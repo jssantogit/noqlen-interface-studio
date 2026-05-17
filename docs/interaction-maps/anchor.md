@@ -1,0 +1,345 @@
+# Anchor Interaction Map
+
+## Product Role
+
+Anchor is a local media server control app mock inside Noqlen Interface Studio.
+
+Anchor manages visual/mock flows for:
+
+- Server status.
+- Server controls.
+- Server list.
+- Library folder.
+- Library scanning.
+- Access verification.
+- Activity logs/events.
+- Settings/log previews.
+
+Anchor remains a complete interactive prototype target, not a real media server client. Every interaction must stay mock-only and must avoid backend calls, Navidrome calls, server control, filesystem access, real logs, network calls, secrets and destructive behavior.
+
+## Navigation Model
+
+Main Anchor bottom navigation:
+
+- Home.
+- Servers.
+- Library.
+- Activity.
+
+Secondary surfaces:
+
+- Settings sheet.
+- Server details sheet.
+- Server menu sheet.
+- Logs viewer.
+- Add server sheet.
+- QR code sheet.
+- Folder picker mock.
+- Library settings sheet.
+- Scan progress sheet.
+- Verify access result sheet.
+- Activity filter sheet.
+- Activity detail sheet.
+- Confirmation dialog for stop/restart.
+- Error detail sheet for startup failed.
+
+## Home Interaction Map
+
+### Settings Icon
+
+- Trigger: settings icon in the Home header.
+- Result: opens Anchor settings sheet.
+- Sections: General, Network, Notifications, Safety, About.
+- Safety: mock-only settings; no real app, server or OS settings are read or changed.
+- Current status: not implemented.
+
+### Stop Server
+
+- Trigger: `Stop server` button on the server card.
+- Result: opens a confirmation dialog.
+- Confirm: changes mock server state to stopped or degraded.
+- Cancel: closes dialog without changing mock state.
+- Safety: must not stop a real process, service, server or Navidrome instance.
+- Current status: not implemented.
+
+### Restart
+
+- Trigger: `Restart` button on the server card.
+- Result: opens restart confirmation or starts a mock restart state.
+- States: idle, restarting, restarted, failed.
+- Safety: must not call real server control APIs or shell commands.
+- Current status: not implemented.
+
+### Library Card
+
+- Trigger: Library card on Home.
+- Result: navigates to the Library tab.
+- Safety: internal tab switch only.
+- Current status: not implemented.
+
+### Copy Address
+
+- Trigger: `Copy address` quick action.
+- Result: shows visual `Copied` toast.
+- Optional behavior: Clipboard API may be used only if harmless, guarded and does not expose sensitive data. Otherwise, use mock toast only.
+- Safety: no real network action and no sensitive address disclosure beyond visible mock copy.
+- Current status: not implemented.
+
+### Show QR Code
+
+- Trigger: `Show QR code` quick action.
+- Result: opens QR code sheet with mock QR visual.
+- QR content: visual-only; does not need to encode real data.
+- Safety: must not expose sensitive info or real connection strings.
+- Current status: not implemented.
+
+### Refresh Library
+
+- Trigger: `Refresh library` quick action.
+- Result: navigates to Library or triggers mock scan state.
+- States: idle, scanning, complete, failed.
+- Safety: must not read folders, scan media or call a backend.
+- Current status: not implemented.
+
+## Servers Interaction Map
+
+### Add Server Plus Icon
+
+- Trigger: plus icon in the Servers header.
+- Result: opens Add server mock sheet.
+- Fields: server type, name, address.
+- Save behavior: may create a mock pending server in a future implementation.
+- Safety: no real connection, validation request, discovery or credential handling.
+- Current status: not implemented.
+
+### Navidrome Card
+
+- Trigger: Navidrome card body.
+- Result: opens server details sheet or expands details.
+- Data: static Navidrome mock data.
+- Safety: no real status refresh or server query.
+- Current status: partial because details are visible, but tap/expansion is not interactive.
+
+### Server Menu
+
+- Trigger: menu icon on a server card.
+- Result: opens server menu sheet.
+- Menu items: Rename, Duplicate config, Disable, Remove mock server.
+- Safety: all actions mutate only local mock state when implemented.
+- Current status: not implemented.
+
+### Settings
+
+- Trigger: `Settings` button in the Navidrome card.
+- Result: opens server settings sheet.
+- Safety: no real server settings are read or written.
+- Current status: not implemented.
+
+### View Logs
+
+- Trigger: `View logs` button in the Navidrome card.
+- Result: opens mock log viewer.
+- Safety: no real log files, process output or filesystem content are read.
+- Current status: not implemented.
+
+### Jellyfin Coming Soon
+
+- Trigger: Jellyfin coming-soon card or menu.
+- Result: opens coming-soon sheet or disabled tooltip.
+- Safety: no Jellyfin connection or discovery.
+- Current status: not implemented.
+
+### Emby Coming Soon
+
+- Trigger: Emby coming-soon card or menu.
+- Result: opens coming-soon sheet or disabled tooltip.
+- Safety: no Emby connection or discovery.
+- Current status: not implemented.
+
+## Library Interaction Map
+
+### Change Folder
+
+- Trigger: `Change folder` action row.
+- Result: opens folder picker mock.
+- Folder copy: fake display paths only.
+- Safety: must not access the filesystem, browser file picker, FileReader or real device storage.
+- Current status: not implemented.
+
+### Refresh Library
+
+- Trigger: `Refresh library` action row.
+- Result: starts mock scan flow.
+- States: scanning, scanned, failed.
+- Safety: no media scan, metadata read, filesystem access or backend call.
+- Current status: not implemented.
+
+### Verify Access
+
+- Trigger: `Verify access` action row.
+- Result: opens permission/access verification result.
+- States: accessible, warning, denied.
+- Safety: no real permission checks or path probing.
+- Current status: not implemented.
+
+### Library Settings
+
+- Trigger: `Library settings` action row.
+- Result: opens library settings sheet.
+- Settings: scan interval, metadata refresh, include hidden files, permission checks.
+- Safety: mock settings only; no persisted device or server configuration.
+- Current status: not implemented.
+
+### Stats Row
+
+- Trigger: Songs, Albums or Artists stat.
+- Result: optional stats detail sheet.
+- Safety: static counts only; no library query.
+- Current status: not implemented.
+
+### Last Scan / Duration
+
+- Trigger: Last scan or Duration footer item.
+- Result: optional scan history sheet.
+- Safety: static scan history only; no real scan logs.
+- Current status: not implemented.
+
+## Activity Interaction Map
+
+### Filter Icon
+
+- Trigger: filter icon in the Activity header.
+- Result: opens filter sheet.
+- Filter options: All, Server, Library, Errors, Today, Yesterday.
+- Safety: filters static mock activity data only.
+- Current status: not implemented.
+
+### Details Buttons
+
+- Trigger: `Details` buttons on activity rows.
+- Result: opens event detail sheet.
+- Safety: static event copy only; no real logs or diagnostics.
+- Current status: not implemented.
+
+### Startup Failed Event
+
+- Trigger: `Startup failed` row or Details button.
+- Result: opens error detail sheet.
+- Error detail: port already in use and suggested mock fixes.
+- Safety: no real port check, process check or network inspection.
+- Current status: not implemented.
+
+### Activity Item Tap
+
+- Trigger: activity item body.
+- Result: opens details.
+- Safety: static event details only.
+- Current status: not implemented.
+
+## Required UI States
+
+Home:
+
+- Server active.
+- Server stopped.
+- Restarting.
+- Degraded.
+- Offline.
+
+Servers:
+
+- One running server.
+- No servers.
+- Adding server.
+- Coming soon server.
+- Server disabled.
+
+Library:
+
+- Accessible.
+- Scanning.
+- Empty.
+- Permission warning.
+- Access denied.
+- Scan failed.
+
+Activity:
+
+- Populated.
+- Filtered.
+- Empty.
+- Errors only.
+
+Global:
+
+- Loading.
+- Disabled.
+- Toast.
+- Confirmation dialog.
+- Bottom sheet.
+- Detail sheet.
+
+## Component Inventory
+
+Existing components:
+
+- `AnchorBottomNav`.
+- `AnchorScreenHeader`.
+- `AnchorCard`.
+- `AnchorIconButton`.
+- `AnchorActionRow`.
+- `AnchorActivityItem`.
+
+Needed components:
+
+- `AnchorHeader`.
+- `AnchorButton`.
+- `AnchorStatusPill`.
+- `AnchorBottomSheet`.
+- `AnchorConfirmDialog`.
+- `AnchorToast`.
+- `AnchorMockQrCode`.
+- `AnchorLogViewer`.
+- `AnchorSettingsSheet`.
+- `AnchorScanProgress`.
+- `AnchorFilterSheet`.
+- `AnchorFolderPickerMock`.
+
+## Implementation Batches
+
+### Batch 1
+
+- Common overlay system.
+- Toast.
+- Confirm dialog.
+- Bottom sheet.
+- Home interactions: Stop server, Restart, Copy address, Show QR code, Refresh library.
+
+### Batch 2
+
+- Servers interactions: Add server, Server details, Server menu, Settings, View logs, Coming soon sheets.
+
+### Batch 3
+
+- Library interactions: Change folder mock, Refresh scan flow, Verify access, Library settings, Scan history.
+
+### Batch 4
+
+- Activity interactions: Filter, Event details, Error details.
+
+### Batch 5
+
+- State polish: empty states, loading states, warning/error states, disabled states, final QA.
+
+## Acceptance Criteria
+
+Anchor can be considered complete only when:
+
+- Every visible actionable element responds.
+- Every response is mock-only.
+- Every modal, sheet and dialog is styled consistently.
+- Every screen has empty, loading and error variants.
+- No real backend, filesystem or network behavior exists.
+- Mobile and desktop shell still works.
+- Bottom nav works.
+- Interaction map is fully covered.

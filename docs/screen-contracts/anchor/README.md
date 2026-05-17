@@ -59,6 +59,14 @@ Required content:
 - Details buttons may remain inert visual controls.
 - Studio app switcher must continue selecting Anchor, Forge, Aria and Flux.
 
+## Interactive Completion Model
+
+The four reference screens are the base Anchor surfaces, not the full application scope. Anchor must be expanded through `docs/interaction-maps/anchor.md` and `docs/screen-contracts/anchor/interactions.md` until every visible action responds in a mock-only form.
+
+Required expansion surfaces include settings, server details, server menus, mock logs, add-server flow, QR code preview, folder picker mock, library scan flow, access verification, activity filters, event details, startup failure details, confirmation dialogs, toasts and empty/loading/error states.
+
+Completion requires consistent Anchor-styled sheets, dialogs and state variants while preserving the no-backend, no-filesystem and no-real-server-control boundary.
+
 ## Disabled / Visual-Only Actions
 
 - Stop server is visual-only.

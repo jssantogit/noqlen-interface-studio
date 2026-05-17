@@ -1,6 +1,6 @@
 # Current Context
 
-Bloco 1 aligns the interface studio with the mobile simulator concept. Bloco 1.1 hardens the responsive shell around that simulator. Bloco 1.3 refines the simulator frame so it reads closer to premium smartphone hardware. Bloco 1.4 selectively reuses mature legacy UI Lab patterns without replacing the new simulator shell.
+Bloco 1 aligns the interface studio with the mobile simulator concept. Bloco 1.1 hardens the responsive shell around that simulator. Bloco 1.3 refines the simulator frame so it reads closer to premium smartphone hardware. Bloco 1.4 selectively reuses mature legacy UI Lab patterns without replacing the new simulator shell. Bloco 2 establishes Anchor's high-fidelity base screens, and Bloco 2.2 maps the complete Anchor interaction coverage required before moving to Forge, Aria or Flux expansion.
 
 Current app state:
 
@@ -13,7 +13,10 @@ Current app state:
 - Mobile and tablet layouts remain single-column with a centered simulator; desktop uses a narrow switcher rail, centered simulator and subtle inspector.
 - Horizontal page overflow is clipped at root/shell level while phone preview content scrolls internally.
 - Integrated fake phone status bar, compact dynamic island and thin bottom home indicator are part of the simulator frame.
-- Anchor and Flux render static visual placeholders inside the phone.
+- Anchor renders high-fidelity mock Home, Servers, Library and Activity screens inside the phone with internal bottom navigation.
+- Anchor has a documented interaction map and implementation contract for all visible mock-only actions, secondary surfaces and required state variants.
+- Anchor is not yet interactively complete beyond bottom navigation; upcoming work should start with Anchor Interaction Expansion Batch 1.
+- Flux still renders a static visual placeholder inside the phone.
 - Forge now has a legacy-informed mock preview with Home, Review, Library and Activity sections inside the phone.
 - Aria now has a richer mock player, queue and library preview informed by the legacy planned tab taxonomy.
 - Visual reference images and visual target contracts for Anchor, Forge, Aria and Flux are now part of the project source of truth for app fidelity.

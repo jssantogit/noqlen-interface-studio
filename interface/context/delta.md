@@ -71,3 +71,11 @@ Bloco 2 delta:
 - Added static Anchor mock data for Navidrome status, server list, library stats, mock folder display copy and activity history.
 - Preserved the Studio shell, app switcher, `PhoneFrame`, Forge, Aria, Flux and GitHub Pages deployment architecture.
 - Documented Anchor screen contracts, mock-only boundaries and the fidelity foundation audit.
+
+Bloco 2.2 delta:
+
+- Added the complete Anchor interaction coverage map for Home, Servers, Library and Activity.
+- Added an implementation-oriented Anchor interaction contract with triggers, resulting UI, mock state changes, data sources, forbidden real behavior and completion status.
+- Clarified that Anchor's four reference screens are base surfaces and that Anchor must become a complete mock-only interactive prototype before starting Forge, Aria or Flux expansion.
+- Added static Anchor interaction metadata for future batches without wiring new behavior.
+- Defined future Anchor implementation batches for overlays, Home interactions, Servers interactions, Library interactions, Activity interactions and state polish.
