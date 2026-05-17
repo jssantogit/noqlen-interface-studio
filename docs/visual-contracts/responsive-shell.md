@@ -30,8 +30,9 @@ Bloco 1.1 hardens the Studio shell around the mobile simulator. It does not star
 
 - Simulator dimensions are controlled through CSS variables in `src/index.css`.
 - Mobile phone width is parent-bounded: the simulator stage provides the available width and the frame uses `width: 100%` with a capped max width.
-- Desktop phone width uses `clamp(21rem, 29vw, 24.875rem)`.
-- The inner phone screen is width-driven with a realistic tall/slim `9 / 19.9` aspect ratio.
+- Desktop phone width is capped through `--studio-phone-width`, currently using `clamp(17.75rem, calc(43.5dvh - 2.7rem), 22.75rem)`.
+- The inner phone screen is width-driven with a realistic tall/slim `--studio-phone-aspect`, currently `9 / 19.7`.
+- The frame uses CSS variables for outer radius, screen radius, rim and bezel so visual reference alignment can be refined without fixed magic dimensions.
 - Do not combine a fixed phone-screen height with `aspect-ratio` on mobile; that lets the browser derive a narrower screen width from height and visually desynchronizes the screen from the outer frame.
 
 ## Bloco 1.1 Overflow Audit

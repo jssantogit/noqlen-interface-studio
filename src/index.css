@@ -3,7 +3,12 @@
 :root {
   --studio-shell-pad: clamp(0.75rem, 2vw, 2rem);
   --studio-shell-gap: clamp(0.75rem, 2vw, 1.75rem);
-  --studio-phone-width: min(100%, 24.875rem);
+  --studio-phone-width: min(100%, 23rem);
+  --studio-phone-aspect: 9 / 19.7;
+  --studio-phone-radius: clamp(2rem, 7vw, 2.72rem);
+  --studio-phone-screen-radius: clamp(1.58rem, 5.8vw, 2.18rem);
+  --studio-phone-rim: clamp(0.22rem, 0.8vw, 0.34rem);
+  --studio-phone-bezel: clamp(0.26rem, 0.9vw, 0.42rem);
 
   color-scheme: dark;
   background: #071018;
@@ -92,18 +97,18 @@ a {
 
 @media (max-width: 420px) {
   :root {
-    --studio-phone-width: min(100%, calc(45.23dvh - 7.45rem));
+    --studio-phone-width: min(100%, calc(42dvh - 6.75rem));
   }
 }
 
 @media (min-width: 421px) and (max-width: 1023px) {
   :root {
-    --studio-phone-width: min(100%, calc(45.23dvh - 6.86rem), 24.875rem);
+    --studio-phone-width: min(100%, calc(42dvh - 5.6rem), 22.75rem);
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --studio-phone-width: clamp(18rem, calc(45.23dvh - 3.17rem), 24.875rem);
+    --studio-phone-width: clamp(17.75rem, calc(43.5dvh - 2.7rem), 22.75rem);
   }
 }

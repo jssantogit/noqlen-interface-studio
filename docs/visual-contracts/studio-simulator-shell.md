@@ -25,6 +25,12 @@ The Studio shell is a visual lab, not a product dashboard and not any Noqlen app
 - Decorative glow is intentionally minimal; depth should come from hardware-like layering and inner shadows.
 - Side hardware hints may appear only as tiny, low-contrast button edges.
 
+## Bloco 2.7.2 Reference Alignment
+
+- `docs/references/phone/phone-frame-reference.png` is the current device-frame visual reference.
+- The frame remains CSS/component-based so app previews stay interactive; do not replace it with the reference image unless explicitly approved.
+- The target is a thin black modern smartphone silhouette with a centered punch-hole camera, subtle side buttons, clean bezel and reduced card-like decoration.
+
 ## Bezel And Screen Rules
 
 - The bezel is uniform, black and believable without becoming bulky.
@@ -34,7 +40,7 @@ The Studio shell is a visual lab, not a product dashboard and not any Noqlen app
 
 ## Status And Bottom Rules
 
-- The dynamic island is centered, compact and visually integrated with the top hardware area.
+- The top camera treatment should be a centered punch-hole or similarly minimal camera detail, not a bulky dynamic island.
 - The status bar is small and believable: time on the left, simulated signal/wifi/battery indicators on the right.
 - The selected app name does not appear in the status bar; app identity belongs to the switcher and placeholder content.
 - The home indicator is thin, centered and low contrast with balanced bottom padding.

@@ -1,6 +1,6 @@
 export function PhoneStatusBar() {
   return (
-    <div className="relative z-20 flex h-10 shrink-0 items-center justify-between px-6 pt-1.5 text-[0.66rem] font-semibold tracking-[-0.01em] text-white/86 sm:h-11 sm:px-7 sm:text-[0.68rem]">
+    <div className="relative z-20 flex h-9 shrink-0 items-center justify-between px-5 pt-1.5 text-[0.64rem] font-semibold tracking-[-0.01em] text-white/84 sm:h-10 sm:px-6 sm:text-[0.67rem]">
       <span className="tabular-nums">9:41</span>
       <span
         className="flex items-center gap-1.5 text-white/72"

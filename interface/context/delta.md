@@ -138,3 +138,10 @@ Bloco 2.7.1 delta:
 Phone frame reference delta:
 
 - Added phone frame visual reference for future simulator frame refinement.
+
+Bloco 2.7.2 delta:
+
+- Aligned the CSS/component-based `PhoneFrame` closer to the committed reference with a thinner black rim, cleaner bezel, smaller desktop cap and subtler hardware shadows.
+- Replaced the oversized dynamic-island visual treatment with a centered punch-hole camera.
+- Refined side hardware buttons, status bar height, home indicator and app viewport inset while keeping app previews interactive.
+- Added phone frame sizing/radius/bezel CSS variables and documented the reference alignment strategy.

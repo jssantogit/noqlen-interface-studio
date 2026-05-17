@@ -12,26 +12,24 @@ export function PhoneFrame({
   return (
     <section
       aria-label={`${appName} phone simulator`}
-      className="relative min-w-0 w-full max-w-[var(--studio-phone-width)] shrink rounded-[clamp(2.45rem,8vw,3.35rem)] border border-white/[0.08] bg-[linear-gradient(145deg,#1a1d22_0%,#050608_44%,#111317_100%)] p-[clamp(0.38rem,1.2vw,0.58rem)] shadow-[0_1.35rem_2.4rem_rgba(0,0,0,0.34),0_3rem_5.6rem_rgba(0,0,0,0.42)] before:pointer-events-none before:absolute before:inset-[0.18rem] before:rounded-[inherit] before:border before:border-white/[0.06] before:content-[''] lg:shrink-0"
+      className="relative w-full max-w-[var(--studio-phone-width)] shrink rounded-[var(--studio-phone-radius)] bg-[linear-gradient(145deg,#17191d_0%,#030405_42%,#0b0d10_100%)] p-[var(--studio-phone-rim)] shadow-[0_1.2rem_2.4rem_rgba(0,0,0,0.38),0_2.4rem_4rem_rgba(0,0,0,0.32),inset_0_0_0_1px_rgba(255,255,255,0.085),inset_0.14rem_0.1rem_0.28rem_rgba(255,255,255,0.055),inset_-0.18rem_-0.2rem_0.5rem_rgba(0,0,0,0.75)] lg:shrink-0"
     >
       <div
         aria-hidden="true"
-        className="absolute left-[0.08rem] top-[23%] h-12 w-[0.16rem] rounded-r-full bg-white/12 shadow-[inset_-1px_0_1px_rgba(255,255,255,0.2)]"
+        className="absolute -left-[0.08rem] top-[24%] h-11 w-[0.12rem] rounded-l-full bg-[#0b0d10] shadow-[inset_-1px_0_0_rgba(255,255,255,0.12),-1px_0_0_rgba(0,0,0,0.65)]"
       />
       <div
         aria-hidden="true"
-        className="absolute left-[0.08rem] top-[33%] h-8 w-[0.16rem] rounded-r-full bg-white/10 shadow-[inset_-1px_0_1px_rgba(255,255,255,0.18)]"
+        className="absolute -left-[0.08rem] top-[32%] h-8 w-[0.12rem] rounded-l-full bg-[#0b0d10] shadow-[inset_-1px_0_0_rgba(255,255,255,0.1),-1px_0_0_rgba(0,0,0,0.6)]"
       />
       <div
         aria-hidden="true"
-        className="absolute right-[0.08rem] top-[29%] h-16 w-[0.16rem] rounded-l-full bg-white/12 shadow-[inset_1px_0_1px_rgba(255,255,255,0.2)]"
+        className="absolute -right-[0.1rem] top-[27%] h-16 w-[0.14rem] rounded-r-full bg-[#111318] shadow-[inset_1px_0_0_rgba(255,255,255,0.16),1px_0_0_rgba(0,0,0,0.7)]"
       />
 
-      <div className="relative aspect-[9/19.9] w-full min-w-0 max-w-full rounded-[clamp(2.05rem,7vw,2.8rem)] bg-black p-[clamp(0.42rem,1.35vw,0.64rem)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.055),inset_0_1.2rem_2rem_rgba(255,255,255,0.035),inset_0_-1.4rem_2.8rem_rgba(0,0,0,0.8)]">
-        <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[clamp(1.62rem,6vw,2.18rem)] border border-white/[0.04] bg-[#05070b] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.7),inset_0_1.5rem_2.4rem_rgba(255,255,255,0.028)]">
-          <div className="pointer-events-none absolute left-1/2 top-[0.48rem] z-30 h-[1.18rem] w-[5.85rem] -translate-x-1/2 rounded-full border border-white/[0.045] bg-black shadow-[0_0.3rem_0.75rem_rgba(0,0,0,0.55),inset_0_0.06rem_0.08rem_rgba(255,255,255,0.08)] sm:top-[0.58rem] sm:h-[1.3rem] sm:w-[6.4rem]">
-            <span className="absolute right-[1rem] top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-slate-700/50 shadow-[0_0_0.35rem_rgba(96,165,250,0.15)]" />
-          </div>
+      <div className="relative aspect-[var(--studio-phone-aspect)] w-full min-w-0 max-w-full overflow-hidden rounded-[calc(var(--studio-phone-radius)-0.28rem)] bg-black p-[var(--studio-phone-bezel)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.045),inset_0_1rem_1.8rem_rgba(255,255,255,0.025),inset_0_-1rem_2rem_rgba(0,0,0,0.78)]">
+        <div className="relative flex h-full min-w-0 flex-col overflow-hidden rounded-[var(--studio-phone-screen-radius)] border border-white/[0.025] bg-[#05070b] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.82)]">
+          <div className="pointer-events-none absolute left-1/2 top-[0.72rem] z-30 h-[0.52rem] w-[0.52rem] -translate-x-1/2 rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.08),inset_0.06rem_0.05rem_0.08rem_rgba(255,255,255,0.08),inset_-0.08rem_-0.08rem_0.1rem_rgba(0,0,0,0.9)] sm:top-[0.82rem] sm:h-[0.58rem] sm:w-[0.58rem]" />
           <PhoneStatusBar />
           {children}
           <PhoneHomeIndicator />
