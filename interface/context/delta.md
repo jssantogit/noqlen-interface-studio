@@ -134,3 +134,7 @@ Bloco 2.7.1 delta:
 - Fixed Navidrome Settings by replacing shrinkable horizontal category chips with wrapping chips and tightening summary/action layouts for narrow sheets.
 - Added stronger width containment and softened internal scrollbars for Anchor root, cards, bottom sheets, dry-run sheets, code previews and the phone app viewport.
 - Preserved mock-only behavior and did not add new product features or state coverage.
+
+Phone frame reference delta:
+
+- Added phone frame visual reference for future simulator frame refinement.
