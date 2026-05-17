@@ -8,6 +8,7 @@ Visual target:
 - Anchor must use `docs/references/anchor/anchor-screens-reference.png` as the mandatory high-fidelity reference.
 - Anchor must remain inside the current `PhoneFrame` and app viewport.
 - Anchor must keep the dark premium mobile UI, serif-style titles, amber primary accent, green success states, red/orange failure states, dense cards and bottom navigation rhythm from the reference.
+- Anchor content must fit the actual inner phone viewport at narrow mobile and desktop simulator sizes without page-level horizontal overflow, overlapping chips, or unreadable truncation of critical server values.
 
 ## Home Screen Contract
 
@@ -15,6 +16,7 @@ Required content:
 
 - Header with `Anchor`, `Control your local media server.` and a settings gear action.
 - Main Navidrome server card with `Server active`, uptime, library size and address.
+- Uptime, library size and address must remain readable inside the narrow phone viewport; long address copy may wrap.
 - Amber `Stop server` button and secondary `Restart` button.
 - Library card with folder icon, `Accessible`, `Updated 12 min ago` and chevron.
 - Quick actions for `Copy address`, `Show QR code` and `Refresh library`.
@@ -27,6 +29,7 @@ Required content:
 - Header with `Servers`, `Manage your media servers.` and a plus action.
 - Detailed Navidrome card with icon/avatar, running badge, menu icon, address, version, uptime, `Settings` and `View logs` buttons.
 - `Settings`, details `Configure Navidrome` and menu `Configure Navidrome` must open the dedicated `Navidrome Settings` mock configuration center.
+- Navidrome Settings category navigation, setting fields and previews must stay inside the sheet width with wrapping chips and internal preview scrolling only.
 - Jellyfin and Emby cards marked `Coming soon`.
 - Bottom privacy note: `All servers run locally on your network.` and `No data leaves your device.`
 - Anchor bottom nav with Servers active.

@@ -9,6 +9,7 @@ This contract translates the Anchor interaction map into implementation-oriented
 - Do not read files, folders, real logs, device storage, personal paths or environment secrets.
 - Do not add unguarded clipboard, network, file picker, `FileReader`, `fs` or server-control behavior.
 - Static mock data may be imported from `src/apps/anchor/anchorMockData.ts` or future static metadata files.
+- Interactive sheets, rows and cards must remain readable inside the simulated phone viewport without page-level horizontal overflow; long static values should wrap where they are core content.
 
 ## Home
 

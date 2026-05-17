@@ -39,7 +39,7 @@ export function AnchorServers({
   const statusDotClass = isDisabled ? 'bg-slate-300' : 'bg-emerald-300'
 
   return (
-    <div className="px-5 pt-5">
+    <div className="w-full min-w-0 max-w-full px-4 pt-5 sm:px-5">
       <AnchorScreenHeader
         action={
           <AnchorIconButton label="Add server" onClick={onAddServer}>
@@ -64,12 +64,12 @@ export function AnchorServers({
                 </span>
               </span>
               <div className="min-w-0 flex-1">
-                <div className="flex min-w-0 items-start justify-between gap-2">
+                <div className="flex min-w-0 flex-wrap items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <h2 className="truncate text-base font-semibold text-white">
+                    <h2 className="break-words text-base font-semibold text-white">
                       {navidrome.name}
                     </h2>
-                    <p className="mt-1 truncate text-xs text-slate-300/76">
+                    <p className="mt-1 break-words text-xs text-slate-300/76">
                       {navidrome.description}
                     </p>
                   </div>
@@ -100,15 +100,15 @@ export function AnchorServers({
                 ['Version', navidrome.version],
                 ['Uptime', navidrome.uptime],
               ].map(([label, value]) => (
-                <div className="grid grid-cols-[4.6rem_minmax(0,1fr)] gap-3" key={label}>
-                  <dt className="text-slate-300/74">{label}</dt>
-                  <dd className="truncate text-white">{value}</dd>
+                <div className="grid min-w-0 grid-cols-1 gap-1 rounded-xl border border-white/[0.045] bg-black/10 px-3 py-2" key={label}>
+                  <dt className="text-[0.64rem] font-semibold uppercase tracking-[0.13em] text-slate-300/74">{label}</dt>
+                  <dd className="min-w-0 break-words text-white [overflow-wrap:anywhere]">{value}</dd>
                 </div>
               ))}
             </dl>
             <div className="mt-5 grid grid-cols-2 gap-2">
               <button
-                className="flex h-10 items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.035] text-xs font-medium text-white transition hover:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+                className="flex min-h-10 min-w-0 items-center justify-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.035] px-2 py-2 text-xs font-medium leading-4 text-white transition hover:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
                 onClick={onOpenSettings}
                 type="button"
               >
@@ -116,7 +116,7 @@ export function AnchorServers({
                 Settings
               </button>
               <button
-                className="flex h-10 items-center justify-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.035] text-xs font-medium text-white transition hover:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+                className="flex min-h-10 min-w-0 items-center justify-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.035] px-2 py-2 text-xs font-medium leading-4 text-white transition hover:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
                 onClick={onOpenLogs}
                 type="button"
               >
@@ -142,7 +142,7 @@ export function AnchorServers({
           return (
             <AnchorCard className="p-4" key={server.id}>
               <button
-                className="flex w-full items-center gap-3 text-left focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+                className="flex w-full min-w-0 items-center gap-3 text-left focus:outline-none focus:ring-2 focus:ring-amber-300/30"
                 onClick={() => onComingSoon(server.name as 'Jellyfin' | 'Emby')}
                 type="button"
               >
@@ -152,8 +152,8 @@ export function AnchorServers({
                   <Icon size={26} strokeWidth={2.4} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h2 className="truncate text-base font-semibold text-white">{server.name}</h2>
-                  <p className="mt-1 truncate text-xs text-slate-300/76">
+                  <h2 className="break-words text-base font-semibold text-white">{server.name}</h2>
+                  <p className="mt-1 break-words text-xs text-slate-300/76">
                     {server.description}
                   </p>
                 </div>

@@ -102,7 +102,7 @@ export function AnchorHome({
   const quickActionHandlers = [onCopyAddress, onShowQrCode, onRefreshLibrary]
 
   return (
-    <div className="px-5 pt-5">
+    <div className="w-full min-w-0 max-w-full px-4 pt-5 sm:px-5">
       <AnchorScreenHeader
         action={
           <AnchorIconButton label="Settings" onClick={onSettingsOpen}>
@@ -113,9 +113,9 @@ export function AnchorHome({
         title="Anchor"
       />
 
-      <AnchorCard className="p-5">
-        <div className="flex items-center justify-between gap-3">
-          <div className={`flex items-center gap-3 text-sm font-semibold ${server.statusClass}`}>
+      <AnchorCard className="p-4 sm:p-5">
+        <div className="flex min-w-0 items-center justify-between gap-3">
+          <div className={`flex min-w-0 items-center gap-2.5 text-sm font-semibold ${server.statusClass}`}>
             <span className={`grid h-7 w-7 place-items-center rounded-full border ${server.iconClass}`}>
               {isRestarting ? (
                 <RefreshCw className="animate-spin" size={16} strokeWidth={2.4} />
@@ -123,22 +123,29 @@ export function AnchorHome({
                 <Check size={17} strokeWidth={2.4} />
               )}
             </span>
-            <span>{server.status}</span>
+            <span className="min-w-0 break-words">{server.status}</span>
           </div>
           <MoreVertical className="text-slate-300/70" size={18} />
         </div>
         <h2 className="mt-4 font-serif text-[1.85rem] leading-none tracking-[-0.052em] text-white">
           {anchorServer.name}
         </h2>
-        <dl className="mt-6 space-y-3 text-sm">
+        <dl className="mt-5 space-y-3 text-sm">
           {[
             ['Uptime', server.uptime],
             ['Library size', anchorServer.librarySize],
             ['Address', anchorServer.address],
           ].map(([label, value]) => (
-            <div className="grid grid-cols-[5.6rem_minmax(0,1fr)] gap-2" key={label}>
-              <dt className="text-slate-300/82">{label}</dt>
-              <dd className="truncate font-medium text-white">{value}</dd>
+            <div
+              className="grid min-w-0 grid-cols-1 gap-1 rounded-xl border border-white/[0.045] bg-black/10 px-3 py-2"
+              key={label}
+            >
+              <dt className="text-[0.66rem] font-semibold uppercase tracking-[0.14em] text-slate-400/82">
+                {label}
+              </dt>
+              <dd className="min-w-0 break-words text-[0.82rem] font-medium leading-5 text-white [overflow-wrap:anywhere]">
+                {value}
+              </dd>
             </div>
           ))}
         </dl>
@@ -166,7 +173,7 @@ export function AnchorHome({
 
       <AnchorCard className="mt-3.5">
         <button
-          className="flex w-full items-center gap-3 p-3.5 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-300/30"
+          className="flex w-full min-w-0 items-center gap-3 p-3.5 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-300/30"
           onClick={onLibraryOpen}
           type="button"
         >
@@ -174,12 +181,12 @@ export function AnchorHome({
             <Folder size={25} fill="currentColor" strokeWidth={1.6} />
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-sm font-semibold text-white">Library</span>
-            <span className="mt-1 block truncate text-xs text-emerald-300">
+            <span className="block break-words text-sm font-semibold text-white">Library</span>
+            <span className="mt-1 block break-words text-xs text-emerald-300">
               <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-300" />
               {anchorLibrary.status}
             </span>
-            <span className="mt-1 block truncate text-[0.72rem] text-slate-300/72">
+            <span className="mt-1 block break-words text-[0.72rem] text-slate-300/72">
               {anchorLibrary.updated}
             </span>
           </span>
@@ -189,12 +196,12 @@ export function AnchorHome({
 
       <section className="mt-5">
         <h2 className="text-sm font-semibold text-white">Quick actions</h2>
-        <div className="mt-3 grid grid-cols-3 gap-2">
+        <div className="mt-3 grid grid-cols-3 gap-1.5 sm:gap-2">
           {anchorQuickActions.map((action, index) => {
             const Icon = quickActionIcons[index]
             return (
               <button
-                className="flex min-h-[5.2rem] min-w-0 flex-col items-center justify-center gap-2 rounded-xl border border-white/[0.065] bg-white/[0.045] px-2 py-3 text-center text-[0.7rem] leading-4 text-slate-200 transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+                className="flex min-h-[4.7rem] min-w-0 flex-col items-center justify-center gap-1.5 rounded-xl border border-white/[0.065] bg-white/[0.045] px-1.5 py-2.5 text-center text-[0.66rem] leading-4 text-slate-200 transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30 sm:min-h-[5.2rem] sm:gap-2 sm:px-2 sm:py-3 sm:text-[0.7rem]"
                 key={action}
                 onClick={quickActionHandlers[index]}
                 type="button"
@@ -203,7 +210,7 @@ export function AnchorHome({
                   className={action === 'Refresh library' && scanState === 'scanning' ? 'animate-spin text-amber-200' : 'text-white'}
                   size={22}
                 />
-                <span>{action === 'Refresh library' && scanState === 'scanning' ? 'Refreshing' : action}</span>
+                <span className="break-words">{action === 'Refresh library' && scanState === 'scanning' ? 'Refreshing' : action}</span>
               </button>
             )
           })}

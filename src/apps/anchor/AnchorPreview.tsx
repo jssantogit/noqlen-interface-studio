@@ -195,11 +195,11 @@ export function AnchorPreview() {
   }
 
   return (
-    <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_24%_-8%,rgba(245,158,11,0.18),transparent_15rem),radial-gradient(circle_at_85%_4%,rgba(14,165,233,0.08),transparent_13rem),linear-gradient(180deg,#091217_0%,#071014_52%,#05090d_100%)] text-white">
+    <div className="relative flex h-full min-h-full w-full min-w-0 max-w-full flex-col overflow-x-hidden overflow-y-hidden bg-[radial-gradient(circle_at_24%_-8%,rgba(245,158,11,0.18),transparent_15rem),radial-gradient(circle_at_85%_4%,rgba(14,165,233,0.08),transparent_13rem),linear-gradient(180deg,#091217_0%,#071014_52%,#05090d_100%)] text-white">
       <AnimatePresence mode="wait">
         <motion.div
           animate={{ opacity: 1, y: 0 }}
-          className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden pb-28"
+          className="anchor-scrollbar-soft min-h-0 w-full min-w-0 max-w-full flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-24"
           exit={{ opacity: 0, y: -8 }}
           initial={{ opacity: 0, y: 14 }}
           key={activeTab}

@@ -21,13 +21,13 @@ export function AnchorNavidromeSettingField({
   const enabled = value === true
 
   return (
-    <section className="min-w-0 rounded-2xl border border-white/[0.065] bg-white/[0.035] p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
+    <section className="w-full min-w-0 max-w-full overflow-hidden rounded-2xl border border-white/[0.065] bg-white/[0.035] p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
       <div className="flex min-w-0 items-start justify-between gap-3">
         <div className="min-w-0">
           <h4 className="break-words text-sm font-semibold text-white">{option.label}</h4>
           <p className="mt-1 text-[0.7rem] leading-4 text-slate-300/72">{option.description}</p>
         </div>
-        <span className={`shrink-0 rounded-full border px-2 py-1 text-[0.62rem] font-semibold capitalize ${safetyClass[option.safetyLevel]}`}>
+        <span className={`shrink-0 rounded-full border px-2 py-1 text-[0.6rem] font-semibold capitalize ${safetyClass[option.safetyLevel]}`}>
           {option.safetyLevel}
         </span>
       </div>
@@ -36,7 +36,7 @@ export function AnchorNavidromeSettingField({
         {option.type === 'boolean' ? (
           <button
             aria-pressed={enabled}
-            className="flex w-full items-center justify-between gap-3 rounded-xl border border-white/[0.07] bg-[#071014]/72 px-3 py-2.5 text-left transition hover:bg-white/[0.055] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+            className="flex w-full min-w-0 items-center justify-between gap-3 rounded-xl border border-white/[0.07] bg-[#071014]/72 px-3 py-2.5 text-left transition hover:bg-white/[0.055] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
             onClick={() => onChange(option.key, !enabled)}
             type="button"
           >
@@ -67,8 +67,8 @@ export function AnchorNavidromeSettingField({
       </div>
 
       <div className="mt-2 flex min-w-0 flex-wrap gap-2 text-[0.64rem] text-slate-400">
-        <span className="truncate rounded-full bg-white/[0.055] px-2 py-1">{option.key}</span>
-        {option.envVar ? <span className="truncate rounded-full bg-white/[0.055] px-2 py-1">{option.envVar}</span> : null}
+        <span className="max-w-full break-words rounded-full bg-white/[0.055] px-2 py-1 font-mono [overflow-wrap:anywhere]">{option.key}</span>
+        {option.envVar ? <span className="max-w-full break-words rounded-full bg-white/[0.055] px-2 py-1 font-mono [overflow-wrap:anywhere]">{option.envVar}</span> : null}
         {option.restartRequired ? <span className="rounded-full bg-amber-300/[0.075] px-2 py-1 text-amber-200">restart</span> : null}
       </div>
       <p className="mt-2 text-[0.68rem] leading-4 text-slate-400/88">{option.notes}</p>

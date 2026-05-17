@@ -63,6 +63,33 @@ a {
   overflow-x: hidden;
 }
 
+.anchor-scrollbar-soft {
+  scrollbar-color: rgba(148, 163, 184, 0.24) transparent;
+  scrollbar-width: thin;
+}
+
+.anchor-scrollbar-soft::-webkit-scrollbar {
+  width: 0.35rem;
+  height: 0.35rem;
+}
+
+.anchor-scrollbar-soft::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.anchor-scrollbar-soft::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.22);
+  border-radius: 999px;
+}
+
+.anchor-scrollbar-none {
+  scrollbar-width: none;
+}
+
+.anchor-scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 @media (max-width: 420px) {
   :root {
     --studio-phone-width: min(100%, calc(45.23dvh - 7.45rem));

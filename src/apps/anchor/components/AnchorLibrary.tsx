@@ -38,7 +38,7 @@ export function AnchorLibrary({
   )
 
   return (
-    <div className="px-5 pt-5">
+    <div className="w-full min-w-0 max-w-full px-4 pt-5 sm:px-5">
       <AnchorScreenHeader
         subtitle="Manage your media library."
         title="Library"
@@ -50,19 +50,19 @@ export function AnchorLibrary({
             <Folder size={36} fill="currentColor" strokeWidth={1.25} />
           </span>
           <div className="min-w-0 flex-1">
-            <h2 className="truncate text-base font-semibold text-white">
+            <h2 className="break-words text-base font-semibold text-white">
               {anchorLibrary.name}
             </h2>
-            <p className="mt-2 truncate text-xs font-medium text-emerald-300">
+            <p className="mt-2 break-words text-xs font-medium text-emerald-300">
               <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-300" />
               {anchorLibrary.status}
             </p>
-            <p className="mt-1 truncate text-[0.72rem] text-slate-300/72">
+            <p className="mt-1 break-words text-[0.72rem] text-slate-300/72">
               Last updated {lastScan}
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-3 border-t border-white/[0.055]">
+        <div className="grid min-w-0 grid-cols-3 border-t border-white/[0.055]">
           {anchorLibrary.stats.map((stat) => (
             <button
               className="border-r border-white/[0.045] px-2 py-4 text-center transition hover:bg-white/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-300/30 last:border-r-0"
@@ -70,10 +70,10 @@ export function AnchorLibrary({
               onClick={onOpenStats}
               type="button"
             >
-              <p className="text-xl leading-none tracking-[-0.035em] text-white">
+              <p className="break-words text-[clamp(0.95rem,5vw,1.25rem)] leading-none tracking-[-0.035em] text-white">
                 {stat.value}
               </p>
-              <p className="mt-2 text-[0.7rem] text-slate-300/72">{stat.label}</p>
+              <p className="mt-2 break-words text-[0.68rem] text-slate-300/72">{stat.label}</p>
             </button>
           ))}
         </div>

@@ -45,6 +45,12 @@ Secondary surfaces:
 - Confirmation dialog for stop/restart.
 - Error detail sheet for startup failed.
 
+Layout constraints:
+
+- Anchor screens and sheets must fit the actual phone app viewport, including narrow inner widths around 206px.
+- Critical server values, mock URLs, fake paths, config keys and env vars should wrap rather than become unreadable ellipses.
+- Horizontal overflow is allowed only inside bounded code/config preview boxes; category navigation and cards must not create phone-level horizontal scroll.
+
 ## Home Interaction Map
 
 ### Settings Icon

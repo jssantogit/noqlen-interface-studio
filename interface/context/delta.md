@@ -126,3 +126,11 @@ Bloco 2.7 delta:
 - Updated static `anchorActivity` mock data with ids, day groups, categories, severities, details, related actions and Startup failed diagnostic fields.
 - Wired Activity state through `AnchorPreview` using local `activityFilter`, `selectedActivityId`, existing sheet state and existing toast state only.
 - Kept all logs and diagnostics static/display-only: no Anchor Core, Navidrome, backend, filesystem, real log, process, port or network behavior was added.
+
+Bloco 2.7.1 delta:
+
+- Audited Anchor display regressions inside the actual simulated phone viewport and measured narrow app widths as low as about 206px at `360x800`.
+- Fixed Home and Servers detail rows by replacing fixed label/value grids plus truncation with stacked readable rows and controlled wrapping for URLs and critical values.
+- Fixed Navidrome Settings by replacing shrinkable horizontal category chips with wrapping chips and tightening summary/action layouts for narrow sheets.
+- Added stronger width containment and softened internal scrollbars for Anchor root, cards, bottom sheets, dry-run sheets, code previews and the phone app viewport.
+- Preserved mock-only behavior and did not add new product features or state coverage.

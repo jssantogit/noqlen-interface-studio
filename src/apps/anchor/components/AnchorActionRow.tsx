@@ -22,8 +22,8 @@ export function AnchorActionRow({
         {icon}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-medium text-white">{title}</span>
-        <span className="mt-1 block truncate text-[0.71rem] leading-4 text-slate-300/72">
+        <span className="block break-words text-sm font-medium text-white">{title}</span>
+        <span className="mt-1 block break-words text-[0.71rem] leading-4 text-slate-300/72 [overflow-wrap:anywhere]">
           {detail}
         </span>
       </span>
