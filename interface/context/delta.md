@@ -79,3 +79,10 @@ Bloco 2.2 delta:
 - Clarified that Anchor's four reference screens are base surfaces and that Anchor must become a complete mock-only interactive prototype before starting Forge, Aria or Flux expansion.
 - Added static Anchor interaction metadata for future batches without wiring new behavior.
 - Defined future Anchor implementation batches for overlays, Home interactions, Servers interactions, Library interactions, Activity interactions and state polish.
+
+Bloco 2.3 delta:
+
+- Added Anchor-local overlay primitives for bottom sheets, confirmation dialogs, toasts, fake QR previews, settings and scan progress.
+- Wired Home settings, stop, restart, copy address, show QR code, refresh library and Library card navigation with local mock-only state.
+- Added mock server states for active, stopped and restarting in the Home server card without backend, filesystem, network or server-control behavior.
+- Kept Servers, Library deep interactions, Activity interactions, Forge, Aria and Flux outside this batch.

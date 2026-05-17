@@ -14,13 +14,13 @@ This contract translates the Anchor interaction map into implementation-oriented
 
 | Interaction | Trigger | Resulting UI | Mock state changes | Data used | Forbidden real behavior | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| Settings | Header settings icon | Anchor settings bottom sheet with General, Network, Notifications, Safety and About sections | Active overlay becomes settings | Static settings labels | Reading or writing real settings | not implemented |
-| Stop server | `Stop server` button | Confirmation dialog | On confirm, mock server status becomes stopped or degraded; on cancel, no change | `anchorServer` display copy | Stopping real server/process | not implemented |
-| Restart | `Restart` button | Restart confirmation or inline restart progress | Mock restart state moves through idle, restarting, restarted or failed | `anchorServer` display copy | Server control commands or API calls | not implemented |
-| Library card | Home Library card | Library tab becomes active | `activeTab` becomes `library` | `anchorLibrary` summary | Filesystem/library access | not implemented |
-| Copy address | `Copy address` quick action | `Copied` toast | Toast queue gains copy success item | Visible mock address | Real network action; exposing non-mock address | not implemented |
-| Show QR code | `Show QR code` quick action | QR code bottom sheet with mock QR visual | Active overlay becomes QR code | Mock address label or non-encoded placeholder | Encoding secrets or real connection details | not implemented |
-| Refresh library | `Refresh library` quick action | Library tab or scan progress sheet | Mock scan state moves through idle, scanning, complete or failed | `anchorLibrary` summary | Media scan, folder read, backend call | not implemented |
+| Settings | Header settings icon | Anchor settings bottom sheet with General, Network, Notifications, Safety and About sections | Active overlay becomes settings; toggles mutate local visual state only | Static settings labels | Reading or writing real settings | implemented |
+| Stop server | `Stop server` button | Confirmation dialog | On confirm, mock server status becomes stopped; on cancel, no change | `anchorServer` display copy | Stopping real server/process | implemented |
+| Restart | `Restart` button, or `Start server` after stopped | Restart confirmation and temporary restarting card state | Mock restart state moves from restarting back to active | `anchorServer` display copy | Server control commands or API calls | implemented |
+| Library card | Home Library card | Library tab becomes active | `activeTab` becomes `library` | `anchorLibrary` summary | Filesystem/library access | implemented |
+| Copy address | `Copy address` quick action | `Address copied` toast | Toast state shows copy feedback | Visible mock address | Real network action; exposing non-mock address | implemented |
+| Show QR code | `Show QR code` quick action | QR code bottom sheet with mock QR visual, mock address and same-network note | Active overlay becomes QR code | Mock address label and fake QR block | Encoding secrets or real connection details | implemented |
+| Refresh library | `Refresh library` quick action | Scan progress bottom sheet | Mock scan state moves through idle, scanning, complete or manually simulated failed | `anchorLibrary` summary | Media scan, folder read, backend call | implemented |
 
 ## Servers
 
@@ -100,6 +100,6 @@ Global states:
 ## Completion Tracking
 
 - Current implementation has complete base surfaces for Home, Servers, Library and Activity.
-- Current implementation has bottom nav interaction only.
-- Visible action coverage is incomplete until all rows above are implemented and QAed.
+- Current implementation has bottom nav and Home Batch 1 interactions.
+- Servers, Library deep actions, Activity and remaining state coverage are incomplete until all rows above are implemented and QAed.
 - No app-specific implementation should be considered complete unless its forbidden real behavior has also been checked.

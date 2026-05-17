@@ -51,55 +51,55 @@ Secondary surfaces:
 - Result: opens Anchor settings sheet.
 - Sections: General, Network, Notifications, Safety, About.
 - Safety: mock-only settings; no real app, server or OS settings are read or changed.
-- Current status: not implemented.
+- Current status: implemented in Batch 1 with local visual toggles only.
 
 ### Stop Server
 
 - Trigger: `Stop server` button on the server card.
 - Result: opens a confirmation dialog.
-- Confirm: changes mock server state to stopped or degraded.
+- Confirm: changes mock server state to stopped.
 - Cancel: closes dialog without changing mock state.
 - Safety: must not stop a real process, service, server or Navidrome instance.
-- Current status: not implemented.
+- Current status: implemented in Batch 1.
 
 ### Restart
 
 - Trigger: `Restart` button on the server card.
-- Result: opens restart confirmation or starts a mock restart state.
-- States: idle, restarting, restarted, failed.
+- Result: opens restart confirmation, then starts a mock restart state.
+- States: idle, restarting, active after restart.
 - Safety: must not call real server control APIs or shell commands.
-- Current status: not implemented.
+- Current status: implemented in Batch 1; failed restart state remains future coverage.
 
 ### Library Card
 
 - Trigger: Library card on Home.
 - Result: navigates to the Library tab.
 - Safety: internal tab switch only.
-- Current status: not implemented.
+- Current status: implemented in Batch 1.
 
 ### Copy Address
 
 - Trigger: `Copy address` quick action.
-- Result: shows visual `Copied` toast.
+- Result: shows visual `Address copied` toast.
 - Optional behavior: Clipboard API may be used only if harmless, guarded and does not expose sensitive data. Otherwise, use mock toast only.
 - Safety: no real network action and no sensitive address disclosure beyond visible mock copy.
-- Current status: not implemented.
+- Current status: implemented in Batch 1 with toast-only behavior.
 
 ### Show QR Code
 
 - Trigger: `Show QR code` quick action.
-- Result: opens QR code sheet with mock QR visual.
+- Result: opens QR code sheet with mock QR visual, mock address and same-network note.
 - QR content: visual-only; does not need to encode real data.
 - Safety: must not expose sensitive info or real connection strings.
-- Current status: not implemented.
+- Current status: implemented in Batch 1.
 
 ### Refresh Library
 
 - Trigger: `Refresh library` quick action.
-- Result: navigates to Library or triggers mock scan state.
+- Result: opens mock scan progress sheet.
 - States: idle, scanning, complete, failed.
 - Safety: must not read folders, scan media or call a backend.
-- Current status: not implemented.
+- Current status: implemented in Batch 1 for Home quick action only; Library tab row remains not implemented.
 
 ## Servers Interaction Map
 
@@ -290,18 +290,21 @@ Existing components:
 - `AnchorActionRow`.
 - `AnchorActivityItem`.
 
+Batch 1 components now implemented:
+
+- `AnchorBottomSheet`.
+- `AnchorConfirmDialog`.
+- `AnchorToast`.
+- `AnchorMockQrCode`.
+- `AnchorSettingsSheet`.
+- `AnchorScanProgress`.
+
 Needed components:
 
 - `AnchorHeader`.
 - `AnchorButton`.
 - `AnchorStatusPill`.
-- `AnchorBottomSheet`.
-- `AnchorConfirmDialog`.
-- `AnchorToast`.
-- `AnchorMockQrCode`.
 - `AnchorLogViewer`.
-- `AnchorSettingsSheet`.
-- `AnchorScanProgress`.
 - `AnchorFilterSheet`.
 - `AnchorFolderPickerMock`.
 

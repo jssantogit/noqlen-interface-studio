@@ -10,6 +10,8 @@ import {
   Settings,
   Square,
 } from 'lucide-react'
+import type { AnchorScanState } from './AnchorScanProgress'
+import type { AnchorServerState } from '../AnchorPreview'
 import {
   anchorLibrary,
   anchorQuickActions,
@@ -19,12 +21,83 @@ import { AnchorCard, AnchorIconButton, AnchorScreenHeader } from './AnchorCard'
 
 const quickActionIcons = [Copy, QrCode, RefreshCw]
 
-export function AnchorHome() {
+const serverView: Record<
+  AnchorServerState,
+  {
+    actionLabel: string
+    iconClass: string
+    primaryButton: string
+    status: string
+    statusClass: string
+    uptime: string
+  }
+> = {
+  active: {
+    actionLabel: 'Stop server',
+    iconClass: 'border-amber-300 text-amber-300',
+    primaryButton: 'bg-amber-400 text-[#211508] hover:bg-amber-300',
+    status: anchorServer.status,
+    statusClass: 'text-amber-300',
+    uptime: anchorServer.uptime,
+  },
+  stopped: {
+    actionLabel: 'Start server',
+    iconClass: 'border-slate-400/70 text-slate-300',
+    primaryButton: 'bg-white/[0.07] text-slate-200 hover:bg-white/[0.1]',
+    status: 'Server stopped',
+    statusClass: 'text-slate-300',
+    uptime: 'Offline in preview',
+  },
+  restarting: {
+    actionLabel: 'Stop server',
+    iconClass: 'border-amber-300 text-amber-300',
+    primaryButton: 'bg-amber-300/70 text-[#211508]',
+    status: 'Restarting server',
+    statusClass: 'text-amber-200',
+    uptime: 'Restarting...',
+  },
+  degraded: {
+    actionLabel: 'Stop server',
+    iconClass: 'border-orange-300 text-orange-300',
+    primaryButton: 'bg-orange-400 text-white hover:bg-orange-300',
+    status: 'Server degraded',
+    statusClass: 'text-orange-300',
+    uptime: anchorServer.uptime,
+  },
+}
+
+export function AnchorHome({
+  onCopyAddress,
+  onLibraryOpen,
+  onRefreshLibrary,
+  onRestartServer,
+  onSettingsOpen,
+  onShowQrCode,
+  onStopServer,
+  scanState,
+  serverState,
+}: {
+  onCopyAddress: () => void
+  onLibraryOpen: () => void
+  onRefreshLibrary: () => void
+  onRestartServer: () => void
+  onSettingsOpen: () => void
+  onShowQrCode: () => void
+  onStopServer: () => void
+  scanState: AnchorScanState
+  serverState: AnchorServerState
+}) {
+  const server = serverView[serverState]
+  const isRestarting = serverState === 'restarting'
+  const isStopped = serverState === 'stopped'
+
+  const quickActionHandlers = [onCopyAddress, onShowQrCode, onRefreshLibrary]
+
   return (
     <div className="px-5 pt-5">
       <AnchorScreenHeader
         action={
-          <AnchorIconButton label="Settings">
+          <AnchorIconButton label="Settings" onClick={onSettingsOpen}>
             <Settings size={21} />
           </AnchorIconButton>
         }
@@ -34,11 +107,15 @@ export function AnchorHome() {
 
       <AnchorCard className="p-5">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 text-sm font-semibold text-amber-300">
-            <span className="grid h-7 w-7 place-items-center rounded-full border border-amber-300 text-amber-300">
-              <Check size={17} strokeWidth={2.4} />
+          <div className={`flex items-center gap-3 text-sm font-semibold ${server.statusClass}`}>
+            <span className={`grid h-7 w-7 place-items-center rounded-full border ${server.iconClass}`}>
+              {isRestarting ? (
+                <RefreshCw className="animate-spin" size={16} strokeWidth={2.4} />
+              ) : (
+                <Check size={17} strokeWidth={2.4} />
+              )}
             </span>
-            <span>{anchorServer.status}</span>
+            <span>{server.status}</span>
           </div>
           <MoreVertical className="text-slate-300/70" size={18} />
         </div>
@@ -47,7 +124,7 @@ export function AnchorHome() {
         </h2>
         <dl className="mt-6 space-y-3 text-sm">
           {[
-            ['Uptime', anchorServer.uptime],
+            ['Uptime', server.uptime],
             ['Library size', anchorServer.librarySize],
             ['Address', anchorServer.address],
           ].map(([label, value]) => (
@@ -59,18 +136,22 @@ export function AnchorHome() {
         </dl>
         <div className="mt-6 space-y-2.5">
           <button
-            className="flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-amber-400 text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_0.8rem_1.5rem_rgba(245,158,11,0.16)] transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-100/60"
+            className={`flex h-10 w-full items-center justify-center gap-2 rounded-lg text-sm font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_0.8rem_1.5rem_rgba(245,158,11,0.12)] transition focus:outline-none focus:ring-2 focus:ring-amber-100/60 disabled:cursor-not-allowed disabled:opacity-60 ${server.primaryButton}`}
+            disabled={isRestarting}
+            onClick={isStopped ? onRestartServer : onStopServer}
             type="button"
           >
-            Stop server
+            {server.actionLabel}
             <Square size={14} strokeWidth={2.5} />
           </button>
           <button
             className="flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-white/[0.065] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+            disabled={isRestarting}
+            onClick={onRestartServer}
             type="button"
           >
-            Restart
-            <RotateCw size={16} />
+            {isRestarting ? 'Restarting' : 'Restart'}
+            <RotateCw className={isRestarting ? 'animate-spin' : ''} size={16} />
           </button>
         </div>
       </AnchorCard>
@@ -78,6 +159,7 @@ export function AnchorHome() {
       <AnchorCard className="mt-3.5">
         <button
           className="flex w-full items-center gap-3 p-3.5 text-left focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-300/30"
+          onClick={onLibraryOpen}
           type="button"
         >
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-amber-300/16 text-amber-300">
@@ -106,10 +188,14 @@ export function AnchorHome() {
               <button
                 className="flex min-h-[5.2rem] min-w-0 flex-col items-center justify-center gap-2 rounded-xl border border-white/[0.065] bg-white/[0.045] px-2 py-3 text-center text-[0.7rem] leading-4 text-slate-200 transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
                 key={action}
+                onClick={quickActionHandlers[index]}
                 type="button"
               >
-                <Icon className="text-white" size={22} />
-                <span>{action}</span>
+                <Icon
+                  className={action === 'Refresh library' && scanState === 'scanning' ? 'animate-spin text-amber-200' : 'text-white'}
+                  size={22}
+                />
+                <span>{action === 'Refresh library' && scanState === 'scanning' ? 'Refreshing' : action}</span>
               </button>
             )
           })}

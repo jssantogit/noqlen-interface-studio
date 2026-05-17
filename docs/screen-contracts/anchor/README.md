@@ -55,6 +55,10 @@ Required content:
 ## Allowed Interactions
 
 - Internal Anchor bottom nav may switch between Home, Servers, Library and Activity.
+- Home settings may open a mock settings sheet with local visual toggles only.
+- Home server controls may show confirmation dialogs and change mock-only server card state.
+- Home quick actions may show toasts, a fake QR preview and a mock scan progress sheet.
+- Home Library card may switch to the Library tab without reading the library path.
 - Buttons may show hover, active and focus styles.
 - Details buttons may remain inert visual controls.
 - Studio app switcher must continue selecting Anchor, Forge, Aria and Flux.
@@ -69,11 +73,11 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 
 ## Disabled / Visual-Only Actions
 
-- Stop server is visual-only.
-- Restart is visual-only.
-- Copy address is visual-only and must not access the clipboard unless explicitly implemented in a future block.
-- Show QR code is visual-only.
-- Refresh library is visual-only.
+- Stop server changes only the local mock server state after confirmation.
+- Restart changes only the local mock server state after confirmation.
+- Copy address shows a mock toast and does not require Clipboard API access.
+- Show QR code displays a fake QR preview for the mock address only.
+- Refresh library displays a mock scan progress sheet only.
 - Settings, View logs, Change folder, Verify access, Library settings and Details are visual-only.
 
 ## Anchor Does Not Do

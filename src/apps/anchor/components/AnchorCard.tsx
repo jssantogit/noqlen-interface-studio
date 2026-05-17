@@ -43,14 +43,17 @@ export function AnchorScreenHeader({
 export function AnchorIconButton({
   children,
   label,
+  onClick,
 }: {
   children: ReactNode
   label: string
+  onClick?: () => void
 }) {
   return (
     <button
       aria-label={label}
       className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-slate-200 transition hover:bg-white/8 hover:text-amber-200 focus:outline-none focus:ring-2 focus:ring-amber-300/35"
+      onClick={onClick}
       type="button"
     >
       {children}
