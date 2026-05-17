@@ -86,3 +86,10 @@ Bloco 2.3 delta:
 - Wired Home settings, stop, restart, copy address, show QR code, refresh library and Library card navigation with local mock-only state.
 - Added mock server states for active, stopped and restarting in the Home server card without backend, filesystem, network or server-control behavior.
 - Kept Servers, Library deep interactions, Activity interactions, Forge, Aria and Flux outside this batch.
+
+Bloco 2.4 delta:
+
+- Added Anchor Servers mock interactions for add server, Navidrome details, server menu, server settings, log viewer and Jellyfin/Emby coming-soon sheets.
+- Wired Servers actions through local React state only, including toast-only add/rename/duplicate feedback, local disabled state and confirmation-gated local removal until refresh.
+- Added static mock log filtering without reading files, process output or terminal logs.
+- Updated Anchor interaction contracts and created the Batch 2 audit while keeping Library deep interactions, Activity interactions, Forge, Aria and Flux untouched.

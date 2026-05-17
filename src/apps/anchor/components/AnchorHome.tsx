@@ -64,6 +64,14 @@ const serverView: Record<
     statusClass: 'text-orange-300',
     uptime: anchorServer.uptime,
   },
+  disabled: {
+    actionLabel: 'Start server',
+    iconClass: 'border-slate-400/70 text-slate-300',
+    primaryButton: 'bg-white/[0.07] text-slate-200 hover:bg-white/[0.1]',
+    status: 'Server disabled',
+    statusClass: 'text-slate-300',
+    uptime: 'Disabled in preview',
+  },
 }
 
 export function AnchorHome({
@@ -89,7 +97,7 @@ export function AnchorHome({
 }) {
   const server = serverView[serverState]
   const isRestarting = serverState === 'restarting'
-  const isStopped = serverState === 'stopped'
+  const isStopped = serverState === 'stopped' || serverState === 'disabled'
 
   const quickActionHandlers = [onCopyAddress, onShowQrCode, onRefreshLibrary]
 

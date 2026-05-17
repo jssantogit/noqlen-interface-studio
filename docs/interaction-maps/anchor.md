@@ -107,10 +107,10 @@ Secondary surfaces:
 
 - Trigger: plus icon in the Servers header.
 - Result: opens Add server mock sheet.
-- Fields: server type, name, address.
-- Save behavior: may create a mock pending server in a future implementation.
+- Fields: server type, display name, local address and port.
+- Save behavior: closes the sheet and shows `Mock server added`; no pending server is persisted.
 - Safety: no real connection, validation request, discovery or credential handling.
-- Current status: not implemented.
+- Current status: implemented in Batch 2.
 
 ### Navidrome Card
 
@@ -118,7 +118,7 @@ Secondary surfaces:
 - Result: opens server details sheet or expands details.
 - Data: static Navidrome mock data.
 - Safety: no real status refresh or server query.
-- Current status: partial because details are visible, but tap/expansion is not interactive.
+- Current status: implemented in Batch 2 with settings and logs actions inside the sheet.
 
 ### Server Menu
 
@@ -126,35 +126,35 @@ Secondary surfaces:
 - Result: opens server menu sheet.
 - Menu items: Rename, Duplicate config, Disable, Remove mock server.
 - Safety: all actions mutate only local mock state when implemented.
-- Current status: not implemented.
+- Current status: implemented in Batch 2. Rename and duplicate show mock toasts, disable changes local visual state, and remove requires confirmation before hiding the local card until refresh.
 
 ### Settings
 
 - Trigger: `Settings` button in the Navidrome card.
 - Result: opens server settings sheet.
 - Safety: no real server settings are read or written.
-- Current status: not implemented.
+- Current status: implemented in Batch 2 with local visual fields/toggles and save toast.
 
 ### View Logs
 
 - Trigger: `View logs` button in the Navidrome card.
 - Result: opens mock log viewer.
 - Safety: no real log files, process output or filesystem content are read.
-- Current status: not implemented.
+- Current status: implemented in Batch 2 with static log rows and local filters.
 
 ### Jellyfin Coming Soon
 
 - Trigger: Jellyfin coming-soon card or menu.
 - Result: opens coming-soon sheet or disabled tooltip.
 - Safety: no Jellyfin connection or discovery.
-- Current status: not implemented.
+- Current status: implemented in Batch 2 as a coming-soon sheet.
 
 ### Emby Coming Soon
 
 - Trigger: Emby coming-soon card or menu.
 - Result: opens coming-soon sheet or disabled tooltip.
 - Safety: no Emby connection or discovery.
-- Current status: not implemented.
+- Current status: implemented in Batch 2 as a coming-soon sheet.
 
 ## Library Interaction Map
 
@@ -299,12 +299,20 @@ Batch 1 components now implemented:
 - `AnchorSettingsSheet`.
 - `AnchorScanProgress`.
 
+Batch 2 components now implemented:
+
+- `AnchorAddServerSheet`.
+- `AnchorServerDetailsSheet`.
+- `AnchorServerMenuSheet`.
+- `AnchorServerSettingsSheet`.
+- `AnchorLogViewerSheet`.
+- `AnchorComingSoonSheet`.
+
 Needed components:
 
 - `AnchorHeader`.
 - `AnchorButton`.
 - `AnchorStatusPill`.
-- `AnchorLogViewer`.
 - `AnchorFilterSheet`.
 - `AnchorFolderPickerMock`.
 

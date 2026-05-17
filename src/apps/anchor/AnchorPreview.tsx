@@ -2,14 +2,20 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { AnchorActivity } from './components/AnchorActivity'
+import { AnchorAddServerSheet } from './components/AnchorAddServerSheet'
 import { AnchorBottomNav } from './components/AnchorBottomNav'
 import { AnchorBottomSheet } from './components/AnchorBottomSheet'
+import { AnchorComingSoonSheet } from './components/AnchorComingSoonSheet'
 import { AnchorConfirmDialog } from './components/AnchorConfirmDialog'
 import { AnchorHome } from './components/AnchorHome'
 import { AnchorLibrary } from './components/AnchorLibrary'
+import { AnchorLogViewerSheet } from './components/AnchorLogViewerSheet'
 import { AnchorMockQrCode } from './components/AnchorMockQrCode'
 import { AnchorScanProgress } from './components/AnchorScanProgress'
 import type { AnchorScanState } from './components/AnchorScanProgress'
+import { AnchorServerDetailsSheet } from './components/AnchorServerDetailsSheet'
+import { AnchorServerMenuSheet } from './components/AnchorServerMenuSheet'
+import { AnchorServerSettingsSheet } from './components/AnchorServerSettingsSheet'
 import { AnchorSettingsSheet } from './components/AnchorSettingsSheet'
 import { AnchorServers } from './components/AnchorServers'
 import { AnchorToast } from './components/AnchorToast'
@@ -17,9 +23,19 @@ import type { AnchorToastTone } from './components/AnchorToast'
 import { anchorServer } from './anchorMockData'
 
 export type AnchorTab = 'home' | 'servers' | 'library' | 'activity'
-export type AnchorServerState = 'active' | 'stopped' | 'restarting' | 'degraded'
-type AnchorSheet = 'settings' | 'qr' | 'scan' | null
-type AnchorDialog = 'stop' | 'restart' | null
+export type AnchorServerState = 'active' | 'stopped' | 'restarting' | 'degraded' | 'disabled'
+type AnchorSheet =
+  | 'settings'
+  | 'qr'
+  | 'scan'
+  | 'addServer'
+  | 'serverDetails'
+  | 'serverMenu'
+  | 'serverSettings'
+  | 'logs'
+  | 'comingSoon'
+  | null
+type AnchorDialog = 'stop' | 'restart' | 'removeServer' | null
 type AnchorToastState = { message: string; tone: AnchorToastTone } | null
 
 export function AnchorPreview() {
@@ -28,6 +44,8 @@ export function AnchorPreview() {
   const [activeSheet, setActiveSheet] = useState<AnchorSheet>(null)
   const [activeDialog, setActiveDialog] = useState<AnchorDialog>(null)
   const [scanState, setScanState] = useState<AnchorScanState>('idle')
+  const [comingSoonServer, setComingSoonServer] = useState<'Jellyfin' | 'Emby'>('Jellyfin')
+  const [navidromeVisible, setNavidromeVisible] = useState(true)
   const [toast, setToast] = useState<AnchorToastState>(null)
 
   const showToast = (message: string, tone: AnchorToastTone = 'success') => {
@@ -80,7 +98,21 @@ export function AnchorPreview() {
         serverState={serverState}
       />
     ),
-    servers: <AnchorServers />,
+    servers: (
+      <AnchorServers
+        navidromeVisible={navidromeVisible}
+        onAddServer={() => setActiveSheet('addServer')}
+        onComingSoon={(server) => {
+          setComingSoonServer(server)
+          setActiveSheet('comingSoon')
+        }}
+        onOpenDetails={() => setActiveSheet('serverDetails')}
+        onOpenLogs={() => setActiveSheet('logs')}
+        onOpenMenu={() => setActiveSheet('serverMenu')}
+        onOpenSettings={() => setActiveSheet('serverSettings')}
+        serverState={serverState === 'degraded' ? 'active' : serverState}
+      />
+    ),
     library: <AnchorLibrary />,
     activity: <AnchorActivity />,
   }
@@ -131,6 +163,72 @@ export function AnchorPreview() {
         </AnchorBottomSheet>
       ) : null}
 
+      {activeSheet === 'addServer' ? (
+        <AnchorAddServerSheet
+          onCancel={() => setActiveSheet(null)}
+          onSave={() => {
+            setActiveSheet(null)
+            showToast('Mock server added')
+          }}
+        />
+      ) : null}
+
+      {activeSheet === 'serverDetails' ? (
+        <AnchorServerDetailsSheet
+          onClose={() => setActiveSheet(null)}
+          onOpenLogs={() => setActiveSheet('logs')}
+          onOpenSettings={() => setActiveSheet('serverSettings')}
+          statusLabel={serverState === 'disabled' ? 'Disabled' : 'Running'}
+        />
+      ) : null}
+
+      {activeSheet === 'serverMenu' ? (
+        <AnchorServerMenuSheet
+          onAction={(action) => {
+            if (action === 'remove') {
+              setActiveSheet(null)
+              setActiveDialog('removeServer')
+              return
+            }
+            if (action === 'disable') {
+              setActiveSheet(null)
+              setServerState('disabled')
+              showToast('Mock server disabled', 'warning')
+              return
+            }
+            if (action === 'duplicate') {
+              setActiveSheet(null)
+              showToast('Mock configuration duplicated')
+              return
+            }
+            setActiveSheet(null)
+            showToast('Rename is visual-only in this preview', 'info')
+          }}
+          onClose={() => setActiveSheet(null)}
+        />
+      ) : null}
+
+      {activeSheet === 'serverSettings' ? (
+        <AnchorServerSettingsSheet
+          onCancel={() => setActiveSheet(null)}
+          onSave={() => {
+            setActiveSheet(null)
+            showToast('Server settings saved in mock preview')
+          }}
+        />
+      ) : null}
+
+      {activeSheet === 'logs' ? (
+        <AnchorLogViewerSheet onClose={() => setActiveSheet(null)} />
+      ) : null}
+
+      {activeSheet === 'comingSoon' ? (
+        <AnchorComingSoonSheet
+          onClose={() => setActiveSheet(null)}
+          serverName={comingSoonServer}
+        />
+      ) : null}
+
       {activeDialog === 'stop' ? (
         <AnchorConfirmDialog
           confirmLabel="Stop server"
@@ -153,6 +251,21 @@ export function AnchorPreview() {
           onCancel={() => setActiveDialog(null)}
           onConfirm={startRestart}
           title="Restart Navidrome?"
+        />
+      ) : null}
+
+      {activeDialog === 'removeServer' ? (
+        <AnchorConfirmDialog
+          confirmLabel="Remove"
+          description="This only removes the Navidrome card from the current local preview until refresh."
+          onCancel={() => setActiveDialog(null)}
+          onConfirm={() => {
+            setActiveDialog(null)
+            setNavidromeVisible(false)
+            showToast('Mock server removed', 'warning')
+          }}
+          title="Remove mock server?"
+          tone="danger"
         />
       ) : null}
 

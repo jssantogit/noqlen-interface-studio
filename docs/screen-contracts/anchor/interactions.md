@@ -26,13 +26,14 @@ This contract translates the Anchor interaction map into implementation-oriented
 
 | Interaction | Trigger | Resulting UI | Mock state changes | Data used | Forbidden real behavior | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| Add server | Servers plus icon | Add server bottom sheet with server type, name and address fields | Optional future pending mock server on save | Empty static form defaults | Connection attempt, discovery, credentials | not implemented |
-| Navidrome card | Navidrome card body | Server details sheet or expanded details | Active selected server becomes `navidrome` | `anchorServers[0]` | Status refresh or server query | partial |
-| Server menu | Server card menu icon | Server menu sheet with Rename, Duplicate config, Disable and Remove mock server | Future local mock rename/duplicate/disable/remove only | `anchorServers` | Deleting real config or server data | not implemented |
-| Settings | Navidrome `Settings` button | Server settings sheet | Active overlay becomes server settings | Static server settings labels | Reading/writing real server config | not implemented |
-| View logs | Navidrome `View logs` button | Mock log viewer | Active overlay becomes logs | Static mock log lines | Reading real logs, process output or files | not implemented |
-| Jellyfin coming soon | Jellyfin card or menu | Coming-soon sheet or disabled tooltip | Active overlay becomes coming soon | `anchorServers` coming-soon copy | Jellyfin discovery or connection | not implemented |
-| Emby coming soon | Emby card or menu | Coming-soon sheet or disabled tooltip | Active overlay becomes coming soon | `anchorServers` coming-soon copy | Emby discovery or connection | not implemented |
+| Add server | Servers plus icon | Add server bottom sheet with server type, display name, local address and port fields | Save closes the sheet and shows `Mock server added`; no server is persisted | Empty static form defaults | Connection attempt, discovery, credentials | implemented |
+| Navidrome card | Navidrome card body | Server details sheet with status, address, version, uptime, library and last activity | Active sheet becomes server details | `anchorServers[0]`, `anchorServer` | Status refresh or server query | implemented |
+| Server menu | Server card menu icon | Server menu sheet with Rename, Duplicate config, Disable and Remove mock server | Rename/duplicate show toasts; disable sets local state to disabled; remove opens confirmation | `anchorServers` | Deleting real config or server data | implemented |
+| Settings | Navidrome `Settings` button or details action | Server settings sheet | Toggles and fields mutate only local visual state; save shows toast | Static server settings labels | Reading/writing real server config | implemented |
+| View logs | Navidrome `View logs` button or details action | Mock log viewer with All, Info, Warnings and Errors filters | Filter changes visible static log rows only | Static mock log lines | Reading real logs, process output or files | implemented |
+| Jellyfin coming soon | Jellyfin card | Coming-soon sheet | Active sheet becomes Jellyfin coming soon | `anchorServers` coming-soon copy | Jellyfin discovery or connection | implemented |
+| Emby coming soon | Emby card | Coming-soon sheet | Active sheet becomes Emby coming soon | `anchorServers` coming-soon copy | Emby discovery or connection | implemented |
+| Remove mock server | Server menu remove option | Confirmation dialog before local preview card removal | On confirm, Navidrome card is hidden until refresh; cancel leaves it visible | `anchorServers[0]` | Removing real config or server data | implemented |
 
 ## Library
 
@@ -100,6 +101,6 @@ Global states:
 ## Completion Tracking
 
 - Current implementation has complete base surfaces for Home, Servers, Library and Activity.
-- Current implementation has bottom nav and Home Batch 1 interactions.
-- Servers, Library deep actions, Activity and remaining state coverage are incomplete until all rows above are implemented and QAed.
+- Current implementation has bottom nav, Home Batch 1 interactions and Servers Batch 2 interactions.
+- Library deep actions, Activity and remaining state coverage are incomplete until all rows above are implemented and QAed.
 - No app-specific implementation should be considered complete unless its forbidden real behavior has also been checked.

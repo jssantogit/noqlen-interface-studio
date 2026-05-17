@@ -85,9 +85,9 @@ export const anchorInteractions: AnchorInteraction[] = [
     area: 'servers',
     trigger: 'Add server plus icon',
     surface: 'Add server sheet',
-    mockState: 'Open add-server overlay',
+    mockState: 'Open add-server overlay and show toast-only add feedback',
     forbidden: 'Attempt discovery, connection or credential handling',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'servers-navidrome-details',
@@ -96,16 +96,16 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Server details sheet or expanded details',
     mockState: 'Select mock Navidrome server',
     forbidden: 'Query real server status',
-    status: 'partial',
+    status: 'implemented',
   },
   {
     id: 'servers-menu',
     area: 'servers',
     trigger: 'Server menu icon',
     surface: 'Server menu sheet',
-    mockState: 'Open menu for selected mock server',
+    mockState: 'Open menu, show toast feedback, disable locally or confirm removal',
     forbidden: 'Delete or edit real server config',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'servers-settings',
@@ -114,7 +114,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Server settings sheet',
     mockState: 'Open server settings overlay',
     forbidden: 'Read or write real server config',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'servers-view-logs',
@@ -123,7 +123,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Mock log viewer',
     mockState: 'Open logs overlay',
     forbidden: 'Read real logs, files or process output',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'servers-jellyfin-coming-soon',
@@ -132,7 +132,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Coming-soon sheet or tooltip',
     mockState: 'Open coming-soon overlay',
     forbidden: 'Discover or connect to Jellyfin',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'servers-emby-coming-soon',
@@ -141,7 +141,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Coming-soon sheet or tooltip',
     mockState: 'Open coming-soon overlay',
     forbidden: 'Discover or connect to Emby',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'library-change-folder',

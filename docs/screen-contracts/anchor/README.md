@@ -59,6 +59,9 @@ Required content:
 - Home server controls may show confirmation dialogs and change mock-only server card state.
 - Home quick actions may show toasts, a fake QR preview and a mock scan progress sheet.
 - Home Library card may switch to the Library tab without reading the library path.
+- Servers plus may open an Add server sheet and show toast-only add feedback.
+- Servers Navidrome card may open details, settings, logs and a local mock menu.
+- Servers Jellyfin and Emby cards may open coming-soon sheets only.
 - Buttons may show hover, active and focus styles.
 - Details buttons may remain inert visual controls.
 - Studio app switcher must continue selecting Anchor, Forge, Aria and Flux.
@@ -69,6 +72,8 @@ The four reference screens are the base Anchor surfaces, not the full applicatio
 
 Required expansion surfaces include settings, server details, server menus, mock logs, add-server flow, QR code preview, folder picker mock, library scan flow, access verification, activity filters, event details, startup failure details, confirmation dialogs, toasts and empty/loading/error states.
 
+Batch 2 implements the Servers expansion surfaces with local-only state and static data.
+
 Completion requires consistent Anchor-styled sheets, dialogs and state variants while preserving the no-backend, no-filesystem and no-real-server-control boundary.
 
 ## Disabled / Visual-Only Actions
@@ -78,7 +83,8 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 - Copy address shows a mock toast and does not require Clipboard API access.
 - Show QR code displays a fake QR preview for the mock address only.
 - Refresh library displays a mock scan progress sheet only.
-- Settings, View logs, Change folder, Verify access, Library settings and Details are visual-only.
+- Server settings, server details, server menu, View logs and coming-soon sheets are visual-only.
+- Change folder, Verify access, Library settings and Activity Details remain future visual-only work.
 
 ## Anchor Does Not Do
 
