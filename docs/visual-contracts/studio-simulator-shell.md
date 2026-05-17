@@ -23,3 +23,4 @@ The Studio shell is a visual lab, not a product dashboard and not any Noqlen app
 - Phone content scrolls internally when needed.
 - The page must avoid horizontal overflow.
 - On desktop, the phone remains centered with side UI secondary.
+- Detailed responsive behavior is defined in `docs/visual-contracts/responsive-shell.md`.

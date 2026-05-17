@@ -1,6 +1,12 @@
 @import "tailwindcss";
 
 :root {
+  --studio-shell-pad: clamp(0.75rem, 2vw, 2rem);
+  --studio-shell-gap: clamp(0.75rem, 2vw, 1.75rem);
+  --studio-phone-width: clamp(20rem, calc(100vw - 1.5rem), 26.875rem);
+  --studio-phone-height: min(53.75rem, calc(100dvh - 14.5rem));
+  --studio-phone-min-height: min(35rem, calc(100svh - 8rem));
+
   color-scheme: dark;
   background: #071018;
   color: #f8fafc;
@@ -17,17 +23,46 @@
   box-sizing: border-box;
 }
 
+html {
+  min-width: 320px;
+  min-height: 100%;
+  overflow-x: clip;
+}
+
 body {
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
+  overflow-x: clip;
   background:
     radial-gradient(circle at 18% 0%, rgba(245, 158, 11, 0.18), transparent 32rem),
     radial-gradient(circle at 85% 12%, rgba(59, 130, 246, 0.11), transparent 28rem),
     linear-gradient(135deg, #030712 0%, #070b13 45%, #11100d 100%);
 }
 
+#root {
+  min-height: 100dvh;
+  width: 100%;
+  overflow-x: clip;
+}
+
 button,
 a {
   font: inherit;
+}
+
+@media (max-width: 420px) {
+  :root {
+    --studio-phone-width: min(100%, calc(100vw - 1.5rem));
+    --studio-phone-height: min(48rem, calc(100dvh - 11.5rem));
+    --studio-phone-min-height: min(31rem, calc(100svh - 7rem));
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --studio-phone-width: clamp(22.5rem, 32vw, 26.875rem);
+    --studio-phone-height: min(53.75rem, calc(100dvh - 8rem));
+    --studio-phone-min-height: min(39rem, calc(100svh - 7rem));
+  }
 }

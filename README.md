@@ -2,7 +2,7 @@
 
 Noqlen Interface Studio is the visual-only mobile simulator lab for exploring interface contracts across the Noqlen ecosystem.
 
-Bloco 1 aligns the site around a premium simulator shell: a minimal external Studio UI, an app selector, and a simulated phone frame where Anchor, Forge, Aria or Flux appears as a static visual placeholder. Anchor is selected by default.
+Bloco 1 aligns the site around a premium simulator shell: a minimal external Studio UI, an app selector, and a responsive simulated phone frame where Anchor, Forge, Aria or Flux appears as a static visual placeholder. Anchor is selected by default.
 
 ## Core Rule
 
@@ -13,6 +13,7 @@ This repository must not implement real backend access, downloads, server contro
 - Minimal external lab shell.
 - Direct app selector for Anchor, Forge, Aria and Flux.
 - Simulated phone frame as the main stage.
+- Responsive shell sizing documented in `docs/visual-contracts/responsive-shell.md`.
 - Fake phone status bar and home indicator.
 - Static app placeholders inside the phone.
 - App-specific interactive screens start only after this visual base is stable.

@@ -12,10 +12,10 @@ export function PhoneFrame({
   return (
     <section
       aria-label={`${appName} phone simulator`}
-      className="w-full max-w-[25rem] rounded-[3rem] border border-white/12 bg-gradient-to-b from-slate-700/35 via-black to-black p-2 shadow-[0_3rem_7rem_rgba(0,0,0,0.55)] sm:p-2.5"
+      className="w-[var(--studio-phone-width)] max-w-full shrink-0 rounded-[clamp(2.1rem,8vw,3rem)] border border-white/12 bg-gradient-to-b from-slate-700/35 via-black to-black p-1.5 shadow-[0_2rem_5rem_rgba(0,0,0,0.5)] sm:p-2.5 lg:shadow-[0_3rem_7rem_rgba(0,0,0,0.55)]"
     >
-      <div className="relative h-[min(46rem,calc(100vh-9.5rem))] min-h-[35rem] overflow-hidden rounded-[2.55rem] border border-white/10 bg-black">
-        <div className="pointer-events-none absolute left-1/2 top-2 z-20 h-6 w-28 -translate-x-1/2 rounded-full bg-black shadow-lg shadow-black" />
+      <div className="relative aspect-[9/19.5] h-[var(--studio-phone-height)] min-h-[var(--studio-phone-min-height)] max-h-[var(--studio-phone-height)] overflow-hidden rounded-[clamp(1.85rem,7vw,2.55rem)] border border-white/10 bg-black">
+        <div className="pointer-events-none absolute left-1/2 top-2 z-20 h-5 w-24 -translate-x-1/2 rounded-full bg-black shadow-lg shadow-black sm:h-6 sm:w-28" />
         <div className="flex h-full flex-col bg-gradient-to-b from-white/[0.055] to-transparent">
           <PhoneStatusBar appName={appName} />
           {children}

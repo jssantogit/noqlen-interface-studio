@@ -14,12 +14,12 @@ export function StudioLayout() {
   const Preview = selectedApp.Preview
 
   return (
-    <main className="min-h-screen overflow-x-hidden px-3 py-3 text-slate-100 sm:px-5 sm:py-5 lg:px-8">
-      <div className="mx-auto flex max-w-7xl flex-col gap-4">
+    <main className="min-h-dvh w-full overflow-x-clip px-[max(var(--studio-shell-pad),env(safe-area-inset-left))] py-[max(0.75rem,env(safe-area-inset-top))] pb-[max(var(--studio-shell-pad),env(safe-area-inset-bottom))] text-slate-100">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-[var(--studio-shell-gap)]">
         <StudioTopBar />
 
-        <section className="grid items-start gap-4 lg:grid-cols-[15rem_minmax(0,1fr)_15rem]">
-          <div className="order-1 lg:sticky lg:top-5">
+        <section className="grid min-w-0 items-start gap-[var(--studio-shell-gap)] lg:grid-cols-[minmax(11rem,13rem)_minmax(0,1fr)_minmax(13rem,15rem)] xl:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)_minmax(14rem,16rem)]">
+          <div className="order-1 min-w-0 lg:sticky lg:top-[var(--studio-shell-pad)]">
             <AppSwitcher
               apps={studioApps}
               onSelectApp={setSelectedAppId}
@@ -29,7 +29,7 @@ export function StudioLayout() {
 
           <motion.div
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            className="order-2 flex min-w-0 justify-center"
+            className="order-2 flex min-w-0 justify-center lg:px-2"
             initial={{ opacity: 0, y: 12, scale: 0.985 }}
             key={selectedApp.id}
             transition={{ duration: 0.24, ease: 'easeOut' }}
@@ -41,7 +41,7 @@ export function StudioLayout() {
             </PhoneFrame>
           </motion.div>
 
-          <div className="order-3 hidden lg:sticky lg:top-5 lg:block">
+          <div className="order-3 hidden min-w-0 lg:sticky lg:top-[var(--studio-shell-pad)] lg:block">
             <StudioInspector selectedApp={selectedApp} />
           </div>
         </section>
