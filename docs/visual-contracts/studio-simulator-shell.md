@@ -8,14 +8,14 @@ The Studio shell is a visual lab, not a product dashboard and not any Noqlen app
 - Direct app selector for Anchor, Forge, Aria and Flux.
 - Centered simulated phone frame as the main stage.
 - Optional side inspector that remains secondary.
-- Static app placeholder inside the phone viewport.
+- App previews inside the phone viewport. Some apps may have lightweight mock navigation when adapted from accepted legacy patterns.
 
 ## Visual Rules
 
 - The phone frame should dominate the composition.
 - External Studio UI should stay quiet and not compete with app previews.
 - Mock-only language should be present but subtle.
-- App-specific interactive screens are out of scope for this shell.
+- App-specific interactions must remain contained inside the phone viewport and must not compete with the Studio-level selector.
 
 ## Bloco 1.3 Phone Frame Realism
 
@@ -30,7 +30,7 @@ The Studio shell is a visual lab, not a product dashboard and not any Noqlen app
 - The bezel is uniform, black and believable without becoming bulky.
 - The screen is embedded inside the device body and uses a slightly smaller radius than the outer shell.
 - App preview content remains inside the screen viewport and must not escape horizontally.
-- The viewport remains static/simple until app-specific screen work begins in a later block.
+- The viewport may host static or lightweight mock app previews, but the current phone frame remains the host and source of truth.
 
 ## Status And Bottom Rules
 
@@ -47,8 +47,14 @@ The Studio shell is a visual lab, not a product dashboard and not any Noqlen app
 - On desktop, the phone remains centered with side UI secondary.
 - Detailed responsive behavior is defined in `docs/visual-contracts/responsive-shell.md`.
 
-## Not Implemented In Bloco 1.3
+## Bloco 1.4 Legacy Reuse Rules
 
-- No Anchor, Forge, Aria or Flux app-specific screens.
+- Legacy UI Lab work can inform app previews only after audit.
+- Legacy shell, routing, phone frame and global CSS must not replace the current simulator shell.
+- Reused app UI must be adapted to the current dark premium phone visual language.
+- Mock controls may change local visual state only; they must not perform real playback, downloads, server controls, metadata writes, file access or network calls.
+
+## Not Implemented In Bloco 1.4
+
 - No backend calls, downloads, server controls, playback, music library access, analytics, secrets or real integrations.
 - No image-based phone mockup; the frame remains CSS/component-based so the internal app viewport can stay interactive later.

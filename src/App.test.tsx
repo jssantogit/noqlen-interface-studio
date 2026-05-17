@@ -20,7 +20,7 @@ describe('Noqlen Interface Studio shell', () => {
     ).toBeInTheDocument()
   })
 
-  it('switches app placeholders without real integration', async () => {
+  it('switches app previews without real integration', async () => {
     const user = userEvent.setup()
     render(<App />)
 
@@ -28,6 +28,6 @@ describe('Noqlen Interface Studio shell', () => {
 
     expect(screen.getByRole('heading', { name: 'Forge' })).toBeInTheDocument()
     expect(screen.getByText('Review now')).toBeInTheDocument()
-    expect(screen.getByText('Static review action')).toBeInTheDocument()
+    expect(screen.getByText('Preview static changes')).toBeInTheDocument()
   })
 })

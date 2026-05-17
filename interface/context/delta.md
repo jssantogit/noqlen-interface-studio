@@ -43,3 +43,11 @@ Bloco 1.3 delta:
 - Added subtle side-button hints without making the frame decorative or image-based.
 - Kept Anchor as the default preview and kept Anchor, Forge, Aria and Flux as static placeholders only.
 - Documented the phone frame realism rules and preserved the responsive no-horizontal-overflow contract.
+
+Bloco 1.4 delta:
+
+- Cloned and audited legacy `jssantogit/noqlen-ui-lab` outside the current repository at `/root/projects/noqlen/_legacy/noqlen-ui-lab`.
+- Recorded inspected legacy commit `3e14d429cfbc9594b7a3c23fef1efa2fb4740b36`.
+- Reused mature Forge UI Lab patterns for review groups, library rows, activity summaries and bottom navigation.
+- Expanded Aria with static mock player, library shelves and queue content using the legacy planned tab taxonomy.
+- Preserved the current Studio shell, app selector, phone frame, GitHub Pages deploy architecture and mock-only boundary.

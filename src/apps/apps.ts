@@ -26,14 +26,14 @@ export const studioApps: StudioApp[] = [
     id: 'forge',
     name: 'Forge',
     mood: 'library repair and review',
-    stage: 'Static visual placeholder',
+    stage: 'Legacy-informed mock preview',
     Preview: ForgePreview,
   },
   {
     id: 'aria',
     name: 'Aria',
     mood: 'music player and library experience',
-    stage: 'Static visual placeholder',
+    stage: 'Legacy-informed mock preview',
     Preview: AriaPreview,
   },
   {
