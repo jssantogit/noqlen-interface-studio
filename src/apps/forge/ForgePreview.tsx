@@ -8,21 +8,21 @@ const issues = [
 
 export function ForgePreview() {
   return (
-    <div className="min-h-full bg-[radial-gradient(circle_at_70%_0%,rgba(251,146,60,0.2),transparent_18rem),linear-gradient(180deg,#15110d_0%,#090d12_100%)] px-5 py-5 text-white">
+    <div className="min-h-full min-w-0 overflow-x-hidden bg-[radial-gradient(circle_at_70%_0%,rgba(251,146,60,0.2),transparent_18rem),linear-gradient(180deg,#15110d_0%,#090d12_100%)] px-5 py-5 text-white">
       <p className="text-xs uppercase tracking-[0.28em] text-orange-100/55">
         Repair queue
       </p>
       <h2 className="mt-2 font-serif text-4xl tracking-[-0.05em]">Forge</h2>
 
       <section className="mt-7 rounded-[1.8rem] border border-orange-200/15 bg-orange-200/[0.08] p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div>
+        <div className="flex min-w-0 items-start justify-between gap-4">
+          <div className="min-w-0">
             <p className="text-sm text-orange-50/70">Review now</p>
-            <p className="mt-2 text-3xl font-semibold tracking-[-0.04em]">
+            <p className="mt-2 truncate text-3xl font-semibold tracking-[-0.04em]">
               12 visual fixes
             </p>
           </div>
-          <ListChecks className="text-orange-100" size={30} />
+          <ListChecks className="shrink-0 text-orange-100" size={30} />
         </div>
         <button
           className="mt-5 w-full rounded-full bg-orange-100 px-4 py-3 text-sm font-semibold text-stone-950"
@@ -42,17 +42,17 @@ export function ForgePreview() {
               <Icon className="text-orange-100" size={20} />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="font-medium">{label}</p>
-              <p className="text-xs text-slate-400">Placeholder batch</p>
+              <p className="truncate font-medium">{label}</p>
+              <p className="truncate text-xs text-slate-400">Placeholder batch</p>
             </div>
-            <span className="text-sm text-orange-100/80">0{index + 2}</span>
+            <span className="shrink-0 text-sm text-orange-100/80">0{index + 2}</span>
           </article>
         ))}
       </div>
 
-      <div className="mt-5 flex items-center justify-between rounded-full border border-white/10 bg-black/30 px-4 py-3 text-[0.68rem] text-slate-400">
+      <div className="mt-5 flex min-w-0 items-center justify-between gap-2 overflow-hidden rounded-full border border-white/10 bg-black/30 px-4 py-3 text-[0.68rem] text-slate-400">
         {['Home', 'Review', 'Library', 'Activity'].map((item, index) => (
-          <span className={index === 1 ? 'text-orange-100' : ''} key={item}>
+          <span className={index === 1 ? 'truncate text-orange-100' : 'truncate'} key={item}>
             {item}
           </span>
         ))}

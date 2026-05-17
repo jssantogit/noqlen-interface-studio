@@ -3,7 +3,7 @@
 :root {
   --studio-shell-pad: clamp(0.75rem, 2vw, 2rem);
   --studio-shell-gap: clamp(0.75rem, 2vw, 1.75rem);
-  --studio-phone-width: min(100%, calc(100vw - 1.5rem), 26.875rem);
+  --studio-phone-width: min(100%, 26.875rem);
   --studio-phone-height: min(53.75rem, calc(100dvh - 14.5rem));
   --studio-phone-min-height: min(35rem, calc(100svh - 8rem));
 
@@ -24,13 +24,13 @@
 }
 
 html {
-  min-width: 320px;
+  width: 100%;
+  max-width: 100%;
   min-height: 100%;
   overflow-x: hidden;
 }
 
 body {
-  min-width: 320px;
   min-height: 100dvh;
   margin: 0;
   width: 100%;
@@ -54,9 +54,20 @@ a {
   font: inherit;
 }
 
+.phone-app-viewport,
+.phone-app-viewport * {
+  min-width: 0;
+}
+
+.phone-app-viewport > * {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 @media (max-width: 420px) {
   :root {
-    --studio-phone-width: min(100%, calc(100vw - 1.5rem));
+    --studio-phone-width: 100%;
     --studio-phone-height: min(48rem, calc(100dvh - 11.5rem));
     --studio-phone-min-height: min(31rem, calc(100svh - 7rem));
   }
