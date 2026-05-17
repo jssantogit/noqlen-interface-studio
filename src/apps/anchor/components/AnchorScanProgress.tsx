@@ -3,10 +3,14 @@ import { AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react'
 export type AnchorScanState = 'idle' | 'scanning' | 'complete' | 'failed'
 
 const rows = [
-  'Checking mock library folders',
-  'Reading static album summary',
-  'Updating preview counters',
+  'Preparing scan',
+  'Reading mock library index',
+  'Checking metadata',
+  'Updating summary',
+  'Complete',
 ]
+
+const results = ['128 songs checked', '3 albums updated', '0 files changed on disk']
 
 export function AnchorScanProgress({
   onFail,
@@ -67,7 +71,7 @@ export function AnchorScanProgress({
 
       <div className="space-y-2">
         {rows.map((row, index) => {
-          const rowComplete = complete || index < 2 || failed
+          const rowComplete = complete || index < 3 || failed
           return (
             <div
               className="flex items-center gap-2 rounded-xl border border-white/[0.055] bg-white/[0.03] px-3 py-2.5 text-xs text-slate-200/86"
@@ -87,6 +91,17 @@ export function AnchorScanProgress({
           )
         })}
       </div>
+
+      {complete ? (
+        <div className="rounded-2xl border border-emerald-300/15 bg-emerald-300/[0.055] p-3">
+          <p className="text-[0.68rem] uppercase tracking-[0.18em] text-emerald-200/75">Fake result</p>
+          <div className="mt-2 space-y-1.5">
+            {results.map((result) => (
+              <p className="text-xs text-slate-100" key={result}>{result}</p>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {state === 'scanning' && onFail ? (
         <button

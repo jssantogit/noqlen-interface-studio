@@ -99,7 +99,7 @@ Secondary surfaces:
 - Result: opens mock scan progress sheet.
 - States: idle, scanning, complete, failed.
 - Safety: must not read folders, scan media or call a backend.
-- Current status: implemented in Batch 1 for Home quick action only; Library tab row remains not implemented.
+- Current status: implemented in Batch 1 for Home quick action and Batch 3 for the Library tab row.
 
 ## Servers Interaction Map
 
@@ -164,7 +164,7 @@ Secondary surfaces:
 - Result: opens folder picker mock.
 - Folder copy: fake display paths only.
 - Safety: must not access the filesystem, browser file picker, FileReader or real device storage.
-- Current status: not implemented.
+- Current status: implemented in Batch 3 with fake display paths and local state only.
 
 ### Refresh Library
 
@@ -172,7 +172,7 @@ Secondary surfaces:
 - Result: starts mock scan flow.
 - States: scanning, scanned, failed.
 - Safety: no media scan, metadata read, filesystem access or backend call.
-- Current status: not implemented.
+- Current status: implemented in Batch 3 with local scan state and static result copy.
 
 ### Verify Access
 
@@ -180,7 +180,7 @@ Secondary surfaces:
 - Result: opens permission/access verification result.
 - States: accessible, warning, denied.
 - Safety: no real permission checks or path probing.
-- Current status: not implemented.
+- Current status: implemented in Batch 3 with static passed/warning checks and local replay state.
 
 ### Library Settings
 
@@ -188,21 +188,21 @@ Secondary surfaces:
 - Result: opens library settings sheet.
 - Settings: scan interval, metadata refresh, include hidden files, permission checks.
 - Safety: mock settings only; no persisted device or server configuration.
-- Current status: not implemented.
+- Current status: implemented in Batch 3 with local visual toggles and save toast.
 
 ### Stats Row
 
 - Trigger: Songs, Albums or Artists stat.
 - Result: optional stats detail sheet.
 - Safety: static counts only; no library query.
-- Current status: not implemented.
+- Current status: implemented in Batch 3 with static Studio mock values.
 
 ### Last Scan / Duration
 
 - Trigger: Last scan or Duration footer item.
 - Result: optional scan history sheet.
 - Safety: static scan history only; no real scan logs.
-- Current status: not implemented.
+- Current status: implemented in Batch 3 with static scan rows and warning note.
 
 ## Activity Interaction Map
 
@@ -308,13 +308,20 @@ Batch 2 components now implemented:
 - `AnchorLogViewerSheet`.
 - `AnchorComingSoonSheet`.
 
+Batch 3 components now implemented:
+
+- `AnchorFolderPickerMock`.
+- `AnchorAccessCheckSheet`.
+- `AnchorLibrarySettingsSheet`.
+- `AnchorLibraryStatsSheet`.
+- `AnchorScanHistorySheet`.
+
 Needed components:
 
 - `AnchorHeader`.
 - `AnchorButton`.
 - `AnchorStatusPill`.
 - `AnchorFilterSheet`.
-- `AnchorFolderPickerMock`.
 
 ## Implementation Batches
 
@@ -333,6 +340,7 @@ Needed components:
 ### Batch 3
 
 - Library interactions: Change folder mock, Refresh scan flow, Verify access, Library settings, Scan history.
+- Batch 3 also includes Library stats details.
 
 ### Batch 4
 

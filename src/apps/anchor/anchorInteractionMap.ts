@@ -150,7 +150,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Folder picker mock',
     mockState: 'Select fake display path only',
     forbidden: 'Open filesystem, file picker or FileReader',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'library-refresh',
@@ -159,7 +159,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Scan progress sheet',
     mockState: 'Move through scanning, scanned or failed',
     forbidden: 'Scan media or read metadata',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'library-verify-access',
@@ -168,7 +168,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Access verification result sheet',
     mockState: 'Show accessible, warning or denied result',
     forbidden: 'Probe real permissions or paths',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'library-settings',
@@ -177,7 +177,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Library settings sheet',
     mockState: 'Open library settings overlay',
     forbidden: 'Persist real settings',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'library-stats-detail',
@@ -186,7 +186,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Stats detail sheet',
     mockState: 'Open static stats detail',
     forbidden: 'Query a real library',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'library-scan-history',
@@ -195,7 +195,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Scan history sheet',
     mockState: 'Open static scan history',
     forbidden: 'Read real scan logs',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'activity-filter',

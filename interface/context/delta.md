@@ -93,3 +93,11 @@ Bloco 2.4 delta:
 - Wired Servers actions through local React state only, including toast-only add/rename/duplicate feedback, local disabled state and confirmation-gated local removal until refresh.
 - Added static mock log filtering without reading files, process output or terminal logs.
 - Updated Anchor interaction contracts and created the Batch 2 audit while keeping Library deep interactions, Activity interactions, Forge, Aria and Flux untouched.
+
+Bloco 2.5 delta:
+
+- Added Anchor Library mock interactions for Change folder, Refresh library, Verify access, Library settings, Stats details and Scan history.
+- Created Anchor-local Library sheets for fake folder selection, access checks, local visual settings, static stats and static scan history.
+- Wired Library interactions through local React state only, including fake display path updates, Last scan text updates, local settings toggles and toast feedback.
+- Documented that fake storage paths are display-only copy and are never used for filesystem, picker, permission, metadata, backend or network behavior.
+- Kept Activity interactions, final state coverage, Forge, Aria and Flux outside this batch.

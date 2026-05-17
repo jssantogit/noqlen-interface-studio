@@ -39,12 +39,12 @@ This contract translates the Anchor interaction map into implementation-oriented
 
 | Interaction | Trigger | Resulting UI | Mock state changes | Data used | Forbidden real behavior | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| Change folder | `Change folder` row | Folder picker mock sheet | Selected mock path may change to another fake path | `anchorLibrary.path` and future fake path list | Filesystem access, file picker, `FileReader` | not implemented |
-| Refresh library | `Refresh library` row | Scan progress sheet | Mock scan state moves through scanning, scanned or failed | `anchorLibrary` stats/footer | Media scan, metadata read, backend call | not implemented |
-| Verify access | `Verify access` row | Access verification result sheet | Mock access state becomes accessible, warning or denied | Static permission result copy | Permission probing or path checks | not implemented |
-| Library settings | `Library settings` row | Library settings sheet | Local mock settings update only if implemented later | Static settings: scan interval, metadata refresh, include hidden files, permission checks | Persisting real settings | not implemented |
-| Stats detail | Songs, Albums or Artists stat | Optional stats detail sheet | Active overlay becomes stats detail | `anchorLibrary.stats` | Querying real library | not implemented |
-| Scan history | Last scan or Duration footer item | Optional scan history sheet | Active overlay becomes scan history | `anchorLibrary.footer` | Reading real scan logs | not implemented |
+| Change folder | `Change folder` row | Folder picker mock sheet | Selected mock path changes local display copy only | Static fake folder list | Filesystem access, file picker, `FileReader` | implemented |
+| Refresh library | `Refresh library` row | Scan progress sheet with static result copy | Mock scan state moves through scanning, complete or manually simulated failed; Last scan can update to `just now` | `anchorLibrary` stats/footer and static scan rows | Media scan, metadata read, backend call | implemented |
+| Verify access | `Verify access` row | Access verification result sheet | Run check again briefly toggles local checking state | Static permission result copy | Permission probing or path checks | implemented |
+| Library settings | `Library settings` row | Library settings sheet | Local visual toggles save to component state and show toast | Static settings: scan behavior, metadata and safety | Persisting real settings | implemented |
+| Stats detail | Songs, Albums or Artists stat | Stats detail sheet | Active overlay becomes stats detail | `anchorLibrary.stats` plus static extra counts | Querying real library | implemented |
+| Scan history | Last scan or Duration footer item | Scan history sheet | Active overlay becomes scan history | Static mock scan rows | Reading real scan logs | implemented |
 
 ## Activity
 
@@ -101,6 +101,6 @@ Global states:
 ## Completion Tracking
 
 - Current implementation has complete base surfaces for Home, Servers, Library and Activity.
-- Current implementation has bottom nav, Home Batch 1 interactions and Servers Batch 2 interactions.
-- Library deep actions, Activity and remaining state coverage are incomplete until all rows above are implemented and QAed.
+- Current implementation has bottom nav, Home Batch 1 interactions, Servers Batch 2 interactions and Library Batch 3 interactions.
+- Activity and remaining state coverage are incomplete until all rows above are implemented and QAed.
 - No app-specific implementation should be considered complete unless its forbidden real behavior has also been checked.

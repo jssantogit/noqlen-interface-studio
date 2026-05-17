@@ -2,16 +2,22 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { AnchorActivity } from './components/AnchorActivity'
+import { AnchorAccessCheckSheet } from './components/AnchorAccessCheckSheet'
 import { AnchorAddServerSheet } from './components/AnchorAddServerSheet'
 import { AnchorBottomNav } from './components/AnchorBottomNav'
 import { AnchorBottomSheet } from './components/AnchorBottomSheet'
 import { AnchorComingSoonSheet } from './components/AnchorComingSoonSheet'
 import { AnchorConfirmDialog } from './components/AnchorConfirmDialog'
+import { AnchorFolderPickerMock } from './components/AnchorFolderPickerMock'
 import { AnchorHome } from './components/AnchorHome'
 import { AnchorLibrary } from './components/AnchorLibrary'
+import { AnchorLibrarySettingsSheet } from './components/AnchorLibrarySettingsSheet'
+import type { AnchorLibrarySettings } from './components/AnchorLibrarySettingsSheet'
+import { AnchorLibraryStatsSheet } from './components/AnchorLibraryStatsSheet'
 import { AnchorLogViewerSheet } from './components/AnchorLogViewerSheet'
 import { AnchorMockQrCode } from './components/AnchorMockQrCode'
 import { AnchorScanProgress } from './components/AnchorScanProgress'
+import { AnchorScanHistorySheet } from './components/AnchorScanHistorySheet'
 import type { AnchorScanState } from './components/AnchorScanProgress'
 import { AnchorServerDetailsSheet } from './components/AnchorServerDetailsSheet'
 import { AnchorServerMenuSheet } from './components/AnchorServerMenuSheet'
@@ -34,9 +40,25 @@ type AnchorSheet =
   | 'serverSettings'
   | 'logs'
   | 'comingSoon'
+  | 'folderPicker'
+  | 'accessCheck'
+  | 'librarySettings'
+  | 'libraryStats'
+  | 'scanHistory'
   | null
 type AnchorDialog = 'stop' | 'restart' | 'removeServer' | null
 type AnchorToastState = { message: string; tone: AnchorToastTone } | null
+
+const initialLibrarySettings: AnchorLibrarySettings = {
+  'Auto-scan on launch': true,
+  'Watch library changes': false,
+  'Include subfolders': true,
+  'Refresh missing artwork': true,
+  'Prefer embedded tags': true,
+  'Keep original genre tags': true,
+  'Confirm folder changes': true,
+  'Mock-only mode': true,
+}
 
 export function AnchorPreview() {
   const [activeTab, setActiveTab] = useState<AnchorTab>('home')
@@ -46,6 +68,9 @@ export function AnchorPreview() {
   const [scanState, setScanState] = useState<AnchorScanState>('idle')
   const [comingSoonServer, setComingSoonServer] = useState<'Jellyfin' | 'Emby'>('Jellyfin')
   const [navidromeVisible, setNavidromeVisible] = useState(true)
+  const [mockLibraryPath, setMockLibraryPath] = useState('/storage/emulated/0/Music/Naqlen')
+  const [mockLibraryLastScan, setMockLibraryLastScan] = useState('12 min ago')
+  const [mockLibrarySettings, setMockLibrarySettings] = useState(initialLibrarySettings)
   const [toast, setToast] = useState<AnchorToastState>(null)
 
   const showToast = (message: string, tone: AnchorToastTone = 'success') => {
@@ -71,6 +96,7 @@ export function AnchorPreview() {
     if (scanState !== 'scanning') return undefined
     const timeout = window.setTimeout(() => {
       setScanState('complete')
+      setMockLibraryLastScan('just now')
       showToast('Library refresh completed')
     }, 1500)
     return () => window.clearTimeout(timeout)
@@ -113,7 +139,21 @@ export function AnchorPreview() {
         serverState={serverState === 'degraded' ? 'active' : serverState}
       />
     ),
-    library: <AnchorLibrary />,
+    library: (
+      <AnchorLibrary
+        lastScan={mockLibraryLastScan}
+        onChangeFolder={() => setActiveSheet('folderPicker')}
+        onOpenScanHistory={() => setActiveSheet('scanHistory')}
+        onOpenSettings={() => setActiveSheet('librarySettings')}
+        onOpenStats={() => setActiveSheet('libraryStats')}
+        onRefreshLibrary={() => {
+          setScanState('scanning')
+          setActiveSheet('scan')
+        }}
+        onVerifyAccess={() => setActiveSheet('accessCheck')}
+        path={mockLibraryPath}
+      />
+    ),
     activity: <AnchorActivity />,
   }
 
@@ -150,7 +190,7 @@ export function AnchorPreview() {
       {activeSheet === 'scan' ? (
         <AnchorBottomSheet
           onClose={() => setActiveSheet(null)}
-          subtitle="A local-only preview of a library refresh."
+          subtitle="Simulating a local library scan."
           title="Refresh library"
         >
           <AnchorScanProgress
@@ -161,6 +201,42 @@ export function AnchorPreview() {
             state={scanState}
           />
         </AnchorBottomSheet>
+      ) : null}
+
+      {activeSheet === 'folderPicker' ? (
+        <AnchorFolderPickerMock
+          currentPath={mockLibraryPath}
+          onCancel={() => setActiveSheet(null)}
+          onUseFolder={(path) => {
+            setMockLibraryPath(path)
+            setActiveSheet(null)
+            showToast('Library folder updated in mock preview')
+          }}
+        />
+      ) : null}
+
+      {activeSheet === 'accessCheck' ? (
+        <AnchorAccessCheckSheet onClose={() => setActiveSheet(null)} />
+      ) : null}
+
+      {activeSheet === 'librarySettings' ? (
+        <AnchorLibrarySettingsSheet
+          onCancel={() => setActiveSheet(null)}
+          onSave={(settings) => {
+            setMockLibrarySettings(settings)
+            setActiveSheet(null)
+            showToast('Library settings saved in mock preview')
+          }}
+          settings={mockLibrarySettings}
+        />
+      ) : null}
+
+      {activeSheet === 'libraryStats' ? (
+        <AnchorLibraryStatsSheet onClose={() => setActiveSheet(null)} />
+      ) : null}
+
+      {activeSheet === 'scanHistory' ? (
+        <AnchorScanHistorySheet onClose={() => setActiveSheet(null)} />
       ) : null}
 
       {activeSheet === 'addServer' ? (

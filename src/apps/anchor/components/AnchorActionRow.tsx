@@ -3,16 +3,19 @@ import type { ReactNode } from 'react'
 
 export function AnchorActionRow({
   icon,
+  onClick,
   title,
   detail,
 }: {
   icon: ReactNode
+  onClick?: () => void
   title: string
   detail: string
 }) {
   return (
     <button
       className="flex w-full items-center gap-3 border-b border-white/[0.055] px-4 py-3.5 text-left last:border-b-0 hover:bg-white/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-300/30"
+      onClick={onClick}
       type="button"
     >
       <span className="grid h-8 w-8 shrink-0 place-items-center text-slate-100">

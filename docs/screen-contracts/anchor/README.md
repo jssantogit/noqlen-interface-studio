@@ -62,6 +62,8 @@ Required content:
 - Servers plus may open an Add server sheet and show toast-only add feedback.
 - Servers Navidrome card may open details, settings, logs and a local mock menu.
 - Servers Jellyfin and Emby cards may open coming-soon sheets only.
+- Library action rows may open mock folder picker, scan progress, access check and library settings sheets.
+- Library stats and scan footer metrics may open static detail/history sheets.
 - Buttons may show hover, active and focus styles.
 - Details buttons may remain inert visual controls.
 - Studio app switcher must continue selecting Anchor, Forge, Aria and Flux.
@@ -74,6 +76,8 @@ Required expansion surfaces include settings, server details, server menus, mock
 
 Batch 2 implements the Servers expansion surfaces with local-only state and static data.
 
+Batch 3 implements the Library expansion surfaces with local-only mock state, fake display paths and static library/stat/history data.
+
 Completion requires consistent Anchor-styled sheets, dialogs and state variants while preserving the no-backend, no-filesystem and no-real-server-control boundary.
 
 ## Disabled / Visual-Only Actions
@@ -84,7 +88,9 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 - Show QR code displays a fake QR preview for the mock address only.
 - Refresh library displays a mock scan progress sheet only.
 - Server settings, server details, server menu, View logs and coming-soon sheets are visual-only.
-- Change folder, Verify access, Library settings and Activity Details remain future visual-only work.
+- Change folder displays fake path copy only and never opens a real picker or storage permission flow.
+- Verify access, Library settings, Library stats and Scan history are visual-only and static/local.
+- Activity Details remain future visual-only work.
 
 ## Anchor Does Not Do
 
