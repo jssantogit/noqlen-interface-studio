@@ -2,6 +2,8 @@
 
 Bloco 1 aligns the interface studio with the mobile simulator concept. Bloco 1.1 hardens the responsive shell around that simulator. Bloco 1.3 refines the simulator frame so it reads closer to premium smartphone hardware. Bloco 1.4 selectively reuses mature legacy UI Lab patterns without replacing the new simulator shell. Bloco 2 establishes Anchor's high-fidelity base screens, and Bloco 2.2 maps the complete Anchor interaction coverage required before moving to Forge, Aria or Flux expansion.
 
+Workflow source is the latest inspected `noqlen-playbook` at `/root/projects/noqlen/_workflow/noqlen-playbook` commit `27d637f`. Tool Mode is now required in block planning. Current product work should pause until this workflow retrofit is complete.
+
 Current app state:
 
 - Vite React TypeScript app.

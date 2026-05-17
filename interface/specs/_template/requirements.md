@@ -4,6 +4,10 @@
 
 Describe the user-visible outcome for this block or screen.
 
+Tool Mode:
+
+Environment assumptions:
+
 ## In Scope
 
 - Visual requirements.
@@ -17,3 +21,9 @@ Describe the user-visible outcome for this block or screen.
 - Real server control.
 - Real playback.
 - Secrets or personal paths.
+
+## Evidence Needs
+
+- Raw evidence needed:
+- Validation evidence:
+- Repo hygiene evidence:

@@ -1,5 +1,14 @@
 # Delta
 
+Workflow retrofit delta:
+
+- Inspected latest `noqlen-playbook` outside this repository at commit `27d637f`.
+- Updated local workflow guidance for the current loop: Plan -> Block -> Prompt -> Tool Mode -> Implement -> Validate -> Audit -> Fix -> Commit -> Handoff -> Next block.
+- Added Tool Mode, optimized environment bootstrap, raw evidence and local tool hygiene guidance.
+- Added prompt/spec template fields for Tool Mode, environment assumptions, validation evidence, repo hygiene evidence and handoff notes.
+- Added repository hygiene validation helper for tracked local tooling/generated artifacts.
+- No product UI or app behavior should change in this workflow retrofit block.
+
 Initial repository delta for Bloco 0:
 
 - Created app scaffold.
