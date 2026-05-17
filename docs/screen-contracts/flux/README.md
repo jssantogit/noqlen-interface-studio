@@ -8,3 +8,7 @@ Bloco 0 requirements:
 - Mock-only placeholder panel.
 - No real workflow execution.
 - No backend connection.
+
+Visual target:
+
+- Flux implementation must follow `docs/visual-targets/flux.md` and `docs/references/flux/flux-screens-reference.png`.

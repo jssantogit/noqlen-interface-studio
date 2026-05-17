@@ -62,3 +62,4 @@ Bloco 1.4.1 delta:
 Bloco visual reference delta:
 
 - Added committed visual references and visual target contracts for Anchor, Forge and Aria.
+- Added the committed Flux visual reference and updated the Flux visual target contract.
