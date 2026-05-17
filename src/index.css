@@ -4,8 +4,6 @@
   --studio-shell-pad: clamp(0.75rem, 2vw, 2rem);
   --studio-shell-gap: clamp(0.75rem, 2vw, 1.75rem);
   --studio-phone-width: min(100%, 26.875rem);
-  --studio-phone-height: min(53.75rem, calc(100dvh - 14.5rem));
-  --studio-phone-min-height: min(35rem, calc(100svh - 8rem));
 
   color-scheme: dark;
   background: #071018;
@@ -68,15 +66,11 @@ a {
 @media (max-width: 420px) {
   :root {
     --studio-phone-width: 100%;
-    --studio-phone-height: min(48rem, calc(100dvh - 11.5rem));
-    --studio-phone-min-height: min(31rem, calc(100svh - 7rem));
   }
 }
 
 @media (min-width: 1024px) {
   :root {
     --studio-phone-width: clamp(22.5rem, 32vw, 26.875rem);
-    --studio-phone-height: min(53.75rem, calc(100dvh - 8rem));
-    --studio-phone-min-height: min(39rem, calc(100svh - 7rem));
   }
 }

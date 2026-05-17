@@ -29,10 +29,17 @@ Bloco 1.1 hardens the Studio shell around the mobile simulator. It does not star
 ## Simulator Sizing Rules
 
 - Simulator dimensions are controlled through CSS variables in `src/index.css`.
-- Mobile phone width uses a viewport-aware clamp and falls back to the available viewport width on narrow screens.
+- Mobile phone width is parent-bounded: the simulator stage provides the available width and the frame uses `width: 100%` with a capped max width.
 - Desktop phone width uses `clamp(22.5rem, 32vw, 26.875rem)`.
-- Phone height is capped with `100dvh` calculations and guarded with `100svh` minimum-height rules.
-- The inner phone viewport uses a realistic `9 / 19.5` aspect ratio when height constraints allow it.
+- The inner phone screen is width-driven with a realistic `9 / 19.5` aspect ratio.
+- Do not combine a fixed phone-screen height with `aspect-ratio` on mobile; that lets the browser derive a narrower screen width from height and visually desynchronizes the screen from the outer frame.
+
+## Bloco 1.1 Overflow Audit
+
+- Root cause found: the outer phone frame fit the mobile grid, but the inner phone screen used a definite viewport-based height plus `aspect-ratio` and no explicit `width: 100%`.
+- Effect: on mobile, the screen/content width was computed from height instead of from the frame width, leaving the visible app viewport narrower and misaligned inside the shell.
+- Fix: the phone screen now fills the frame width and lets the aspect ratio determine height.
+- Validation viewports: 360x800, 375x812, 390x844, 412x915, 430x932, 768x1024, 1024x768, 1366x768 and 1440x900.
 
 ## Overflow Rules
 
@@ -40,6 +47,7 @@ Bloco 1.1 hardens the Studio shell around the mobile simulator. It does not star
 - The shell uses `min-height: 100dvh` rather than fixed `100vh`.
 - The phone app viewport owns internal vertical scrolling via `overflow-y-auto`.
 - External shell content can scroll naturally on short screens.
+- Overflow hiding is only a safety net; the phone frame and inner screen must fit their parent dimensions naturally.
 
 ## App Switcher Behavior
 

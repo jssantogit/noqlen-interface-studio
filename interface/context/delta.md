@@ -28,3 +28,10 @@ Bloco 1.1 delta:
 - Preserved internal phone viewport scrolling while preventing horizontal page overflow.
 - Kept mobile/tablet layouts centered and single-column, with desktop switching to a restrained side-rail/inspector layout.
 - Added the responsive shell visual contract and kept app previews as static placeholders only.
+
+Bloco 1.1 overflow audit delta:
+
+- Audited computed mobile layout from `html` through the phone app viewport.
+- Found the persistent visual bug in the inner phone screen: fixed height plus `aspect-ratio` caused a screen width narrower than the outer frame.
+- Changed the phone screen to be width-driven so the outer frame, screen and app viewport align on mobile.
+- Documented the root cause and validation viewport set in the responsive shell contract.

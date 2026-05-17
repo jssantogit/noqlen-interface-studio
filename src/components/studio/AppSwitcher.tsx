@@ -17,7 +17,7 @@ export function AppSwitcher({
       aria-label="Select app preview"
       className="min-w-0 max-w-full overflow-hidden rounded-[1.35rem] border border-white/10 bg-black/20 p-1.5 backdrop-blur-xl sm:rounded-[1.5rem] sm:p-2"
     >
-      <div className="grid min-w-0 grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-2 lg:grid-cols-1">
+      <div className="grid min-w-0 grid-cols-[repeat(2,minmax(0,1fr))] gap-1.5 sm:grid-cols-[repeat(4,minmax(0,1fr))] sm:gap-2 lg:grid-cols-1">
         {apps.map((app) => {
           const isSelected = app.id === selectedAppId
 
@@ -35,10 +35,10 @@ export function AppSwitcher({
               onClick={() => onSelectApp(app.id)}
               type="button"
             >
-              <span className="block truncate text-sm font-semibold leading-5">
+              <span className="block text-sm font-semibold leading-5">
                 {app.name}
               </span>
-              <span className="mt-0.5 block truncate text-xs leading-4 text-slate-400 sm:mt-1">
+              <span className="mt-0.5 block break-words text-xs leading-4 text-slate-400 sm:mt-1">
                 {app.mood}
               </span>
             </button>
