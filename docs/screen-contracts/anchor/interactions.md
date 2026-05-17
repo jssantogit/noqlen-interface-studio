@@ -60,10 +60,15 @@ This contract translates the Anchor interaction map into implementation-oriented
 
 | Interaction | Trigger | Resulting UI | Mock state changes | Data used | Forbidden real behavior | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| Filter | Activity filter icon | Filter sheet with All, Server, Library, Errors, Today and Yesterday | Active filter changes local visible list | `anchorActivity` | Real log filtering or server query | not implemented |
-| Details buttons | Activity `Details` buttons | Event detail sheet | Selected mock event changes | `anchorActivity` item | Reading logs or diagnostics | not implemented |
-| Startup failed | Startup failed row or Details button | Error detail sheet with port-in-use copy and suggested mock fixes | Selected mock error changes | Startup failed static event | Real port/process/network check | not implemented |
-| Activity item tap | Activity item body | Event detail sheet | Selected mock event changes | `anchorActivity` item | Reading logs or diagnostics | not implemented |
+| Filter sheet | Activity filter icon | Filter sheet with All, Server, Library, Errors, Today and Yesterday | `activityFilter` changes local visible list and persists while staying inside Anchor | `anchorActivity` static events | Real log filtering or server query | implemented |
+| Details buttons | Activity `Details` buttons | Activity detail sheet, or error detail sheet for Startup failed | `selectedActivityId` changes locally; nested button stops propagation | `anchorActivity` item | Reading logs or diagnostics | implemented |
+| Startup failed details | Startup failed row or Details button | Error detail sheet with port-in-use copy, mock diagnostics, suggested mock fixes, copy summary toast and Navidrome Settings action | `selectedActivityId` changes locally; copy action shows toast only; settings action opens existing Navidrome Settings sheet | Startup failed static event | Real port/process/network check | implemented |
+| Activity item tap | Activity item body | Activity detail sheet, or error detail sheet for Startup failed | `selectedActivityId` changes locally | `anchorActivity` item | Reading logs or diagnostics | implemented |
+| Today / Yesterday filtering | Today or Yesterday filter option | Activity list shows only matching day group | `activityFilter` becomes `today` or `yesterday` | `anchorActivity.dayGroup` | Date queries or real log filtering | implemented |
+| Empty filtered state | Any filter with no local results | Anchor-styled empty state with Reset filter action | Reset returns `activityFilter` to `all` | Filtered static event array | Real diagnostics, backend query or log reads | implemented |
+| Errors-only state | Errors filter option | Activity list shows only error severity events, including Startup failed | `activityFilter` becomes `errors` | `anchorActivity.severity` | Real error/log query | implemented |
+| Copy diagnostic summary | Error detail action | Toast-only copy feedback | Toast state changes to info message | Startup failed static diagnostic | Clipboard dependency, port probing or process inspection | implemented |
+| Open Navidrome Settings from error detail | Error detail action | Existing Navidrome Settings sheet opens | Active sheet switches to `navidromeSettings` | Existing Navidrome Settings component | Duplicate settings implementation or real config access | implemented |
 
 ## State Coverage Contract
 
@@ -112,5 +117,6 @@ Global states:
 
 - Current implementation has complete base surfaces for Home, Servers, Library and Activity.
 - Current implementation has bottom nav, Home Batch 1 interactions, Servers Batch 2 interactions and Library Batch 3 interactions.
-- Activity and remaining state coverage are incomplete until all rows above are implemented and QAed.
+- Activity interactions are implemented for filter, event detail, error detail, Today/Yesterday filtering, errors-only state, empty-state handling and diagnostic copy toast.
+- Remaining Anchor work is state coverage polish and final completion audit.
 - No app-specific implementation should be considered complete unless its forbidden real behavior has also been checked.

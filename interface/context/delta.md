@@ -118,3 +118,11 @@ Bloco 2.6 delta:
 - Wired settings entry points from the Navidrome card, details sheet and server menu to local-only draft editing with masked secret fields and risky setting warnings.
 - Added searchable Advanced settings, display-only TOML preview, display-only `ND_` environment variable preview, dry-run diff preview, mock apply and reset behavior.
 - Preserved the Studio boundary: no Anchor Core calls, no Navidrome calls, no backend, no config file reads/writes, no filesystem access, no port probing and no real secrets.
+
+Bloco 2.7 delta:
+
+- Added Anchor Activity mock interactions for filter sheet, Activity item taps, Details buttons, Startup failed error details, Today/Yesterday filtering, errors-only filtering, empty filtered state handling and diagnostic copy toast.
+- Created Activity-local sheets for filtering, generic event details and display-only error diagnostics, plus an Anchor-styled empty state.
+- Updated static `anchorActivity` mock data with ids, day groups, categories, severities, details, related actions and Startup failed diagnostic fields.
+- Wired Activity state through `AnchorPreview` using local `activityFilter`, `selectedActivityId`, existing sheet state and existing toast state only.
+- Kept all logs and diagnostics static/display-only: no Anchor Core, Navidrome, backend, filesystem, real log, process, port or network behavior was added.

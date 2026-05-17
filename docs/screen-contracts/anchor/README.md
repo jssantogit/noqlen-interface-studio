@@ -66,8 +66,10 @@ Required content:
 - Servers Jellyfin and Emby cards may open coming-soon sheets only.
 - Library action rows may open mock folder picker, scan progress, access check and library settings sheets.
 - Library stats and scan footer metrics may open static detail/history sheets.
+- Activity filter may open a mock filter sheet for All, Server, Library, Errors, Today and Yesterday.
+- Activity rows and Details buttons may open static event detail sheets.
+- Startup failed may open a display-only error diagnostic sheet with copy-toast feedback and an existing Navidrome Settings shortcut.
 - Buttons may show hover, active and focus styles.
-- Details buttons may remain inert visual controls.
 - Studio app switcher must continue selecting Anchor, Forge, Aria and Flux.
 
 ## Interactive Completion Model
@@ -82,6 +84,8 @@ Batch 3 implements the Library expansion surfaces with local-only mock state, fa
 
 Bloco 2.6 implements the Navidrome Settings Center inside Servers with local-only mock state, a typed curated settings catalog, generated display-only `navidrome.toml` and `ND_` previews, dry-run/apply/reset behavior and secret/risky warnings.
 
+Bloco 2.7 implements Activity filter, event detail, Startup failed error detail, Today/Yesterday filtering, errors-only filtering, empty filtered state handling and toast-only diagnostic copy feedback.
+
 Completion requires consistent Anchor-styled sheets, dialogs and state variants while preserving the no-backend, no-filesystem and no-real-server-control boundary.
 
 ## Disabled / Visual-Only Actions
@@ -94,7 +98,7 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 - Navidrome Settings, server details, server menu, View logs and coming-soon sheets are visual-only.
 - Change folder displays fake path copy only and never opens a real picker or storage permission flow.
 - Verify access, Library settings, Library stats and Scan history are visual-only and static/local.
-- Activity Details remain future visual-only work.
+- Activity filters, details and diagnostics are visual-only and use static mock event data.
 
 ## Anchor Does Not Do
 

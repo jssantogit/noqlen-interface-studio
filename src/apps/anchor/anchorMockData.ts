@@ -75,51 +75,149 @@ export const anchorLibraryActions = [
   },
 ]
 
-export const anchorActivity = {
-  today: [
-    {
-      title: 'Navidrome started',
-      detail: 'Server started successfully',
-      time: '12:15 PM',
-      tone: 'success',
-      hasDetails: false,
+export type AnchorActivityFilter =
+  | 'all'
+  | 'server'
+  | 'library'
+  | 'errors'
+  | 'today'
+  | 'yesterday'
+
+export type AnchorActivityDayGroup = 'today' | 'yesterday'
+export type AnchorActivityCategory = 'server' | 'library' | 'system' | 'settings'
+export type AnchorActivitySeverity = 'success' | 'info' | 'warning' | 'error'
+
+export type AnchorActivityEvent = {
+  id: string
+  title: string
+  description: string
+  time: string
+  dayGroup: AnchorActivityDayGroup
+  category: AnchorActivityCategory
+  severity: AnchorActivitySeverity
+  details: string[]
+  relatedLabel?: string
+  relatedAction?: 'navidromeSettings' | 'libraryScan' | 'serverRestart'
+  diagnostic?: {
+    message: string
+    service: string
+    port: string
+    attempt: string
+    result: string
+    suggestedSource: string
+    fixes: string[]
+    note: string
+  }
+}
+
+export const anchorActivity: AnchorActivityEvent[] = [
+  {
+    id: 'today-navidrome-started',
+    title: 'Navidrome started',
+    description: 'Server started successfully',
+    time: '12:15 PM',
+    dayGroup: 'today',
+    category: 'server',
+    severity: 'success',
+    relatedLabel: 'Navidrome local server',
+    details: [
+      'Mock server state changed to running.',
+      'Library index was already available in the preview.',
+      'No service process was started by Studio.',
+    ],
+  },
+  {
+    id: 'today-library-updated',
+    title: 'Library updated',
+    description: 'Added 128 songs, 3 albums',
+    time: '11:47 AM',
+    dayGroup: 'today',
+    category: 'library',
+    severity: 'success',
+    relatedLabel: 'Music / Naqlen',
+    relatedAction: 'libraryScan',
+    details: [
+      'Static scan result added 128 songs and 3 albums.',
+      'Artwork and embedded tag rows were refreshed visually.',
+      'No folders, media files or metadata were read.',
+    ],
+  },
+  {
+    id: 'today-server-restarted',
+    title: 'Server restarted',
+    description: 'Restarted by user',
+    time: '10:22 AM',
+    dayGroup: 'today',
+    category: 'server',
+    severity: 'info',
+    relatedLabel: 'Navidrome local server',
+    relatedAction: 'serverRestart',
+    details: [
+      'Mock restart confirmation completed.',
+      'Preview status returned to active after a short timer.',
+      'No restart command or server request was sent.',
+    ],
+  },
+  {
+    id: 'today-startup-failed',
+    title: 'Startup failed',
+    description: 'Port 4533 already in use',
+    time: '9:03 AM',
+    dayGroup: 'today',
+    category: 'server',
+    severity: 'error',
+    relatedLabel: 'Navidrome local server',
+    relatedAction: 'navidromeSettings',
+    details: [
+      'Mock startup attempt was blocked by a display-only diagnostic.',
+      'The preview uses static copy and did not inspect the device.',
+      'Open Navidrome Settings to adjust the visual port field.',
+    ],
+    diagnostic: {
+      message: 'Port 4533 already in use',
+      service: 'Navidrome',
+      port: '4533',
+      attempt: 'Start server',
+      result: 'Blocked',
+      suggestedSource: 'mock diagnostic event',
+      fixes: [
+        'Choose another port',
+        'Stop the conflicting mock service',
+        'Restart Anchor preview',
+        'Review Navidrome Settings',
+      ],
+      note: 'This is a Studio mock diagnostic. No real port was checked.',
     },
-    {
-      title: 'Library updated',
-      detail: 'Added 128 songs, 3 albums',
-      time: '11:47 AM',
-      tone: 'library',
-      hasDetails: true,
-    },
-    {
-      title: 'Server restarted',
-      detail: 'Restarted by user',
-      time: '10:22 AM',
-      tone: 'restart',
-      hasDetails: true,
-    },
-    {
-      title: 'Startup failed',
-      detail: 'Port 4533 already in use',
-      time: '9:03 AM',
-      tone: 'failure',
-      hasDetails: true,
-    },
-  ],
-  yesterday: [
-    {
-      title: 'Library updated',
-      detail: 'Added 56 songs, 4 albums',
-      time: '8:41 PM',
-      tone: 'library',
-      hasDetails: true,
-    },
-    {
-      title: 'Navidrome started',
-      detail: 'Server started successfully',
-      time: '8:39 PM',
-      tone: 'success',
-      hasDetails: false,
-    },
-  ],
-} as const
+  },
+  {
+    id: 'yesterday-library-updated',
+    title: 'Library updated',
+    description: 'Added 56 songs, 4 albums',
+    time: '8:41 PM',
+    dayGroup: 'yesterday',
+    category: 'library',
+    severity: 'success',
+    relatedLabel: 'Music / Naqlen',
+    relatedAction: 'libraryScan',
+    details: [
+      'Static scan result added 56 songs and 4 albums.',
+      'Preview counters were shown from mock data only.',
+      'No filesystem scan, backend call or metadata read occurred.',
+    ],
+  },
+  {
+    id: 'yesterday-navidrome-started',
+    title: 'Navidrome started',
+    description: 'Server started successfully',
+    time: '8:39 PM',
+    dayGroup: 'yesterday',
+    category: 'server',
+    severity: 'success',
+    relatedLabel: 'Navidrome local server',
+    details: [
+      'Mock server state entered running in the preview timeline.',
+      'All status values came from static Anchor sample data.',
+      'No local service, port or process was checked.',
+    ],
+  },
+]

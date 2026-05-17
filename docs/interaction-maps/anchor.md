@@ -216,32 +216,36 @@ Secondary surfaces:
 ### Filter Icon
 
 - Trigger: filter icon in the Activity header.
-- Result: opens filter sheet.
+- Result: opens an Anchor-styled filter sheet.
 - Filter options: All, Server, Library, Errors, Today, Yesterday.
+- State: changes local `activityFilter` only and persists while staying inside Anchor.
+- Empty state: if a filtered static result set is empty, the Activity screen shows `No events found` with Reset filter.
 - Safety: filters static mock activity data only.
-- Current status: not implemented.
+- Current status: implemented in Bloco 2.7.
 
 ### Details Buttons
 
 - Trigger: `Details` buttons on activity rows.
-- Result: opens event detail sheet.
+- Result: opens event detail sheet for normal events or error detail sheet for Startup failed.
+- State: changes local `selectedActivityId` only; nested Details buttons stop propagation to avoid double handling.
 - Safety: static event copy only; no real logs or diagnostics.
-- Current status: not implemented.
+- Current status: implemented in Bloco 2.7.
 
 ### Startup Failed Event
 
 - Trigger: `Startup failed` row or Details button.
 - Result: opens error detail sheet.
-- Error detail: port already in use and suggested mock fixes.
+- Error detail: port already in use, Service `Navidrome`, Port `4533`, Attempt `Start server`, Result `Blocked`, mock source, suggested mock fixes and note that no real port was checked.
+- Actions: Copy diagnostic summary shows a toast only; Open Navidrome Settings switches to the existing Navidrome Settings sheet.
 - Safety: no real port check, process check or network inspection.
-- Current status: not implemented.
+- Current status: implemented in Bloco 2.7.
 
 ### Activity Item Tap
 
 - Trigger: activity item body.
-- Result: opens details.
+- Result: opens details for the selected static event.
 - Safety: static event details only.
-- Current status: not implemented.
+- Current status: implemented in Bloco 2.7.
 
 ## Required UI States
 
@@ -323,12 +327,19 @@ Batch 3 components now implemented:
 - `AnchorLibraryStatsSheet`.
 - `AnchorScanHistorySheet`.
 
+Batch 4 components now implemented:
+
+- `AnchorActivityFilterSheet`.
+- `AnchorActivityDetailSheet`.
+- `AnchorErrorDetailSheet`.
+- `AnchorActivityEmptyState`.
+
 Needed components:
 
 - `AnchorHeader`.
 - `AnchorButton`.
 - `AnchorStatusPill`.
-- `AnchorFilterSheet`.
+- Shared app-level state coverage components remain future work.
 
 ## Implementation Batches
 
@@ -351,7 +362,8 @@ Needed components:
 
 ### Batch 4
 
-- Activity interactions: Filter, Event details, Error details.
+- Activity interactions: Filter, Event details, Error details, Today/Yesterday filters, errors-only state, empty filtered state and diagnostic copy toast.
+- Current status: implemented in Bloco 2.7.
 
 ### Batch 5
 

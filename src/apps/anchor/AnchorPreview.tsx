@@ -2,12 +2,15 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { AnchorActivity } from './components/AnchorActivity'
+import { AnchorActivityDetailSheet } from './components/AnchorActivityDetailSheet'
+import { AnchorActivityFilterSheet } from './components/AnchorActivityFilterSheet'
 import { AnchorAccessCheckSheet } from './components/AnchorAccessCheckSheet'
 import { AnchorAddServerSheet } from './components/AnchorAddServerSheet'
 import { AnchorBottomNav } from './components/AnchorBottomNav'
 import { AnchorBottomSheet } from './components/AnchorBottomSheet'
 import { AnchorComingSoonSheet } from './components/AnchorComingSoonSheet'
 import { AnchorConfirmDialog } from './components/AnchorConfirmDialog'
+import { AnchorErrorDetailSheet } from './components/AnchorErrorDetailSheet'
 import { AnchorFolderPickerMock } from './components/AnchorFolderPickerMock'
 import { AnchorHome } from './components/AnchorHome'
 import { AnchorLibrary } from './components/AnchorLibrary'
@@ -27,7 +30,8 @@ import { AnchorSettingsSheet } from './components/AnchorSettingsSheet'
 import { AnchorServers } from './components/AnchorServers'
 import { AnchorToast } from './components/AnchorToast'
 import type { AnchorToastTone } from './components/AnchorToast'
-import { anchorServer } from './anchorMockData'
+import { anchorActivity, anchorServer } from './anchorMockData'
+import type { AnchorActivityFilter } from './anchorMockData'
 
 export type AnchorTab = 'home' | 'servers' | 'library' | 'activity'
 export type AnchorServerState = 'active' | 'stopped' | 'restarting' | 'degraded' | 'disabled'
@@ -47,6 +51,9 @@ type AnchorSheet =
   | 'librarySettings'
   | 'libraryStats'
   | 'scanHistory'
+  | 'activityFilter'
+  | 'activityDetail'
+  | 'errorDetail'
   | null
 type AnchorDialog = 'stop' | 'restart' | 'removeServer' | null
 type AnchorToastState = { message: string; tone: AnchorToastTone } | null
@@ -73,6 +80,8 @@ export function AnchorPreview() {
   const [mockLibraryPath, setMockLibraryPath] = useState('/storage/emulated/0/Music/Naqlen')
   const [mockLibraryLastScan, setMockLibraryLastScan] = useState('12 min ago')
   const [mockLibrarySettings, setMockLibrarySettings] = useState(initialLibrarySettings)
+  const [activityFilter, setActivityFilter] = useState<AnchorActivityFilter>('all')
+  const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null)
   const [toast, setToast] = useState<AnchorToastState>(null)
 
   const showToast = (message: string, tone: AnchorToastTone = 'success') => {
@@ -107,6 +116,24 @@ export function AnchorPreview() {
   const startRestart = () => {
     setActiveDialog(null)
     setServerState('restarting')
+  }
+
+  const filteredActivity = anchorActivity.filter((event) => {
+    if (activityFilter === 'all') return true
+    if (activityFilter === 'errors') return event.severity === 'error'
+    if (activityFilter === 'today' || activityFilter === 'yesterday') {
+      return event.dayGroup === activityFilter
+    }
+    return event.category === activityFilter
+  })
+
+  const selectedActivity = anchorActivity.find((event) => event.id === selectedActivityId)
+
+  const openActivityEvent = (eventId: string) => {
+    const event = anchorActivity.find((item) => item.id === eventId)
+    if (!event) return
+    setSelectedActivityId(event.id)
+    setActiveSheet(event.severity === 'error' ? 'errorDetail' : 'activityDetail')
   }
 
   const screens: Record<AnchorTab, ReactNode> = {
@@ -156,7 +183,15 @@ export function AnchorPreview() {
         path={mockLibraryPath}
       />
     ),
-    activity: <AnchorActivity />,
+    activity: (
+      <AnchorActivity
+        activeFilter={activityFilter}
+        events={filteredActivity}
+        onFilterOpen={() => setActiveSheet('activityFilter')}
+        onOpenEvent={openActivityEvent}
+        onResetFilter={() => setActivityFilter('all')}
+      />
+    ),
   }
 
   return (
@@ -239,6 +274,30 @@ export function AnchorPreview() {
 
       {activeSheet === 'scanHistory' ? (
         <AnchorScanHistorySheet onClose={() => setActiveSheet(null)} />
+      ) : null}
+
+      {activeSheet === 'activityFilter' ? (
+        <AnchorActivityFilterSheet
+          activeFilter={activityFilter}
+          onChange={setActivityFilter}
+          onClose={() => setActiveSheet(null)}
+        />
+      ) : null}
+
+      {activeSheet === 'activityDetail' && selectedActivity ? (
+        <AnchorActivityDetailSheet
+          event={selectedActivity}
+          onClose={() => setActiveSheet(null)}
+        />
+      ) : null}
+
+      {activeSheet === 'errorDetail' && selectedActivity ? (
+        <AnchorErrorDetailSheet
+          event={selectedActivity}
+          onClose={() => setActiveSheet(null)}
+          onCopyDiagnostic={() => showToast('Diagnostic summary copied in mock preview', 'info')}
+          onOpenNavidromeSettings={() => setActiveSheet('navidromeSettings')}
+        />
       ) : null}
 
       {activeSheet === 'addServer' ? (
