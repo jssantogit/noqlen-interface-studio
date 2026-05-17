@@ -28,6 +28,8 @@ describe('Noqlen Interface Studio shell', () => {
 
     expect(screen.getByRole('heading', { name: 'Forge' })).toBeInTheDocument()
     expect(screen.getByText('Review now')).toBeInTheDocument()
-    expect(screen.getByText('Preview static changes')).toBeInTheDocument()
+    expect(
+      screen.getByText('A few things are missing from your library.'),
+    ).toBeInTheDocument()
   })
 })

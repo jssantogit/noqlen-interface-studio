@@ -1,0 +1,71 @@
+import { ChevronRight, Image, Music2, Settings, ShieldCheck, Tags } from 'lucide-react'
+import { ForgeCard, ForgeScreenHeader } from './ForgeCard'
+
+interface AttentionCardProps {
+  icon: typeof Music2
+  title: string
+  subtitle: string
+  accent: string
+  onClick: () => void
+}
+
+function AttentionCard({ icon: Icon, title, subtitle, accent, onClick }: AttentionCardProps) {
+  return (
+    <ForgeCard className="flex items-center gap-4 p-4" onClick={onClick}>
+      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-white/[0.055]">
+        <Icon className={accent} size={24} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-lg font-medium leading-tight text-white">{title}</p>
+        <p className="mt-1 text-sm text-white/55">{subtitle}</p>
+      </div>
+      <ChevronRight className="shrink-0 text-white/52" size={18} />
+    </ForgeCard>
+  )
+}
+
+export function ForgeHome({ onReviewNow }: { onReviewNow: () => void }) {
+  return (
+    <div className="min-h-full px-7 pb-28 text-white">
+      <ForgeScreenHeader
+        rightAction={
+          <button className="text-white/80 transition-colors hover:text-white" type="button">
+            <Settings size={22} />
+          </button>
+        }
+        title="Forge"
+      />
+
+      <div className="mb-7">
+        <p className="mb-3 text-sm text-white/62">Good morning</p>
+        <h2 className="max-w-[285px] font-serif text-[36px] leading-[0.98] tracking-[-0.04em] text-white">
+          A few things are missing from your library.
+        </h2>
+        <p className="mt-5 max-w-[270px] text-sm leading-5 text-white/58">
+          Let&apos;s bring everything up to date so your music always feels right.
+        </p>
+      </div>
+
+      <button
+        className="mb-8 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e7a35f] text-sm font-semibold text-black shadow-lg shadow-orange-950/25 transition hover:bg-[#efad6c] active:scale-[0.99]"
+        onClick={onReviewNow}
+        type="button"
+      >
+        Review now
+        <ChevronRight size={17} />
+      </button>
+
+      <h3 className="mb-3 text-sm font-medium text-white/82">What needs attention</h3>
+      <div className="space-y-3">
+        <AttentionCard accent="text-orange-300" icon={Music2} onClick={onReviewNow} subtitle="are missing lyrics" title="2 tracks" />
+        <AttentionCard accent="text-violet-300" icon={Image} onClick={onReviewNow} subtitle="need better covers" title="4 albums" />
+        <AttentionCard accent="text-lime-300" icon={Tags} onClick={onReviewNow} subtitle="are missing genres" title="3 songs" />
+      </div>
+
+      <ForgeCard className="mt-5 flex items-center gap-3 p-4">
+        <ShieldCheck className="shrink-0 text-white/60" size={21} />
+        <p className="text-xs leading-5 text-white/48">Nothing changes until you confirm a preview.</p>
+      </ForgeCard>
+    </div>
+  )
+}

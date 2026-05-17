@@ -51,3 +51,10 @@ Bloco 1.4 delta:
 - Reused mature Forge UI Lab patterns for review groups, library rows, activity summaries and bottom navigation.
 - Expanded Aria with static mock player, library shelves and queue content using the legacy planned tab taxonomy.
 - Preserved the current Studio shell, app selector, phone frame, GitHub Pages deploy architecture and mock-only boundary.
+
+Bloco 1.4.1 delta:
+
+- Replaced the simplified Forge reinterpretation with high-fidelity legacy Forge mobile screens.
+- Ported/adapted Forge Home, Review, Library and Activity into `src/apps/forge/components` while keeping the current Studio shell and `PhoneFrame`.
+- Restored legacy Forge visual hierarchy: editorial Home screen, amber CTA, dense review groups, segmented Library, Activity sections and translucent bottom nav.
+- Kept all Forge behavior local/mock-only with no metadata edits, file access, backend calls or network calls.
