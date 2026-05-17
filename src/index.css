@@ -3,7 +3,7 @@
 :root {
   --studio-shell-pad: clamp(0.75rem, 2vw, 2rem);
   --studio-shell-gap: clamp(0.75rem, 2vw, 1.75rem);
-  --studio-phone-width: min(100%, 26.875rem);
+  --studio-phone-width: min(100%, 24.875rem);
 
   color-scheme: dark;
   background: #071018;
@@ -71,6 +71,6 @@ a {
 
 @media (min-width: 1024px) {
   :root {
-    --studio-phone-width: clamp(22.5rem, 32vw, 26.875rem);
+    --studio-phone-width: clamp(21rem, 29vw, 24.875rem);
   }
 }

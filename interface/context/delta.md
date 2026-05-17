@@ -35,3 +35,11 @@ Bloco 1.1 overflow audit delta:
 - Found the persistent visual bug in the inner phone screen: fixed height plus `aspect-ratio` caused a screen width narrower than the outer frame.
 - Changed the phone screen to be width-driven so the outer frame, screen and app viewport align on mobile.
 - Documented the root cause and validation viewport set in the responsive shell contract.
+
+Bloco 1.3 delta:
+
+- Refined the simulator phone frame into a taller, slimmer hardware-like silhouette.
+- Reworked the outer chassis, bezel, embedded screen, dynamic island, status bar and home indicator with restrained shadows and near-black materials.
+- Added subtle side-button hints without making the frame decorative or image-based.
+- Kept Anchor as the default preview and kept Anchor, Forge, Aria and Flux as static placeholders only.
+- Documented the phone frame realism rules and preserved the responsive no-horizontal-overflow contract.
