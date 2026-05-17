@@ -110,3 +110,11 @@ Bloco 2.5 delta:
 - Wired Library interactions through local React state only, including fake display path updates, Last scan text updates, local settings toggles and toast feedback.
 - Documented that fake storage paths are display-only copy and are never used for filesystem, picker, permission, metadata, backend or network behavior.
 - Kept Activity interactions, final state coverage, Forge, Aria and Flux outside this batch.
+
+Bloco 2.6 delta:
+
+- Added a dedicated Anchor > Servers Navidrome Settings Center for configuring a mock `navidrome.toml` profile.
+- Created a typed curated Navidrome config catalog covering Basics, Network, Library Scanner, Artwork & Metadata, Playback & Transcoding, Features, Integrations, Security & Auth, Backup & Monitoring and Advanced.
+- Wired settings entry points from the Navidrome card, details sheet and server menu to local-only draft editing with masked secret fields and risky setting warnings.
+- Added searchable Advanced settings, display-only TOML preview, display-only `ND_` environment variable preview, dry-run diff preview, mock apply and reset behavior.
+- Preserved the Studio boundary: no Anchor Core calls, no Navidrome calls, no backend, no config file reads/writes, no filesystem access, no port probing and no real secrets.

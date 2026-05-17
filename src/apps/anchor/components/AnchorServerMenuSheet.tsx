@@ -1,7 +1,8 @@
-import { Copy, Edit3, Power, Trash2 } from 'lucide-react'
+import { Copy, Edit3, Power, Settings, Trash2 } from 'lucide-react'
 import { AnchorBottomSheet } from './AnchorBottomSheet'
 
 const menuItems = [
+  { Icon: Settings, label: 'Configure Navidrome', tone: 'default' },
   { Icon: Edit3, label: 'Rename', tone: 'default' },
   { Icon: Copy, label: 'Duplicate config', tone: 'default' },
   { Icon: Power, label: 'Disable mock server', tone: 'warning' },
@@ -12,10 +13,11 @@ export function AnchorServerMenuSheet({
   onAction,
   onClose,
 }: {
-  onAction: (action: 'rename' | 'duplicate' | 'disable' | 'remove') => void
+  onAction: (action: 'configure' | 'rename' | 'duplicate' | 'disable' | 'remove') => void
   onClose: () => void
 }) {
   const actionByLabel = {
+    'Configure Navidrome': 'configure',
     Rename: 'rename',
     'Duplicate config': 'duplicate',
     'Disable mock server': 'disable',

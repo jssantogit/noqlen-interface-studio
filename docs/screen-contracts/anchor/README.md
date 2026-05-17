@@ -26,6 +26,7 @@ Required content:
 
 - Header with `Servers`, `Manage your media servers.` and a plus action.
 - Detailed Navidrome card with icon/avatar, running badge, menu icon, address, version, uptime, `Settings` and `View logs` buttons.
+- `Settings`, details `Configure Navidrome` and menu `Configure Navidrome` must open the dedicated `Navidrome Settings` mock configuration center.
 - Jellyfin and Emby cards marked `Coming soon`.
 - Bottom privacy note: `All servers run locally on your network.` and `No data leaves your device.`
 - Anchor bottom nav with Servers active.
@@ -61,6 +62,7 @@ Required content:
 - Home Library card may switch to the Library tab without reading the library path.
 - Servers plus may open an Add server sheet and show toast-only add feedback.
 - Servers Navidrome card may open details, settings, logs and a local mock menu.
+- Navidrome Settings may switch settings categories, edit local draft values, show masked secret fields, search options, render display-only TOML/env previews, run a dry-run preview, apply mock changes and reset changes.
 - Servers Jellyfin and Emby cards may open coming-soon sheets only.
 - Library action rows may open mock folder picker, scan progress, access check and library settings sheets.
 - Library stats and scan footer metrics may open static detail/history sheets.
@@ -78,6 +80,8 @@ Batch 2 implements the Servers expansion surfaces with local-only state and stat
 
 Batch 3 implements the Library expansion surfaces with local-only mock state, fake display paths and static library/stat/history data.
 
+Bloco 2.6 implements the Navidrome Settings Center inside Servers with local-only mock state, a typed curated settings catalog, generated display-only `navidrome.toml` and `ND_` previews, dry-run/apply/reset behavior and secret/risky warnings.
+
 Completion requires consistent Anchor-styled sheets, dialogs and state variants while preserving the no-backend, no-filesystem and no-real-server-control boundary.
 
 ## Disabled / Visual-Only Actions
@@ -87,7 +91,7 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 - Copy address shows a mock toast and does not require Clipboard API access.
 - Show QR code displays a fake QR preview for the mock address only.
 - Refresh library displays a mock scan progress sheet only.
-- Server settings, server details, server menu, View logs and coming-soon sheets are visual-only.
+- Navidrome Settings, server details, server menu, View logs and coming-soon sheets are visual-only.
 - Change folder displays fake path copy only and never opens a real picker or storage permission flow.
 - Verify access, Library settings, Library stats and Scan history are visual-only and static/local.
 - Activity Details remain future visual-only work.

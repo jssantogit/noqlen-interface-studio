@@ -32,6 +32,8 @@ Secondary surfaces:
 - Server details sheet.
 - Server menu sheet.
 - Logs viewer.
+- Navidrome Settings sheet.
+- Navidrome dry-run preview sheet.
 - Add server sheet.
 - QR code sheet.
 - Folder picker mock.
@@ -124,16 +126,21 @@ Secondary surfaces:
 
 - Trigger: menu icon on a server card.
 - Result: opens server menu sheet.
-- Menu items: Rename, Duplicate config, Disable, Remove mock server.
+- Menu items: Configure Navidrome, Rename, Duplicate config, Disable, Remove mock server.
 - Safety: all actions mutate only local mock state when implemented.
 - Current status: implemented in Batch 2. Rename and duplicate show mock toasts, disable changes local visual state, and remove requires confirmation before hiding the local card until refresh.
 
-### Settings
+### Navidrome Settings
 
-- Trigger: `Settings` button in the Navidrome card.
-- Result: opens server settings sheet.
-- Safety: no real server settings are read or written.
-- Current status: implemented in Batch 2 with local visual fields/toggles and save toast.
+- Trigger: `Settings` button in the Navidrome card, `Configure Navidrome` in details, or `Configure Navidrome` in the server menu.
+- Result: opens `Navidrome Settings` with category navigation for Basics, Network, Library Scanner, Artwork & Metadata, Playback & Transcoding, Features, Integrations, Security & Auth, Backup & Monitoring and Advanced.
+- Local editing: text, number, duration, size, path, list, select, toggle and masked secret fields update local React draft state only.
+- Advanced: searchable settings list, display-only generated TOML preview, display-only `ND_` environment variable mapping, reset changes, dry-run preview and mock apply.
+- Dry-run preview: shows changed fields, old/new mock values, restart-required count, caution/sensitive warning count and diff-style TOML preview.
+- Apply behavior: saves local mock draft state and shows `Navidrome settings saved in mock preview`; it never writes files or calls a backend.
+- Reset behavior: restores the last saved mock draft and shows `Mock changes reset`.
+- Safety: no real server settings are read or written; no Anchor Core, Navidrome, network, filesystem, port probing, secrets or config files are touched.
+- Current status: implemented in Bloco 2.6.
 
 ### View Logs
 

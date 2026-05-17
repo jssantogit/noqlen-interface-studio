@@ -57,7 +57,7 @@ export function AnchorServerDetailsSheet({
             type="button"
           >
             <Settings size={15} />
-            Open settings
+            Configure Navidrome
           </button>
           <button
             className="flex h-10 items-center justify-center gap-2 rounded-xl border border-white/[0.075] bg-white/[0.045] text-xs font-semibold text-white transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"

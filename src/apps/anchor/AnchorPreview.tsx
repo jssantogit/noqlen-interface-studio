@@ -16,6 +16,7 @@ import type { AnchorLibrarySettings } from './components/AnchorLibrarySettingsSh
 import { AnchorLibraryStatsSheet } from './components/AnchorLibraryStatsSheet'
 import { AnchorLogViewerSheet } from './components/AnchorLogViewerSheet'
 import { AnchorMockQrCode } from './components/AnchorMockQrCode'
+import { AnchorNavidromeSettingsSheet } from './components/AnchorNavidromeSettingsSheet'
 import { AnchorScanProgress } from './components/AnchorScanProgress'
 import { AnchorScanHistorySheet } from './components/AnchorScanHistorySheet'
 import type { AnchorScanState } from './components/AnchorScanProgress'
@@ -38,6 +39,7 @@ type AnchorSheet =
   | 'serverDetails'
   | 'serverMenu'
   | 'serverSettings'
+  | 'navidromeSettings'
   | 'logs'
   | 'comingSoon'
   | 'folderPicker'
@@ -135,7 +137,7 @@ export function AnchorPreview() {
         onOpenDetails={() => setActiveSheet('serverDetails')}
         onOpenLogs={() => setActiveSheet('logs')}
         onOpenMenu={() => setActiveSheet('serverMenu')}
-        onOpenSettings={() => setActiveSheet('serverSettings')}
+        onOpenSettings={() => setActiveSheet('navidromeSettings')}
         serverState={serverState === 'degraded' ? 'active' : serverState}
       />
     ),
@@ -253,7 +255,7 @@ export function AnchorPreview() {
         <AnchorServerDetailsSheet
           onClose={() => setActiveSheet(null)}
           onOpenLogs={() => setActiveSheet('logs')}
-          onOpenSettings={() => setActiveSheet('serverSettings')}
+          onOpenSettings={() => setActiveSheet('navidromeSettings')}
           statusLabel={serverState === 'disabled' ? 'Disabled' : 'Running'}
         />
       ) : null}
@@ -261,6 +263,10 @@ export function AnchorPreview() {
       {activeSheet === 'serverMenu' ? (
         <AnchorServerMenuSheet
           onAction={(action) => {
+            if (action === 'configure') {
+              setActiveSheet('navidromeSettings')
+              return
+            }
             if (action === 'remove') {
               setActiveSheet(null)
               setActiveDialog('removeServer')
@@ -291,6 +297,15 @@ export function AnchorPreview() {
             setActiveSheet(null)
             showToast('Server settings saved in mock preview')
           }}
+        />
+      ) : null}
+
+      {activeSheet === 'navidromeSettings' ? (
+        <AnchorNavidromeSettingsSheet
+          onClose={() => setActiveSheet(null)}
+          onMockApply={() => showToast('Navidrome settings saved in mock preview')}
+          onMockReset={() => showToast('Mock changes reset', 'info')}
+          onRestartRecommended={() => setServerState('degraded')}
         />
       ) : null}
 
