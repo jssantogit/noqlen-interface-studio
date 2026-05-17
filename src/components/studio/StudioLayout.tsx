@@ -14,8 +14,8 @@ export function StudioLayout() {
   const Preview = selectedApp.Preview
 
   return (
-    <main className="min-h-dvh w-full overflow-x-clip px-[max(var(--studio-shell-pad),env(safe-area-inset-left))] py-[max(0.75rem,env(safe-area-inset-top))] pb-[max(var(--studio-shell-pad),env(safe-area-inset-bottom))] text-slate-100">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-[var(--studio-shell-gap)]">
+    <main className="min-h-dvh w-full max-w-full overflow-x-hidden px-[max(var(--studio-shell-pad),env(safe-area-inset-left))] py-[max(0.75rem,env(safe-area-inset-top))] pb-[max(var(--studio-shell-pad),env(safe-area-inset-bottom))] text-slate-100">
+      <div className="mx-auto flex min-w-0 w-full max-w-7xl flex-col gap-[var(--studio-shell-gap)] overflow-x-hidden">
         <StudioTopBar />
 
         <section className="grid min-w-0 items-start gap-[var(--studio-shell-gap)] lg:grid-cols-[minmax(11rem,13rem)_minmax(0,1fr)_minmax(13rem,15rem)] xl:grid-cols-[minmax(12rem,14rem)_minmax(0,1fr)_minmax(14rem,16rem)]">
