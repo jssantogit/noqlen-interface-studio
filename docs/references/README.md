@@ -1,9 +1,9 @@
 # Visual References
 
-This directory stores committed documentation for app visual reference images.
+This directory stores committed documentation/spec assets for app visual reference images.
 
-Reference images are design targets for implementation work. They are not runtime assets, should not be imported by app code and should not be treated as product data.
+Reference images are visual design targets for implementation work. They are not runtime app assets, must not be imported by app code and must not be copied into `public/`.
 
-Future app UIs should follow the provided references with high visual fidelity. Do not reinterpret the references into generic placeholders when implementing screens.
+Future UI blocks must use these images for fidelity checks before declaring app work done. OpenCode must not reinterpret the app targets into generic placeholders, generic dashboards or unrelated mobile patterns.
 
 All app behavior remains mock-only. References must not imply real backend calls, server control, library access, downloads, playback, personal paths or app integration.

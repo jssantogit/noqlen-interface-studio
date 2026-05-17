@@ -1,31 +1,40 @@
 # Anchor Visual Target
 
-Primary reference:
+Reference image:
 
 - `docs/references/anchor/anchor-screens-reference.png`
 
-Use the reference image as the primary visual target for Anchor UI implementation.
+Goal: implement Anchor with high visual fidelity to the reference image.
 
-Required screens:
+Screens:
 
 - Home
 - Servers
 - Library
 - Activity
 
-Visual fidelity requirements:
+Visual rules:
 
 - Preserve the dark premium mobile UI.
-- Preserve the amber accent.
-- Preserve the bottom navigation.
-- Preserve the card hierarchy.
-- Preserve the serif-style title feel.
-- Do not reinterpret the reference into generic placeholders.
+- Preserve serif-style large titles.
+- Preserve the amber/orange primary accent.
+- Use green only for online/success states.
+- Use red/orange only for failures or warning states.
+- Preserve card density similar to the reference.
+- Preserve bottom navigation similar to the reference.
+- Preserve soft borders.
+- Preserve compact status/data rows.
+- Keep UI inside the phone frame.
 
-Behavior boundaries:
+Must not:
 
-- No real backend behavior.
-- No real server behavior or server control.
-- No real library behavior or local library access.
-- No downloads, playback, personal paths or app integration.
-- All Anchor behavior remains mock-only.
+- Simplify into placeholder cards.
+- Reinterpret as a generic dashboard.
+- Move UI outside the phone frame.
+- Implement real server controls.
+- Access real Navidrome.
+- Access a real library.
+- Read real logs.
+- Add real backend behavior.
+
+All Anchor behavior remains mock-only.

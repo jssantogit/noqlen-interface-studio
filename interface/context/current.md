@@ -16,6 +16,7 @@ Current app state:
 - Anchor and Flux render static visual placeholders inside the phone.
 - Forge now has a legacy-informed mock preview with Home, Review, Library and Activity sections inside the phone.
 - Aria now has a richer mock player, queue and library preview informed by the legacy planned tab taxonomy.
+- Visual reference images and visual target contracts are now part of the project source of truth for app fidelity.
 - Mock-only boundary remains active and visually subtle.
 - GitHub Pages deploy is configured through GitHub Actions for the static `dist` output.
 - Production Pages builds use `GITHUB_PAGES=true` to set the Vite base path to `/noqlen-interface-studio/`; local development stays at `/`.

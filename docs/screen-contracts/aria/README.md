@@ -11,3 +11,7 @@ Bloco 0 requirements:
 - No playback.
 - No real music library access.
 - No downloads, metadata reads, network calls or personal paths.
+
+Visual target:
+
+- Aria implementation must follow `docs/visual-targets/aria.md`, `docs/references/aria/aria-player-library-reference.png` and `docs/references/aria/aria-artist-library-reference.png`.

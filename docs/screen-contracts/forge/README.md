@@ -14,3 +14,7 @@ Bloco 0 requirements:
 - No real metadata is changed.
 - No real files are touched.
 - No backend, network calls, downloads, real library access, command execution, repository mutation or server mutation.
+
+Visual target:
+
+- Forge implementation must follow `docs/visual-targets/forge.md` and `docs/references/forge/forge-screens-reference.png`.

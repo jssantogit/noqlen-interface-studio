@@ -10,6 +10,10 @@ Required qualities:
 - Communicates visual-only boundaries.
 - Works on desktop and mobile.
 
+Visual target:
+
+- Anchor implementation must follow `docs/visual-targets/anchor.md` and `docs/references/anchor/anchor-screens-reference.png`.
+
 Forbidden behavior:
 
 - Real app launch.

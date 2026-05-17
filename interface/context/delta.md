@@ -58,3 +58,7 @@ Bloco 1.4.1 delta:
 - Ported/adapted Forge Home, Review, Library and Activity into `src/apps/forge/components` while keeping the current Studio shell and `PhoneFrame`.
 - Restored legacy Forge visual hierarchy: editorial Home screen, amber CTA, dense review groups, segmented Library, Activity sections and translucent bottom nav.
 - Kept all Forge behavior local/mock-only with no metadata edits, file access, backend calls or network calls.
+
+Bloco visual reference delta:
+
+- Added committed visual references and visual target contracts for Anchor, Forge and Aria.
