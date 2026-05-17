@@ -19,7 +19,7 @@ export const studioApps: StudioApp[] = [
     id: 'anchor',
     name: 'Anchor',
     mood: 'local media server control',
-    stage: 'Static visual placeholder',
+    stage: 'High-fidelity mock foundation',
     Preview: AnchorPreview,
   },
   {

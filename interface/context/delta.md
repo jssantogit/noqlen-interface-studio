@@ -63,3 +63,11 @@ Bloco visual reference delta:
 
 - Added committed visual references and visual target contracts for Anchor, Forge and Aria.
 - Added the committed Flux visual reference and updated the Flux visual target contract.
+
+Bloco 2 delta:
+
+- Replaced the Anchor placeholder with a high-fidelity mock mobile UI inside the existing phone simulator.
+- Added Anchor Home, Servers, Library and Activity screens with internal bottom navigation controlled by Anchor state.
+- Added static Anchor mock data for Navidrome status, server list, library stats, mock folder display copy and activity history.
+- Preserved the Studio shell, app switcher, `PhoneFrame`, Forge, Aria, Flux and GitHub Pages deployment architecture.
+- Documented Anchor screen contracts, mock-only boundaries and the fidelity foundation audit.

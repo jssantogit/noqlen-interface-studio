@@ -65,12 +65,18 @@ a {
 
 @media (max-width: 420px) {
   :root {
-    --studio-phone-width: 100%;
+    --studio-phone-width: min(100%, calc(45.23dvh - 7.45rem));
+  }
+}
+
+@media (min-width: 421px) and (max-width: 1023px) {
+  :root {
+    --studio-phone-width: min(100%, calc(45.23dvh - 6.86rem), 24.875rem);
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --studio-phone-width: clamp(21rem, 29vw, 24.875rem);
+    --studio-phone-width: clamp(18rem, calc(45.23dvh - 3.17rem), 24.875rem);
   }
 }
