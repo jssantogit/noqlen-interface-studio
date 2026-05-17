@@ -1,12 +1,21 @@
 # Noqlen Interface Studio
 
-Noqlen Interface Studio is the visual-only workspace for exploring interface contracts across the Noqlen ecosystem.
+Noqlen Interface Studio is the visual-only mobile simulator lab for exploring interface contracts across the Noqlen ecosystem.
 
-Bloco 0 bootstraps a Vite, React, TypeScript and Tailwind CSS app with a minimal interactive shell for Anchor, Flux, Forge and Aria. Anchor is selected by default and is intentionally more developed than the other placeholder tabs.
+Bloco 1 aligns the site around a premium simulator shell: a minimal external Studio UI, an app selector, and a simulated phone frame where Anchor, Forge, Aria or Flux appears as a static visual placeholder. Anchor is selected by default.
 
 ## Core Rule
 
-This repository must not implement real backend access, downloads, server control, playback, music library access, secrets, personal paths or real app integration. All UI states in Bloco 0 are mock-only.
+This repository must not implement real backend access, downloads, server control, playback, music library access, secrets, personal paths or real app integration. The Studio is not the app itself; it is a visual lab/simulator. App previews inside the phone remain mock-only placeholders.
+
+## Simulator Model
+
+- Minimal external lab shell.
+- Direct app selector for Anchor, Forge, Aria and Flux.
+- Simulated phone frame as the main stage.
+- Fake phone status bar and home indicator.
+- Static app placeholders inside the phone.
+- App-specific interactive screens start only after this visual base is stable.
 
 ## Stack
 
@@ -38,9 +47,8 @@ See `docs/deploy.md` for local preview and deployed-page validation.
 
 ## Development Order
 
-1. Anchor
-2. Flux
-3. Forge
-4. Aria
+1. Stabilize Studio simulator shell.
+2. Build app-specific mockups one app at a time.
+3. Keep each block visual-only unless a future handoff explicitly changes scope.
 
-Stop after the current block scope. Bloco 1 is not part of this bootstrap.
+Stop after the current block scope. Bloco 1 does not start Anchor, Forge, Aria or Flux screen development.

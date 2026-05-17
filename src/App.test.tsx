@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import App from './App'
 
 describe('Noqlen Interface Studio shell', () => {
-  it('starts on Anchor and exposes all studio tabs', () => {
+  it('starts on Anchor inside the simulator and exposes all apps', () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { name: 'Anchor' })).toBeInTheDocument()
@@ -15,16 +15,19 @@ describe('Noqlen Interface Studio shell', () => {
     expect(screen.getByRole('button', { name: /Flux/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Forge/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Aria/ })).toBeInTheDocument()
+    expect(
+      screen.getByRole('region', { name: /Anchor phone simulator/ }),
+    ).toBeInTheDocument()
   })
 
-  it('switches to a placeholder tab without real integration', async () => {
+  it('switches app placeholders without real integration', async () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('button', { name: /Flux/ }))
+    await user.click(screen.getByRole('button', { name: /Forge/ }))
 
-    expect(screen.getByRole('heading', { name: 'Flux' })).toBeInTheDocument()
-    expect(screen.getByText('Flux placeholder contract')).toBeInTheDocument()
-    expect(screen.getByText('No real backend')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Forge' })).toBeInTheDocument()
+    expect(screen.getByText('Review now')).toBeInTheDocument()
+    expect(screen.getByText('Static review action')).toBeInTheDocument()
   })
 })

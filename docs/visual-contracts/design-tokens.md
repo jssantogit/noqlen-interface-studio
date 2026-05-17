@@ -1,24 +1,26 @@
 # Design Tokens
 
-Bloco 0 uses a dark Noqlen-style visual foundation.
+Bloco 1 uses a dark premium simulator foundation.
 
 ## Color
 
-- Background: deep blue-black gradients.
-- Primary accent: cyan to emerald.
-- Secondary accents: violet, amber and fuchsia per tab.
-- Surfaces: translucent slate with white borders at low opacity.
+- Background: black, charcoal and blue-black gradients with subtle warm amber light.
+- Primary accent: amber/orange.
+- Success accent: green only for online or success states.
+- Error accent: red only for failure states.
+- Surfaces: soft glass panels with thin white borders at low opacity.
 
 ## Shape
 
-- Large rounded panels, usually `1.75rem` to `2rem`.
+- External Studio panels stay quiet and rounded, usually `1.5rem` to `1.75rem`.
+- The phone frame uses larger realistic radii, layered borders and internal clipping.
 - Compact status pills use full-radius rounded forms.
 
 ## Motion
 
 - Motion is light and decorative only.
-- Tab panel transitions use short opacity and vertical offset changes.
+- App switching uses short opacity, vertical offset and subtle scale changes.
 
 ## Boundaries
 
-Tokens describe visuals only and must not imply real operational state.
+Tokens describe visuals only and must not imply real operational state. Mock-only boundaries remain active but should appear as subtle Studio notes rather than repeated dashboard cards.
