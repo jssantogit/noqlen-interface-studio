@@ -25,7 +25,16 @@ This repository must not implement real backend access, downloads, server contro
 - `npm run dev`
 - `npm run lint`
 - `npm run build`
+- `GITHUB_PAGES=true npm run build`
 - `npm run test -- --run`
+
+## Deploy
+
+Public GitHub Pages URL: https://jssantogit.github.io/noqlen-interface-studio/
+
+Deployment is static and mock-only through GitHub Actions Pages. The workflow lives at `.github/workflows/deploy-pages.yml`, builds with `GITHUB_PAGES=true npm run build`, uploads `./dist`, and does not commit generated build output.
+
+See `docs/deploy.md` for local preview and deployed-page validation.
 
 ## Development Order
 
