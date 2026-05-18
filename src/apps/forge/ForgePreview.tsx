@@ -7,6 +7,8 @@ import {
   forgeAllReviewItems,
   reviewGroups,
   songData,
+  type ActivityItem,
+  type ActivityFilter,
   type ForgeMetadataFilter,
   type ForgeReviewQueueItem,
   type ForgeReviewSection,
@@ -17,6 +19,9 @@ import {
   type ReviewItemType,
 } from './forgeMockData'
 import { ForgeActivity } from './components/ForgeActivity'
+import { ForgeActivityDetailSheet } from './components/ForgeActivityDetailSheet'
+import { ForgeActivityFilterSheet } from './components/ForgeActivityFilterSheet'
+import { ForgeActivitySummarySheet } from './components/ForgeActivitySummarySheet'
 import { ForgeBottomNav } from './components/ForgeBottomNav'
 import { ForgeConfirmDialog } from './components/ForgeConfirmDialog'
 import { ForgeCoverComparisonSheet } from './components/ForgeCoverComparisonSheet'
@@ -119,6 +124,88 @@ function getProgressConfig(item: ForgeReviewQueueItem | null): {
   }
 }
 
+function makeActivityEntryFromReviewItem(
+  item: ForgeReviewQueueItem,
+): ActivityItem | null {
+  const typeMap: Record<string, ActivityItem['activityType']> = {
+    'Apply artwork': 'artwork',
+    'Apply lyrics': 'lyrics',
+    'Apply synced': 'lyrics',
+    'Review lyrics': 'lyrics',
+    'Apply tags': 'tags',
+    'Apply identity': 'identity',
+    'Choose match': 'identity',
+    'Apply release data': 'release',
+    'Apply audio data': 'audio',
+  }
+  const activityType = typeMap[item.actionLabel || ''] || 'tags'
+  const providerMap: Record<string, string> = {
+    'Apply artwork': 'Discogs',
+    'Apply lyrics': 'Lyrics mock',
+    'Apply synced': 'LRC mock',
+    'Review lyrics': 'Lyrics mock',
+    'Apply tags': 'Last.fm',
+    'Apply identity': 'MusicBrainz',
+    'Choose match': 'MusicBrainz',
+    'Apply release data': 'Discogs',
+    'Apply audio data': 'Audio analysis mock',
+  }
+  const titleMap: Record<string, string> = {
+    'Apply artwork': 'Artwork updated',
+    'Apply lyrics': 'Lyrics added',
+    'Apply synced': 'Synced lyrics applied',
+    'Review lyrics': 'Lyrics reviewed',
+    'Apply tags': 'Tags applied',
+    'Apply identity': 'Identity applied',
+    'Choose match': 'Identity match resolved',
+    'Apply release data': 'Release metadata updated',
+    'Apply audio data': 'Audio analysis applied',
+  }
+  const relatedMap: Record<string, ActivityItem['relatedReviewTarget']> = {
+    'Apply artwork': 'artwork',
+    'Apply lyrics': 'lyrics',
+    'Apply synced': 'lyrics',
+    'Review lyrics': 'lyrics',
+    'Apply tags': 'metadata/tags',
+    'Apply identity': 'metadata/identity',
+    'Choose match': 'metadata/identity',
+    'Apply release data': 'metadata/release',
+    'Apply audio data': 'metadata/audio',
+  }
+  const changedFieldsMap: Record<string, string[]> = {
+    'Apply artwork': ['Cover image'],
+    'Apply lyrics': ['Plain lyrics'],
+    'Apply synced': ['Synced lyrics', 'LRC'],
+    'Review lyrics': ['Plain lyrics'],
+    'Apply tags': ['Genre', 'Mood', 'Style'],
+    'Apply identity': ['Album MBID', 'Artist MBID', 'Release Group MBID'],
+    'Choose match': ['Album MBID', 'Release Group MBID'],
+    'Apply release data': ['Label', 'Country', 'Catalog number', 'Barcode'],
+    'Apply audio data': ['BPM', 'Key', 'Energy', 'Danceability'],
+  }
+  const now = new Date()
+  const timeStr = `${now.getHours() % 12 || 12}:${now.getMinutes().toString().padStart(2, '0')} ${now.getHours() >= 12 ? 'PM' : 'AM'}`
+  return {
+    id: `activity-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    title: titleMap[item.actionLabel || ''] || 'Change applied',
+    subtitle: `${item.title} · ${item.artist}`,
+    time: timeStr,
+    icon: 'CheckCircle2',
+    accent: 'text-emerald-300',
+    bgAccent: 'bg-emerald-400/13',
+    summary: [item.title],
+    detail: `${titleMap[item.actionLabel || ''] || 'Change'} was applied to ${item.title} by ${item.artist}.`,
+    activityType,
+    dateGroup: 'today',
+    affectedCount: 1,
+    affectedItems: [item.title],
+    changedFields: changedFieldsMap[item.actionLabel || ''] || ['Metadata'],
+    provider: providerMap[item.actionLabel || ''] || 'Forge mock',
+    status: 'completed',
+    relatedReviewTarget: relatedMap[item.actionLabel || ''] || 'all',
+  }
+}
+
 export function ForgePreview() {
   const [activeTab, setActiveTab] = useState<ForgeTab>('home')
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('all')
@@ -152,12 +239,33 @@ export function ForgePreview() {
   const [editorEntityId, setEditorEntityId] = useState<string | null>(null)
   const [editorInitialTab, setEditorInitialTab] = useState<string | undefined>(undefined)
 
+  /* Activity state */
+  const [activityItemsState, setActivityItemsState] = useState<ActivityItem[]>([])
+  const [activityFilter, setActivityFilter] = useState<ActivityFilter>('all')
+  const [activitySort, setActivitySort] = useState<'newest' | 'oldest'>('newest')
+  const [activeActivitySheet, setActiveActivitySheet] = useState<'detail' | 'summary' | 'filter' | null>(null)
+  const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null)
+
+  // Lazy-init activity items from mock data on first render
+  useMemo(() => {
+    if (activityItemsState.length === 0) {
+      import('./forgeMockData').then((mod) => {
+        setActivityItemsState([...mod.activityItems])
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const showToast = useCallback((message: string, tone: 'success' | 'info' | 'warning' = 'success') => {
     setToast({ message, tone })
   }, [])
 
   const dismissToast = useCallback(() => {
     setToast(null)
+  }, [])
+
+  const appendActivity = useCallback((entry: ActivityItem) => {
+    setActivityItemsState((prev) => [entry, ...prev])
   }, [])
 
   const handleReviewNow = useCallback(() => {
@@ -214,6 +322,11 @@ export function ForgePreview() {
       })
       if (status === 'fixed') {
         setSessionFixed((s) => s + 1)
+        const item = forgeAllReviewItems.find((i) => i.id === id)
+        if (item) {
+          const entry = makeActivityEntryFromReviewItem(item)
+          if (entry) appendActivity(entry)
+        }
       } else if (status === 'ignored') {
         setSessionIgnored((s) => s + 1)
       }
@@ -224,7 +337,7 @@ export function ForgePreview() {
         return next
       })
     },
-    [],
+    [appendActivity],
   )
 
   const resetQueue = useCallback(() => {
@@ -429,6 +542,13 @@ export function ForgePreview() {
   }, [])
 
   const handleSaveEntity = useCallback((updated: MockArtist | MockAlbum | MockSong) => {
+    const entityName =
+      'name' in updated
+        ? updated.name
+        : 'title' in updated
+          ? updated.title
+          : 'Track'
+    const entityTypeLabel = editorType === 'artist' ? 'artist' : editorType === 'album' ? 'album' : 'track'
     startProgress({
       title: 'Applying changes',
       steps: ['Preparing changes', 'Applying mock metadata'],
@@ -443,10 +563,32 @@ export function ForgePreview() {
           setLibrarySongs((prev) => prev.map((s) => (s.id === (updated as MockSong).id ? (updated as MockSong) : s)))
         }
         showToast('Metadata updated in mock preview')
+        // Append library edit activity
+        const now = new Date()
+        const timeStr = `${now.getHours() % 12 || 12}:${now.getMinutes().toString().padStart(2, '0')} ${now.getHours() >= 12 ? 'PM' : 'AM'}`
+        appendActivity({
+          id: `activity-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          title: 'Manual metadata edit',
+          subtitle: `${entityTypeLabel} edited`,
+          time: timeStr,
+          icon: 'CheckCircle2',
+          accent: 'text-emerald-300',
+          bgAccent: 'bg-emerald-400/13',
+          summary: [entityName],
+          detail: `${entityName} was edited manually in the library metadata editor.`,
+          activityType: 'libraryEdit',
+          dateGroup: 'today',
+          affectedCount: 1,
+          affectedItems: [entityName],
+          changedFields: ['Metadata'],
+          provider: 'Manual',
+          status: 'completed',
+          relatedLibraryTarget: entityTypeLabel as 'artist' | 'album' | 'track',
+        })
       },
     })
     closeEditor()
-  }, [editorType, startProgress, showToast, closeEditor])
+  }, [editorType, startProgress, showToast, closeEditor, appendActivity])
 
   const editorEntity = useMemo(() => {
     if (!editorOpen || !editorEntityId) return null
@@ -454,6 +596,71 @@ export function ForgePreview() {
     if (editorType === 'album') return libraryAlbums.find((a) => a.id === editorEntityId) ?? null
     return librarySongs.find((s) => s.id === editorEntityId) ?? null
   }, [editorOpen, editorEntityId, editorType, libraryArtists, libraryAlbums, librarySongs])
+
+  /* Activity callbacks */
+  const selectedActivityItem = useMemo(() => {
+    if (!selectedActivityId) return null
+    return activityItemsState.find((i) => i.id === selectedActivityId) ?? null
+  }, [selectedActivityId, activityItemsState])
+
+  const openActivityDetail = useCallback((item: ActivityItem) => {
+    setSelectedActivityId(item.id)
+    setActiveActivitySheet('detail')
+  }, [])
+
+  const openActivitySummary = useCallback((item: ActivityItem) => {
+    setSelectedActivityId(item.id)
+    setActiveActivitySheet('summary')
+  }, [])
+
+  const closeActivitySheet = useCallback(() => {
+    setActiveActivitySheet(null)
+    setSelectedActivityId(null)
+  }, [])
+
+  const navigateActivityToReview = useCallback(
+    (target: ActivityItem['relatedReviewTarget']) => {
+      if (!target) return
+      if (target === 'artwork') {
+        handleFilterReview('artwork')
+      } else if (target === 'lyrics') {
+        handleFilterReview('lyrics')
+      } else if (target === 'metadata/tags') {
+        setMetadataFilter('tags')
+        handleFilterReview('metadata')
+      } else if (target === 'metadata/identity') {
+        setMetadataFilter('identity')
+        handleFilterReview('metadata')
+      } else if (target === 'metadata/release') {
+        setMetadataFilter('release')
+        handleFilterReview('metadata')
+      } else if (target === 'metadata/audio') {
+        setMetadataFilter('audio')
+        handleFilterReview('metadata')
+      } else {
+        handleFilterReview('all')
+      }
+      closeActivitySheet()
+    },
+    [handleFilterReview, closeActivitySheet],
+  )
+
+  const openActivityFilter = useCallback(() => {
+    setActiveActivitySheet('filter')
+  }, [])
+
+  const applyActivityFilter = useCallback((filter: ActivityFilter, sort: 'newest' | 'oldest') => {
+    setActivityFilter(filter)
+    setActivitySort(sort)
+    closeActivitySheet()
+    showToast(filter === 'all' ? 'Showing all activity' : `Filtered by ${filter}`, 'info')
+  }, [closeActivitySheet, showToast])
+
+  const resetActivityFilters = useCallback(() => {
+    setActivityFilter('all')
+    setActivitySort('newest')
+    showToast('Activity filters reset', 'info')
+  }, [showToast])
 
   const screens: Record<ForgeTab, ReactNode> = {
     home: (
@@ -493,7 +700,17 @@ export function ForgePreview() {
         onOpenTrackEditor={openTrackEditor}
       />
     ),
-    activity: <ForgeActivity />,
+    activity: (
+      <ForgeActivity
+        activeFilter={activityFilter}
+        items={activityItemsState}
+        onNavigateToReview={navigateActivityToReview}
+        onOpenDetail={openActivityDetail}
+        onOpenFilter={openActivityFilter}
+        onOpenSummary={openActivitySummary}
+        onResetFilters={resetActivityFilters}
+      />
+    ),
   }
 
   return (
@@ -556,6 +773,47 @@ export function ForgePreview() {
           applyLabel={'actionLabel' in selectedReviewItem && selectedReviewItem.actionLabel ? selectedReviewItem.actionLabel : 'Apply change'}
           onApply={applyDetailFix}
           onClose={closeDetailSheet}
+        />
+      )}
+
+      {/* Activity sheets */}
+      {activeActivitySheet === 'detail' && selectedActivityItem && (
+        <ForgeActivityDetailSheet
+          item={selectedActivityItem}
+          onClose={closeActivitySheet}
+          onOpenRelatedReview={
+            selectedActivityItem.relatedReviewTarget
+              ? () => navigateActivityToReview(selectedActivityItem.relatedReviewTarget)
+              : undefined
+          }
+          onOpenRelatedLibrary={
+            selectedActivityItem.relatedLibraryTarget
+              ? () => {
+                  closeActivitySheet()
+                  showToast('Library item focus is planned for a later Forge batch', 'info')
+                }
+              : undefined
+          }
+        />
+      )}
+      {activeActivitySheet === 'summary' && selectedActivityItem && (
+        <ForgeActivitySummarySheet
+          item={selectedActivityItem}
+          onClose={closeActivitySheet}
+          onOpenRelatedReview={
+            selectedActivityItem.relatedReviewTarget
+              ? () => navigateActivityToReview(selectedActivityItem.relatedReviewTarget)
+              : undefined
+          }
+        />
+      )}
+      {activeActivitySheet === 'filter' && (
+        <ForgeActivityFilterSheet
+          activeFilter={activityFilter}
+          activeSort={activitySort}
+          onApply={applyActivityFilter}
+          onReset={resetActivityFilters}
+          onClose={closeActivitySheet}
         />
       )}
 

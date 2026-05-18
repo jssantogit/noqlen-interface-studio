@@ -267,34 +267,38 @@ Layout constraints:
 ### Activity Card Tap
 
 - Trigger: tap on an activity card body.
-- Result: opens activity detail sheet.
-- Shows: title, subtitle, time, detail text, affected item list, undo/done actions.
-- Current status: not implemented.
+- Result: opens `ForgeActivityDetailSheet`.
+- Shows: title, subtitle, time, type badge, status badge, provider/source badge, affected count, affected item list, changed fields, detail text, mock-only note, action buttons.
+- Current status: implemented.
 
 ### Summary Button
 
 - Trigger: `Summary` pill on an activity card.
-- Result: opens the same activity detail sheet.
-- Current status: not implemented (Summary pill renders; not wired).
+- Result: opens `ForgeActivitySummarySheet`.
+- Shows: concise summary, affected count, grouped changes, provider/source badge, mock-only note, action buttons.
+- Current status: implemented.
 
 ### Review Button
 
-- Trigger: `Review` pill on the `Library checked` or `Some items still need review` card.
-- Result: navigates to the related review queue.
-- Current status: not implemented.
+- Trigger: `Review` pill on an activity card with a related review target.
+- Result: navigates to the related Review tab/filter.
+- Mapping: Lyrics -> Review / Lyrics; Artwork -> Review / Artwork; Tags -> Review / Metadata / Tags; Identity -> Review / Metadata / Identity; Release -> Review / Metadata / Release; Audio -> Review / Metadata / Audio; Library checked -> Review / All.
+- Current status: implemented.
 
 ### Today / Yesterday Grouping
 
 - Trigger: visual group headers.
-- Result: can be filtered or collapsed later.
-- Current status: implemented (static grouping).
+- Result: items are grouped by `dateGroup` field; filtered results still group correctly; empty groups are hidden.
+- Current status: implemented.
 
-### Activity Filters (Future)
+### Activity Filters
 
 - Trigger: filter icon in Activity header.
-- Result: opens filter sheet.
-- Options: Lyrics, Covers, Genres, Checks, Errors.
-- Current status: not implemented.
+- Result: opens `ForgeActivityFilterSheet`.
+- Options: All, Lyrics, Artwork, Metadata, Library edits, Warnings, Failed, Completed.
+- Sort: Newest first, Oldest first.
+- Behavior: filter applies locally; active filter chip visible; no-results state with reset action; reset clears filter.
+- Current status: implemented.
 
 ## Required UI States
 
@@ -333,10 +337,12 @@ Layout constraints:
 ### Activity
 
 - Populated: implemented.
-- Empty: not implemented.
-- Filtered: not implemented.
-- Errors only: not implemented.
-- Summary detail: not implemented.
+- Empty: implemented (empty state with icon, message and reset action).
+- Filtered: implemented (active filter chip + filtered list).
+- Errors only: implemented (via filter).
+- Summary detail: implemented (`ForgeActivitySummarySheet`).
+- Detail sheet: implemented (`ForgeActivityDetailSheet`).
+- Filter sheet: implemented (`ForgeActivityFilterSheet`).
 
 ### Global
 
@@ -381,8 +387,10 @@ Layout constraints:
 - `ForgeIgnoreReasonSheet`.
 - `ForgeFixSummarySheet`.
 - `ForgeLibraryDetailSheet` (artist, album, song variants).
-- `ForgeActivityDetailSheet`.
-- `ForgeFilterSheet` (library and activity filters).
+- `ForgeActivityDetailSheet` (implemented).
+- `ForgeActivitySummarySheet` (implemented).
+- `ForgeActivityFilterSheet` (implemented).
+- `ForgeFilterSheet` (library filter deferred).
 - `ForgeMockStateControls` (Studio-only state toggles inside Settings).
 
 ## Implementation Batches
@@ -435,13 +443,17 @@ Layout constraints:
 - Partial/deferred Review ↔ Library sync.
 - Empty and no-results states.
 
-### Batch 5: Activity Interactions
+### Batch 5: Activity Interactions (Bloco 3.5)
 
-- Activity card tap opens detail sheet.
-- `Summary` and `Review` pill wiring.
-- Today/Yesterday grouping polish.
-- Activity filter sheet.
-- Empty and filtered states.
+- Activity card tap opens `ForgeActivityDetailSheet` with title, status, provider badge, affected items, changed fields and mock-only note.
+- `Summary` pill opens `ForgeActivitySummarySheet` with concise result, grouped changes and provider badge.
+- `Review` pill navigates to the related Review tab/filter with toast feedback.
+- Today/Yesterday grouping is robust: filtered results still group correctly, empty groups are hidden.
+- `ForgeActivityFilterSheet` with type options (All, Lyrics, Artwork, Metadata, Library edits, Warnings, Failed, Completed) and sort options (Newest first, Oldest first).
+- Empty state with icon, message and reset action when filter yields no results.
+- Dynamic Review -> Activity history: Review apply actions append a new activity entry to local state.
+- Dynamic Library editor -> Activity history: Library metadata editor save appends a `libraryEdit` activity entry.
+- Activity -> Library item navigation is deferred (shows toast: planned for a later batch).
 
 ### Batch 6: State Coverage
 

@@ -111,6 +111,20 @@ All data is static and fictional. All state changes are local React state only.
   - Updated `forgeMockData.ts` with richer album gradients and activity `bgAccent` fields.
   - Preserved all existing interactions; no new Library/Activity interactions added.
 
+- **Bloco 3.5 (Forge Activity Interactions):** implemented.
+  - Enhanced `ActivityItem` data model with `activityType`, `status`, `provider`, `affectedCount`, `affectedItems`, `changedFields`, `relatedReviewTarget`, `relatedLibraryTarget` and `dateGroup`.
+  - Created `ForgeActivityDetailSheet` with title, status, provider badge, affected items, changed fields and mock-only note.
+  - Created `ForgeActivitySummarySheet` with concise result, grouped changes and provider badge.
+  - Created `ForgeActivityFilterSheet` with type filters (All, Lyrics, Artwork, Metadata, Library edits, Warnings, Failed, Completed) and sort (Newest/Oldest first).
+  - Wired Activity card tap to detail sheet, Summary pill to summary sheet, Review pill to related Review tab/filter.
+  - Added filter button to Activity header with active filter chip and no-results empty state.
+  - Made Today/Yesterday grouping robust: filtered results still group correctly, empty groups hidden.
+  - Implemented dynamic Review -> Activity history: Review apply actions append a new activity entry.
+  - Implemented dynamic Library editor -> Activity history: Library metadata editor save appends a `libraryEdit` entry.
+  - Deferred Activity -> Library item navigation (shows toast).
+  - Updated `ForgePreview` with mutable `activityItems` state and `appendActivity` helper.
+  - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, FileReader, secrets or analytics.
+
 - **Bloco 3.4.5 (Forge Library Metadata Editor):** implemented.
   - Created `ForgeMetadataEditor` reusable full-screen editor for Artist, Album and Track entities.
   - Organized tabs per entity: Track (Overview, Artwork, Lyrics, Metadata, Audio, File info), Album (Overview, Artwork, Metadata, Release, Tracks, File info), Artist (Overview, Image, Metadata, Albums, Identity).

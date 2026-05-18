@@ -330,49 +330,79 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### AC-1: Activity Card Tap
 
 - **Trigger:** tap an activity card body.
-- **Resulting UI:** `ForgeActivityDetailSheet` opens.
-- **Shows:** title, subtitle, time, detail text, affected items, undo/done actions.
-- **Mock state changes:** `activityDetailId = item.id`.
+- **Resulting UI:** `ForgeActivityDetailSheet` opens as a bottom sheet.
+- **Shows:** title, subtitle, time, type badge, status badge, provider/source badge, affected count, affected item list, changed fields, detail text, mock-only note, action buttons.
+- **Mock state changes:** `activeActivitySheet = 'detail'`, `selectedActivityId = item.id`.
 - **Data used:** `activityItems`.
 - **Forbidden real behavior:** no real log read, no undo of real changes.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### AC-2: Summary Button
 
 - **Trigger:** tap the `Summary` pill on an activity card.
-- **Resulting UI:** same as AC-1.
-- **Mock state changes:** same as AC-1.
-- **Data used:** same as AC-1.
+- **Resulting UI:** `ForgeActivitySummarySheet` opens as a bottom sheet.
+- **Shows:** concise summary, affected count, grouped changes, provider/source badge, mock-only note, action buttons.
+- **Mock state changes:** `activeActivitySheet = 'summary'`, `selectedActivityId = item.id`.
+- **Data used:** `activityItems`.
 - **Forbidden real behavior:** same as AC-1.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### AC-3: Review Button
 
-- **Trigger:** tap the `Review` pill on a `Library checked` or review-related activity card.
-- **Resulting UI:** navigates to Review tab.
-- **Mock state changes:** `activeTab = 'review'`.
-- **Data used:** activity item type mapping.
+- **Trigger:** tap the `Review` pill on an activity card with a related review target.
+- **Resulting UI:** navigates to the related Review tab/filter with toast.
+- **Mapping:** Lyrics -> Review / Lyrics; Artwork -> Review / Artwork; Tags -> Review / Metadata / Tags; Identity -> Review / Metadata / Identity; Release -> Review / Metadata / Release; Audio -> Review / Metadata / Audio; Library checked -> Review / All.
+- **Mock state changes:** `activeTab = 'review'`, `reviewFilter` and `metadataFilter` updated.
+- **Data used:** `activityItems`.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### AC-4: Today / Yesterday Grouping
 
 - **Trigger:** visual group headers.
-- **Resulting UI:** groups remain static; future filter may collapse.
-- **Mock state changes:** none currently.
-- **Data used:** `time` field.
+- **Resulting UI:** items grouped by `dateGroup`; filtered results still group correctly; empty groups hidden.
+- **Mock state changes:** none.
+- **Data used:** `activityItems`.
 - **Forbidden real behavior:** none.
-- **Status:** implemented (static grouping).
+- **Status:** implemented.
 
 ### AC-5: Activity Filters
 
 - **Trigger:** tap filter icon in Activity header.
-- **Resulting UI:** `ForgeFilterSheet` opens with type options.
-- **Options:** All, Lyrics, Covers, Genres, Checks, Errors.
-- **Mock state changes:** `activityFilter`.
+- **Resulting UI:** `ForgeActivityFilterSheet` opens with type options.
+- **Options:** All, Lyrics, Artwork, Metadata, Library edits, Warnings, Failed, Completed.
+- **Sort:** Newest first, Oldest first.
+- **Mock state changes:** `activityFilter`, `activitySort`.
 - **Data used:** static options.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
+
+### AC-6: Dynamic Review -> Activity History
+
+- **Trigger:** Review apply/fix action completes.
+- **Resulting UI:** new activity entry appears at the top of Activity list.
+- **Mock state changes:** `activityItems` appended with entry derived from review item.
+- **Data used:** completed review item.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
+
+### AC-7: Dynamic Library Editor -> Activity History
+
+- **Trigger:** Library metadata editor save completes.
+- **Resulting UI:** new `libraryEdit` activity entry appears at the top of Activity list.
+- **Mock state changes:** `activityItems` appended with `libraryEdit` entry.
+- **Data used:** saved entity.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
+
+### AC-8: Activity -> Library Navigation
+
+- **Trigger:** tap "Open library item" in activity detail.
+- **Resulting UI:** toast: "Library item focus is planned for a later Forge batch".
+- **Mock state changes:** none.
+- **Data used:** `relatedLibraryTarget`.
+- **Forbidden real behavior:** none.
+- **Status:** deferred.
 
 ---
 

@@ -140,16 +140,47 @@ export interface ForgeReviewQueueItem {
   gradient: string
 }
 
+export type ActivityType =
+  | 'lyrics'
+  | 'artwork'
+  | 'tags'
+  | 'identity'
+  | 'release'
+  | 'audio'
+  | 'libraryEdit'
+  | 'libraryCheck'
+  | 'error'
+
+export type ActivityStatus = 'completed' | 'pendingReview' | 'warning' | 'failed'
+export type ActivityFilter = 'all' | 'lyrics' | 'artwork' | 'metadata' | 'libraryEdit' | 'warning' | 'failed' | 'completed'
+
 export interface ActivityItem {
   id: string
   title: string
   subtitle: string
   time: string
-  icon: 'CheckCircle2' | 'Image' | 'Tags' | 'Clock3' | 'Check'
+  icon: 'CheckCircle2' | 'Image' | 'Tags' | 'Clock3' | 'Check' | 'AlertTriangle' | 'Music2'
   accent: string
   bgAccent: string
   summary: string[]
   detail: string
+  activityType: ActivityType
+  dateGroup: 'today' | 'yesterday'
+  affectedCount: number
+  affectedItems: string[]
+  changedFields?: string[]
+  provider?: string
+  status: ActivityStatus
+  relatedReviewTarget?:
+    | 'all'
+    | 'artwork'
+    | 'lyrics'
+    | 'metadata'
+    | 'metadata/tags'
+    | 'metadata/identity'
+    | 'metadata/release'
+    | 'metadata/audio'
+  relatedLibraryTarget?: 'artist' | 'album' | 'track'
 }
 
 export const artistData: MockArtist[] = [
@@ -954,6 +985,14 @@ export const activityItems: ActivityItem[] = [
     bgAccent: 'bg-emerald-400/13',
     summary: ['The Whole Universe Wants', 'Says'],
     detail: 'Lyrics were added after preview. No other metadata changed.',
+    activityType: 'lyrics',
+    dateGroup: 'today',
+    affectedCount: 2,
+    affectedItems: ['The Whole Universe Wants', 'Says'],
+    changedFields: ['Plain lyrics', 'Synced lyrics'],
+    provider: 'Lyrics mock',
+    status: 'completed',
+    relatedReviewTarget: 'lyrics',
   },
   {
     id: 'covers-improved',
@@ -965,20 +1004,93 @@ export const activityItems: ActivityItem[] = [
     bgAccent: 'bg-violet-400/13',
     summary: ['All Melody', 'Spaces', 'Felt', 'Empty'],
     detail: 'Higher quality artwork was selected for each album.',
+    activityType: 'artwork',
+    dateGroup: 'today',
+    affectedCount: 4,
+    affectedItems: ['All Melody', 'Spaces', 'Felt', 'Empty'],
+    changedFields: ['Cover image', 'Resolution upgrade'],
+    provider: 'Discogs',
+    status: 'completed',
+    relatedReviewTarget: 'artwork',
   },
   {
-    id: 'genres-completed',
-    title: 'Genres completed',
+    id: 'tags-applied',
+    title: 'Tags applied',
     subtitle: '3 songs updated',
-    time: '7:15 AM',
+    time: '8:10 AM',
     icon: 'Tags',
     accent: 'text-amber-300',
     bgAccent: 'bg-amber-400/13',
-    summary: ['A Place', 'My Friend the Forest', 'The Bells'],
-    detail: 'Missing genre fields were completed from trusted matches.',
+    summary: ['A Place', 'Says', 'Music for Animals'],
+    detail: 'Missing genre, mood and style fields were completed from Last.fm suggestions.',
+    activityType: 'tags',
+    dateGroup: 'today',
+    affectedCount: 3,
+    affectedItems: ['A Place', 'Says', 'Music for Animals'],
+    changedFields: ['Genre', 'Mood', 'Style'],
+    provider: 'Last.fm',
+    status: 'completed',
+    relatedReviewTarget: 'metadata/tags',
   },
   {
-    id: 'still-review',
+    id: 'identity-applied',
+    title: 'Identity applied',
+    subtitle: '1 album identity updated',
+    time: '7:45 AM',
+    icon: 'CheckCircle2',
+    accent: 'text-sky-300',
+    bgAccent: 'bg-sky-400/13',
+    summary: ['All Melody'],
+    detail: 'Protected identity fields were updated after explicit confirmation.',
+    activityType: 'identity',
+    dateGroup: 'today',
+    affectedCount: 1,
+    affectedItems: ['All Melody'],
+    changedFields: ['Album MBID', 'Release Group MBID'],
+    provider: 'MusicBrainz',
+    status: 'completed',
+    relatedReviewTarget: 'metadata/identity',
+  },
+  {
+    id: 'release-data',
+    title: 'Release metadata updated',
+    subtitle: '1 album updated',
+    time: '7:20 AM',
+    icon: 'CheckCircle2',
+    accent: 'text-orange-300',
+    bgAccent: 'bg-orange-400/13',
+    summary: ['All Melody'],
+    detail: 'Label, country, catalog number and barcode were updated from Discogs.',
+    activityType: 'release',
+    dateGroup: 'today',
+    affectedCount: 1,
+    affectedItems: ['All Melody'],
+    changedFields: ['Label', 'Country', 'Catalog number', 'Barcode'],
+    provider: 'Discogs',
+    status: 'completed',
+    relatedReviewTarget: 'metadata/release',
+  },
+  {
+    id: 'audio-data',
+    title: 'Audio analysis applied',
+    subtitle: '1 track updated',
+    time: '7:15 AM',
+    icon: 'Music2',
+    accent: 'text-teal-300',
+    bgAccent: 'bg-teal-400/13',
+    summary: ['Says'],
+    detail: 'BPM, key, energy and danceability were updated from mock audio analysis.',
+    activityType: 'audio',
+    dateGroup: 'today',
+    affectedCount: 1,
+    affectedItems: ['Says'],
+    changedFields: ['BPM', 'Key', 'Energy', 'Danceability'],
+    provider: 'Audio analysis mock',
+    status: 'completed',
+    relatedReviewTarget: 'metadata/audio',
+  },
+  {
+    id: 'library-check',
     title: 'Library checked',
     subtitle: 'Everything looks good',
     time: 'Yesterday',
@@ -987,5 +1099,31 @@ export const activityItems: ActivityItem[] = [
     bgAccent: 'bg-orange-400/13',
     summary: ['No pending critical changes'],
     detail: 'Forge scanned the mock library and left everything unchanged.',
+    activityType: 'libraryCheck',
+    dateGroup: 'yesterday',
+    affectedCount: 0,
+    affectedItems: ['No pending critical changes'],
+    provider: 'Forge mock',
+    status: 'completed',
+    relatedReviewTarget: 'all',
+  },
+  {
+    id: 'library-edit',
+    title: 'Manual metadata edit',
+    subtitle: '1 track edited',
+    time: 'Yesterday',
+    icon: 'CheckCircle2',
+    accent: 'text-emerald-300',
+    bgAccent: 'bg-emerald-400/13',
+    summary: ['My Friend the Forest'],
+    detail: 'Title, genre and lyrics were edited manually in the library metadata editor.',
+    activityType: 'libraryEdit',
+    dateGroup: 'yesterday',
+    affectedCount: 1,
+    affectedItems: ['My Friend the Forest'],
+    changedFields: ['Title', 'Genre', 'Lyrics'],
+    provider: 'Manual',
+    status: 'completed',
+    relatedLibraryTarget: 'track',
   },
 ]

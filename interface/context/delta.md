@@ -423,3 +423,23 @@ Bloco 3.4.5 delta (Forge Library Metadata Editor):
 - Did not start Forge Activity interactions, Aria or Flux.
 - Browser MCP validation was skipped per user request.
 - Build, lint, tests pass.
+
+Bloco 3.5 delta (Forge Activity Interactions):
+
+- Enhanced `ActivityItem` data model with `activityType`, `status`, `provider`, `affectedCount`, `affectedItems`, `changedFields`, `relatedReviewTarget`, `relatedLibraryTarget` and `dateGroup`.
+- Created `ForgeActivityDetailSheet` with title, status badge, provider/source badge, affected items list, changed fields, detail text, mock-only note and action buttons.
+- Created `ForgeActivitySummarySheet` with concise result, affected count, grouped changes, provider badge and action buttons.
+- Created `ForgeActivityFilterSheet` with type filters (All, Lyrics, Artwork, Metadata, Library edits, Warnings, Failed, Completed) and sort options (Newest first, Oldest first).
+- Wired Activity card tap to open detail sheet.
+- Wired Summary pill to open summary sheet.
+- Wired Review pill to navigate to related Review tab/filter with toast feedback.
+- Added filter button to Activity header with active filter chip and no-results empty state.
+- Made Today/Yesterday grouping robust: filtered results still group correctly, empty groups hidden.
+- Implemented dynamic Review -> Activity history: Review apply actions append a new activity entry to `activityItems` state.
+- Implemented dynamic Library editor -> Activity history: Library metadata editor save appends a `libraryEdit` activity entry.
+- Deferred Activity -> Library item navigation (shows toast: planned for a later Forge batch).
+- Updated `ForgePreview` with mutable `activityItems` state, `activityFilter`, `activitySort`, `activeActivitySheet`, `selectedActivityId` and `appendActivity` helper.
+- Updated `docs/interaction-maps/forge.md`, `docs/screen-contracts/forge/interactions.md` and `docs/screen-contracts/forge/README.md` with Batch 5 status.
+- Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, FileReader, secrets or analytics.
+- Browser MCP validation skipped per user request.
+- Build, lint, tests pass.
