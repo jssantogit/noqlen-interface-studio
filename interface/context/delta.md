@@ -195,3 +195,17 @@ Bloco 2.9.1 delta (first-run setup UX fix):
 - Added draft bridge helpers in `AnchorPreview` to map between setup `navidromeDraft` and catalog `NavidromeConfigDraft`.
 - Partial two-way sync: basic fields (MusicFolder, DataFolder, Port, LogLevel, ScannerSchedule, EnableDownloads, EnableSharing, EnableLogRedacting) sync between setup and Advanced Settings.
 - Updated audit docs, interaction maps, screen contracts and context delta.
+
+Bloco 3.0 delta (Forge interaction map and completion plan):
+
+- Audited current Forge implementation in `src/apps/forge`, legacy UI Lab Forge screens, visual targets and screen contracts.
+- Created `docs/interaction-maps/forge.md` with complete Forge interaction coverage for Home, Review, Library and Activity.
+- Created `docs/screen-contracts/forge/interactions.md` with per-interaction contracts including trigger, resulting UI, mock state changes, data used, forbidden real behavior and completion status.
+- Updated `docs/screen-contracts/forge/README.md` with visual target, primary screens, interactive completion model, mock-only boundaries and future implementation batches.
+- Updated `interface/context/delta.md` with Bloco 3.0 scope.
+- Created optional static metadata `src/apps/forge/forgeInteractionMap.ts` exporting interaction lists, statuses and batch groupings with no runtime complexity.
+- Documented seven future implementation batches: Overlay Foundation + Home, Review Queue Interactions, Review Item Detail Flows, Library Interactions, Activity Interactions, State Coverage and Completion Audit.
+- Defined acceptance criteria: every visible action responds, all responses are mock-only, review actions change local mock state, before/after previews exist, no real files/metadata/network touched, all screens have state coverage, visual fidelity close to reference, stable viewport, no horizontal overflow.
+- Did not implement any new Forge runtime interactions; this block is planning/spec only.
+- Preserved Anchor, Aria, Flux and Studio shell unchanged.
+- Preserved mock-only boundary: no backend, filesystem, metadata edits, downloads, FileReader, secrets or network behavior.
