@@ -25,6 +25,7 @@ import { ForgeActivitySummarySheet } from './components/ForgeActivitySummaryShee
 import { ForgeBottomNav } from './components/ForgeBottomNav'
 import { ForgeConfirmDialog } from './components/ForgeConfirmDialog'
 import { ForgeCoverComparisonSheet } from './components/ForgeCoverComparisonSheet'
+import { ForgeEnrichMode } from './components/ForgeEnrichMode'
 import { ForgeGenrePickerSheet } from './components/ForgeGenrePickerSheet'
 import { ForgeHome } from './components/ForgeHome'
 import { ForgeLibrary } from './components/ForgeLibrary'
@@ -213,6 +214,7 @@ export function ForgePreview() {
   const [activeSheet, setActiveSheet] = useState<ForgeSheet>(null)
   const [activeDetailSheet, setActiveDetailSheet] = useState<ForgeDetailSheet>(null)
   const [selectedReviewItemId, setSelectedReviewItemId] = useState<string | null>(null)
+  const [enrichModeOpen, setEnrichModeOpen] = useState(false)
   const [itemStatuses, setItemStatuses] = useState<Record<string, ReviewItemStatus>>(buildInitialItemStatuses)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [sessionFixed, setSessionFixed] = useState(0)
@@ -302,6 +304,28 @@ export function ForgePreview() {
 
   const closeSheet = useCallback(() => {
     setActiveSheet(null)
+  }, [])
+
+  const openEnrichMode = useCallback(() => {
+    setEnrichModeOpen(true)
+  }, [])
+
+  const closeEnrichMode = useCallback(() => {
+    setEnrichModeOpen(false)
+  }, [])
+
+  const markSafeItemsApplied = useCallback(() => {
+    // Mock: mark a few safe review items as applied locally
+    setItemStatuses((prev) => {
+      const next = { ...prev }
+      forgeAllReviewItems.forEach((item) => {
+        if (item.proposalStatus === 'Safe' && next[item.id] === 'pending') {
+          next[item.id] = 'fixed'
+        }
+      })
+      return next
+    })
+    setSessionFixed((s) => s + 5)
   }, [])
 
   const closeDetailSheet = useCallback(() => {
@@ -683,6 +707,7 @@ export function ForgePreview() {
         showConfirm={showConfirm}
         showProgress={startProgress}
         onClearFilter={clearReviewFilter}
+        onOpenEnrichMode={openEnrichMode}
         onOpenItemDetail={openItemDetail}
         onResetQueue={resetQueue}
         onSetFilter={setReviewFilter}
@@ -739,6 +764,25 @@ export function ForgePreview() {
         />
       )}
       {activeSheet === 'safetyNote' && <ForgeSafetyNoteSheet onClose={closeSheet} />}
+
+      {/* Enrich Mode full-screen flow */}
+      {enrichModeOpen && (
+        <ForgeEnrichMode
+          appendActivity={appendActivity}
+          markSafeItemsApplied={markSafeItemsApplied}
+          onClose={closeEnrichMode}
+          onViewActivity={() => {
+            setActiveTab('activity')
+            showToast('Activity opened', 'info')
+          }}
+          onViewReview={() => {
+            setReviewFilter('all')
+            setActiveTab('review')
+            showToast('Review queue opened', 'info')
+          }}
+          showToast={showToast}
+        />
+      )}
 
       {/* Detail sheets */}
       {activeDetailSheet === 'lyrics' && selectedReviewItem && (

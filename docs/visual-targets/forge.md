@@ -50,6 +50,20 @@ Review redesign rules:
 - File info is read-only and excluded from the main Review surface.
 - Use soft peach-orange/warm amber accents only; avoid neon, cyan spill, blue glow and saturated orange.
 
+Enrich Mode visual rules:
+
+- Full-screen overlay inside the phone viewport with warm charcoal gradient background.
+- Step indicator pill row at top: Options → Targets → Confirm → Dry-run → Apply.
+- Category cards use `ForgeCard` with premium gradient surface and inner highlight.
+- Overwrite toggles use the same switch style as Settings toggles.
+- Warning cards use calm orange-tinged border and background, not scary red.
+- Target rows use compact checkbox + thumbnail + metadata pattern.
+- Dry-run and progress steps use the same step-list pattern as `ForgeProgressSheet`.
+- Result screen uses success emerald icon + summary stat grid + category result cards.
+- Primary actions use the warm orange CTA with inner highlight.
+- Secondary actions use bordered buttons with subtle background.
+- No generic wizard feel; no terminal/config feel; no page-level overflow.
+
 Must not:
 
 - Collapse into generic review cards.
@@ -58,5 +72,6 @@ Must not:
 - Touch files.
 - Use backend behavior.
 - Copy Anchor yellow directly.
+- Present Enrich Mode as "automatic safe repair".
 
 All Forge behavior remains mock-only.

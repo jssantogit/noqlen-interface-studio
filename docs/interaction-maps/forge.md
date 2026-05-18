@@ -120,6 +120,15 @@ Layout constraints:
 - Safety: must not write metadata, edit files, fetch lyrics or download covers.
 - Current status: implemented.
 
+### Open Enrich Mode
+
+- Trigger: `Open Enrich Mode →` helper row under `Review safe fixes` in the All summary card.
+- Result: opens the full-screen Enrich Mode flow with 6 steps: Rewrite options → Target selection → Confirmation → Dry-run → Progress → Result.
+- Distinction: Enrich Mode is a force rewrite/reprocess workflow, not safe automatic repair. It can overwrite existing metadata and runs a dry-run before applying.
+- Mock state: on completion, appends an activity entry, marks pending safe review items as fixed locally, increments session fixed counter.
+- Safety: mock-only; no real metadata or files changed.
+- Current status: implemented.
+
 ### Contextual Apply Selected
 
 - Trigger: select row checkboxes, then tap `Apply selected` in the compact contextual bar.
@@ -380,6 +389,7 @@ Layout constraints:
 - `ForgeToast`.
 - `ForgeSettingsSheet` (full categories, provider cards, API keys, rewrite rules, app updates).
 - `ForgeSafetyNoteSheet`.
+- `ForgeEnrichMode` (full-screen 6-step force rewrite flow: options, targets, confirm, dry-run, progress, result).
 - `forgeSettingsCatalog` (typed settings model and default state).
 
 ### Needed Components

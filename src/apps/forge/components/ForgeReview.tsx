@@ -1,4 +1,4 @@
-import { BadgeCheck, Check, ChevronDown, ChevronRight, FileText, Image, Music2, RotateCcw, SlidersHorizontal, Tags } from 'lucide-react'
+import { BadgeCheck, Check, ChevronDown, ChevronRight, FileText, Image, Music2, RotateCcw, SlidersHorizontal, Tags, Wand2 } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useMemo, useState } from 'react'
 import {
@@ -134,7 +134,7 @@ function statusTone(status: ForgeReviewQueueItem['proposalStatus']) {
   return 'bg-[#e7a35f]/12 text-[#e7a35f]'
 }
 
-function SummaryCard({ filter, onReviewSafeFixes }: { filter: ReviewFilter; onReviewSafeFixes: () => void }) {
+function SummaryCard({ filter, onReviewSafeFixes, onOpenEnrichMode }: { filter: ReviewFilter; onReviewSafeFixes: () => void; onOpenEnrichMode?: () => void }) {
   const stats = summaryFor(filter)
   return (
     <ForgeCard className="mb-5 p-5">
@@ -160,6 +160,15 @@ function SummaryCard({ filter, onReviewSafeFixes }: { filter: ReviewFilter; onRe
             Review safe fixes
             <ChevronRight size={15} />
           </button>
+          <button
+            className="mt-2 flex h-9 w-full items-center justify-center gap-1.5 rounded-xl border border-white/[0.06] bg-transparent text-[11px] font-medium text-white/45 transition hover:bg-white/[0.04] hover:text-white/70"
+            onClick={onOpenEnrichMode}
+            type="button"
+          >
+            <Wand2 size={12} />
+            Open Enrich Mode →
+          </button>
+          <p className="mt-1 text-center text-[10px] text-white/30">Rewrite selected metadata using provider settings.</p>
         </>
       )}
     </ForgeCard>
@@ -386,6 +395,7 @@ export function ForgeReview({
   onSetSelectedIds,
   onSetSessionFixed,
   onSetSessionIgnored,
+  onOpenEnrichMode,
 }: {
   filter?: ReviewFilter
   metadataFilter: ForgeMetadataFilter
@@ -411,6 +421,7 @@ export function ForgeReview({
   onSetSelectedIds: Dispatch<SetStateAction<Set<string>>>
   onSetSessionFixed: Dispatch<SetStateAction<number>>
   onSetSessionIgnored: Dispatch<SetStateAction<number>>
+  onOpenEnrichMode?: () => void
 }) {
   const [ignoreSheetOpen, setIgnoreSheetOpen] = useState(false)
   const [ignoreReason, setIgnoreReason] = useState<string | null>(null)
@@ -582,7 +593,7 @@ export function ForgeReview({
       <ForgeScreenHeader title="Review" />
       <p className="-mt-5 mb-5 text-sm leading-5 text-white/52">{sectionSubtitle(filter)}</p>
 
-      <SummaryCard filter={filter} onReviewSafeFixes={applySafeFixes} />
+      <SummaryCard filter={filter} onOpenEnrichMode={onOpenEnrichMode} onReviewSafeFixes={applySafeFixes} />
 
       {(sessionFixed > 0 || sessionIgnored > 0) && (
         <ForgeCard className="mb-4 flex items-center justify-between gap-3 p-3">

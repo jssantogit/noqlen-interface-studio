@@ -491,5 +491,23 @@ Bloco 3.5.2 delta (Forge Settings — Interaction Closure):
 - Updated docs: `docs/audits/forge-settings-interaction-closure.md`, interaction maps, screen contracts, integration contracts, and context files.
 - Verified no dead controls remain in Settings.
 - Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real credential storage, no real config writes.
-- Did not implement Enrich Mode, Forge State Coverage, Aria or Flux.
+  - Did not implement Enrich Mode, Forge State Coverage, Aria or Flux.
+  - Build, lint, tests pass.
+
+Bloco 3.5.3 delta (Forge Enrich Mode App Flow):
+
+- Created `ForgeEnrichMode` full-screen in-phone flow with 6 steps: Rewrite options → Target selection → Confirmation → Dry-run → Progress → Result.
+- Entry point: `Open Enrich Mode →` helper row under `Review safe fixes` in Review / All summary card.
+- Step 1 (Rewrite options): Tags, Covers, Lyrics, Advanced Metadata categories with sub-options, overwrite toggles, provider hints, minimum image size display, protected field warning.
+- Step 2 (Target selection): Library, Artists, Albums, Songs tabs with search, selectable rows, select all visible, clear selection.
+- Step 3 (Confirmation): summary of categories, target, overwrite options; warning card; Run dry-run button.
+- Step 4 (Dry-run): deterministic 5-step mock progress → result with mock counts (tracks scanned, fields rewritten, existing values replaced, protected fields, conflicts).
+- Step 5 (Progress): deterministic 7-step mock rewrite progress.
+- Step 6 (Result): mock applied counts, category cards, actions: View Review queue, View Activity, Done.
+- Settings integration: shows "Using current mock provider settings" with link to Forge Settings (toast-only).
+- Review integration: on completion marks pending safe items as fixed locally; conflicts/protected fields remain in Review.
+- Activity integration: on completion appends `Enrich Mode completed` activity entry.
+- Interaction closure: every visible Enrich Mode control responds; no dead controls.
+- Updated docs: created `docs/audits/forge-enrich-mode-app-flow.md`; updated interaction maps, screen contracts, integration contracts, visual targets, and context files.
+- Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real metadata edits, no real file changes.
 - Build, lint, tests pass.

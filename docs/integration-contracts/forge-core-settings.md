@@ -172,6 +172,19 @@ App Updates are fully mock-only. No real network call is made. The flow is:
 4. **Retry check** → appears when update check returns failed; re-runs the mock check cycle.
 5. Copy: "Studio preview only. No update was downloaded or installed."
 
+## Enrich Mode Integration
+
+Enrich Mode is a force rewrite workflow that uses current provider settings. In a real app:
+
+- **Provider settings** — Enrich Mode should read the same `metadata_providers` and `apis` configuration used by normal review/fix flows.
+- **Dry-run first** — The real app must run a dry-run before any apply, as Enrich Mode can overwrite existing values.
+- **Protected fields** — Identity fields should only be overwritten if `protect_identity_fields` is disabled and the user explicitly enables replacement.
+- **Conflict behavior** — Uses the same `sync.conflict_policy` setting (review / skip / prefer_current / prefer_provider).
+- **Artwork size** — Minimum image size maps to `cover.min_confidence` and source resolution filters.
+- **Lyrics sidecar** — `lyrics.save_lrc` and `lyrics.embed_lyrics` determine whether sidecar/embedded lyrics are written.
+- **Activity logging** — Enrich Mode results should be recorded in the job/activity history (`jobs.history_days`, `database.track_tag_sync`).
+- **Mock-only boundary** — In the Studio preview, Enrich Mode uses deterministic mock progress and mock counts. No real metadata or files are changed.
+
 ## Future Real App Rules
 
 When Forge moves from mock preview to a real app integration:

@@ -94,6 +94,22 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Forbidden real behavior:** no metadata write, no file edit, no lyric fetch, no artwork download.
 - **Status:** implemented.
 
+### RV-2A: Open Enrich Mode
+
+- **Trigger:** tap `Open Enrich Mode →` helper row under `Review safe fixes` in the All summary card.
+- **Resulting UI:** full-screen `ForgeEnrichMode` flow opens with step indicator: Options → Targets → Confirm → Dry-run → Apply.
+- **Flow steps:**
+  1. **Rewrite options** — choose Tags, Covers, Lyrics, Advanced Metadata sub-options; toggle overwrite per category; provider hints shown.
+  2. **Target selection** — choose Library, Artists, Albums or Songs; search, select rows, select all visible, clear selection.
+  3. **Confirmation** — summary of selected categories, target and overwrite options; warning card; Run dry-run button.
+  4. **Dry-run** — deterministic mock progress (5 steps); result shows scanned tracks, fields to rewrite, existing values to replace, protected fields, conflicts.
+  5. **Progress** — deterministic mock rewrite progress (7 steps).
+  6. **Result** — mock changes applied, existing values rewritten, items sent to Review, protected fields skipped; actions: View Review queue, View Activity, Done.
+- **Mock state changes:** on completion, appends an `Enrich Mode completed` activity entry; marks pending safe review items as fixed locally; increments `sessionFixed`; toast shown.
+- **Data used:** static `enrichCategories`, `artistData`, `albumData`, `songData`, deterministic mock counts.
+- **Forbidden real behavior:** no metadata write, no file edit, no lyric fetch, no artwork download, no network call, no real provider lookup.
+- **Status:** implemented.
+
 ### RV-3: Contextual Apply Selected
 
 - **Trigger:** select one or more row checkboxes, then tap `Apply selected` in the compact contextual bar.
@@ -507,6 +523,69 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Data used:** static control definitions.
 - **Forbidden real behavior:** none.
 - **Status:** not implemented (deferred to Forge State Coverage).
+
+### GL-10: Open Enrich Mode
+
+- **Trigger:** tap `Open Enrich Mode →` helper row under `Review safe fixes` in Review / All summary card.
+- **Resulting UI:** `ForgeEnrichMode` full-screen flow opens with step indicator: Options → Targets → Confirm → Dry-run → Apply.
+- **Mock state changes:** none until completion; on completion appends activity entry and marks safe review items as fixed.
+- **Data used:** static `enrichCategories`, `artistData`, `albumData`, `songData`.
+- **Forbidden real behavior:** no metadata write, no file edit, no network call.
+- **Status:** implemented.
+
+### GL-11: Enrich Rewrite Options
+
+- **Trigger:** Step 1 of Enrich Mode; toggle category sub-options or overwrite toggles.
+- **Resulting UI:** category cards update active/inactive state; overwrite toggles show warning when enabled; Continue disabled until at least one option selected.
+- **Mock state changes:** local `categories` and `overwrite` state.
+- **Data used:** static options.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
+
+### GL-12: Enrich Target Selection
+
+- **Trigger:** Step 2 of Enrich Mode; switch tabs, search, select rows, select all visible, clear selection.
+- **Resulting UI:** target list updates; selection count updates; Continue disabled until valid target chosen.
+- **Mock state changes:** local `target` and `searchQuery` state.
+- **Data used:** `artistData`, `albumData`, `songData`.
+- **Forbidden real behavior:** no backend search, no filesystem scan.
+- **Status:** implemented.
+
+### GL-13: Enrich Confirmation
+
+- **Trigger:** Step 3 of Enrich Mode; tap `Run dry-run`.
+- **Resulting UI:** summary cards show selected categories, target and overwrite options; warning card visible.
+- **Mock state changes:** advances to dry-run step.
+- **Data used:** local `categories`, `overwrite`, `target`.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
+
+### GL-14: Enrich Dry-run
+
+- **Trigger:** Step 4 of Enrich Mode; deterministic mock progress completes.
+- **Resulting UI:** dry-run result shows mock counts; actions: Start rewrite, Review conflicts, Back.
+- **Mock state changes:** none.
+- **Data used:** static mock counts.
+- **Forbidden real behavior:** no real metadata comparison, no network call.
+- **Status:** implemented.
+
+### GL-15: Enrich Rewrite Progress
+
+- **Trigger:** tap `Start rewrite` in dry-run result.
+- **Resulting UI:** 7-step deterministic mock progress; no endless spinner.
+- **Mock state changes:** on completion, result state set.
+- **Data used:** static steps.
+- **Forbidden real behavior:** no real metadata write, no file edit.
+- **Status:** implemented.
+
+### GL-16: Enrich Result Actions
+
+- **Trigger:** Step 6 of Enrich Mode; tap View Review queue, View Activity or Done.
+- **Resulting UI:** navigates to Review / All, Activity or closes Enrich Mode.
+- **Mock state changes:** appends activity entry; marks safe review items fixed.
+- **Data used:** result summary.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
 
 ---
 
