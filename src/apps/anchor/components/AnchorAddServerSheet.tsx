@@ -16,6 +16,25 @@ export function AnchorAddServerSheet({
     address: '192.168.1.156',
     port: '4533',
   })
+  const [error, setError] = useState<string | null>(null)
+
+  const validateAndSave = () => {
+    const port = Number(fields.port)
+    if (!fields.name.trim()) {
+      setError('Enter a display name for the mock server.')
+      return
+    }
+    if (!fields.address.trim()) {
+      setError('Enter a local address for the mock profile.')
+      return
+    }
+    if (!Number.isInteger(port) || port < 1 || port > 65535) {
+      setError('Use a visual mock port between 1 and 65535.')
+      return
+    }
+    setError(null)
+    onSave()
+  }
 
   return (
     <AnchorBottomSheet
@@ -63,11 +82,18 @@ export function AnchorAddServerSheet({
                 onChange={(event) =>
                   setFields((current) => ({ ...current, [key]: event.target.value }))
                 }
+                inputMode={key === 'port' ? 'numeric' : 'text'}
                 value={fields[key as keyof typeof fields]}
               />
             </label>
           ))}
         </section>
+
+        {error ? (
+          <p className="rounded-2xl border border-orange-300/18 bg-orange-300/[0.07] px-3.5 py-2.5 text-xs leading-5 text-orange-100">
+            {error}
+          </p>
+        ) : null}
 
         <p className="rounded-2xl border border-amber-300/12 bg-amber-300/[0.055] px-3.5 py-3 text-xs leading-5 text-amber-50/82">
           This preview does not connect, discover, validate ports or store credentials.
@@ -83,7 +109,7 @@ export function AnchorAddServerSheet({
           </button>
           <button
             className="h-10 rounded-xl bg-amber-400 text-sm font-semibold text-[#211508] shadow-[0_0.8rem_1.5rem_rgba(245,158,11,0.16)] transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-100/70"
-            onClick={onSave}
+            onClick={validateAndSave}
             type="button"
           >
             Add mock server

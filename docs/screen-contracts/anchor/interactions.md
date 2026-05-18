@@ -1,6 +1,6 @@
 # Anchor Interaction Contract
 
-This contract translates the Anchor interaction map into implementation-oriented requirements. Completion status values are `not implemented`, `partial`, `implemented` or `needs QA`.
+This contract translates the Anchor interaction map into implementation-oriented requirements. Completion status values are `not implemented`, `partial`, `implemented`, `needs QA`, `deferred` or `intentionally disabled`.
 
 ## Global Rules
 
@@ -16,6 +16,7 @@ This contract translates the Anchor interaction map into implementation-oriented
 | Interaction | Trigger | Resulting UI | Mock state changes | Data used | Forbidden real behavior | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | Settings | Header settings icon | Anchor settings bottom sheet with General, Network, Notifications, Safety and About sections | Active overlay becomes settings; toggles mutate local visual state only | Static settings labels | Reading or writing real settings | implemented |
+| Home server menu | Server card menu icon | Existing Server menu sheet | Active overlay becomes server menu | Static Navidrome menu actions | Real config edits or server control | implemented |
 | Stop server | `Stop server` button | Confirmation dialog | On confirm, mock server status becomes stopped; on cancel, no change | `anchorServer` display copy | Stopping real server/process | implemented |
 | Restart | `Restart` button, or `Start server` after stopped | Restart confirmation and temporary restarting card state | Mock restart state moves from restarting back to active | `anchorServer` display copy | Server control commands or API calls | implemented |
 | Library card | Home Library card | Library tab becomes active | `activeTab` becomes `library` | `anchorLibrary` summary | Filesystem/library access | implemented |
@@ -27,7 +28,7 @@ This contract translates the Anchor interaction map into implementation-oriented
 
 | Interaction | Trigger | Resulting UI | Mock state changes | Data used | Forbidden real behavior | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| Add server | Servers plus icon | Add server bottom sheet with server type, display name, local address and port fields | Save closes the sheet and shows `Mock server added`; no server is persisted | Empty static form defaults | Connection attempt, discovery, credentials | implemented |
+| Add server | Servers plus icon | Add server bottom sheet with server type, display name, local address and port fields | Local validation catches empty name, missing address and invalid port; valid save closes the sheet and shows `Mock server added` | Empty static form defaults | Connection attempt, discovery, credentials | implemented |
 | Navidrome card | Navidrome card body | Server details sheet with status, address, version, uptime, library and last activity | Active sheet becomes server details | `anchorServers[0]`, `anchorServer` | Status refresh or server query | implemented |
 | Server menu | Server card menu icon | Server menu sheet with Configure Navidrome, Rename, Duplicate config, Disable and Remove mock server | Configure opens Navidrome Settings; rename/duplicate show toasts; disable sets local state to disabled; remove opens confirmation | `anchorServers` | Deleting real config or server data | implemented |
 | Navidrome Settings | Navidrome `Settings` button, details `Configure Navidrome` action or server menu `Configure Navidrome` action | Navidrome Settings sheet with categories, local draft fields, warnings and safe bottom actions | Active sheet becomes Navidrome Settings; draft mutates only local React state | `navidromeConfigCatalog` | Reading/writing `navidrome.toml`, calling Anchor Core/Navidrome, storing secrets, filesystem/network/port access | implemented |
@@ -45,6 +46,7 @@ This contract translates the Anchor interaction map into implementation-oriented
 | Jellyfin coming soon | Jellyfin card | Coming-soon sheet | Active sheet becomes Jellyfin coming soon | `anchorServers` coming-soon copy | Jellyfin discovery or connection | implemented |
 | Emby coming soon | Emby card | Coming-soon sheet | Active sheet becomes Emby coming soon | `anchorServers` coming-soon copy | Emby discovery or connection | implemented |
 | Remove mock server | Server menu remove option | Confirmation dialog before local preview card removal | On confirm, Navidrome card is hidden until refresh; cancel leaves it visible | `anchorServers[0]` | Removing real config or server data | implemented |
+| Restore mock server | Empty Servers state restore button | Navidrome card returns to the local preview | `navidromeVisible` returns true and mock server state returns active | `anchorServers[0]` | Server discovery, real config restore or connection | implemented |
 
 ## Library
 
@@ -119,5 +121,6 @@ Global states:
 - Current implementation has complete base surfaces for Home, Servers, Library and Activity.
 - Current implementation has bottom nav, Home Batch 1 interactions, Servers Batch 2 interactions and Library Batch 3 interactions.
 - Activity interactions are implemented for filter, event detail, error detail, Today/Yesterday filtering, errors-only state, empty-state handling and diagnostic copy toast.
+- Bloco 2.8 closes visible interaction gaps found after QA: Home server menu icon is wired, Add Server validation is visible, secret fields accept masked local draft edits, and the removed-server empty state has a restore action.
 - Remaining Anchor work is state coverage polish and final completion audit.
 - No app-specific implementation should be considered complete unless its forbidden real behavior has also been checked.

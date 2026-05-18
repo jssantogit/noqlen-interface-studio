@@ -152,3 +152,11 @@ Bloco 2.7.3 delta:
 - Added `PhoneStage` to scale the full CSS/component phone frame responsively while preserving a fixed `390px x 844px` virtual app viewport.
 - Updated `PhoneFrame`, `AppViewport` and phone CSS variables so frame dimensions derive from the virtual app viewport plus rim/bezel insets.
 - Validated Anchor Home, Servers, Navidrome Settings, Library, Activity, Forge, Aria and Flux at the virtual viewport without adding backend, filesystem, playback or product integration behavior.
+
+Bloco 2.8 delta:
+
+- Audited visible Anchor interactive-looking controls across Home, Servers, Navidrome Settings, Add Server, Server details/menu/logs, Library, folder/access/settings/stats/history, Activity filter/details/error details and app switching.
+- Wired the Home server-card menu icon to the existing Server menu sheet so it is no longer a silent decorative control.
+- Added local Add Server validation for empty display name, missing address and invalid mock port before toast-only save feedback.
+- Added a local `Restore mock server` action for the post-remove empty Servers state and made masked Navidrome secret fields editable in local draft state.
+- Updated Anchor contracts and audit docs while preserving the no-backend, no-filesystem, no-real-server-control mock-only boundary.

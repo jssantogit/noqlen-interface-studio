@@ -61,7 +61,7 @@ export function AnchorNavidromeSettingField({
             inputMode={option.type === 'number' ? 'numeric' : 'text'}
             onChange={(event) => onChange(option.key, option.type === 'number' ? Number(event.target.value) : event.target.value)}
             type={option.type === 'secret' ? 'password' : option.type === 'number' ? 'number' : 'text'}
-            value={option.type === 'secret' ? 'mock-secret' : String(value)}
+            value={String(value)}
           />
         )}
       </div>

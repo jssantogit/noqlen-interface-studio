@@ -47,7 +47,7 @@ Secondary surfaces:
 
 Layout constraints:
 
-- Anchor screens and sheets must fit the actual phone app viewport, including narrow inner widths around 206px.
+- Anchor screens and sheets must fit the stable `390px` virtual phone app viewport while the simulator itself may be visually scaled down.
 - Critical server values, mock URLs, fake paths, config keys and env vars should wrap rather than become unreadable ellipses.
 - Horizontal overflow is allowed only inside bounded code/config preview boxes; category navigation and cards must not create phone-level horizontal scroll.
 
@@ -116,9 +116,16 @@ Layout constraints:
 - Trigger: plus icon in the Servers header.
 - Result: opens Add server mock sheet.
 - Fields: server type, display name, local address and port.
-- Save behavior: closes the sheet and shows `Mock server added`; no pending server is persisted.
+- Save behavior: validates empty display name, missing address and invalid port locally, then closes the sheet and shows `Mock server added`; no real connection is attempted.
 - Safety: no real connection, validation request, discovery or credential handling.
 - Current status: implemented in Batch 2.
+
+### Home Server Menu Icon
+
+- Trigger: menu icon on the Home server card.
+- Result: opens the same local-only Server menu sheet used by the Servers tab.
+- Safety: no real server config or control action is performed.
+- Current status: implemented in Bloco 2.8 visible gap closure.
 
 ### Navidrome Card
 
@@ -134,7 +141,14 @@ Layout constraints:
 - Result: opens server menu sheet.
 - Menu items: Configure Navidrome, Rename, Duplicate config, Disable, Remove mock server.
 - Safety: all actions mutate only local mock state when implemented.
-- Current status: implemented in Batch 2. Rename and duplicate show mock toasts, disable changes local visual state, and remove requires confirmation before hiding the local card until refresh.
+- Current status: implemented in Batch 2 and Bloco 2.8. Rename and duplicate show mock toasts, disable changes local visual state, and remove requires confirmation before hiding the local card until the local restore action is used.
+
+### Restore Mock Server
+
+- Trigger: `Restore mock server` button after removing the Navidrome card from the local preview.
+- Result: restores the static Navidrome card and active mock status.
+- Safety: no discovery, config restore, filesystem access or server connection.
+- Current status: implemented in Bloco 2.8 visible gap closure.
 
 ### Navidrome Settings
 

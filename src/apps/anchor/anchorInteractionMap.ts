@@ -3,6 +3,8 @@ export type AnchorInteractionStatus =
   | 'partial'
   | 'implemented'
   | 'needs QA'
+  | 'deferred'
+  | 'intentionally disabled'
 
 export type AnchorInteractionArea = 'home' | 'servers' | 'library' | 'activity'
 
@@ -24,6 +26,15 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Anchor settings sheet',
     mockState: 'Open settings overlay',
     forbidden: 'Read or write real settings',
+    status: 'implemented',
+  },
+  {
+    id: 'home-server-menu-icon',
+    area: 'home',
+    trigger: 'Server card menu icon',
+    surface: 'Server menu sheet',
+    mockState: 'Open the existing local-only server menu from Home',
+    forbidden: 'Read, edit or control a real server',
     status: 'implemented',
   },
   {
@@ -85,8 +96,17 @@ export const anchorInteractions: AnchorInteraction[] = [
     area: 'servers',
     trigger: 'Add server plus icon',
     surface: 'Add server sheet',
-    mockState: 'Open add-server overlay and show toast-only add feedback',
+    mockState: 'Open add-server overlay, validate local fields and show toast-only add feedback',
     forbidden: 'Attempt discovery, connection or credential handling',
+    status: 'implemented',
+  },
+  {
+    id: 'servers-restore-mock-server',
+    area: 'servers',
+    trigger: 'Restore mock server button in empty server state',
+    surface: 'Servers screen',
+    mockState: 'Restore the hidden Navidrome card locally after remove confirmation',
+    forbidden: 'Restore real config or discover servers',
     status: 'implemented',
   },
   {
@@ -231,7 +251,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Activity filter sheet',
     mockState: 'Filter static mock activity',
     forbidden: 'Query or filter real logs',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'activity-details',
@@ -240,7 +260,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Activity detail sheet',
     mockState: 'Select static mock event',
     forbidden: 'Read real diagnostics',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'activity-startup-failed',
@@ -249,7 +269,7 @@ export const anchorInteractions: AnchorInteraction[] = [
     surface: 'Error detail sheet',
     mockState: 'Show port-in-use mock guidance',
     forbidden: 'Check real ports, processes or network state',
-    status: 'not implemented',
+    status: 'implemented',
   },
   {
     id: 'activity-item-tap',

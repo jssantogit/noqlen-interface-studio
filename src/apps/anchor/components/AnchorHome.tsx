@@ -79,6 +79,7 @@ export function AnchorHome({
   onLibraryOpen,
   onRefreshLibrary,
   onRestartServer,
+  onServerMenuOpen,
   onSettingsOpen,
   onShowQrCode,
   onStopServer,
@@ -89,6 +90,7 @@ export function AnchorHome({
   onLibraryOpen: () => void
   onRefreshLibrary: () => void
   onRestartServer: () => void
+  onServerMenuOpen: () => void
   onSettingsOpen: () => void
   onShowQrCode: () => void
   onStopServer: () => void
@@ -125,7 +127,14 @@ export function AnchorHome({
             </span>
             <span className="min-w-0 break-words">{server.status}</span>
           </div>
-          <MoreVertical className="text-slate-300/70" size={18} />
+          <button
+            aria-label="Open server menu"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-slate-300/70 transition hover:bg-white/[0.07] hover:text-white focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+            onClick={onServerMenuOpen}
+            type="button"
+          >
+            <MoreVertical size={18} />
+          </button>
         </div>
         <h2 className="mt-4 font-serif text-[1.85rem] leading-none tracking-[-0.052em] text-white">
           {anchorServer.name}

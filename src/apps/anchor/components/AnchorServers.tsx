@@ -19,6 +19,7 @@ export function AnchorServers({
   onOpenLogs,
   onOpenMenu,
   onOpenSettings,
+  onRestoreServer,
   serverState = 'active',
 }: {
   navidromeVisible?: boolean
@@ -28,6 +29,7 @@ export function AnchorServers({
   onOpenLogs: () => void
   onOpenMenu: () => void
   onOpenSettings: () => void
+  onRestoreServer: () => void
   serverState?: 'active' | 'stopped' | 'restarting' | 'disabled'
 }) {
   const navidrome = anchorServers[0]
@@ -132,6 +134,13 @@ export function AnchorServers({
           <p className="mt-2 text-xs leading-5 text-slate-300/78">
             Navidrome was removed from this local preview. Refresh the Studio to restore the baseline mock data.
           </p>
+          <button
+            className="mt-4 h-10 w-full rounded-xl bg-amber-400 text-sm font-semibold text-[#211508] transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-100/70"
+            onClick={onRestoreServer}
+            type="button"
+          >
+            Restore mock server
+          </button>
         </AnchorCard>
       )}
 

@@ -62,11 +62,13 @@ Required content:
 - Home settings may open a mock settings sheet with local visual toggles only.
 - Home server controls may show confirmation dialogs and change mock-only server card state.
 - Home quick actions may show toasts, a fake QR preview and a mock scan progress sheet.
+- Home server-card menu icon opens the same local-only Server menu sheet used by the Servers tab.
 - Home Library card may switch to the Library tab without reading the library path.
-- Servers plus may open an Add server sheet and show toast-only add feedback.
+- Servers plus may open an Add server sheet with local-only form validation and toast-only add feedback.
 - Servers Navidrome card may open details, settings, logs and a local mock menu.
 - Navidrome Settings may switch settings categories, edit local draft values, show masked secret fields, search options, render display-only TOML/env previews, run a dry-run preview, apply mock changes and reset changes.
 - Servers Jellyfin and Emby cards may open coming-soon sheets only.
+- Servers empty state after mock removal may restore the static Navidrome card locally.
 - Library action rows may open mock folder picker, scan progress, access check and library settings sheets.
 - Library stats and scan footer metrics may open static detail/history sheets.
 - Activity filter may open a mock filter sheet for All, Server, Library, Errors, Today and Yesterday.
@@ -89,6 +91,8 @@ Bloco 2.6 implements the Navidrome Settings Center inside Servers with local-onl
 
 Bloco 2.7 implements Activity filter, event detail, Startup failed error detail, Today/Yesterday filtering, errors-only filtering, empty filtered state handling and toast-only diagnostic copy feedback.
 
+Bloco 2.8 closes visible interaction gaps before State Coverage: no visible Anchor control should remain a silent no-op; implemented controls respond with local mock state, sheets, dialogs or toasts, and unavailable future behavior remains described as visual-only/deferred.
+
 Completion requires consistent Anchor-styled sheets, dialogs and state variants while preserving the no-backend, no-filesystem and no-real-server-control boundary.
 
 ## Disabled / Visual-Only Actions
@@ -102,6 +106,8 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 - Change folder displays fake path copy only and never opens a real picker or storage permission flow.
 - Verify access, Library settings, Library stats and Scan history are visual-only and static/local.
 - Activity filters, details and diagnostics are visual-only and use static mock event data.
+- Add Server validation is local visual validation only; it never probes addresses or ports.
+- Restore mock server restores only the static preview card after local removal.
 
 ## Anchor Does Not Do
 

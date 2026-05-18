@@ -146,6 +146,7 @@ export function AnchorPreview() {
           setActiveSheet('scan')
         }}
         onRestartServer={() => setActiveDialog('restart')}
+        onServerMenuOpen={() => setActiveSheet('serverMenu')}
         onSettingsOpen={() => setActiveSheet('settings')}
         onShowQrCode={() => setActiveSheet('qr')}
         onStopServer={() => setActiveDialog('stop')}
@@ -165,6 +166,11 @@ export function AnchorPreview() {
         onOpenLogs={() => setActiveSheet('logs')}
         onOpenMenu={() => setActiveSheet('serverMenu')}
         onOpenSettings={() => setActiveSheet('navidromeSettings')}
+        onRestoreServer={() => {
+          setNavidromeVisible(true)
+          setServerState('active')
+          showToast('Mock server restored')
+        }}
         serverState={serverState === 'degraded' ? 'active' : serverState}
       />
     ),
@@ -305,6 +311,7 @@ export function AnchorPreview() {
           onCancel={() => setActiveSheet(null)}
           onSave={() => {
             setActiveSheet(null)
+            setNavidromeVisible(true)
             showToast('Mock server added')
           }}
         />
