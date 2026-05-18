@@ -548,18 +548,35 @@ Bloco 4.0 delta (Aria Visual Target and Interaction Map):
 - Created `docs/screen-contracts/aria/interactions.md` with full interaction contracts: trigger, resulting UI, mock state changes, data used, forbidden real behavior and completion status for every mapped interaction.
 - Created `docs/interaction-maps/aria.md` with screen-by-screen interaction tables, visible actions, expected results, overlay/sheet/dialog usage, state updates, missing interactions, component inventory and implementation batch assignments.
 - Created `src/apps/aria/ariaInteractionMap.ts` static metadata file exporting screen lists, nav items, interaction IDs, statuses, mock-only notes and batch groupings. No runtime behavior.
-- Defined nine realistic Aria implementation batches:
-  1. Visual Baseline & Navigation Shell
-  2. Playback Core Interactions
-  3. Library Browsing
-  4. Artist/Album/Song/Playlist Detail
-  5. Lyrics & Queue
-  6. Search & Explore
-  7. Metadata Review & Library Health
-  8. Aria State Coverage
-  9. Aria Completion Audit
+- Defined nine realistic Aria implementation batches.
 - Updated `interface/context/current.md` and `interface/context/delta.md` with Bloco 4.0 scope.
 - Confirmed final Aria references exist and older references are not referenced in docs or source.
 - Did not implement any new Aria runtime UI or behavior; this block is planning/spec only.
 - Preserved Anchor, Forge, Flux, Studio shell, PhoneFrame and app switching unchanged.
+- Preserved mock-only boundary: no fetch/axios/fs/child_process/FileReader; no real audio, no real library access, no network calls.
+
+Bloco 4.1 delta (Aria Visual Baseline & Navigation Shell):
+
+- Implemented final Aria visual system in `src/apps/aria`:
+  - Dark warm charcoal background (`#0c0e12`) with subtle amber radial glow.
+  - Minimal surfaces (`bg-white/[0.03–0.05]`, `border-white/[0.06–0.08]`), large radius (`1.4rem`–`1.8rem`).
+  - Warm amber/gold accent (`amber-300`, `#d4a853`) for active nav, primary Play buttons, filter chips, favorite state.
+  - Clean sans-serif body + serif headings with negative tracking.
+- Rewrote `AriaPreview.tsx` as the main container managing `activeTab`, `playerExpanded`, `isPlaying`, `isShuffled`, `repeatMode`, `isFavorite` and `toast` with local React state only.
+- Created `AriaBottomNav` with 4 tabs (Listen, Library, Playlists, Explore), active underline indicator, amber active state, muted slate inactive state.
+- Created `AriaMiniPlayer` with artwork thumbnail, track title/artist, play/pause and next buttons; tapping body expands to full Now Playing.
+- Created `AriaNowPlaying` full-screen overlay with large artwork, track info, static progress bar, primary amber play/pause, previous/next, shuffle/repeat toggles, favorite heart toggle, Up Next queue preview and collapse chevron.
+- Created `AriaListenHome` with editorial greeting, now playing hero card, Play CTA, Recent listens horizontal shelf, Quick resume rows, Featured playlists grid, Search affordance.
+- Created `AriaLibrary` with search affordance, category filter chips, Albums list with format/source badges, Artists circular avatar preview row.
+- Created `AriaPlaylists` with playlist cards (header artwork, title, description, track count, Play/Shuffle buttons).
+- Created `AriaExplore` with search input, filter chips, recent search pills, browse results with metadata badges and basic local string filtering.
+- Expanded `ariaMockData.ts` with tracks, albums, artists, playlists, shelves, search results, recent searches and queue.
+- Added subtle fade/slide transitions between tabs and Now Playing overlay using `framer-motion` `AnimatePresence`.
+- Added toast feedback for play/pause, next, previous, shuffle, repeat and favorite actions.
+- Updated `ariaInteractionMap.ts` statuses for Batch 1 interactions.
+- Created `docs/audits/aria-visual-baseline-navigation-shell.md` with full audit.
+- Updated `docs/screen-contracts/aria/interactions.md`, `docs/interaction-maps/aria.md`, `docs/visual-targets/aria.md`, `docs/screen-contracts/aria/README.md`.
+- Browser MCP validation skipped per user request.
+- Build, lint, tests pass.
+- Preserved Anchor, Forge, Flux, Studio shell, PhoneFrame unchanged.
 - Preserved mock-only boundary: no fetch/axios/fs/child_process/FileReader; no real audio, no real library access, no network calls.

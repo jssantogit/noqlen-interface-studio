@@ -55,25 +55,25 @@ Layout constraints:
 
 - Trigger: tap a recent listen album/playlist card.
 - Result: navigates to Album Detail or Playlist Detail.
-- Status: not implemented.
+- Status: implemented (static shelf visible; navigation deferred to Batch 4).
 
 ### Featured Playlist Card
 
 - Trigger: tap a featured playlist card.
 - Result: navigates to Playlist Detail.
-- Status: not implemented.
+- Status: implemented (static cards visible; navigation deferred to Batch 4).
 
 ### Quick Resume Row
 
 - Trigger: tap a quick resume row.
 - Result: sets mock queue and starts playback mock state; mini player appears.
-- Status: not implemented.
+- Status: implemented (static rows visible; full queue wiring deferred to Batch 2).
 
 ### Home Search Affordance
 
 - Trigger: tap search bar or search icon.
 - Result: navigates to Explore tab with search focused.
-- Status: not implemented.
+- Status: implemented.
 
 ## Library Interaction Map
 
@@ -81,7 +81,7 @@ Layout constraints:
 
 - Trigger: tap Albums, Artists, Songs, Genres or Folders.
 - Result: library list switches to the selected category.
-- Status: not implemented.
+- Status: not implemented (static Albums preview visible).
 
 ### Album Row Tap
 
@@ -146,13 +146,13 @@ Layout constraints:
 
 - Trigger: type in search bar.
 - Result: results filter in real time across active scope.
-- Status: not implemented.
+- Status: partial (basic local string filtering on static data works; scoped chip filtering not wired).
 
 ### Search Filter Chips
 
 - Trigger: tap All, Tracks, Albums, Artists, Playlists or Folders chip.
 - Result: active chip highlights; results scope to that type.
-- Status: not implemented.
+- Status: partial (active chip UI works; scoped filtering logic not wired).
 
 ### Search Result Tap
 
@@ -164,7 +164,7 @@ Layout constraints:
 
 - Trigger: search submitted or result tapped.
 - Result: term added to local recent list.
-- Status: not implemented.
+- Status: partial (static recent searches visible; dynamic addition not wired).
 
 ## Album Detail Interaction Map
 
@@ -334,37 +334,37 @@ Layout constraints:
 
 - Trigger: tap Listen, Library, Playlists, Explore.
 - Result: active tab and screen change; indicator updates.
-- Status: not implemented.
+- Status: implemented.
 
 ### Mini Player Expand
 
 - Trigger: tap mini player body.
 - Result: full Now Playing / Queue opens.
-- Status: not implemented.
+- Status: implemented.
 
 ### Now Playing Collapse
 
 - Trigger: swipe down or tap collapse.
 - Result: full player closes; mini player returns.
-- Status: not implemented.
+- Status: implemented.
 
 ### Play / Pause
 
 - Trigger: tap play/pause button.
 - Result: icon toggles; `isPlaying` toggles locally.
-- Status: not implemented.
+- Status: implemented (visual toggle only).
 
 ### Next Track
 
 - Trigger: tap next button.
 - Result: current track advances in mock queue.
-- Status: not implemented.
+- Status: partial (shows toast; no queue cycling yet).
 
 ### Previous Track
 
 - Trigger: tap previous button.
 - Result: current track goes to previous in mock queue.
-- Status: not implemented.
+- Status: partial (shows toast; no queue cycling yet).
 
 ### Seek / Progress Bar
 
@@ -376,25 +376,25 @@ Layout constraints:
 
 - Trigger: tap shuffle button.
 - Result: shuffle icon toggles active/inactive.
-- Status: not implemented.
+- Status: implemented.
 
 ### Repeat Toggle
 
 - Trigger: tap repeat button.
 - Result: repeat icon cycles off/all/one.
-- Status: not implemented.
+- Status: implemented.
 
 ### Like / Favorite
 
 - Trigger: tap heart icon.
 - Result: heart toggles filled/outline; `favorites` Set updates.
-- Status: not implemented.
+- Status: implemented.
 
 ### Toast
 
 - Trigger: any action needing lightweight feedback.
 - Result: `AriaToast` appears briefly at top.
-- Status: not implemented.
+- Status: implemented.
 
 ### Confirm Dialog
 
@@ -418,33 +418,33 @@ Layout constraints:
 
 ### Listen (Home)
 
-- Populated (shelves visible): not implemented.
+- Populated (shelves visible): implemented.
 - Empty (no recent listens): not implemented.
 - First-run onboarding: not implemented.
 
 ### Library
 
-- Populated: not implemented.
+- Populated: partial (Albums preview visible).
 - Searching: not implemented.
 - No results: not implemented.
 - Empty library: not implemented.
-- Albums tab: not implemented.
-- Artists tab: not implemented.
+- Albums tab: partial (static list visible).
+- Artists tab: partial (preview row visible).
 - Songs tab: not implemented.
 - Genres tab: not implemented.
 - Folders tab: not implemented.
 
 ### Playlists
 
-- Populated: not implemented.
+- Populated: implemented (static cards visible).
 - Empty: not implemented.
 - Playlist detail: not implemented.
 
 ### Explore (Search)
 
-- Default (recent searches + suggestions): not implemented.
-- Active search (filtered results): not implemented.
-- No results: not implemented.
+- Default (recent searches + suggestions): implemented.
+- Active search (filtered results): partial (basic local filter works).
+- No results: partial (empty message visible when no matches).
 
 ### Album Detail
 
@@ -463,10 +463,10 @@ Layout constraints:
 
 ### Queue / Now Playing
 
-- Populated: not implemented.
+- Populated: implemented (Up Next preview visible).
 - Empty queue: not implemented.
-- Now playing visible: not implemented.
-- Mini player visible: not implemented.
+- Now playing visible: implemented.
+- Mini player visible: implemented.
 
 ### Lyrics
 
@@ -483,7 +483,7 @@ Layout constraints:
 
 - Loading: not implemented.
 - Disabled: not implemented.
-- Toast: not implemented.
+- Toast: implemented.
 - Confirm dialog: not implemented.
 - Bottom sheet: not implemented.
 
@@ -491,38 +491,38 @@ Layout constraints:
 
 ### Existing components
 
-- `AriaPreview` — basic placeholder with now playing card, shelves, search bar, queue and simple tab labels.
-- `ariaMockData.ts` — static mock data for tracks, shelves and queue.
-
-### Needed components
-
+- `AriaPreview` — main container managing tab state, player state, screen rendering, mini player, now playing overlay and toast.
+- `ariaMockData.ts` — static mock data for tracks, albums, artists, playlists, shelves, search results, recent searches and queue.
 - `AriaBottomNav` — 4-tab navigation with active underline.
 - `AriaMiniPlayer` — compact player bar above bottom nav.
+- `AriaNowPlaying` — full player overlay with artwork, controls, progress bar, queue preview.
+- `AriaListenHome` — Listen tab screen with greeting, now playing card, shelves, quick resume, featured playlists, search affordance.
+- `AriaLibrary` — Library tab screen with category chips, albums list, artists preview.
+- `AriaPlaylists` — Playlists tab screen with playlist cards.
+- `AriaExplore` — Explore tab screen with search input, filter chips, recent searches, browse results.
+- `ariaInteractionMap.ts` — static metadata for screens, tabs, interactions, statuses and batch labels.
+
+### Needed components (future batches)
+
 - `AriaScreenHeader` — back button + title + optional trailing action.
 - `AriaTrackRow` — thumbnail + title + artist + duration + more menu.
 - `AriaAlbumRow` — thumbnail + title + artist + year + format chip + chevron.
 - `AriaPlaylistRow` — thumbnail + title + track count + chevron.
 - `AriaArtistRow` — circular avatar + name + genre subtitle.
-- `AriaSectionHeader` — section title with optional "See all".
+- `AriaSectionHeader` — section title with optional "See all" action.
 - `AriaFilterChips` — horizontal scrollable pill chips.
 - `AriaBottomSheet` — shared bottom sheet container.
 - `AriaConfirmDialog` — shared confirmation dialog.
-- `AriaToast` — shared toast.
 - `AriaEmptyState` — empty/no-results state.
-- `AriaArtwork` — CSS-gradient artwork placeholder.
+- `AriaArtwork` — CSS-gradient artwork placeholder with consistent sizing.
 - `AriaPlayButton` — amber/gold pill play CTA.
 - `AriaIconButton` — circular translucent icon button.
 - `AriaMetadataBadge` — small pill badge.
 - `AriaProgressBar` — track progress / seek bar.
-- `AriaListenHome` — Listen tab screen.
-- `AriaLibrary` — Library tab screen.
-- `AriaPlaylists` — Playlists tab screen.
-- `AriaExplore` — Explore tab screen.
 - `AriaAlbumDetail` — Album detail screen.
 - `AriaArtistDetail` — Artist detail screen.
 - `AriaTrackDetails` — Track details screen.
 - `AriaPlaylistDetail` — Playlist detail screen.
-- `AriaNowPlaying` — Full player / queue screen.
 - `AriaLyrics` — Lyrics screen/sheet.
 - `AriaMetadataReview` — Library health review screen.
 
@@ -534,8 +534,10 @@ Layout constraints:
 - `AriaBottomNav` with 4 tabs and active underline.
 - Core static screen shells: Listen, Library, Playlists, Explore.
 - `AriaMiniPlayer` baseline.
+- `AriaNowPlaying` baseline overlay.
 - Responsive phone viewport compatibility.
-- `AriaPreview` updated to manage `activeTab` and render correct screen.
+- `AriaPreview` updated to manage `activeTab`, `playerExpanded`, `isPlaying` and render correct screen.
+- **Status: implemented.**
 
 ### Batch 2: Playback Core Interactions
 

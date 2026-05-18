@@ -131,6 +131,13 @@ Aria is a dark-premium music player and library experience. It must feel:
 - Pure black backgrounds that feel hollow rather than immersive.
 - Bright orange or Forge-like warm tones; Aria should feel more gold/amber.
 
+## Implementation status
+
+- Batch 1 (Visual Baseline & Navigation Shell) is implemented.
+- The Aria visual system is active in the Studio simulator: dark warm charcoal backgrounds, amber/gold accents, minimal bordered surfaces, large radius, thin Lucide icons, editorial typography.
+- Bottom navigation (Listen / Library / Playlists / Explore), mini player and full Now Playing overlay are wired with local React state.
+- Static core screens (Listen Home, Library preview, Playlists, Explore/Search) render mock data with high visual fidelity to the final references.
+
 ## Mock-only limits
 
 - No real audio playback.

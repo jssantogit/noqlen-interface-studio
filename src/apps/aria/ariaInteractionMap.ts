@@ -60,26 +60,26 @@ export const ariaScreens: { id: AriaScreenId; label: string; type: 'tab' | 'deta
 
 export const ariaInteractions: AriaInteraction[] = [
   // Global
-  { id: 'GL-1', name: 'Bottom Navigation', screen: 'global', status: 'not_implemented', batch: 1, mockOnly: true },
-  { id: 'GL-2', name: 'Mini Player Expand', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-3', name: 'Now Playing Collapse', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-4', name: 'Play / Pause', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-5', name: 'Next Track', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-6', name: 'Previous Track', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
+  { id: 'GL-1', name: 'Bottom Navigation', screen: 'global', status: 'implemented', batch: 1, mockOnly: true },
+  { id: 'GL-2', name: 'Mini Player Expand', screen: 'global', status: 'implemented', batch: 1, mockOnly: true, notes: 'Tapping mini player opens full Now Playing overlay' },
+  { id: 'GL-3', name: 'Now Playing Collapse', screen: 'global', status: 'implemented', batch: 1, mockOnly: true, notes: 'Chevron down collapses back to mini player' },
+  { id: 'GL-4', name: 'Play / Pause', screen: 'global', status: 'implemented', batch: 1, mockOnly: true, notes: 'Visual toggle only; no real audio' },
+  { id: 'GL-5', name: 'Next Track', screen: 'global', status: 'partial', batch: 1, mockOnly: true, notes: 'Shows toast; no queue cycling yet' },
+  { id: 'GL-6', name: 'Previous Track', screen: 'global', status: 'partial', batch: 1, mockOnly: true, notes: 'Shows toast; no queue cycling yet' },
   { id: 'GL-7', name: 'Seek / Progress Bar', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-8', name: 'Shuffle Toggle', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-9', name: 'Repeat Toggle', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-10', name: 'Like / Favorite', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-11', name: 'Toast', screen: 'global', status: 'not_implemented', batch: 1, mockOnly: true },
-  { id: 'GL-12', name: 'Confirm Dialog', screen: 'global', status: 'not_implemented', batch: 1, mockOnly: true },
-  { id: 'GL-13', name: 'Bottom Sheet', screen: 'global', status: 'not_implemented', batch: 1, mockOnly: true },
-  { id: 'GL-14', name: 'Back Navigation', screen: 'global', status: 'not_implemented', batch: 1, mockOnly: true },
+  { id: 'GL-8', name: 'Shuffle Toggle', screen: 'global', status: 'implemented', batch: 1, mockOnly: true, notes: 'Visual toggle with toast feedback' },
+  { id: 'GL-9', name: 'Repeat Toggle', screen: 'global', status: 'implemented', batch: 1, mockOnly: true, notes: 'Cycles off/all/one with toast feedback' },
+  { id: 'GL-10', name: 'Like / Favorite', screen: 'global', status: 'implemented', batch: 1, mockOnly: true, notes: 'Visual heart toggle with toast feedback' },
+  { id: 'GL-11', name: 'Toast', screen: 'global', status: 'implemented', batch: 1, mockOnly: true },
+  { id: 'GL-12', name: 'Confirm Dialog', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
+  { id: 'GL-13', name: 'Bottom Sheet', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
+  { id: 'GL-14', name: 'Back Navigation', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
 
   // Listen (Home)
-  { id: 'LS-1', name: 'Recent Listen Shelf', screen: 'listen', status: 'not_implemented', batch: 1, mockOnly: true },
-  { id: 'LS-2', name: 'Featured Playlist Card', screen: 'listen', status: 'not_implemented', batch: 1, mockOnly: true },
-  { id: 'LS-3', name: 'Quick Resume Row', screen: 'listen', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'LS-4', name: 'Home Search Affordance', screen: 'listen', status: 'not_implemented', batch: 1, mockOnly: true },
+  { id: 'LS-1', name: 'Recent Listen Shelf', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Horizontal scroll shelf with static mock albums' },
+  { id: 'LS-2', name: 'Featured Playlist Card', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Static featured playlist grid' },
+  { id: 'LS-3', name: 'Quick Resume Row', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Static quick resume rows' },
+  { id: 'LS-4', name: 'Home Search Affordance', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Tapping search navigates to Explore tab' },
 
   // Library
   { id: 'LB-1', name: 'Category Tabs', screen: 'library', status: 'not_implemented', batch: 3, mockOnly: true },

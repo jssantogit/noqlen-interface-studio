@@ -24,7 +24,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `activeTab` updates locally.
 - **Data used:** none.
 - **Forbidden real behavior:** no backend call, no library sync, no server query.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### GL-2: Mini Player Expand
 
@@ -33,7 +33,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `playerExpanded = true`.
 - **Data used:** current track from mock queue.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### GL-3: Now Playing Collapse
 
@@ -42,7 +42,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `playerExpanded = false`.
 - **Data used:** none.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### GL-4: Play / Pause
 
@@ -51,7 +51,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `isPlaying` toggles locally.
 - **Data used:** none.
 - **Forbidden real behavior:** no real audio playback, no media element API.
-- **Status:** not implemented.
+- **Status:** implemented (visual toggle only).
 
 ### GL-5: Next Track
 
@@ -60,7 +60,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `currentTrackIndex` increments (wraps to 0 at end if repeat is on, otherwise stops or wraps based on repeat/shuffle state).
 - **Data used:** mock queue array.
 - **Forbidden real behavior:** no real audio stream change.
-- **Status:** not implemented.
+- **Status:** partial (shows toast; no queue cycling yet).
 
 ### GL-6: Previous Track
 
@@ -69,7 +69,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `currentTrackIndex` decrements (wraps to end if at start).
 - **Data used:** mock queue array.
 - **Forbidden real behavior:** no real audio stream change.
-- **Status:** not implemented.
+- **Status:** partial (shows toast; no queue cycling yet).
 
 ### GL-7: Seek / Progress Bar
 
@@ -87,7 +87,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `shuffle` boolean toggles locally.
 - **Data used:** none.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### GL-9: Repeat Toggle
 
@@ -96,7 +96,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `repeatMode` cycles locally.
 - **Data used:** none.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### GL-10: Like / Favorite
 
@@ -105,7 +105,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `favorites` Set add/remove track id locally.
 - **Data used:** track id.
 - **Forbidden real behavior:** no real library write, no playlist mutation.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### GL-11: Toast
 
@@ -114,7 +114,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `toast` object with message and tone.
 - **Data used:** static message strings.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### GL-12: Confirm Dialog
 
@@ -154,7 +154,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** push detail screen onto stack.
 - **Data used:** static shelf data.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented (static shelf visible; navigation deferred to Batch 4).
 
 ### LS-2: Featured Playlist Card
 
@@ -163,7 +163,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** push Playlist Detail onto stack.
 - **Data used:** static playlist data.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented (static cards visible; navigation deferred to Batch 4).
 
 ### LS-3: Quick Resume Row
 
@@ -172,7 +172,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `currentTrackIndex = 0`; `isPlaying = true`; `queue` replaced with album/playlist tracks.
 - **Data used:** static album/playlist track list.
 - **Forbidden real behavior:** no real audio playback.
-- **Status:** not implemented.
+- **Status:** implemented (static rows visible; full queue wiring deferred to Batch 2).
 
 ### LS-4: Home Search Affordance
 
@@ -181,7 +181,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `activeTab = 'explore'`; `searchFocused = true`.
 - **Data used:** none.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ---
 
@@ -194,7 +194,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `libraryCategory` updates locally.
 - **Data used:** static category data.
 - **Forbidden real behavior:** no backend query.
-- **Status:** not implemented.
+- **Status:** not implemented (static Albums preview visible; tab switching not wired).
 
 ### LB-2: Album Row Tap
 
@@ -292,7 +292,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `searchQuery` updates; filtered results derived locally.
 - **Data used:** static consolidated mock data.
 - **Forbidden real behavior:** no backend search, no network call.
-- **Status:** not implemented.
+- **Status:** partial (basic local string filtering on static data works; scoped chip filtering not wired).
 
 ### EX-2: Search Filter Chips
 
@@ -301,7 +301,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `searchScope` updates locally.
 - **Data used:** none.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** partial (active chip UI works; scoped filtering logic not wired).
 
 ### EX-3: Search Result Tap
 
@@ -319,7 +319,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `recentSearches` array updated locally.
 - **Data used:** search query string.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** partial (static recent searches visible; dynamic addition not wired).
 
 ---
 
@@ -581,7 +581,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `isPlaying` toggles.
 - **Data used:** none.
 - **Forbidden real behavior:** no real audio playback.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### MP-2: Mini Player Next/Previous
 
@@ -590,7 +590,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 - **Mock state changes:** `currentTrackIndex` increments/decrements.
 - **Data used:** queue array.
 - **Forbidden real behavior:** no real audio stream change.
-- **Status:** not implemented.
+- **Status:** partial (shows toast; no queue cycling yet).
 
 ---
 

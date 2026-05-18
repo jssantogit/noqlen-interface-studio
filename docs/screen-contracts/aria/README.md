@@ -115,8 +115,10 @@ All data is static and fictional. All state changes are local React state only.
 - Create `AriaBottomNav` with 4 tabs and active underline indicator.
 - Create core static screen shells: Listen, Library, Playlists, Explore.
 - Create `AriaMiniPlayer` baseline (compact bar above nav).
+- Create `AriaNowPlaying` baseline overlay.
 - Ensure responsive compatibility within the `390px x 844px` virtual phone viewport.
 - Update `AriaPreview` to manage `activeTab` state and render the correct screen.
+- **Status: implemented (Bloco 4.1).**
 
 ### Batch 2 — Playback Core Interactions
 

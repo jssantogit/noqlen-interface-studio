@@ -1,81 +1,172 @@
-import { Library, ListMusic, Music2, Pause, PlayCircle, Search, SkipBack, SkipForward } from 'lucide-react'
-import { ariaQueue, ariaShelves, nowPlaying } from './ariaMockData'
+import { useCallback, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import type { AriaTabId } from './ariaInteractionMap'
+import { AriaBottomNav } from './components/AriaBottomNav'
+import { AriaExplore } from './components/AriaExplore'
+import { AriaLibrary } from './components/AriaLibrary'
+import { AriaListenHome } from './components/AriaListenHome'
+import { AriaMiniPlayer } from './components/AriaMiniPlayer'
+import { AriaNowPlaying } from './components/AriaNowPlaying'
+import { AriaPlaylists } from './components/AriaPlaylists'
 
 export function AriaPreview() {
+  const [activeTab, setActiveTab] = useState<AriaTabId>('listen')
+  const [playerExpanded, setPlayerExpanded] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
+  const [isShuffled, setIsShuffled] = useState(false)
+  const [repeatMode, setRepeatMode] = useState<'off' | 'all' | 'one'>('off')
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [toast, setToast] = useState<{ message: string } | null>(null)
+
+  const showToast = useCallback((message: string) => {
+    setToast({ message })
+    setTimeout(() => setToast(null), 2200)
+  }, [])
+
+  const handlePlayPause = useCallback(() => {
+    setIsPlaying((prev) => !prev)
+  }, [])
+
+  const handleNext = useCallback(() => {
+    showToast('Next track (mock)')
+  }, [showToast])
+
+  const handlePrevious = useCallback(() => {
+    showToast('Previous track (mock)')
+  }, [showToast])
+
+  const handleToggleShuffle = useCallback(() => {
+    setIsShuffled((prev) => !prev)
+    showToast(isShuffled ? 'Shuffle off' : 'Shuffle on')
+  }, [isShuffled, showToast])
+
+  const handleToggleRepeat = useCallback(() => {
+    setRepeatMode((prev) => {
+      const next = prev === 'off' ? 'all' : prev === 'all' ? 'one' : 'off'
+      const label = next === 'off' ? 'Repeat off' : next === 'all' ? 'Repeat all' : 'Repeat one'
+      showToast(label)
+      return next
+    })
+  }, [showToast])
+
+  const handleToggleFavorite = useCallback(() => {
+    setIsFavorite((prev) => !prev)
+    showToast(isFavorite ? 'Removed from favorites' : 'Added to favorites')
+  }, [isFavorite, showToast])
+
+  const handleTabChange = useCallback((tab: AriaTabId) => {
+    setActiveTab(tab)
+    setPlayerExpanded(false)
+  }, [])
+
+  const handleExpandPlayer = useCallback(() => {
+    setPlayerExpanded(true)
+  }, [])
+
+  const handleCollapsePlayer = useCallback(() => {
+    setPlayerExpanded(false)
+  }, [])
+
+  const handleNavigateToExplore = useCallback(() => {
+    setActiveTab('explore')
+  }, [])
+
+  const handlePlay = useCallback(() => {
+    setIsPlaying(true)
+    showToast('Playback started (mock)')
+  }, [showToast])
+
+  const screens: Record<AriaTabId, React.ReactNode> = {
+    listen: (
+      <AriaListenHome
+        onNavigateToExplore={handleNavigateToExplore}
+        onPlay={handlePlay}
+      />
+    ),
+    library: <AriaLibrary />,
+    playlists: <AriaPlaylists />,
+    explore: <AriaExplore />,
+  }
+
+  const showMiniPlayer = !playerExpanded
+
   return (
-    <div className="min-h-full min-w-0 overflow-x-hidden bg-[radial-gradient(circle_at_50%_0%,rgba(245,158,11,0.18),transparent_17rem),linear-gradient(180deg,#111318_0%,#080b10_100%)] px-5 py-5 text-white">
-      <p className="text-xs uppercase tracking-[0.28em] text-amber-100/55">
-        Listening space
-      </p>
-      <h2 className="mt-2 font-serif text-4xl tracking-[-0.05em]">Aria</h2>
-
-      <section className="mt-7 rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-100/20 via-orange-200/10 to-slate-950 p-4">
-        <div className={`aspect-square rounded-[1.55rem] border border-white/10 bg-gradient-to-br ${nowPlaying.accent}`}>
-          <div className="h-full rounded-[inherit] bg-[radial-gradient(circle_at_35%_25%,rgba(255,255,255,0.38),transparent_7rem),radial-gradient(circle_at_82%_78%,rgba(0,0,0,0.48),transparent_8rem)]" />
-        </div>
-        <div className="mt-4 flex min-w-0 items-center justify-between gap-4">
-          <div className="min-w-0">
-            <p className="truncate text-lg font-semibold tracking-[-0.02em]">
-              {nowPlaying.title}
-            </p>
-            <p className="truncate text-sm text-slate-300">{nowPlaying.artist} · {nowPlaying.album}</p>
-          </div>
-          <span className="shrink-0 text-xs text-slate-300">{nowPlaying.duration}</span>
-        </div>
-        <div className="mt-4 flex items-center justify-center gap-4 text-slate-200">
-          <button aria-label="Previous mock track" className="rounded-full bg-white/[0.07] p-2" type="button"><SkipBack size={17} /></button>
-          <button aria-label="Pause mock track" className="rounded-full bg-white px-4 py-3 text-slate-950" type="button"><Pause size={20} /></button>
-          <button aria-label="Next mock track" className="rounded-full bg-white/[0.07] p-2" type="button"><SkipForward size={17} /></button>
-        </div>
-      </section>
-
-      <div className="mt-4 grid min-w-0 grid-cols-2 gap-3">
-        {ariaShelves.map((shelf, index) => {
-          const Icon = index === 0 ? Library : Music2
-          return (
-          <article
-            className="min-w-0 rounded-[1.5rem] border border-white/10 bg-black/24 p-4"
-            key={shelf.id}
+    <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_35%_0%,rgba(212,168,83,0.08),transparent_30%),linear-gradient(180deg,#0c0e12,#080a0f_70%)] text-white">
+      {/* Scrollable content */}
+      <div
+        className={`min-h-0 flex-1 overflow-y-auto overflow-x-hidden ${
+          showMiniPlayer ? 'pb-[8.5rem]' : 'pb-[4.5rem]'
+        }`}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: 12 }}
+            key={activeTab}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
           >
-            <Icon className="text-amber-100" size={22} />
-            <div className={`mt-5 h-12 rounded-2xl bg-gradient-to-br ${shelf.accent}`} />
-            <p className="mt-3 truncate text-lg font-medium">{shelf.title}</p>
-            <p className="mt-1 truncate text-xs text-slate-400">{shelf.subtitle}</p>
-          </article>
-          )
-        })}
+            {screens[activeTab]}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      <section className="mt-4 flex min-w-0 items-center gap-3 rounded-[1.4rem] border border-white/10 bg-white/[0.045] p-4">
-        <Search className="shrink-0 text-slate-400" size={18} />
-        <span className="min-w-0 truncate text-sm text-slate-400">Search remains visual only</span>
-      </section>
+      {/* Mini player */}
+      {showMiniPlayer && (
+        <AriaMiniPlayer
+          isPlaying={isPlaying}
+          onExpand={handleExpandPlayer}
+          onNext={handleNext}
+          onPlayPause={handlePlayPause}
+        />
+      )}
 
-      <section className="mt-4 rounded-[1.5rem] border border-white/10 bg-black/24 p-3">
-        <p className="px-1 text-sm font-medium text-slate-200">Up next</p>
-        <div className="mt-2 space-y-1">
-          {ariaQueue.map((track) => (
-            <div className="flex min-w-0 items-center gap-3 rounded-2xl px-1 py-2" key={track.id}>
-              <div className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${track.accent}`} />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{track.title}</p>
-                <p className="truncate text-xs text-slate-500">{track.artist}</p>
-              </div>
-              <span className="shrink-0 text-xs text-slate-500">{track.duration}</span>
+      {/* Bottom navigation */}
+      <AriaBottomNav activeTab={activeTab} onTabChange={handleTabChange} />
+
+      {/* Now Playing overlay */}
+      <AnimatePresence>
+        {playerExpanded && (
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute inset-0 z-40"
+            exit={{ opacity: 0, y: '10%' }}
+            initial={{ opacity: 0, y: '100%' }}
+            transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+          >
+            <AriaNowPlaying
+              isFavorite={isFavorite}
+              isPlaying={isPlaying}
+              isShuffled={isShuffled}
+              onCollapse={handleCollapsePlayer}
+              onNext={handleNext}
+              onPlayPause={handlePlayPause}
+              onPrevious={handlePrevious}
+              onToggleFavorite={handleToggleFavorite}
+              onToggleRepeat={handleToggleRepeat}
+              onToggleShuffle={handleToggleShuffle}
+              repeatMode={repeatMode}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Toast */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute left-0 right-0 top-3 z-50 flex justify-center px-5"
+            exit={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="rounded-full bg-[#1a1d24] px-4 py-2 text-xs font-medium text-white shadow-[0_0.5rem_1rem_rgba(0,0,0,0.35)] ring-1 ring-white/[0.08]">
+              {toast.message}
             </div>
-          ))}
-        </div>
-      </section>
-
-      <div className="mt-5 flex min-w-0 items-center justify-between gap-2 overflow-hidden rounded-full border border-white/10 bg-black/30 px-4 py-3 text-[0.68rem] text-slate-400">
-        {['Now Playing', 'Library', 'Playlists', 'Queue'].map((item, index) => (
-          <span className={index === 0 ? 'truncate text-amber-100' : 'truncate'} key={item}>
-            {item}
-          </span>
-        ))}
-      </div>
-      <PlayCircle className="sr-only" />
-      <ListMusic className="sr-only" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
