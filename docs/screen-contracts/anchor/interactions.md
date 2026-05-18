@@ -11,6 +11,23 @@ This contract translates the Anchor interaction map into implementation-oriented
 - Static mock data may be imported from `src/apps/anchor/anchorMockData.ts` or future static metadata files.
 - Interactive sheets, rows and cards must remain readable inside the simulated phone viewport without page-level horizontal overflow; long static values should wrap where they are core content.
 
+## First-Run Setup
+
+| Interaction | Trigger | Resulting UI | Mock state changes | Data used | Forbidden real behavior | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| Welcome Start setup | `Start setup` button on Welcome | Permissions screen with acknowledgement cards | `setupStep` becomes `permissions` | Static permission defaults | Real permission requests | implemented |
+| Preview configured app | `Preview configured app` button on Welcome | Normal Anchor Home | `hasCompletedSetup` becomes true | Static mock data | None | implemented |
+| Permissions acknowledgement | Permission card tap | Card toggles acknowledged state with checkmark | Permission object acknowledged field flips | Static permission labels | Real permission APIs | implemented |
+| Library folder selection | Folder option card tap | Selected folder highlighted with checkmark | `libraryPath` and `navidromeDraft.MusicFolder` update | Static fake folder options | Filesystem access, file picker | implemented |
+| Server type selection | Server card tap | Navidrome selected by default; Jellyfin/Emby disabled | `serverType` updates | Static server type list | Backend calls, port probing | implemented |
+| Coming soon server types | Jellyfin or Emby card tap | No-op (cards are disabled) | None | Static coming-soon copy | Discovery or connection | implemented |
+| Navidrome basics editing | Field inputs, selects, toggles | Updated local draft values | `navidromeDraft` updates locally | Static default values | Config writes, secret storage | implemented |
+| Advanced Navidrome settings from setup | `Advanced Navidrome Settings` row | Existing Navidrome Settings sheet opens | Active sheet becomes `navidromeSettings` | Existing Navidrome Settings component | Duplicate settings or real config access | implemented |
+| Review setup | Continue from Navidrome Basics | Review screen with summary cards | `setupStep` becomes `review` | Setup draft state | None | implemented |
+| Preview TOML | `Preview TOML` button on Review | Display-only navidrome.toml bottom sheet | Generated from local `navidromeDraft` | Setup draft state | File writing | implemented |
+| Finish setup | `Finish setup` button on Review | Normal Anchor Home with toast | `hasCompletedSetup` becomes true; `activeTab` becomes `home` | Setup draft state | Real apply or server restart | implemented |
+| Replay/reset setup | `Replay setup` in Studio mock state controls | Welcome screen returns | Setup draft resets to initial defaults | `initialAnchorSetupDraft` | None | implemented |
+
 ## Home
 
 | Interaction | Trigger | Resulting UI | Mock state changes | Data used | Forbidden real behavior | Status |
@@ -108,6 +125,17 @@ Activity states:
 - Empty: implemented.
 - Errors only: implemented.
 
+Setup states:
+
+- Welcome: implemented.
+- Permissions: implemented.
+- Library: implemented.
+- Server: implemented.
+- Navidrome basics: implemented.
+- Review: implemented.
+- Complete (transition to Home): implemented.
+- Replay/reset: implemented.
+
 Global states:
 
 - Loading: implemented through Studio mock state controls.
@@ -123,6 +151,6 @@ Global states:
 - Current implementation has bottom nav, Home Batch 1 interactions, Servers Batch 2 interactions and Library Batch 3 interactions.
 - Activity interactions are implemented for filter, event detail, error detail, Today/Yesterday filtering, errors-only state, empty-state handling and diagnostic copy toast.
 - Bloco 2.8 closes visible interaction gaps found after QA: Home server menu icon is wired, Add Server validation is visible, secret fields accept masked local draft edits, and the removed-server empty state has a restore action.
-- Bloco 2.9 adds accessible Studio mock state controls under Anchor Home -> Settings and implements server, server-list, library, activity and global mock states.
+- Bloco 2.9 adds a complete first-run setup flow: Welcome, Permissions, Library, Server, Navidrome Basics, Review, progress indicator, preview configured app bypass and replay/reset controls.
 - Remaining Anchor work is final completion audit.
 - No app-specific implementation should be considered complete unless its forbidden real behavior has also been checked.

@@ -71,11 +71,13 @@ export function AnchorMockStateControls({
   onClearSurfaces,
   onShowToast,
   onStateChange,
+  onResetSetup,
 }: {
   mockState: AnchorMockState
   onClearSurfaces: () => void
   onShowToast: () => void
   onStateChange: (state: AnchorMockState) => void
+  onResetSetup?: () => void
 }) {
   const update = (patch: Partial<AnchorMockState>) => onStateChange({ ...mockState, ...patch })
 
@@ -136,6 +138,9 @@ export function AnchorMockStateControls({
             <StateChip active={false} ariaLabel="Global: Show toast" label="Show toast" onClick={onShowToast} />
             <StateChip active={false} ariaLabel="Global: Clear overlays" label="Clear overlays" onClick={onClearSurfaces} />
             <StateChip active={false} ariaLabel="Global: Reset all" label="Reset all" onClick={() => onStateChange(initialAnchorMockState)} />
+            {onResetSetup ? (
+              <StateChip active={false} ariaLabel="Global: Replay setup" label="Replay setup" onClick={onResetSetup} />
+            ) : null}
           </div>
         </section>
       </div>

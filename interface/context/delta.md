@@ -161,7 +161,7 @@ Bloco 2.8 delta:
 - Added a local `Restore mock server` action for the post-remove empty Servers state and made masked Navidrome secret fields editable in local draft state.
 - Updated Anchor contracts and audit docs while preserving the no-backend, no-filesystem, no-real-server-control mock-only boundary.
 
-Bloco 2.9 delta:
+Previous Bloco 2.9 delta (state coverage):
 
 - Added a typed Anchor-local mock state model for server, server-list, library, activity and global UI coverage.
 - Added Studio-only mock state controls inside Anchor Home -> Settings so state coverage is testable from inside the phone viewport.
@@ -169,4 +169,17 @@ Bloco 2.9 delta:
 - Implemented visible Servers states for normal list, no servers, adding server, Navidrome disabled and coming-soon only.
 - Implemented visible Library states for accessible, scanning, empty, permission warning, access denied and scan failed.
 - Implemented visible Activity states for populated, empty, errors-only and filtered no-results, plus global loading, disabled actions, toast and clear-overlays controls.
-- Preserved the mock-only boundary: no Anchor Core, Navidrome, backend, filesystem, log, process, port, auth, analytics or credential behavior was added.
+
+Bloco 2.9 delta (first-run setup flow):
+
+- Added a complete mock first-run setup/onboarding flow for Anchor.
+- Created `anchorSetupState.ts` with typed setup draft, steps, permissions and library options.
+- Created seven setup components: `AnchorSetupFlow`, `AnchorSetupWelcome`, `AnchorSetupPermissions`, `AnchorSetupLibrary`, `AnchorSetupServer`, `AnchorSetupNavidrome`, `AnchorSetupReview` and `AnchorSetupProgress`.
+- Integrated setup flow into `AnchorPreview` so it replaces the normal app when `hasCompletedSetup === false`.
+- Implemented Welcome, Permissions, Library, Server, Navidrome Basics and Review screens with Anchor dark premium styling.
+- Added setup progress indicator (`Step X of 6` + amber progress bar) visible during setup.
+- Implemented "Preview configured app" bypass on Welcome and "Replay setup" reset in Studio mock state controls.
+- Connected setup draft to visible app mock state: selected library folder, server address/port and Navidrome basics.
+- Added "Advanced Navidrome Settings" shortcut from the Navidrome Basics setup screen to the existing Navidrome Settings sheet.
+- Added "Preview TOML" in Review that opens a display-only generated navidrome.toml bottom sheet.
+- Preserved the mock-only boundary: no real permissions, filesystem access, port probing, config writes, backend calls or secret storage.

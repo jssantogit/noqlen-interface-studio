@@ -51,6 +51,67 @@ Layout constraints:
 - Critical server values, mock URLs, fake paths, config keys and env vars should wrap rather than become unreadable ellipses.
 - Horizontal overflow is allowed only inside bounded code/config preview boxes; category navigation and cards must not create phone-level horizontal scroll.
 
+## First-Run Setup Flow
+
+### Welcome
+
+- Trigger: opening Anchor for the first time (or via Replay setup).
+- Result: Welcome screen with Anchor introduction, feature cards and two primary actions.
+- "Start setup" moves to Permissions.
+- "Preview configured app" bypasses setup and shows the normal configured Home.
+- Safety: no real permissions or backend calls.
+- Current status: implemented in Bloco 2.9.
+
+### Permissions
+
+- Trigger: "Start setup" from Welcome.
+- Result: permission acknowledgement screen with mock-only required/optional cards.
+- Each card toggles acknowledgement state locally.
+- Continue unlocks only after required items are acknowledged.
+- Safety: no real permission APIs called.
+- Current status: implemented in Bloco 2.9.
+
+### Library
+
+- Trigger: Continue from Permissions.
+- Result: mock folder selection with fake display paths and song counts.
+- Selecting a folder updates local state only.
+- Safety: no filesystem, file picker or FileReader.
+- Current status: implemented in Bloco 2.9.
+
+### Server
+
+- Trigger: Continue from Library.
+- Result: server type selection with Navidrome selected by default.
+- Jellyfin/Emby cards are disabled and show "Coming soon".
+- "Check mock availability" simulates a pass result locally.
+- Safety: no port probing, backend calls or real server control.
+- Current status: implemented in Bloco 2.9.
+
+### Navidrome Basics
+
+- Trigger: Continue from Server.
+- Result: basic navidrome.toml fields with local-only editing.
+- "Advanced Navidrome Settings" opens the existing Navidrome Settings sheet.
+- No real config writes.
+- Current status: implemented in Bloco 2.9.
+
+### Review
+
+- Trigger: Continue from Navidrome Basics.
+- Result: summary cards of all setup choices.
+- "Preview TOML" opens a display-only generated navidrome.toml sheet.
+- "Finish setup" completes the flow and enters the normal app.
+- Safety: no real files changed.
+- Current status: implemented in Bloco 2.9.
+
+### Replay/Reset Setup
+
+- Trigger: "Replay setup" in Studio mock state controls inside Settings.
+- Result: resets local setup state and returns to Welcome.
+- Safety: Studio-only local state reset.
+- Current status: implemented in Bloco 2.9.
+
 ## Home Interaction Map
 
 ### Settings Icon
@@ -352,8 +413,15 @@ Batch 3 components now implemented:
 
 Bloco 2.9 components now implemented:
 
-- `AnchorMockStateControls`.
-- `anchorState.ts` typed local state model.
+- `AnchorSetupFlow`.
+- `AnchorSetupWelcome`.
+- `AnchorSetupPermissions`.
+- `AnchorSetupLibrary`.
+- `AnchorSetupServer`.
+- `AnchorSetupNavidrome`.
+- `AnchorSetupReview`.
+- `AnchorSetupProgress`.
+- `anchorSetupState.ts` typed setup draft model.
 
 Batch 4 components now implemented:
 
@@ -393,6 +461,14 @@ Needed components:
 - Current status: implemented in Bloco 2.7.
 
 ### Batch 5
+
+- First-run setup flow: Welcome, Permissions, Library, Server, Navidrome Basics, Review.
+- Setup progress indicator.
+- Preview configured app bypass.
+- Replay/reset setup from Studio mock state controls.
+- Current status: implemented in Bloco 2.9.
+
+### Batch 6
 
 - State polish: empty states, loading states, warning/error states, disabled states, final QA.
 

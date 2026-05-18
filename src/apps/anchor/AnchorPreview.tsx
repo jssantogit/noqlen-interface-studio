@@ -1,6 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+import { anchorActivity, anchorServer } from './anchorMockData'
+import type { AnchorActivityFilter } from './anchorMockData'
+import { initialAnchorMockState } from './anchorState'
+import type { AnchorMockState } from './anchorState'
+import { initialAnchorSetupDraft } from './anchorSetupState'
+import type { AnchorSetupDraft } from './anchorSetupState'
 import { AnchorActivity } from './components/AnchorActivity'
 import { AnchorActivityDetailSheet } from './components/AnchorActivityDetailSheet'
 import { AnchorActivityFilterSheet } from './components/AnchorActivityFilterSheet'
@@ -22,19 +28,16 @@ import { AnchorMockQrCode } from './components/AnchorMockQrCode'
 import { AnchorMockStateControls } from './components/AnchorMockStateControls'
 import { AnchorNavidromeSettingsSheet } from './components/AnchorNavidromeSettingsSheet'
 import { AnchorScanProgress } from './components/AnchorScanProgress'
-import { AnchorScanHistorySheet } from './components/AnchorScanHistorySheet'
 import type { AnchorScanState } from './components/AnchorScanProgress'
+import { AnchorScanHistorySheet } from './components/AnchorScanHistorySheet'
 import { AnchorServerDetailsSheet } from './components/AnchorServerDetailsSheet'
 import { AnchorServerMenuSheet } from './components/AnchorServerMenuSheet'
 import { AnchorServerSettingsSheet } from './components/AnchorServerSettingsSheet'
 import { AnchorSettingsSheet } from './components/AnchorSettingsSheet'
 import { AnchorServers } from './components/AnchorServers'
+import { AnchorSetupFlow } from './components/setup/AnchorSetupFlow'
 import { AnchorToast } from './components/AnchorToast'
 import type { AnchorToastTone } from './components/AnchorToast'
-import { anchorActivity, anchorServer } from './anchorMockData'
-import type { AnchorActivityFilter } from './anchorMockData'
-import { initialAnchorMockState } from './anchorState'
-import type { AnchorMockState } from './anchorState'
 
 export type AnchorTab = 'home' | 'servers' | 'library' | 'activity'
 export type { AnchorServerState } from './anchorState'
@@ -86,7 +89,11 @@ export function AnchorPreview() {
   const [activityFilter, setActivityFilter] = useState<AnchorActivityFilter>('all')
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null)
   const [toast, setToast] = useState<AnchorToastState>(null)
+  const [setupDraft, setSetupDraft] = useState<AnchorSetupDraft>(() => ({ ...initialAnchorSetupDraft }))
+  const [setupFromSettings, setSetupFromSettings] = useState(false)
   const serverState = mockState.server
+
+  const inSetup = !setupDraft.hasCompletedSetup || setupFromSettings
 
   const showToast = (message: string, tone: AnchorToastTone = 'success') => {
     setToast({ message, tone })
@@ -227,30 +234,52 @@ export function AnchorPreview() {
     ),
   }
 
+  const finishSetup = () => {
+    setSetupDraft((current) => ({ ...current, step: 'complete', hasCompletedSetup: true }))
+    setSetupFromSettings(false)
+    setMockLibraryPath(setupDraft.libraryPath)
+    setActiveTab('home')
+    showToast('Anchor setup completed')
+  }
+
+  const resetSetup = () => {
+    setSetupDraft({ ...initialAnchorSetupDraft })
+    setSetupFromSettings(true)
+  }
+
   return (
     <div className="relative flex h-full min-h-full w-full min-w-0 max-w-full flex-col overflow-x-hidden overflow-y-hidden bg-[radial-gradient(circle_at_24%_-8%,rgba(245,158,11,0.18),transparent_15rem),radial-gradient(circle_at_85%_4%,rgba(14,165,233,0.08),transparent_13rem),linear-gradient(180deg,#091217_0%,#071014_52%,#05090d_100%)] text-white">
-      <AnimatePresence mode="wait">
-        <motion.div
-          animate={{ opacity: 1, y: 0 }}
-          className="anchor-scrollbar-soft min-h-0 w-full min-w-0 max-w-full flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-24"
-          exit={{ opacity: 0, y: -8 }}
-          initial={{ opacity: 0, y: 14 }}
-          key={activeTab}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-        >
-          {screens[activeTab]}
-        </motion.div>
-      </AnimatePresence>
-      {mockState.globalLoading ? (
-        <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center bg-black/42 backdrop-blur-[2px]">
-          <div className="rounded-2xl border border-amber-300/18 bg-[#071014]/92 px-4 py-3 text-center shadow-2xl">
-            <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-amber-300/25 border-t-amber-300" />
-            <p className="text-sm font-semibold text-white">Loading mock state</p>
-            <p className="mt-1 text-xs text-slate-300/76">Studio-only overlay</p>
-          </div>
-        </div>
-      ) : null}
-      <AnchorBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      {inSetup ? (
+        <AnchorSetupFlow
+          draft={setupDraft}
+          onChangeDraft={setSetupDraft}
+          onComplete={finishSetup}
+          onOpenNavidromeSettings={() => setActiveSheet('navidromeSettings')}
+        />
+      ) : (
+        <>
+          <AnimatePresence mode="wait">
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              className="anchor-scrollbar-soft min-h-0 w-full min-w-0 max-w-full flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-24"
+              exit={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: 14 }}
+              key={activeTab}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+            >
+              {screens[activeTab]}
+            </motion.div>
+          </AnimatePresence>
+          {mockState.globalLoading ? (
+            <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center bg-black/42 backdrop-blur-[2px]">
+              <div className="rounded-2xl border border-amber-300/18 bg-[#071014]/92 px-4 py-3 text-center shadow-2xl">
+                <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-amber-300/25 border-t-amber-300" />
+                <p className="text-sm font-semibold text-white">Loading mock state</p>
+                <p className="mt-1 text-xs text-slate-300/76">Studio-only overlay</p>
+              </div>
+            </div>
+          ) : null}
+          <AnchorBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
 
       {activeSheet === 'settings' ? (
         <AnchorSettingsSheet
@@ -262,6 +291,7 @@ export function AnchorPreview() {
                 setActiveDialog(null)
                 setToast(null)
               }}
+              onResetSetup={resetSetup}
               onShowToast={() => showToast('Mock state toast active', 'info')}
               onStateChange={updateMockState}
             />
@@ -485,6 +515,8 @@ export function AnchorPreview() {
           tone={toast.tone}
         />
       ) : null}
-    </div>
+    </>
+  )}
+</div>
   )
 }

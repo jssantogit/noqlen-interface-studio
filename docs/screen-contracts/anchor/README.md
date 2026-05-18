@@ -56,6 +56,38 @@ Required content:
 - Details buttons on rows specified by the reference contract.
 - Anchor bottom nav with Activity active.
 
+## First-Run Setup Contract
+
+Required content:
+
+- Welcome screen with `Anchor` title, feature cards (`Local-first`, `Navidrome-powered`, `Mock-safe preview`) and `Start setup` / `Preview configured app` actions.
+- Permissions screen with mock-only acknowledgement cards for Music library access, Local server control, Network access and Notifications.
+- Library screen with mock folder selection and fake display paths.
+- Server screen with Navidrome selected by default and Jellyfin/Emby marked `Coming soon`.
+- Navidrome Basics screen with editable mock fields and a link to Advanced Navidrome Settings.
+- Review screen with summary cards, `Preview TOML` and `Finish setup`.
+- Setup progress indicator (`Step X of 6`) visible on every setup screen except Welcome.
+- Bottom nav is hidden during setup.
+- After setup completion, normal Anchor Home appears with a toast.
+
+Entry behavior:
+
+- When `hasCompletedSetup === false`, show setup flow instead of regular Anchor Home.
+- Setup flow stays visually inside Anchor, not a separate external site.
+
+Exit behavior:
+
+- `Finish setup` sets `hasCompletedSetup = true` and navigates to Home.
+- `Preview configured app` on Welcome also sets `hasCompletedSetup = true` immediately.
+- `Replay setup` in Settings resets setup state and returns to Welcome.
+
+Mock-only constraints:
+
+- No real permissions requested.
+- No filesystem access, file picker or `FileReader`.
+- No backend calls, port probing or server control.
+- No config file writes or secret storage.
+
 ## Allowed Interactions
 
 - Internal Anchor bottom nav may switch between Home, Servers, Library and Activity.
@@ -93,7 +125,7 @@ Bloco 2.7 implements Activity filter, event detail, Startup failed error detail,
 
 Bloco 2.8 closes visible interaction gaps before State Coverage: no visible Anchor control should remain a silent no-op; implemented controls respond with local mock state, sheets, dialogs or toasts, and unavailable future behavior remains described as visual-only/deferred.
 
-Bloco 2.9 implements Studio-only mock state coverage. The controls live inside Anchor Home -> Settings -> Studio mock states and can switch server, server-list, library, activity and global UI states without leaving the phone viewport.
+Bloco 2.9 implements a complete first-run setup/onboarding flow. When a user opens Anchor for the first time, they are guided through Welcome, Permissions, Library, Server, Navidrome Basics and Review screens before entering the normal app. A "Preview configured app" bypass and a "Replay setup" reset control are available for Studio testing.
 
 Completion requires consistent Anchor-styled sheets, dialogs and state variants while preserving the no-backend, no-filesystem and no-real-server-control boundary.
 
@@ -111,6 +143,12 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 - Add Server validation is local visual validation only; it never probes addresses or ports.
 - Restore mock server restores only the static preview card after local removal.
 - Studio mock state controls mutate local React preview state only and are not production settings.
+- Setup permission cards are mock-only acknowledgements; no real permission APIs are called.
+- Setup library folder selection uses fake display paths only; no filesystem access occurs.
+- Setup server availability check is a local timer with static pass result; no port probing.
+- Setup Navidrome basics editing updates local React draft only; no config files are written.
+- Setup TOML preview is display-only generated text; no files are created.
+- Replay setup resets only local React preview state and is not a production feature.
 
 ## Anchor Does Not Do
 
