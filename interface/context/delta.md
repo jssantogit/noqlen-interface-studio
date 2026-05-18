@@ -525,7 +525,7 @@ Bloco 3.5.3b delta (Forge Enrich Mode UX Refinement):
   - Removed automatic toast on Enrich Mode entry; toasts now only appear after real user actions.
   - Updated header subtitle to `"Choose what Forge should rewrite."` and added `"Reprocess selected metadata using current provider settings."` helper text.
   - Made category cards collapsible: Tags expanded by default; Covers, Lyrics, Advanced Metadata collapsed by default.
-  - Replaced `"Active"`/`"Off"` badge with count-based labels: `0 selected`, `N selected`, `All selected`.
+  - Replaced `"Active"`/"Off"` badge with count-based labels: `0 selected`, `N selected`, `All selected`.
   - Improved Advanced Metadata caution copy under toggle and in conditional warning card.
   - Replaced large Settings card with compact single-row helper: `"Using current mock provider settings"` + `"Open Forge Settings →"` that opens Forge Settings directly.
   - Added `onOpenSettings` prop to `ForgeEnrichMode`; `ForgePreview.tsx` closes Enrich Mode and opens Settings sheet when helper is tapped.
@@ -536,3 +536,30 @@ Bloco 3.5.3b delta (Forge Enrich Mode UX Refinement):
 - Updated docs: created `docs/audits/forge-enrich-mode-ux-refinement.md`; updated `docs/audits/forge-enrich-mode-app-flow.md`, `docs/interaction-maps/forge.md`, `docs/screen-contracts/forge/README.md`, `docs/screen-contracts/forge/interactions.md`, `docs/visual-targets/forge.md`, `interface/context/delta.md`, `interface/context/current.md`.
 - Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real metadata edits, no real file changes.
 - Build, lint, tests pass.
+
+Bloco 4.0 delta (Aria Visual Target and Interaction Map):
+
+- Analyzed the final definitive Aria visual references (`docs/references/aria/aria_reference1.png` and `docs/references/aria/aria_reference2.png`).
+- Documented the Aria visual system: dark warm charcoal backgrounds, minimal bordered surfaces, large radius, clean sans-serif typography, warm amber/gold accent (distinct from Forge orange), 4-tab bottom nav (Listen/Library/Playlists/Explore), mini player above nav, editorial artwork treatment, premium list rows with metadata chips, pill-shaped primary CTAs, thin Lucide icons.
+- Identified visible screens from references: Album Detail, Search, Queue, Playlist Detail, Track Details, Metadata Review.
+- Identified implied screens: Listen (Home), Library, Playlists, Explore, Artist Detail, Lyrics, Now Playing full screen, Settings.
+- Created/updated `docs/visual-targets/aria.md` with comprehensive visual principles, color/accent guidance, layout principles, spacing, bottom nav, player/control guidance, what to avoid and mock-only limits.
+- Created/updated `docs/screen-contracts/aria/README.md` with app purpose, primary screens, tab/navigation model, shared component inventory, mock-only boundaries and nine implementation batches.
+- Created `docs/screen-contracts/aria/interactions.md` with full interaction contracts: trigger, resulting UI, mock state changes, data used, forbidden real behavior and completion status for every mapped interaction.
+- Created `docs/interaction-maps/aria.md` with screen-by-screen interaction tables, visible actions, expected results, overlay/sheet/dialog usage, state updates, missing interactions, component inventory and implementation batch assignments.
+- Created `src/apps/aria/ariaInteractionMap.ts` static metadata file exporting screen lists, nav items, interaction IDs, statuses, mock-only notes and batch groupings. No runtime behavior.
+- Defined nine realistic Aria implementation batches:
+  1. Visual Baseline & Navigation Shell
+  2. Playback Core Interactions
+  3. Library Browsing
+  4. Artist/Album/Song/Playlist Detail
+  5. Lyrics & Queue
+  6. Search & Explore
+  7. Metadata Review & Library Health
+  8. Aria State Coverage
+  9. Aria Completion Audit
+- Updated `interface/context/current.md` and `interface/context/delta.md` with Bloco 4.0 scope.
+- Confirmed final Aria references exist and older references are not referenced in docs or source.
+- Did not implement any new Aria runtime UI or behavior; this block is planning/spec only.
+- Preserved Anchor, Forge, Flux, Studio shell, PhoneFrame and app switching unchanged.
+- Preserved mock-only boundary: no fetch/axios/fs/child_process/FileReader; no real audio, no real library access, no network calls.

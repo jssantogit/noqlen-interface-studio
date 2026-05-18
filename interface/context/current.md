@@ -21,7 +21,7 @@ Current app state:
 - Flux still renders a static visual placeholder inside the phone.
 - Forge now has a legacy-informed mock preview with Home, Review, Library and Activity sections inside the phone, plus a full Settings surface with Metadata Providers, API Keys, Tags & Metadata, Artwork, Lyrics, Audio, Safety & Review, App Updates and Advanced categories. All visible Settings controls are wired: no dead toggles, buttons, inputs or selects remain.
 - Forge Enrich Mode is implemented as a full-screen 6-step force rewrite flow (Rewrite options → Target selection → Confirmation → Dry-run → Progress → Result) accessible from Review / All. Step 1 was refined with collapsible category cards, count-based selection badges, improved caution copy, a compact Settings helper row, sticky header and no automatic entry toast. Forge now also includes Settings > Advanced Preview States controls for comprehensive local mock state coverage across Home, Review, Library, Activity, Settings and Enrich Mode.
-- Aria now has a richer mock player, queue and library preview informed by the legacy planned tab taxonomy.
+- Aria work has officially started. Bloco 4.0 defined the Aria visual target, screen architecture, interaction map and implementation batches based on the final definitive references (`aria_reference1.png` and `aria_reference2.png`). The current Aria UI remains a legacy-informed placeholder; no full Aria screens were implemented in this block.
 - Visual reference images and visual target contracts for Anchor, Forge, Aria and Flux are now part of the project source of truth for app fidelity.
 - Mock-only boundary remains active and visually subtle.
 - GitHub Pages deploy is configured through GitHub Actions for the static `dist` output.
