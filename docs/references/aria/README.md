@@ -1,20 +1,15 @@
 # Aria Visual References
 
-This folder stores Aria visual references.
+This folder stores the official Aria visual references.
 
-## Current primary references
+## Current definitive references
 
-- `aria_part_1_redesign.png`
-- `aria_part_2_redesign.png`
+- `aria_reference1.png`
+- `aria_reference2.png`
 
-These redesigned images are the primary visual targets for future Aria implementation blocks. Future Aria implementation must use these redesigned references first.
+These are the only official Aria visual references. All previous Aria references were replaced and must not be used for future implementation.
 
-## Legacy references
-
-Older Aria references present in this directory are legacy only and should not be used for new implementation unless explicitly required for historical comparison:
-
-- `aria-player-library-reference.png` (legacy)
-- `aria-artist-library-reference.png` (legacy)
+Future Aria implementation blocks must use only these two images as visual targets.
 
 ## Notes
 

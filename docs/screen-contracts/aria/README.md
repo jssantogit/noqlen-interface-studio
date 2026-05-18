@@ -15,7 +15,5 @@ Bloco 0 requirements:
 Visual target:
 
 - Aria implementation must follow `docs/visual-targets/aria.md`.
-- The redesigned images supersede the previous Aria visual references:
-  - `docs/references/aria/aria_part_1_redesign.png`
-  - `docs/references/aria/aria_part_2_redesign.png`
-- Legacy references (`aria-player-library-reference.png`, `aria-artist-library-reference.png`) remain in the repository for historical context only.
+- The definitive Aria references are `aria_reference1.png` and `aria_reference2.png` in `docs/references/aria/`.
+- Older Aria references must not be used for future implementation.
