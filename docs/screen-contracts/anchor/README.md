@@ -62,9 +62,9 @@ Required content:
 
 - Welcome screen with `Anchor` title, feature cards (`Local-first`, `Navidrome-powered`, `Mock-safe preview`) and `Start setup` / `Preview configured app` actions.
 - Permissions screen with mock-only acknowledgement cards for Music library access, Local server control, Network access and Notifications.
-- Library screen with mock folder selection and fake display paths.
+- Library screen with "Choose folder" action, mock folder picker sheet, fake display paths and custom mock path input.
 - Server screen with Navidrome selected by default and Jellyfin/Emby marked `Coming soon`.
-- Navidrome Basics screen with editable mock fields and a link to Advanced Navidrome Settings.
+- Navidrome Basics screen with editable mock fields and a link to Advanced Navidrome Settings that opens the existing Navidrome Settings sheet from setup.
 - Review screen with summary cards, `Preview TOML` and `Finish setup`.
 - Setup progress indicator (`Step X of 6`) visible on every setup screen except Welcome.
 - Bottom nav is hidden during setup.
@@ -144,7 +144,8 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 - Restore mock server restores only the static preview card after local removal.
 - Studio mock state controls mutate local React preview state only and are not production settings.
 - Setup permission cards are mock-only acknowledgements; no real permission APIs are called.
-- Setup library folder selection uses fake display paths only; no filesystem access occurs.
+- Setup library folder selection uses a mock folder picker sheet with fake display paths only; no filesystem access occurs.
+- Setup custom mock path input is visual-only with no real path access or storage validation.
 - Setup server availability check is a local timer with static pass result; no port probing.
 - Setup Navidrome basics editing updates local React draft only; no config files are written.
 - Setup TOML preview is display-only generated text; no files are created.

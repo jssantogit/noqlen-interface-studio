@@ -25,8 +25,12 @@ All screens match the Anchor dark premium mobile UI with serif titles, amber pri
    - No real permission APIs are called.
 
 3. **Library**
-   - Mock folder selection with `/storage/emulated/0/Music/Naqlen` as default.
+   - Mock folder selection via a "Choose folder" bottom sheet.
+   - Starts with no selected folder; user must actively choose.
+   - Pre-baked options inside the sheet: `/storage/emulated/0/Music`, `/storage/emulated/0/Music/Naqlen`, `/storage/emulated/0/Download/Music`, `/sdcard/Music`.
+   - Custom mock path input option: "Use another folder...".
    - Fake song counts and accessibility status.
+   - Continue disabled until a folder is selected.
    - No filesystem or storage access.
 
 4. **Server**
@@ -37,7 +41,8 @@ All screens match the Anchor dark premium mobile UI with serif titles, amber pri
 5. **Navidrome Basics**
    - Editable fields: MusicFolder, DataFolder, Port, LogLevel, ScannerSchedule.
    - Toggles: EnableDownloads, EnableSharing, EnableLogRedacting.
-   - "Advanced Navidrome Settings" opens the existing Navidrome Settings sheet.
+   - "Advanced Navidrome Settings" opens the existing Navidrome Settings sheet from setup.
+   - Advanced changes sync back to setup draft for the basic fields (MusicFolder, DataFolder, Port, LogLevel, ScannerSchedule, EnableDownloads, EnableSharing, EnableLogRedacting).
    - No real config writes.
 
 6. **Review**
@@ -87,6 +92,15 @@ All screens match the Anchor dark premium mobile UI with serif titles, amber pri
 - Overflow check at 360x800, 390x844, 430x932, 1366x768, 1440x900: no page-level horizontal overflow.
 - Browser MCP validation: setup flow completed end-to-end; existing Home/Servers/Library/Activity tabs work after setup; replay/reset works; preview configured app works.
 
+## UX Fix (Bloco 2.9.1)
+
+- Music Library step now starts empty and requires active folder selection via "Choose folder".
+- Folder picker sheet includes pre-baked options and a custom mock path input.
+- Continue is disabled until a folder is selected.
+- Advanced Navidrome Settings button now opens the existing Navidrome Settings sheet from setup.
+- Setup draft syncs basic Navidrome fields with Advanced Settings changes.
+- See `docs/audits/anchor-first-run-setup-ux-fix.md` for detailed audit.
+
 ## Files Added
 
 - `src/apps/anchor/anchorSetupState.ts`
@@ -99,11 +113,16 @@ All screens match the Anchor dark premium mobile UI with serif titles, amber pri
 - `src/apps/anchor/components/setup/AnchorSetupReview.tsx`
 - `src/apps/anchor/components/setup/AnchorSetupProgress.tsx`
 - `docs/audits/anchor-first-run-setup.md`
+- `docs/audits/anchor-first-run-setup-ux-fix.md`
+- `src/apps/anchor/components/setup/AnchorSetupFolderPicker.tsx`
 
 ## Files Modified
 
 - `src/apps/anchor/AnchorPreview.tsx`
 - `src/apps/anchor/components/AnchorMockStateControls.tsx`
+- `src/apps/anchor/anchorSetupState.ts`
+- `src/apps/anchor/components/setup/AnchorSetupLibrary.tsx`
+- `src/apps/anchor/components/AnchorNavidromeSettingsSheet.tsx`
 - `docs/interaction-maps/anchor.md`
 - `docs/screen-contracts/anchor/interactions.md`
 - `docs/screen-contracts/anchor/README.md`

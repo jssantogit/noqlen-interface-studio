@@ -17,7 +17,7 @@ Current app state:
 - Integrated fake phone status bar, centered punch-hole camera and thin bottom home indicator are part of the simulator frame.
 - Anchor renders high-fidelity mock Home, Servers, Library and Activity screens inside the phone with internal bottom navigation.
 - Anchor has a documented interaction map and implementation contract for all visible mock-only actions, secondary surfaces and required state variants.
-- Anchor has implemented Home, Servers, Library, dedicated Navidrome Settings, Activity mock interactions and a complete first-run setup/onboarding flow; visible interaction gaps and mock state coverage are complete, and final Anchor completion audit remains the next Anchor block.
+- Anchor has implemented Home, Servers, Library, dedicated Navidrome Settings, Activity mock interactions and a complete first-run setup/onboarding flow with UX fixes for folder selection and advanced settings; visible interaction gaps and mock state coverage are complete, and final Anchor completion audit remains the next Anchor block.
 - Flux still renders a static visual placeholder inside the phone.
 - Forge now has a legacy-informed mock preview with Home, Review, Library and Activity sections inside the phone.
 - Aria now has a richer mock player, queue and library preview informed by the legacy planned tab taxonomy.

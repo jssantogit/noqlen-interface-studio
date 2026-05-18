@@ -183,3 +183,15 @@ Bloco 2.9 delta (first-run setup flow):
 - Added "Advanced Navidrome Settings" shortcut from the Navidrome Basics setup screen to the existing Navidrome Settings sheet.
 - Added "Preview TOML" in Review that opens a display-only generated navidrome.toml bottom sheet.
 - Preserved the mock-only boundary: no real permissions, filesystem access, port probing, config writes, backend calls or secret storage.
+
+Bloco 2.9.1 delta (first-run setup UX fix):
+
+- Rewrote `AnchorSetupLibrary` to start with an empty folder selection state and a "Choose folder" button.
+- Created `AnchorSetupFolderPicker` bottom sheet with pre-baked folder options, selectable rows, fake counts/status and a "Use another folder..." custom mock path input.
+- Changed `initialAnchorSetupDraft` so `libraryPath` and `navidromeDraft.MusicFolder` start empty.
+- Continue button on Music Library step is disabled with clear styling until a folder is selected.
+- Fixed "Advanced Navidrome Settings" button in setup by moving all overlay sheets outside the `inSetup` conditional in `AnchorPreview`.
+- Added `initialDraft` and `onDraftChange` props to `AnchorNavidromeSettingsSheet` so it can initialize from and sync back to the setup draft.
+- Added draft bridge helpers in `AnchorPreview` to map between setup `navidromeDraft` and catalog `NavidromeConfigDraft`.
+- Partial two-way sync: basic fields (MusicFolder, DataFolder, Port, LogLevel, ScannerSchedule, EnableDownloads, EnableSharing, EnableLogRedacting) sync between setup and Advanced Settings.
+- Updated audit docs, interaction maps, screen contracts and context delta.

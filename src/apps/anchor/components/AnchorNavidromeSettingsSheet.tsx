@@ -18,14 +18,18 @@ export function AnchorNavidromeSettingsSheet({
   onMockApply,
   onMockReset,
   onRestartRecommended,
+  initialDraft,
+  onDraftChange,
 }: {
   onClose: () => void
   onMockApply: () => void
   onMockReset: () => void
   onRestartRecommended: () => void
+  initialDraft?: NavidromeConfigDraft
+  onDraftChange?: (draft: NavidromeConfigDraft) => void
 }) {
-  const [savedDraft, setSavedDraft] = useState<NavidromeConfigDraft>(() => createNavidromeMockDraft())
-  const [draft, setDraft] = useState<NavidromeConfigDraft>(() => createNavidromeMockDraft())
+  const [savedDraft, setSavedDraft] = useState<NavidromeConfigDraft>(() => initialDraft ?? createNavidromeMockDraft())
+  const [draft, setDraft] = useState<NavidromeConfigDraft>(() => initialDraft ?? createNavidromeMockDraft())
   const [activeCategory, setActiveCategory] = useState<NavidromeSettingCategory>('basics')
   const [search, setSearch] = useState('')
   const [dryRunOpen, setDryRunOpen] = useState(false)
@@ -42,7 +46,11 @@ export function AnchorNavidromeSettingsSheet({
   })
 
   const updateDraft = (key: string, value: string | number | boolean) => {
-    setDraft((current) => ({ ...current, [key]: value }))
+    setDraft((current) => {
+      const next = { ...current, [key]: value }
+      onDraftChange?.(next)
+      return next
+    })
   }
 
   const applyMockChanges = () => {

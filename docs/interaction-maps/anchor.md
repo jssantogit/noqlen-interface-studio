@@ -74,10 +74,12 @@ Layout constraints:
 ### Library
 
 - Trigger: Continue from Permissions.
-- Result: mock folder selection with fake display paths and song counts.
-- Selecting a folder updates local state only.
+- Result: Music Library step starts empty with a "Choose folder" action.
+- Tapping "Choose folder" opens a mock folder picker bottom sheet with pre-baked options and a custom path input.
+- Selecting a folder (pre-baked or custom) updates local state only.
+- Continue is disabled until a folder is selected.
 - Safety: no filesystem, file picker or FileReader.
-- Current status: implemented in Bloco 2.9.
+- Current status: implemented in Bloco 2.9, UX fix in Bloco 2.9.1.
 
 ### Server
 
@@ -92,9 +94,10 @@ Layout constraints:
 
 - Trigger: Continue from Server.
 - Result: basic navidrome.toml fields with local-only editing.
-- "Advanced Navidrome Settings" opens the existing Navidrome Settings sheet.
+- "Advanced Navidrome Settings" opens the existing Navidrome Settings sheet from setup.
+- Advanced Settings changes sync back to the setup draft for basic fields.
 - No real config writes.
-- Current status: implemented in Bloco 2.9.
+- Current status: implemented in Bloco 2.9, UX fix in Bloco 2.9.1.
 
 ### Review
 

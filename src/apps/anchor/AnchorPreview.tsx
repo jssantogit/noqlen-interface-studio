@@ -27,6 +27,8 @@ import { AnchorLogViewerSheet } from './components/AnchorLogViewerSheet'
 import { AnchorMockQrCode } from './components/AnchorMockQrCode'
 import { AnchorMockStateControls } from './components/AnchorMockStateControls'
 import { AnchorNavidromeSettingsSheet } from './components/AnchorNavidromeSettingsSheet'
+import { createNavidromeMockDraft } from './navidromeConfigCatalog'
+import type { NavidromeConfigDraft } from './navidromeConfigCatalog'
 import { AnchorScanProgress } from './components/AnchorScanProgress'
 import type { AnchorScanState } from './components/AnchorScanProgress'
 import { AnchorScanHistorySheet } from './components/AnchorScanHistorySheet'
@@ -247,6 +249,32 @@ export function AnchorPreview() {
     setSetupFromSettings(true)
   }
 
+  const buildCatalogDraftFromSetup = (navidromeDraft: AnchorSetupDraft['navidromeDraft']): NavidromeConfigDraft => {
+    const base = createNavidromeMockDraft()
+    return {
+      ...base,
+      MusicFolder: navidromeDraft.MusicFolder,
+      DataFolder: navidromeDraft.DataFolder,
+      Port: navidromeDraft.Port,
+      LogLevel: navidromeDraft.LogLevel,
+      'Scanner.Schedule': navidromeDraft.ScannerSchedule,
+      EnableDownloads: navidromeDraft.EnableDownloads,
+      EnableSharing: navidromeDraft.EnableSharing,
+      EnableLogRedacting: navidromeDraft.EnableLogRedacting,
+    }
+  }
+
+  const buildSetupDraftFromCatalog = (catalogDraft: NavidromeConfigDraft): Partial<AnchorSetupDraft['navidromeDraft']> => ({
+    MusicFolder: String(catalogDraft['MusicFolder'] ?? ''),
+    DataFolder: String(catalogDraft['DataFolder'] ?? ''),
+    Port: Number(catalogDraft['Port'] ?? 4533),
+    LogLevel: String(catalogDraft['LogLevel'] ?? 'info'),
+    ScannerSchedule: String(catalogDraft['Scanner.Schedule'] ?? '@every 1h'),
+    EnableDownloads: Boolean(catalogDraft['EnableDownloads'] ?? true),
+    EnableSharing: Boolean(catalogDraft['EnableSharing'] ?? false),
+    EnableLogRedacting: Boolean(catalogDraft['EnableLogRedacting'] ?? true),
+  })
+
   return (
     <div className="relative flex h-full min-h-full w-full min-w-0 max-w-full flex-col overflow-x-hidden overflow-y-hidden bg-[radial-gradient(circle_at_24%_-8%,rgba(245,158,11,0.18),transparent_15rem),radial-gradient(circle_at_85%_4%,rgba(14,165,233,0.08),transparent_13rem),linear-gradient(180deg,#091217_0%,#071014_52%,#05090d_100%)] text-white">
       {inSetup ? (
@@ -280,6 +308,8 @@ export function AnchorPreview() {
             </div>
           ) : null}
           <AnchorBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+        </>
+      )}
 
       {activeSheet === 'settings' ? (
         <AnchorSettingsSheet
@@ -453,6 +483,13 @@ export function AnchorPreview() {
           onMockApply={() => showToast('Navidrome settings saved in mock preview')}
           onMockReset={() => showToast('Mock changes reset', 'info')}
           onRestartRecommended={() => setMockState((current) => ({ ...current, server: 'degraded' }))}
+          initialDraft={inSetup ? buildCatalogDraftFromSetup(setupDraft.navidromeDraft) : undefined}
+          onDraftChange={inSetup ? (catalogDraft) => {
+            setSetupDraft((current) => ({
+              ...current,
+              navidromeDraft: { ...current.navidromeDraft, ...buildSetupDraftFromCatalog(catalogDraft) },
+            }))
+          } : undefined}
         />
       ) : null}
 
@@ -515,8 +552,6 @@ export function AnchorPreview() {
           tone={toast.tone}
         />
       ) : null}
-    </>
-  )}
-</div>
+    </div>
   )
 }
