@@ -1,9 +1,14 @@
 # Aria Visual Target
 
-Reference images:
+## Primary visual references
 
-- `docs/references/aria/aria-player-library-reference.png`
-- `docs/references/aria/aria-artist-library-reference.png`
+- `docs/references/aria/aria_part_1_redesign.png`
+- `docs/references/aria/aria_part_2_redesign.png`
+
+## Legacy visual references
+
+- `docs/references/aria/aria-player-library-reference.png` (legacy only)
+- `docs/references/aria/aria-artist-library-reference.png` (legacy only)
 
 Goal: implement Aria as an immersive music player/library mock UI.
 

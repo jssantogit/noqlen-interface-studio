@@ -382,6 +382,14 @@ Bloco 3.4.4 delta (Forge Review Progress Flows and Interaction Closure):
 - Preserved Forge Home, Library and Activity rendering; did not start Activity interactions, Aria or Flux.
 - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, FileReader, secrets or analytics.
 
+Aria visual reference delta:
+
+- Added redesigned Aria visual references (`aria_part_1_redesign.png`, `aria_part_2_redesign.png`) to `docs/references/aria/`.
+- Marked the redesigned images as the primary targets for future Aria implementation.
+- Retained legacy Aria references (`aria-player-library-reference.png`, `aria-artist-library-reference.png`) as legacy-only.
+- Updated `docs/references/aria/README.md`, `docs/visual-targets/aria.md` and `docs/screen-contracts/aria/README.md` to point to the new primary references.
+- No product UI or app behavior was changed.
+
 Bloco 3.4.5 delta (Forge Library Metadata Editor):
 
 - Created `ForgeMetadataEditor` reusable full-screen editor for Artist, Album and Track entities.
