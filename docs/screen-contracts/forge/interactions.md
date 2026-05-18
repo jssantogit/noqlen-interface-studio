@@ -15,7 +15,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Mock state changes:** `activeTab` set to `'review'`.
 - **Data used:** none.
 - **Forbidden real behavior:** no server scan, no library query, no backend call.
-- **Status:** partially implemented (tab switch exists; no scroll/focus).
+- **Status:** implemented (switches to Review tab, resets filter to all, shows toast).
 
 ### HN-2: Missing Lyrics Card
 
@@ -24,7 +24,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Mock state changes:** `activeTab = 'review'`, `reviewFilter = 'lyrics'`.
 - **Data used:** static `reviewGroups`.
 - **Forbidden real behavior:** no lyric search, no backend query.
-- **Status:** not implemented (card navigates to Review but ignores filter).
+- **Status:** implemented (switches to Review with lyrics filter and toast).
 
 ### HN-3: Better Covers Card
 
@@ -33,7 +33,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Mock state changes:** `activeTab = 'review'`, `reviewFilter = 'covers'`.
 - **Data used:** static `reviewGroups`.
 - **Forbidden real behavior:** no cover search, no download.
-- **Status:** not implemented.
+- **Status:** implemented (switches to Review with covers filter and toast).
 
 ### HN-4: Missing Genres Card
 
@@ -42,25 +42,25 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Mock state changes:** `activeTab = 'review'`, `reviewFilter = 'genres'`.
 - **Data used:** static `reviewGroups`.
 - **Forbidden real behavior:** no genre lookup, no backend call.
-- **Status:** not implemented.
+- **Status:** implemented (switches to Review with genres filter and toast).
 
 ### HN-5: Settings Gear
 
 - **Trigger:** tap the gear icon in the Home header.
 - **Resulting UI:** `ForgeSettingsSheet` opens as a bottom sheet overlay.
-- **Mock state changes:** `settingsOpen = true`.
+- **Mock state changes:** `activeSheet = 'settings'`.
 - **Data used:** static settings options.
 - **Forbidden real behavior:** no real app or OS settings read/write.
-- **Status:** not implemented (icon is visual-only).
+- **Status:** implemented (opens ForgeSettingsSheet with local toggles and save toast).
 
 ### HN-6: Safety Note Card
 
 - **Trigger:** tap the shield-check safety note card.
-- **Resulting UI:** optional safety explainer bottom sheet or toast.
-- **Mock state changes:** none.
+- **Resulting UI:** `ForgeSafetyNoteSheet` opens as a bottom sheet overlay.
+- **Mock state changes:** `activeSheet = 'safetyNote'`.
 - **Data used:** static copy.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented (opens ForgeSafetyNoteSheet with safety explainer sections).
 
 ---
 
@@ -302,11 +302,11 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### GL-1: Toast
 
 - **Trigger:** any action that needs lightweight feedback (fix applied, ignore reason chosen, search no results).
-- **Resulting UI:** `ForgeToast` appears briefly at the bottom of the app viewport.
-- **Mock state changes:** `toast` object with message and type.
+- **Resulting UI:** `ForgeToast` appears briefly at the top of the app viewport.
+- **Mock state changes:** `toast` object with message and tone.
 - **Data used:** static message strings.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented (ForgeToast rendered in ForgePreview overlay).
 
 ### GL-2: Confirm Dialog
 
@@ -315,16 +315,16 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Mock state changes:** confirmed actions proceed; canceled actions abort.
 - **Data used:** action context.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented as foundation (ForgeConfirmDialog rendered in ForgePreview overlay).
 
 ### GL-3: Bottom Sheet
 
 - **Trigger:** any secondary surface (settings, detail, filter, picker, comparison).
 - **Resulting UI:** `ForgeBottomSheet` slides up from the bottom with backdrop.
-- **Mock state changes:** `sheet` state object.
+- **Mock state changes:** `activeSheet` state.
 - **Data used:** sheet type and payload.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented (ForgeBottomSheet used by ForgeSettingsSheet and ForgeSafetyNoteSheet).
 
 ### GL-4: Mock State Controls
 

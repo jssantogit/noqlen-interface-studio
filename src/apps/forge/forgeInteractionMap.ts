@@ -23,12 +23,12 @@ export interface InteractionEntry {
 
 export const forgeInteractions: InteractionEntry[] = [
   // Home
-  { id: 'HN-1', name: 'Review Now', screen: 'home', status: 'partial' },
-  { id: 'HN-2', name: 'Missing Lyrics Card', screen: 'home', status: 'partial' },
-  { id: 'HN-3', name: 'Better Covers Card', screen: 'home', status: 'partial' },
-  { id: 'HN-4', name: 'Missing Genres Card', screen: 'home', status: 'partial' },
-  { id: 'HN-5', name: 'Settings Gear', screen: 'home', status: 'not-implemented' },
-  { id: 'HN-6', name: 'Safety Note Card', screen: 'home', status: 'not-implemented' },
+  { id: 'HN-1', name: 'Review Now', screen: 'home', status: 'implemented' },
+  { id: 'HN-2', name: 'Missing Lyrics Card', screen: 'home', status: 'implemented' },
+  { id: 'HN-3', name: 'Better Covers Card', screen: 'home', status: 'implemented' },
+  { id: 'HN-4', name: 'Missing Genres Card', screen: 'home', status: 'implemented' },
+  { id: 'HN-5', name: 'Settings Gear', screen: 'home', status: 'implemented' },
+  { id: 'HN-6', name: 'Safety Note Card', screen: 'home', status: 'implemented' },
 
   // Review
   { id: 'RV-1', name: 'Fix Selected', screen: 'review', status: 'not-implemented' },
@@ -60,9 +60,9 @@ export const forgeInteractions: InteractionEntry[] = [
   { id: 'AC-5', name: 'Activity Filters', screen: 'activity', status: 'not-implemented' },
 
   // Global
-  { id: 'GL-1', name: 'Toast', screen: 'global', status: 'not-implemented' },
-  { id: 'GL-2', name: 'Confirm Dialog', screen: 'global', status: 'not-implemented' },
-  { id: 'GL-3', name: 'Bottom Sheet', screen: 'global', status: 'not-implemented' },
+  { id: 'GL-1', name: 'Toast', screen: 'global', status: 'implemented' },
+  { id: 'GL-2', name: 'Confirm Dialog', screen: 'global', status: 'implemented' },
+  { id: 'GL-3', name: 'Bottom Sheet', screen: 'global', status: 'implemented' },
   { id: 'GL-4', name: 'Mock State Controls', screen: 'global', status: 'not-implemented' },
 ]
 

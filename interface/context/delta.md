@@ -209,3 +209,35 @@ Bloco 3.0 delta (Forge interaction map and completion plan):
 - Did not implement any new Forge runtime interactions; this block is planning/spec only.
 - Preserved Anchor, Aria, Flux and Studio shell unchanged.
 - Preserved mock-only boundary: no backend, filesystem, metadata edits, downloads, FileReader, secrets or network behavior.
+
+Bloco 3.1 delta (Forge interaction foundation and home actions):
+
+- Created Forge overlay foundation components:
+  - `ForgeBottomSheet` — dark premium bottom sheet with grab handle, close button, internal scrolling, backdrop dismissal.
+  - `ForgeToast` — top-positioned toast with success/info/warning tones and manual dismiss.
+  - `ForgeConfirmDialog` — styled confirmation dialog with amber/danger tones for future batch actions.
+  - `ForgeSettingsSheet` — settings bottom sheet with Review behavior, Metadata safety, Visual previews, Mock mode, Reports and About sections. Toggle rows update local visual state only; Save shows toast.
+  - `ForgeSafetyNoteSheet` — safety explainer bottom sheet opened from the shield-check card.
+- Added local Forge state model in `ForgePreview`:
+  - `activeTab`, `reviewFilter`, `activeSheet`, `toast`, `confirmDialog`.
+  - All local React state; no global store.
+- Wired Forge Home interactions:
+  - `Review now` CTA switches to Review tab with filter=all and shows toast.
+  - Missing Lyrics card switches to Review with filter=lyrics and toast.
+  - Better Covers card switches to Review with filter=covers and toast.
+  - Missing Genres card switches to Review with filter=genres and toast.
+  - Settings gear opens `ForgeSettingsSheet`.
+  - Safety note card opens `ForgeSafetyNoteSheet`.
+- Added minimal review-filter awareness to `ForgeReview`:
+  - Accepts optional `filter` prop.
+  - Filters visible groups when filter is lyrics/covers/genres.
+  - Shows active filter chip above action buttons.
+  - Group expand/collapse and selection remain functional under filtered views.
+- Updated docs:
+  - `docs/interaction-maps/forge.md` status updates for implemented Home and global overlays.
+  - `docs/screen-contracts/forge/interactions.md` status updates.
+  - `docs/screen-contracts/forge/README.md` batch status.
+  - `src/apps/forge/forgeInteractionMap.ts` status updates.
+  - Created `docs/audits/forge-interaction-batch-1.md`.
+- Preserved Anchor, Aria, Flux and Studio shell unchanged.
+- Preserved mock-only boundary: no backend, filesystem, metadata edits, downloads, FileReader, secrets or network behavior.

@@ -24,12 +24,26 @@ function AttentionCard({ icon: Icon, title, subtitle, accent, onClick }: Attenti
   )
 }
 
-export function ForgeHome({ onReviewNow }: { onReviewNow: () => void }) {
+export function ForgeHome({
+  onReviewNow,
+  onFilterReview,
+  onOpenSettings,
+  onOpenSafetyNote,
+}: {
+  onReviewNow: () => void
+  onFilterReview: (filter: 'lyrics' | 'covers' | 'genres') => void
+  onOpenSettings: () => void
+  onOpenSafetyNote: () => void
+}) {
   return (
     <div className="min-h-full px-7 pb-28 text-white">
       <ForgeScreenHeader
         rightAction={
-          <button className="text-white/80 transition-colors hover:text-white" type="button">
+          <button
+            className="text-white/80 transition-colors hover:text-white"
+            onClick={onOpenSettings}
+            type="button"
+          >
             <Settings size={22} />
           </button>
         }
@@ -57,12 +71,30 @@ export function ForgeHome({ onReviewNow }: { onReviewNow: () => void }) {
 
       <h3 className="mb-3 text-sm font-medium text-white/82">What needs attention</h3>
       <div className="space-y-3">
-        <AttentionCard accent="text-orange-300" icon={Music2} onClick={onReviewNow} subtitle="are missing lyrics" title="2 tracks" />
-        <AttentionCard accent="text-violet-300" icon={Image} onClick={onReviewNow} subtitle="need better covers" title="4 albums" />
-        <AttentionCard accent="text-lime-300" icon={Tags} onClick={onReviewNow} subtitle="are missing genres" title="3 songs" />
+        <AttentionCard
+          accent="text-orange-300"
+          icon={Music2}
+          onClick={() => onFilterReview('lyrics')}
+          subtitle="are missing lyrics"
+          title="2 tracks"
+        />
+        <AttentionCard
+          accent="text-violet-300"
+          icon={Image}
+          onClick={() => onFilterReview('covers')}
+          subtitle="need better covers"
+          title="4 albums"
+        />
+        <AttentionCard
+          accent="text-lime-300"
+          icon={Tags}
+          onClick={() => onFilterReview('genres')}
+          subtitle="are missing genres"
+          title="3 songs"
+        />
       </div>
 
-      <ForgeCard className="mt-5 flex items-center gap-3 p-4">
+      <ForgeCard className="mt-5 flex cursor-pointer items-center gap-3 p-4" onClick={onOpenSafetyNote}>
         <ShieldCheck className="shrink-0 text-white/60" size={21} />
         <p className="text-xs leading-5 text-white/48">Nothing changes until you confirm a preview.</p>
       </ForgeCard>

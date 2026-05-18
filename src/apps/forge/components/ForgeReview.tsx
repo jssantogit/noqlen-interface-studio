@@ -6,11 +6,15 @@ import { ForgeScreenHeader } from './ForgeCard'
 
 const iconMap = { Music2, Image, Tags }
 
-export function ForgeReview() {
+export function ForgeReview({ filter }: { filter?: 'all' | 'lyrics' | 'covers' | 'genres' }) {
   const [selected, setSelected] = useState<Set<string>>(
     () => new Set(['The Whole Universe Wants', 'Says', 'A Place', 'My Friend the Forest', 'The Bells']),
   )
   const [openGroups, setOpenGroups] = useState<Set<string>>(() => new Set(['lyrics', 'covers', 'genres']))
+
+  const visibleGroups = filter && filter !== 'all'
+    ? reviewGroups.filter((g) => g.id === filter)
+    : reviewGroups
 
   const allItems = reviewGroups.flatMap((group) => group.items)
 
@@ -33,6 +37,17 @@ export function ForgeReview() {
       <ForgeScreenHeader title="Review" />
       <p className="-mt-5 mb-5 text-sm leading-5 text-white/52">Select items to fix or ignore.</p>
 
+      {filter && filter !== 'all' && (
+        <div className="mb-4 flex items-center gap-2">
+          <span className="rounded-xl bg-[#e7a35f]/15 px-3 py-1.5 text-xs font-medium text-[#e7a35f]">
+            {filter === 'lyrics' && 'Missing lyrics'}
+            {filter === 'covers' && 'Better covers'}
+            {filter === 'genres' && 'Missing genres'}
+          </span>
+          <span className="text-xs text-white/40">queue</span>
+        </div>
+      )}
+
       <div className="mb-4 grid grid-cols-3 gap-2">
         <button className="min-h-11 rounded-xl bg-[#e7a35f] px-2 text-[11px] font-semibold leading-tight text-black transition hover:bg-[#efad6c]" type="button">
           Fix selected ({selected.size})
@@ -46,7 +61,7 @@ export function ForgeReview() {
       </div>
 
       <div className="space-y-3">
-        {reviewGroups.map((group) => {
+        {visibleGroups.map((group) => {
           const Icon = iconMap[group.icon]
           const isOpen = openGroups.has(group.id)
           return (

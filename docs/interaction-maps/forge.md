@@ -60,39 +60,39 @@ Layout constraints:
 - Trigger: amber `Review now` CTA button.
 - Result: navigates to the Review tab.
 - Optionally focuses the first review queue or scrolls to the top of Review.
-- Current status: partially implemented (navigates to Review tab; no queue focus).
+- Current status: implemented (switches to Review tab, resets filter to all, shows toast).
 
 ### Missing Lyrics Card
 
 - Trigger: `2 tracks are missing lyrics` attention card.
-- Result: navigates to Review tab filtered by missing lyrics queue.
-- Current status: partially implemented (navigates to Review; no filter state).
+- Result: navigates to Review filtered by missing lyrics.
+- Current status: implemented (switches to Review with lyrics filter and toast).
 
 ### Better Covers Card
 
 - Trigger: `4 albums need better covers` attention card.
-- Result: navigates to Review tab filtered by cover review queue.
-- Current status: partially implemented (navigates to Review; no filter state).
+- Result: navigates to Review filtered by cover review.
+- Current status: implemented (switches to Review with covers filter and toast).
 
 ### Missing Genres Card
 
 - Trigger: `3 songs are missing genres` attention card.
-- Result: navigates to Review tab filtered by missing genres queue.
-- Current status: partially implemented (navigates to Review; no filter state).
+- Result: navigates to Review filtered by missing genres.
+- Current status: implemented (switches to Review with genres filter and toast).
 
 ### Settings Gear
 
 - Trigger: gear icon in the Home header.
 - Result: opens Forge settings sheet.
-- Sections: Preview before applying, Metadata behavior, Artwork, Reports, Mock state controls.
+- Sections: Preview before applying, Metadata behavior, Artwork, Reports, Mock mode, About Forge.
 - Safety: mock-only settings; no real app, server or library settings are read or changed.
-- Current status: not implemented (gear is visual-only).
+- Current status: implemented (opens ForgeSettingsSheet with local toggles and save toast).
 
 ### Any Home Summary Card
 
 - Trigger: any attention card body or the shield-check safety note card.
 - Result: opens the relevant review queue or a safety explainer sheet.
-- Current status: partially implemented (cards navigate to Review; no safety explainer).
+- Current status: implemented (cards navigate to filtered Review; safety note opens ForgeSafetyNoteSheet).
 
 ## Review Interaction Map
 
@@ -314,9 +314,9 @@ Layout constraints:
 
 - Loading: not implemented.
 - Disabled (buttons during apply): not implemented.
-- Toast: not implemented.
-- Confirmation dialog: not implemented.
-- Bottom sheet: not implemented.
+- Toast: implemented (ForgeToast in ForgePreview overlay).
+- Confirmation dialog: implemented as foundation (ForgeConfirmDialog in ForgePreview overlay).
+- Bottom sheet: implemented (ForgeBottomSheet used by settings and safety note).
 - Mock state controls: not implemented.
 
 ## Component Inventory
@@ -332,6 +332,11 @@ Layout constraints:
 - `ForgeScreenHeader`.
 - `CoverGradient`.
 - `SegmentedControl`.
+- `ForgeBottomSheet`.
+- `ForgeConfirmDialog`.
+- `ForgeToast`.
+- `ForgeSettingsSheet`.
+- `ForgeSafetyNoteSheet`.
 
 ### Needed Components
 

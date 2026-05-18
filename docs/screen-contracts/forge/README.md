@@ -71,11 +71,17 @@ Forge must never:
 
 All data is static and fictional. All state changes are local React state only.
 
+## Batch Status
+
+- **Batch 1 (Overlay foundation + Home):** implemented in Bloco 3.1.
+  - Created `ForgeBottomSheet`, `ForgeConfirmDialog`, `ForgeToast`, `ForgeSettingsSheet`, `ForgeSafetyNoteSheet`.
+  - Wired Home `Review now`, attention cards with Review filter navigation, settings gear and safety note card.
+  - Added minimal review-filter awareness to `ForgeReview`.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:
 
-- **Batch 1:** Overlay foundation (toast, confirm dialog, bottom sheet) + Home interactions.
 - **Batch 2:** Review queue interactions (selection, fix selected, fix all, ignore selected, group expand/collapse).
 - **Batch 3:** Review item detail flows (lyrics detail, cover comparison, genre picker, metadata diff, item status changes).
 - **Batch 4:** Library interactions (search, tabs, item detail sheets, metadata badge navigation, sort/filter).
