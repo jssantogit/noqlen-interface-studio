@@ -10,11 +10,11 @@ Current app state:
 - Tailwind CSS imported through `src/index.css` and enabled in Vite.
 - Minimal external Studio shell with a direct app selector for Anchor, Forge, Aria and Flux.
 - Anchor selected by default.
-- Simulated phone frame is the main visual stage and now uses a taller/slimmer hardware-like silhouette.
-- Responsive shell uses CSS variables, `clamp()`, dynamic viewport units and safe-area-aware padding.
+- Simulated phone frame is the main visual stage and now uses a taller/slimmer hardware-like silhouette with a centered punch-hole camera.
+- Responsive shell uses CSS variables, dynamic viewport units, safe-area-aware padding and `PhoneStage` scaling around a stable `390px x 844px` virtual app viewport.
 - Mobile and tablet layouts remain single-column with a centered simulator; desktop uses a narrow switcher rail, centered simulator and subtle inspector.
 - Horizontal page overflow is clipped at root/shell level while phone preview content scrolls internally.
-- Integrated fake phone status bar, compact dynamic island and thin bottom home indicator are part of the simulator frame.
+- Integrated fake phone status bar, centered punch-hole camera and thin bottom home indicator are part of the simulator frame.
 - Anchor renders high-fidelity mock Home, Servers, Library and Activity screens inside the phone with internal bottom navigation.
 - Anchor has a documented interaction map and implementation contract for all visible mock-only actions, secondary surfaces and required state variants.
 - Anchor has implemented Home, Servers, Library, dedicated Navidrome Settings and Activity mock interactions; state coverage polish remains the next Anchor block.

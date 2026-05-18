@@ -29,11 +29,20 @@ Bloco 1.1 hardens the Studio shell around the mobile simulator. It does not star
 ## Simulator Sizing Rules
 
 - Simulator dimensions are controlled through CSS variables in `src/index.css`.
-- Mobile phone width is parent-bounded: the simulator stage provides the available width and the frame uses `width: 100%` with a capped max width.
-- Desktop phone width is capped through `--studio-phone-width`, currently using `clamp(17.75rem, calc(43.5dvh - 2.7rem), 22.75rem)`.
-- The inner phone screen is width-driven with a realistic tall/slim `--studio-phone-aspect`, currently `9 / 19.7`.
-- The frame uses CSS variables for outer radius, screen radius, rim and bezel so visual reference alignment can be refined without fixed magic dimensions.
-- Do not combine a fixed phone-screen height with `aspect-ratio` on mobile; that lets the browser derive a narrower screen width from height and visually desynchronizes the screen from the outer frame.
+- The app viewport uses a virtual mobile size, currently `--phone-virtual-width: 390px` and `--phone-virtual-height: 844px`.
+- The full phone frame is derived from the virtual viewport plus rim/bezel variables and is currently `414px x 868px` before scaling.
+- `PhoneStage` reserves the scaled frame footprint in layout and applies a transform to the whole frame so app content keeps a stable mobile layout while the simulator fits mobile, tablet and desktop shells.
+- On small or short screens, the phone may be visually scaled below its virtual dimensions; this is expected and must not change the app viewport's computed CSS width.
+- The frame uses CSS variables for outer radius, screen radius, rim and bezel so visual reference alignment can be refined without replacing the CSS/component frame.
+- Do not return to sizing the app viewport from the available parent width; that reintroduces narrow logical widths and causes app screens to wrap as if they were rendered around 200px wide.
+
+## Bloco 2.7.3 Virtual Viewport Audit
+
+- Root cause found: the simulator fit the shell, but the app viewport's computed width was tied to the scaled/available space, producing logical app widths around `208px` on `360x800` and `261px` on `1366x768`.
+- Effect: high-fidelity Anchor screens reflowed as ultra-narrow layouts even though the visual phone frame looked plausible.
+- Fix: app layout now renders at a fixed `390px` virtual width and the entire phone scales responsively through `PhoneStage`.
+- Validation viewports: `360x800`, `390x844`, `430x932`, `768x1024`, `1366x768`, `1440x900` and `1920x1080`.
+- Evidence after fix: `.phone-app-viewport` computed width stayed `390px` in all validated viewports; page scroll width stayed within viewport width; visual scale ranged from about `0.5768` at `360x800` to `1` at `1920x1080`.
 
 ## Bloco 1.1 Overflow Audit
 

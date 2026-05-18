@@ -145,3 +145,10 @@ Bloco 2.7.2 delta:
 - Replaced the oversized dynamic-island visual treatment with a centered punch-hole camera.
 - Refined side hardware buttons, status bar height, home indicator and app viewport inset while keeping app previews interactive.
 - Added phone frame sizing/radius/bezel CSS variables and documented the reference alignment strategy.
+
+Bloco 2.7.3 delta:
+
+- Audited the simulator viewport squeeze after the frame reference alignment and confirmed app layouts were rendering at narrow logical widths instead of a stable phone viewport.
+- Added `PhoneStage` to scale the full CSS/component phone frame responsively while preserving a fixed `390px x 844px` virtual app viewport.
+- Updated `PhoneFrame`, `AppViewport` and phone CSS variables so frame dimensions derive from the virtual app viewport plus rim/bezel insets.
+- Validated Anchor Home, Servers, Navidrome Settings, Library, Activity, Forge, Aria and Flux at the virtual viewport without adding backend, filesystem, playback or product integration behavior.

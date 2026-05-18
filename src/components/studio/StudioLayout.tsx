@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { studioApps, type StudioAppId } from '../../apps/apps'
 import { AppViewport } from '../phone/AppViewport'
 import { PhoneFrame } from '../phone/PhoneFrame'
+import { PhoneStage } from '../phone/PhoneStage'
 import { AppSwitcher } from './AppSwitcher'
 import { StudioInspector } from './StudioInspector'
 import { StudioTopBar } from './StudioTopBar'
@@ -34,11 +35,13 @@ export function StudioLayout() {
             key={selectedApp.id}
             transition={{ duration: 0.24, ease: 'easeOut' }}
           >
-            <PhoneFrame appName={selectedApp.name}>
-              <AppViewport>
-                <Preview />
-              </AppViewport>
-            </PhoneFrame>
+            <PhoneStage>
+              <PhoneFrame appName={selectedApp.name}>
+                <AppViewport>
+                  <Preview />
+                </AppViewport>
+              </PhoneFrame>
+            </PhoneStage>
           </motion.div>
 
           <div className="order-3 hidden min-w-0 lg:sticky lg:top-[var(--studio-shell-pad)] lg:block">

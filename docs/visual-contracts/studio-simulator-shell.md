@@ -31,6 +31,13 @@ The Studio shell is a visual lab, not a product dashboard and not any Noqlen app
 - The frame remains CSS/component-based so app previews stay interactive; do not replace it with the reference image unless explicitly approved.
 - The target is a thin black modern smartphone silhouette with a centered punch-hole camera, subtle side buttons, clean bezel and reduced card-like decoration.
 
+## Bloco 2.7.3 Virtual Viewport
+
+- App previews render inside a stable virtual phone viewport, currently `390px x 844px`, defined by CSS variables in `src/index.css`.
+- `PhoneStage` scales the full CSS/component phone frame to fit the available shell space instead of letting app layouts reflow to very narrow real CSS widths.
+- The rendered phone remains interactive and CSS/component-based; the committed phone reference remains a visual target, not a runtime screenshot or overlay.
+- The virtual viewport may be visually scaled below 390px on small screens, but app layout calculations must still see the virtual viewport width.
+
 ## Bezel And Screen Rules
 
 - The bezel is uniform, black and believable without becoming bulky.
