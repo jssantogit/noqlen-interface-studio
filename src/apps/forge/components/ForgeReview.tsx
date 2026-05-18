@@ -1,6 +1,6 @@
 import { Check, ChevronDown, ChevronUp, Image, Music2, RotateCcw, Tags } from 'lucide-react'
 import { useMemo, useState } from 'react'
-import { reviewGroups, type ReviewItemStatus } from '../forgeMockData'
+import { reviewGroups, type ReviewItemStatus, type ReviewItemType } from '../forgeMockData'
 import { CoverGradient } from './ForgeCard'
 import { ForgeScreenHeader } from './ForgeCard'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
@@ -18,11 +18,25 @@ export type ReviewFilter = 'all' | 'lyrics' | 'covers' | 'genres'
 
 export function ForgeReview({
   filter,
+  itemStatuses,
+  selectedIds,
+  sessionFixed,
+  sessionIgnored,
   showToast,
   showConfirm,
   onClearFilter,
+  onOpenItemDetail,
+  onResetQueue,
+  onSetItemStatuses,
+  onSetSelectedIds,
+  onSetSessionFixed,
+  onSetSessionIgnored,
 }: {
   filter?: ReviewFilter
+  itemStatuses: Record<string, ReviewItemStatus>
+  selectedIds: Set<string>
+  sessionFixed: number
+  sessionIgnored: number
   showToast: (message: string, tone?: 'success' | 'info' | 'warning') => void
   showConfirm: (opts: {
     title: string
@@ -32,20 +46,16 @@ export function ForgeReview({
     tone?: 'amber' | 'danger'
   }) => void
   onClearFilter?: () => void
+  onOpenItemDetail?: (itemId: string, type: ReviewItemType) => void
+  onResetQueue?: () => void
+  onSetItemStatuses: React.Dispatch<React.SetStateAction<Record<string, ReviewItemStatus>>>
+  onSetSelectedIds: React.Dispatch<React.SetStateAction<Set<string>>>
+  onSetSessionFixed: React.Dispatch<React.SetStateAction<number>>
+  onSetSessionIgnored: React.Dispatch<React.SetStateAction<number>>
 }) {
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [openGroups, setOpenGroups] = useState<Set<string>>(
     () => new Set(['lyrics', 'covers', 'genres']),
   )
-  const [itemStatuses, setItemStatuses] = useState<Record<string, ReviewItemStatus>>(() => {
-    const map: Record<string, ReviewItemStatus> = {}
-    reviewGroups.forEach((g) => g.items.forEach((i) => {
-      map[i.id] = i.status
-    }))
-    return map
-  })
-  const [sessionFixed, setSessionFixed] = useState(0)
-  const [sessionIgnored, setSessionIgnored] = useState(0)
   const [ignoreSheetOpen, setIgnoreSheetOpen] = useState(false)
   const [ignoreReason, setIgnoreReason] = useState<string | null>(null)
 
@@ -81,17 +91,21 @@ export function ForgeReview({
 
   const toggleItem = (id: string) => {
     if (itemStatuses[id] !== 'pending') return
-    const next = new Set(selectedIds)
-    if (next.has(id)) next.delete(id)
-    else next.add(id)
-    setSelectedIds(next)
+    onSetSelectedIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
   }
 
   const toggleGroup = (groupId: string) => {
-    const next = new Set(openGroups)
-    if (next.has(groupId)) next.delete(groupId)
-    else next.add(groupId)
-    setOpenGroups(next)
+    setOpenGroups((prev) => {
+      const next = new Set(prev)
+      if (next.has(groupId)) next.delete(groupId)
+      else next.add(groupId)
+      return next
+    })
   }
 
   const applyFixSelected = () => {
@@ -116,13 +130,13 @@ export function ForgeReview({
       description: `Forge will apply mock fixes to ${idsToFix.length} selected review items in this Studio preview.${summary ? ` (${summary})` : ''}`,
       confirmLabel: 'Fix selected',
       onConfirm: () => {
-        setItemStatuses((prev) => {
+        onSetItemStatuses((prev) => {
           const next = { ...prev }
           idsToFix.forEach((id) => { next[id] = 'fixed' })
           return next
         })
-        setSessionFixed((s) => s + idsToFix.length)
-        setSelectedIds(new Set())
+        onSetSessionFixed((s) => s + idsToFix.length)
+        onSetSelectedIds(new Set())
         showToast('Selected fixes applied in mock preview')
       },
     })
@@ -140,13 +154,13 @@ export function ForgeReview({
       description: `Forge will mark all ${idsToFix.length} pending items${filterLabel} in the current queue as fixed in the mock preview.`,
       confirmLabel: 'Fix all',
       onConfirm: () => {
-        setItemStatuses((prev) => {
+        onSetItemStatuses((prev) => {
           const next = { ...prev }
           idsToFix.forEach((id) => { next[id] = 'fixed' })
           return next
         })
-        setSessionFixed((s) => s + idsToFix.length)
-        setSelectedIds(new Set())
+        onSetSessionFixed((s) => s + idsToFix.length)
+        onSetSelectedIds(new Set())
         showToast('Review queue fixed in mock preview')
       },
     })
@@ -163,25 +177,15 @@ export function ForgeReview({
 
   const applyIgnoreSelected = () => {
     const idsToIgnore = Array.from(selectedIds).filter((id) => itemStatuses[id] === 'pending')
-    setItemStatuses((prev) => {
+    onSetItemStatuses((prev) => {
       const next = { ...prev }
       idsToIgnore.forEach((id) => { next[id] = 'ignored' })
       return next
     })
-    setSessionIgnored((s) => s + idsToIgnore.length)
-    setSelectedIds(new Set())
+    onSetSessionIgnored((s) => s + idsToIgnore.length)
+    onSetSelectedIds(new Set())
     setIgnoreSheetOpen(false)
     showToast('Selected items ignored in mock preview')
-  }
-
-  const resetQueue = () => {
-    const next: Record<string, ReviewItemStatus> = {}
-    reviewGroups.forEach((g) => g.items.forEach((i) => { next[i.id] = 'pending' }))
-    setItemStatuses(next)
-    setSelectedIds(new Set())
-    setSessionFixed(0)
-    setSessionIgnored(0)
-    showToast('Mock review queue reset', 'info')
   }
 
   return (
@@ -267,14 +271,16 @@ export function ForgeReview({
                 View all
               </button>
             )}
-            <button
-              className="flex h-9 items-center gap-1.5 rounded-lg bg-white/[0.07] px-4 text-xs font-medium text-white transition hover:bg-white/[0.1]"
-              onClick={resetQueue}
-              type="button"
-            >
-              <RotateCcw size={13} />
-              Reset mock queue
-            </button>
+            {onResetQueue && (
+              <button
+                className="flex h-9 items-center gap-1.5 rounded-lg bg-white/[0.07] px-4 text-xs font-medium text-white transition hover:bg-white/[0.1]"
+                onClick={onResetQueue}
+                type="button"
+              >
+                <RotateCcw size={13} />
+                Reset mock queue
+              </button>
+            )}
           </div>
         </div>
       ) : (
@@ -316,31 +322,37 @@ export function ForgeReview({
                     {group.pendingItems.map((item) => {
                       const active = selectedIds.has(item.id)
                       return (
-                        <button
+                        <div
                           className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition hover:bg-white/[0.045]"
                           key={item.id}
-                          onClick={() => toggleItem(item.id)}
-                          type="button"
                         >
-                          <span
+                          <button
                             className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border text-[10px] transition ${active ? 'border-[#e7a35f] bg-[#e7a35f] text-black' : 'border-white/25 text-transparent'}`}
+                            onClick={() => toggleItem(item.id)}
+                            type="button"
                           >
                             <Check size={13} />
-                          </span>
-                          <CoverGradient
-                            className="h-9 w-9 shrink-0 rounded-lg"
-                            gradient="from-stone-200 via-stone-500 to-stone-950"
-                          />
-                          <div className="min-w-0 flex-1 text-left">
-                            <p className="truncate text-sm text-white/80">
-                              {item.title}
-                            </p>
-                            <p className="truncate text-[11px] text-white/40">
-                              {item.artist}
-                              {item.album ? ` — ${item.album}` : ''}
-                            </p>
-                          </div>
-                        </button>
+                          </button>
+                          <button
+                            className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                            onClick={() => onOpenItemDetail?.(item.id, item.type)}
+                            type="button"
+                          >
+                            <CoverGradient
+                              className="h-9 w-9 shrink-0 rounded-lg"
+                              gradient="from-stone-200 via-stone-500 to-stone-950"
+                            />
+                            <div className="min-w-0 flex-1 text-left">
+                              <p className="truncate text-sm text-white/80">
+                                {item.title}
+                              </p>
+                              <p className="truncate text-[11px] text-white/40">
+                                {item.artist}
+                                {item.album ? ` — ${item.album}` : ''}
+                              </p>
+                            </div>
+                          </button>
+                        </div>
                       )
                     })}
                   </div>

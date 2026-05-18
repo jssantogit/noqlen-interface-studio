@@ -36,9 +36,9 @@ export const forgeInteractions: InteractionEntry[] = [
   { id: 'RV-3', name: 'Ignore Selected', screen: 'review', status: 'implemented' },
   { id: 'RV-4', name: 'Item Checkbox', screen: 'review', status: 'implemented' },
   { id: 'RV-5', name: 'Group Expand/Collapse', screen: 'review', status: 'implemented' },
-  { id: 'RV-6', name: 'Missing Lyrics Item Tap', screen: 'review', status: 'not-implemented' },
-  { id: 'RV-7', name: 'Cover Item Tap', screen: 'review', status: 'not-implemented' },
-  { id: 'RV-8', name: 'Genre Item Tap', screen: 'review', status: 'not-implemented' },
+  { id: 'RV-6', name: 'Missing Lyrics Item Tap', screen: 'review', status: 'implemented' },
+  { id: 'RV-7', name: 'Cover Item Tap', screen: 'review', status: 'implemented' },
+  { id: 'RV-8', name: 'Genre Item Tap', screen: 'review', status: 'implemented' },
   { id: 'RV-9', name: 'Review Covers from Library', screen: 'review', status: 'not-implemented' },
   { id: 'RV-10', name: 'Status After Fix/Ignore', screen: 'review', status: 'implemented' },
 

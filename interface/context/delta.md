@@ -267,3 +267,39 @@ Bloco 3.2 delta (Forge Review Queue Interactions):
   - Created `docs/audits/forge-interaction-batch-2.md`.
 - Preserved Anchor, Aria, Flux and Studio shell unchanged.
 - Preserved mock-only boundary: no backend, filesystem, metadata edits, downloads, FileReader, secrets or network behavior.
+
+Bloco 3.3 delta (Forge Review Item Detail Flows):
+
+- Created `ForgeLyricsDetailSheet` component:
+  - Mock placeholder lyrics text (no copyrighted/real lyrics).
+  - Metadata rows: Source, Confidence, Status.
+  - Actions: `Apply lyrics` (fixes item), `Ignore this item` (ignores item), `Close`, `Preview changes` (opens metadata diff).
+- Created `ForgeCoverComparisonSheet` component:
+  - Side-by-side current/suggested cover placeholders using `CoverGradient`.
+  - Metadata rows: Confidence, Status.
+  - Actions: `Use suggested cover` (fixes item), `Keep current` (ignores item), `Ignore`, `Close`, `Preview changes`.
+- Created `ForgeGenrePickerSheet` component:
+  - Suggested genre chips: Modern Classical, Ambient, Piano, Instrumental, Electronic, Progressive.
+  - Selected preview panel.
+  - Actions: `Apply genre` (fixes item and stores selected genres), `Ignore this item`, `Close`, `Preview changes`.
+- Created `ForgeMetadataDiffSheet` component:
+  - Before/after diff rows with label, old value (strikethrough) and new value (emerald).
+  - Mock-only note.
+  - Actions: `Apply change`, `Close`.
+- Lifted review item state from `ForgeReview` to `ForgePreview`:
+  - `itemStatuses`, `selectedIds`, `sessionFixed`, `sessionIgnored` now live in `ForgePreview`.
+  - `ForgeReview` receives them as props plus setter callbacks.
+  - This allows detail sheets (rendered in `ForgePreview`) to mutate queue state directly.
+- Wired item row tap (outside checkbox) to open detail sheet based on item type.
+- Added `itemGenres` local state in `ForgePreview` to store mock genre selections per item.
+- Added `activeDetailSheet` and `selectedReviewItemId` state in `ForgePreview` to manage open detail sheets.
+- Individual apply/ignore in detail sheets updates `itemStatuses`, shows toast, removes item from pending queue, clears selection if selected.
+- Updated docs:
+  - `docs/interaction-maps/forge.md` status updates for item detail flows.
+  - `docs/screen-contracts/forge/interactions.md` status updates for RV-6, RV-7, RV-8.
+  - `docs/screen-contracts/forge/README.md` batch status.
+  - `src/apps/forge/forgeInteractionMap.ts` status updates.
+  - Created `docs/audits/forge-interaction-batch-3.md`.
+- Preserved Anchor, Aria, Flux and Studio shell unchanged.
+- Preserved mock-only boundary: no backend, filesystem, metadata edits, downloads, FileReader, secrets or network behavior.
+- Safety: no copyrighted lyrics were added; all lyrics text is clearly fake placeholder copy.

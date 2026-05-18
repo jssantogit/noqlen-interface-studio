@@ -89,6 +89,16 @@ All data is static and fictional. All state changes are local React state only.
   - Polished group expand/collapse with chevron icons and pending-count updates.
   - Preserved review filter compatibility from Home cards.
 
+- **Batch 3 (Review Item Detail Flows):** implemented in Bloco 3.3.
+  - Created `ForgeLyricsDetailSheet` with mock placeholder lyrics (no copyrighted text), metadata rows, `Apply lyrics`, `Ignore`, `Close` and `Preview changes` actions.
+  - Created `ForgeCoverComparisonSheet` with side-by-side current/suggested cover placeholders, `Use suggested`, `Keep current`, `Ignore`, `Close` and `Preview changes` actions.
+  - Created `ForgeGenrePickerSheet` with suggested genre chips, selected preview, `Apply genre`, `Ignore`, `Close` and `Preview changes` actions.
+  - Created `ForgeMetadataDiffSheet` with before/after rows, used as a secondary preview from all detail sheets.
+  - Lifted review item state (`itemStatuses`, `selectedIds`, `sessionFixed`, `sessionIgnored`) from `ForgeReview` to `ForgePreview` so detail sheets can mutate queue state consistently.
+  - Wired item row tap (outside checkbox) to open the corresponding detail sheet based on item type.
+  - Individual apply/ignore actions in detail sheets update item status, show toast, remove item from pending queue and clear selection.
+  - Added `itemGenres` local state to store mock genre selections per item.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:

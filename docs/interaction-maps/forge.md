@@ -138,29 +138,29 @@ Layout constraints:
 ### Missing Lyrics Item Tap
 
 - Trigger: tap on a lyrics review item (outside the checkbox).
-- Result: opens lyrics detail/preview sheet.
-- Shows: current missing state, mock generated lyrics preview or a `Search later` placeholder.
-- Actions: `Use preview`, `Search again`, `Ignore`.
-- Mock state: choosing `Use preview` marks the item as `fixed` locally.
-- Current status: not implemented.
+- Result: opens `ForgeLyricsDetailSheet`.
+- Shows: song title, artist, album, metadata rows (Source, Confidence, Status), mock lyrics preview using placeholder text (no real/copyrighted lyrics), `Preview changes` link.
+- Actions: `Apply lyrics` (marks fixed), `Ignore this item` (marks ignored), `Close`, `Preview changes` (opens metadata diff).
+- Mock state: item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
+- Current status: implemented.
 
 ### Cover Item Tap
 
 - Trigger: tap on a cover review item.
-- Result: opens cover comparison sheet.
-- Shows: current cover placeholder and suggested cover placeholder side by side.
-- Actions: `Use suggested cover`, `Keep current cover`, `Ignore`.
-- Mock state: choosing `Use suggested cover` marks the item as `fixed` locally.
-- Current status: not implemented.
+- Result: opens `ForgeCoverComparisonSheet`.
+- Shows: album title, artist, side-by-side current/suggested cover placeholders, metadata rows (Confidence, Status), `Preview changes` link.
+- Actions: `Use suggested cover` (marks fixed), `Keep current` (marks ignored), `Ignore` (marks ignored), `Close`, `Preview changes` (opens metadata diff).
+- Mock state: item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
+- Current status: implemented.
 
 ### Genre Item Tap
 
 - Trigger: tap on a genre review item.
-- Result: opens genre picker sheet.
-- Shows: suggested genres as chips, a custom genre input and current empty state.
-- Actions: `Apply selected genre`, `Skip`.
-- Mock state: applying a genre marks the item as `fixed` locally and updates mock genre data.
-- Current status: not implemented.
+- Result: opens `ForgeGenrePickerSheet`.
+- Shows: song title, artist, album, current genres (None), suggested genre chips, selected preview, `Preview changes` link.
+- Actions: `Apply genre` (marks fixed and stores selected genres), `Ignore this item` (marks ignored), `Close`, `Preview changes` (opens metadata diff).
+- Mock state: item status becomes `fixed` or `ignored`; selected genres stored locally; toast confirms; item removed from pending queue.
+- Current status: implemented.
 
 ### Review Covers Button (from Library)
 

@@ -1,11 +1,16 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import type { ReactNode } from 'react'
+import { reviewGroups, type ReviewItemStatus, type ReviewItemType } from './forgeMockData'
 import { ForgeActivity } from './components/ForgeActivity'
 import { ForgeBottomNav } from './components/ForgeBottomNav'
 import { ForgeConfirmDialog } from './components/ForgeConfirmDialog'
+import { ForgeCoverComparisonSheet } from './components/ForgeCoverComparisonSheet'
+import { ForgeGenrePickerSheet } from './components/ForgeGenrePickerSheet'
 import { ForgeHome } from './components/ForgeHome'
 import { ForgeLibrary } from './components/ForgeLibrary'
+import { ForgeLyricsDetailSheet } from './components/ForgeLyricsDetailSheet'
+import { ForgeMetadataDiffSheet } from './components/ForgeMetadataDiffSheet'
 import { ForgeReview } from './components/ForgeReview'
 import { ForgeSafetyNoteSheet } from './components/ForgeSafetyNoteSheet'
 import { ForgeSettingsSheet } from './components/ForgeSettingsSheet'
@@ -14,11 +19,25 @@ import { ForgeToast } from './components/ForgeToast'
 export type ForgeTab = 'home' | 'review' | 'library' | 'activity'
 export type ReviewFilter = 'all' | 'lyrics' | 'covers' | 'genres'
 export type ForgeSheet = 'settings' | 'safetyNote' | null
+export type ForgeDetailSheet = 'lyrics' | 'covers' | 'genres' | 'metadata' | null
+
+function buildInitialItemStatuses(): Record<string, ReviewItemStatus> {
+  const map: Record<string, ReviewItemStatus> = {}
+  reviewGroups.forEach((g) => g.items.forEach((i) => { map[i.id] = i.status }))
+  return map
+}
 
 export function ForgePreview() {
   const [activeTab, setActiveTab] = useState<ForgeTab>('home')
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('all')
   const [activeSheet, setActiveSheet] = useState<ForgeSheet>(null)
+  const [activeDetailSheet, setActiveDetailSheet] = useState<ForgeDetailSheet>(null)
+  const [selectedReviewItemId, setSelectedReviewItemId] = useState<string | null>(null)
+  const [itemStatuses, setItemStatuses] = useState<Record<string, ReviewItemStatus>>(buildInitialItemStatuses)
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [sessionFixed, setSessionFixed] = useState(0)
+  const [sessionIgnored, setSessionIgnored] = useState(0)
+  const [itemGenres, setItemGenres] = useState<Record<string, string[]>>({})
   const [toast, setToast] = useState<{ message: string; tone?: 'success' | 'info' | 'warning' } | null>(null)
   const [confirmDialog, setConfirmDialog] = useState<{
     title: string
@@ -69,6 +88,45 @@ export function ForgePreview() {
     setActiveSheet(null)
   }, [])
 
+  const closeDetailSheet = useCallback(() => {
+    setActiveDetailSheet(null)
+    setSelectedReviewItemId(null)
+  }, [])
+
+  const openItemDetail = useCallback((itemId: string, type: ReviewItemType) => {
+    setSelectedReviewItemId(itemId)
+    setActiveDetailSheet(type === 'lyrics' ? 'lyrics' : type === 'covers' ? 'covers' : 'genres')
+  }, [])
+
+  const updateItemStatus = useCallback(
+    (id: string, status: ReviewItemStatus) => {
+      setItemStatuses((prev) => {
+        if (prev[id] === status) return prev
+        return { ...prev, [id]: status }
+      })
+      if (status === 'fixed') {
+        setSessionFixed((s) => s + 1)
+      } else if (status === 'ignored') {
+        setSessionIgnored((s) => s + 1)
+      }
+      setSelectedIds((prev) => {
+        if (!prev.has(id)) return prev
+        const next = new Set(prev)
+        next.delete(id)
+        return next
+      })
+    },
+    [],
+  )
+
+  const resetQueue = useCallback(() => {
+    setItemStatuses(buildInitialItemStatuses())
+    setSelectedIds(new Set())
+    setSessionFixed(0)
+    setSessionIgnored(0)
+    showToast('Mock review queue reset', 'info')
+  }, [showToast])
+
   const handleSaveSettings = useCallback(() => {
     closeSheet()
     showToast('Forge settings saved in mock preview')
@@ -95,6 +153,47 @@ export function ForgePreview() {
 
   const clearReviewFilter = useCallback(() => setReviewFilter('all'), [])
 
+  const selectedReviewItem = useMemo(() => {
+    if (!selectedReviewItemId) return null
+    return reviewGroups.flatMap((g) => g.items).find((i) => i.id === selectedReviewItemId) ?? null
+  }, [selectedReviewItemId])
+
+  const applyDetailFix = useCallback(() => {
+    if (!selectedReviewItemId) return
+    updateItemStatus(selectedReviewItemId, 'fixed')
+    closeDetailSheet()
+    showToast('Item fixed in mock preview')
+  }, [selectedReviewItemId, updateItemStatus, closeDetailSheet, showToast])
+
+  const ignoreDetailItem = useCallback(() => {
+    if (!selectedReviewItemId) return
+    updateItemStatus(selectedReviewItemId, 'ignored')
+    closeDetailSheet()
+    showToast('Item ignored in mock preview')
+  }, [selectedReviewItemId, updateItemStatus, closeDetailSheet, showToast])
+
+  const keepCurrentCover = useCallback(() => {
+    if (!selectedReviewItemId) return
+    updateItemStatus(selectedReviewItemId, 'ignored')
+    closeDetailSheet()
+    showToast('Current cover kept in mock preview')
+  }, [selectedReviewItemId, updateItemStatus, closeDetailSheet, showToast])
+
+  const applyGenre = useCallback(
+    (genres: string[]) => {
+      if (!selectedReviewItemId) return
+      setItemGenres((prev) => ({ ...prev, [selectedReviewItemId]: genres }))
+      updateItemStatus(selectedReviewItemId, 'fixed')
+      closeDetailSheet()
+      showToast('Genre applied in mock preview')
+    },
+    [selectedReviewItemId, updateItemStatus, closeDetailSheet, showToast],
+  )
+
+  const openMetadataDiff = useCallback(() => {
+    setActiveDetailSheet('metadata')
+  }, [])
+
   const screens: Record<ForgeTab, ReactNode> = {
     home: (
       <ForgeHome
@@ -107,9 +206,19 @@ export function ForgePreview() {
     review: (
       <ForgeReview
         filter={reviewFilter}
+        itemStatuses={itemStatuses}
+        selectedIds={selectedIds}
+        sessionFixed={sessionFixed}
+        sessionIgnored={sessionIgnored}
         showToast={showToast}
         showConfirm={showConfirm}
         onClearFilter={clearReviewFilter}
+        onOpenItemDetail={openItemDetail}
+        onResetQueue={resetQueue}
+        onSetItemStatuses={setItemStatuses}
+        onSetSelectedIds={setSelectedIds}
+        onSetSessionFixed={setSessionFixed}
+        onSetSessionIgnored={setSessionIgnored}
       />
     ),
     library: <ForgeLibrary />,
@@ -137,6 +246,52 @@ export function ForgePreview() {
         <ForgeSettingsSheet onClose={closeSheet} onSave={handleSaveSettings} />
       )}
       {activeSheet === 'safetyNote' && <ForgeSafetyNoteSheet onClose={closeSheet} />}
+
+      {/* Detail sheets */}
+      {activeDetailSheet === 'lyrics' && selectedReviewItem && (
+        <ForgeLyricsDetailSheet
+          item={selectedReviewItem}
+          onApply={applyDetailFix}
+          onIgnore={ignoreDetailItem}
+          onPreviewChanges={openMetadataDiff}
+          onClose={closeDetailSheet}
+        />
+      )}
+      {activeDetailSheet === 'covers' && selectedReviewItem && (
+        <ForgeCoverComparisonSheet
+          item={selectedReviewItem}
+          onApply={applyDetailFix}
+          onKeepCurrent={keepCurrentCover}
+          onIgnore={ignoreDetailItem}
+          onPreviewChanges={openMetadataDiff}
+          onClose={closeDetailSheet}
+        />
+      )}
+      {activeDetailSheet === 'genres' && selectedReviewItem && (
+        <ForgeGenrePickerSheet
+          item={selectedReviewItem}
+          initialGenres={itemGenres[selectedReviewItem.id]}
+          onApply={applyGenre}
+          onIgnore={ignoreDetailItem}
+          onPreviewChanges={openMetadataDiff}
+          onClose={closeDetailSheet}
+        />
+      )}
+      {activeDetailSheet === 'metadata' && selectedReviewItem && (
+        <ForgeMetadataDiffSheet
+          title="Metadata preview"
+          subtitle="Review the changes before applying."
+          rows={[
+            {
+              label: selectedReviewItem.type === 'lyrics' ? 'Lyrics' : selectedReviewItem.type === 'covers' ? 'Cover' : 'Genre',
+              before: selectedReviewItem.type === 'lyrics' ? 'Missing' : selectedReviewItem.type === 'covers' ? 'Low resolution' : 'Unknown',
+              after: selectedReviewItem.type === 'lyrics' ? 'Mock lyrics preview' : selectedReviewItem.type === 'covers' ? 'Suggested cover' : (itemGenres[selectedReviewItem.id]?.join(', ') || 'Selected genre'),
+            },
+          ]}
+          onApply={applyDetailFix}
+          onClose={closeDetailSheet}
+        />
+      )}
 
       {toast && (
         <ForgeToast

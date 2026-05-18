@@ -114,35 +114,35 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### RV-6: Missing Lyrics Item Tap
 
 - **Trigger:** tap a lyrics review item outside the checkbox.
-- **Resulting UI:** `ForgeLyricsDetailSheet` opens.
-- **Shows:** item name, current missing state, mock generated lyrics preview, `Search later` placeholder.
-- **Actions:** `Use preview`, `Search again`, `Ignore`.
-- **Mock state changes:** `Use preview` sets item status to `fixed`; `Ignore` sets to `ignored`.
-- **Data used:** song name, mock lyrics text.
-- **Forbidden real behavior:** no lyric API call, no lyric download, no file write.
-- **Status:** not implemented.
+- **Resulting UI:** `ForgeLyricsDetailSheet` opens as a bottom sheet.
+- **Shows:** song title, artist, album, metadata rows (Source: Studio mock suggestion, Confidence: High, Status: Ready to apply), mock lyrics preview using placeholder text only (no real/copyrighted lyrics), `Preview changes` link.
+- **Actions:** `Apply lyrics` (sets fixed), `Ignore this item` (sets ignored), `Close`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
+- **Mock state changes:** item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
+- **Data used:** `reviewGroups` item.
+- **Forbidden real behavior:** no lyric API call, no lyric download, no file write, no copyrighted lyrics.
+- **Status:** implemented.
 
 ### RV-7: Cover Item Tap
 
 - **Trigger:** tap a cover review item outside the checkbox.
-- **Resulting UI:** `ForgeCoverComparisonSheet` opens.
-- **Shows:** current cover placeholder and suggested cover placeholder side by side.
-- **Actions:** `Use suggested cover`, `Keep current cover`, `Ignore`.
-- **Mock state changes:** `Use suggested cover` sets item status to `fixed`; `Ignore` sets to `ignored`.
-- **Data used:** album name, mock cover placeholders.
+- **Resulting UI:** `ForgeCoverComparisonSheet` opens as a bottom sheet.
+- **Shows:** album title, artist, side-by-side current/suggested cover placeholders, metadata rows (Confidence: Medium, Status: Ready to apply), `Preview changes` link.
+- **Actions:** `Use suggested cover` (sets fixed), `Keep current` (sets ignored), `Ignore` (sets ignored), `Close`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
+- **Mock state changes:** item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
+- **Data used:** `reviewGroups` item.
 - **Forbidden real behavior:** no cover download, no image replacement, no file write.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### RV-8: Genre Item Tap
 
 - **Trigger:** tap a genre review item outside the checkbox.
-- **Resulting UI:** `ForgeGenrePickerSheet` opens.
-- **Shows:** suggested genre chips, custom input, current empty state.
-- **Actions:** `Apply selected genre`, `Skip`.
-- **Mock state changes:** applying sets item status to `fixed` and updates mock genre list.
-- **Data used:** song name, suggested genres.
+- **Resulting UI:** `ForgeGenrePickerSheet` opens as a bottom sheet.
+- **Shows:** song title, artist, album, current genres (None), suggested genre chips (Modern Classical, Ambient, Piano, Instrumental, Electronic, Progressive), selected preview, `Preview changes` link.
+- **Actions:** `Apply genre` (sets fixed and stores selected genres locally), `Ignore this item` (sets ignored), `Close`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
+- **Mock state changes:** item status becomes `fixed` or `ignored`; selected genres stored in `itemGenres` local state; toast confirms; item removed from pending queue.
+- **Data used:** `reviewGroups` item, static suggested genres.
 - **Forbidden real behavior:** no genre API lookup, no metadata write.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### RV-9: Review Covers from Library
 
