@@ -518,11 +518,21 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### GL-9: Mock State Controls
 
 - **Trigger:** inside `ForgeSettingsSheet`, a Studio-only section.
-- **Resulting UI:** toggles for empty states, loading states, error states, all-clear states.
-- **Mock state changes:** `forgeMockState` flags.
+- **Resulting UI:** grouped Preview States controls inside Settings > Advanced for Home, Review, Library, Activity, Settings, Enrich Mode and global offline mock states.
+- **Mock state changes:** local `ForgeMockScenario` in `ForgePreview`; derived `ForgeMockState` flags are passed into Forge surfaces.
 - **Data used:** static control definitions.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented (deferred to Forge State Coverage).
+- **Status:** implemented in Bloco 3.6.
+
+### GL-9A: Forge State Coverage
+
+- **Home states:** normal, clean library, provider unavailable, missing credentials, recent Enrich completed and offline mock notice.
+- **Review states:** empty queue, all applied, provider unavailable, missing credentials, conflict-heavy queue, applied/ignored session summary and no-results filter state.
+- **Library states:** empty library, no search results, missing artwork placeholders, incomplete metadata badges and editor save failed state.
+- **Activity states:** empty activity, filter no results, failed activity card, warning activity card and Enrich completion history.
+- **Settings states:** unsaved changes, missing credentials, invalid credential, provider disabled, provider unavailable, update available and update failed.
+- **Enrich states:** no options selected, no target selected, overwrite warning, protected field warning, dry-run no changes, dry-run failed, rewrite failed and result summary.
+- **Mock-only rule:** all states are visual/local only and never call providers, backends, filesystem, real gallery, GitHub, downloads, Forge Core or metadata write APIs.
 
 ### GL-10: Open Enrich Mode
 

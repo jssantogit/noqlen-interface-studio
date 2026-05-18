@@ -1,7 +1,9 @@
 import { ArrowLeft, ArrowRight, BadgeCheck, Check, ChevronDown, ChevronRight, Image, Music2, Search, ShieldAlert, SlidersHorizontal, Tags, Text, Users, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { artistData, albumData, songData } from '../forgeMockData'
+import type { ForgeMockState } from '../forgeMockState'
 import { CoverGradient, ForgeCard, ForgeScreenHeader } from './ForgeCard'
+import { ForgeEmptyState } from './ForgeEmptyState'
 
 export interface EnrichCategory {
   id: 'tags' | 'covers' | 'lyrics' | 'advanced'
@@ -846,7 +848,9 @@ export function ForgeEnrichMode({
   showToast,
   appendActivity,
   markSafeItemsApplied,
+  mockState,
 }: {
+  mockState: ForgeMockState
   onClose: () => void
   onViewReview: () => void
   onViewActivity: () => void
@@ -897,9 +901,15 @@ export function ForgeEnrichMode({
   const stepLabels = ['Options', 'Targets', 'Confirm', 'Dry-run', 'Apply']
   const stepIndex = step === 'options' ? 0 : step === 'targets' ? 1 : step === 'confirm' ? 2 : step === 'dryrun' ? 3 : step === 'progress' ? 4 : 5
 
-  const anyOptionSelected = categories.some((c) => c.options.some((o) => o.checked))
+  const anyOptionSelected = mockState.enrichState === 'noOptions' ? false : categories.some((c) => c.options.some((o) => o.checked))
 
-  const canContinueTargets = target.mode === 'library' || target.selectedIds.size > 0
+  const canContinueTargets = mockState.enrichState === 'noTarget' ? false : target.mode === 'library' || target.selectedIds.size > 0
+
+  const effectiveOverwrite = mockState.enrichState === 'overwriteWarning'
+    ? { tags: true, covers: true, lyrics: false, advanced: false }
+    : mockState.enrichState === 'protectedWarning'
+      ? { tags: false, covers: false, lyrics: false, advanced: true }
+      : overwrite
 
   const toggleOption = (catId: string, optId: string) => {
     setCategories((prev) =>
@@ -1074,7 +1084,7 @@ export function ForgeEnrichMode({
                 onToggleOption={(optId) => toggleOption(cat.id, optId)}
                 onToggleOverwrite={() => toggleOverwrite(cat.id)}
                 options={cat.options}
-                overwrite={overwrite[cat.id]}
+                overwrite={effectiveOverwrite[cat.id]}
               />
             ))}
 
@@ -1122,7 +1132,7 @@ export function ForgeEnrichMode({
             <p className="-mt-5 mb-5 text-sm leading-5 text-white/52">
               Enrich Mode can replace existing metadata depending on your selected options.
             </p>
-            <ConfirmationSummary categories={categories} overwrite={overwrite} target={target} />
+            <ConfirmationSummary categories={categories} overwrite={effectiveOverwrite} target={target} />
           </div>
         )}
 
@@ -1138,11 +1148,31 @@ export function ForgeEnrichMode({
           <div>
             <ForgeScreenHeader title="Dry-run result" />
             <p className="-mt-5 mb-5 text-sm leading-5 text-white/52">Review what would be rewritten.</p>
-            <DryRunResult
-              onBack={() => setStep('confirm')}
-              onReviewConflicts={handleReviewConflicts}
-              onStartRewrite={startRewrite}
-            />
+            {mockState.enrichState === 'dryRunNoChanges' ? (
+              <ForgeEmptyState
+                actions={[
+                  { label: 'Back to options', onClick: () => setStep('options'), tone: 'secondary' },
+                  { label: 'Done', onClick: onClose, tone: 'primary' },
+                ]}
+                title="Nothing to rewrite"
+                message="Selected targets already match the current mock settings."
+              />
+            ) : mockState.enrichState === 'dryRunFailed' ? (
+              <ForgeEmptyState
+                actions={[
+                  { label: 'Retry dry-run', onClick: () => setDryRunComplete(false), tone: 'primary' },
+                  { label: 'Open Settings', onClick: openSettings, tone: 'secondary' },
+                ]}
+                title="Dry-run failed"
+                message="Mock dry-run could not complete. Check provider settings and try again."
+              />
+            ) : (
+              <DryRunResult
+                onBack={() => setStep('confirm')}
+                onReviewConflicts={handleReviewConflicts}
+                onStartRewrite={startRewrite}
+              />
+            )}
           </div>
         )}
 
@@ -1158,12 +1188,23 @@ export function ForgeEnrichMode({
 
         {step === 'result' && result && (
           <div className="pt-4">
-            <ResultScreen
-              onDone={handleDone}
-              onViewActivity={handleViewActivity}
-              onViewReview={handleViewReview}
-              result={result}
-            />
+            {mockState.enrichState === 'rewriteFailed' ? (
+              <ForgeEmptyState
+                actions={[
+                  { label: 'Retry', onClick: () => setStep('progress'), tone: 'primary' },
+                  { label: 'View dry-run', onClick: () => { setDryRunComplete(true); setStep('dryrun') }, tone: 'secondary' },
+                ]}
+                title="Rewrite failed"
+                message="Mock rewrite could not complete. No files were changed."
+              />
+            ) : (
+              <ResultScreen
+                onDone={handleDone}
+                onViewActivity={handleViewActivity}
+                onViewReview={handleViewReview}
+                result={result}
+              />
+            )}
           </div>
         )}
       </div>

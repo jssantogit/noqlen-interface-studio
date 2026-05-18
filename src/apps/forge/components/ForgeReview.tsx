@@ -12,9 +12,12 @@ import {
   type ReviewItemStatus,
   type ReviewItemType,
 } from '../forgeMockData'
+import type { ForgeMockState } from '../forgeMockState'
 import type { ForgeProgressFlow } from './ForgeProgressSheet'
 import { CoverGradient, ForgeCard, ForgeScreenHeader } from './ForgeCard'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
+import { ForgeEmptyState } from './ForgeEmptyState'
+import { ForgeStateNotice } from './ForgeStateNotice'
 
 export type ReviewFilter = ForgeReviewSection
 type ReviewSort = 'priority' | 'most-fixes' | 'needs-review' | 'artwork-first' | 'lyrics-first' | 'metadata-first' | 'title' | 'recent'
@@ -380,6 +383,7 @@ export function ForgeReview({
   filter = 'all',
   metadataFilter,
   itemStatuses,
+  mockState,
   selectedIds,
   sessionFixed,
   sessionIgnored,
@@ -396,10 +400,14 @@ export function ForgeReview({
   onSetSessionFixed,
   onSetSessionIgnored,
   onOpenEnrichMode,
+  onNavigateToLibrary,
+  onNavigateToActivity,
+  onOpenSettings,
 }: {
   filter?: ReviewFilter
   metadataFilter: ForgeMetadataFilter
   itemStatuses: Record<string, ReviewItemStatus>
+  mockState: ForgeMockState
   selectedIds: Set<string>
   sessionFixed: number
   sessionIgnored: number
@@ -422,6 +430,9 @@ export function ForgeReview({
   onSetSessionFixed: Dispatch<SetStateAction<number>>
   onSetSessionIgnored: Dispatch<SetStateAction<number>>
   onOpenEnrichMode?: () => void
+  onNavigateToLibrary?: () => void
+  onNavigateToActivity?: () => void
+  onOpenSettings?: () => void
 }) {
   const [ignoreSheetOpen, setIgnoreSheetOpen] = useState(false)
   const [ignoreReason, setIgnoreReason] = useState<string | null>(null)
@@ -429,13 +440,15 @@ export function ForgeReview({
   const [sortSheetOpen, setSortSheetOpen] = useState(false)
   const [activeSort, setActiveSort] = useState<ReviewSort>('priority')
 
-  const visibleItems = useMemo(
-    () => sortItems(
-      getVisibleItems(filter, metadataFilter).filter((item) => itemStatuses[item.id] === 'pending'),
-      activeSort,
-    ),
-    [activeSort, filter, metadataFilter, itemStatuses],
-  )
+  const visibleItems = useMemo(() => {
+    if (mockState.reviewState === 'empty' || mockState.reviewState === 'allApplied') return []
+    if (mockState.reviewState === 'noResultsFilter') return []
+    let items = getVisibleItems(filter, metadataFilter).filter((item) => itemStatuses[item.id] === 'pending')
+    if (mockState.reviewState === 'conflictHeavy') {
+      items = items.map((item) => ({ ...item, proposalStatus: (item.proposalStatus === 'Safe' ? 'Conflict' : item.proposalStatus) as typeof item.proposalStatus }))
+    }
+    return sortItems(items, activeSort)
+  }, [activeSort, filter, metadataFilter, itemStatuses, mockState.reviewState])
   const activeSortLabel = sortOptions.find((option) => option.id === activeSort)?.label ?? 'Priority'
 
   const safeFixCount = useMemo(
@@ -615,22 +628,77 @@ export function ForgeReview({
         </button>
       </div>
 
+      {mockState.reviewState === 'providerUnavailable' && (
+        <ForgeStateNotice
+          actions={[
+            { label: 'Open Settings', onClick: onOpenSettings || (() => showToast('Navigate to Settings', 'info')), tone: 'secondary' },
+            { label: 'Retry mock check', onClick: () => showToast('Mock provider check retried', 'info'), tone: 'secondary' },
+          ]}
+          message="Suggestions cannot be refreshed in this mock state."
+          title="Provider unavailable"
+          variant="warning"
+        />
+      )}
+
+      {mockState.reviewState === 'missingCredentials' && (
+        <ForgeStateNotice
+          actions={[{ label: 'Open API settings', onClick: onOpenSettings || (() => showToast('Navigate to API settings', 'info')), tone: 'primary' }]}
+          message="Some metadata providers need mock credentials before suggestions can be generated."
+          title="Provider credentials missing"
+          variant="warning"
+        />
+      )}
+
+      {mockState.reviewState === 'conflictHeavy' && (
+        <ForgeStateNotice
+          message="This queue contains many conflicts and protected fields. Review each item carefully before applying."
+          title="Conflict-heavy queue"
+          variant="warning"
+        />
+      )}
+
       {visibleItems.length === 0 ? (
-        <div className="mt-8 flex flex-col items-center gap-3 text-center">
-          <p className="text-lg font-medium text-white">Review queue clear</p>
-          <p className="max-w-[230px] text-sm leading-5 text-white/50">No pending items for this view.</p>
-          <div className="mt-2 flex gap-2">
-            {onClearFilter && filter !== 'all' && (
-              <button className="h-9 rounded-lg border border-white/[0.065] bg-white/[0.045] px-4 text-xs font-medium text-white transition hover:bg-white/[0.075]" onClick={onClearFilter} type="button">View all</button>
-            )}
-            {onResetQueue && (
-              <button className="flex h-9 items-center gap-1.5 rounded-lg border border-white/[0.065] bg-white/[0.045] px-4 text-xs font-medium text-white transition hover:bg-white/[0.075]" onClick={onResetQueue} type="button">
-                <RotateCcw size={13} />
-                Reset mock queue
-              </button>
-            )}
+        mockState.reviewState === 'allApplied' ? (
+          <ForgeEmptyState
+            actions={[
+              { label: 'View Activity', onClick: onNavigateToActivity || (() => {}), tone: 'primary' },
+              { label: 'Open Library', onClick: onNavigateToLibrary || (() => {}), tone: 'secondary' },
+            ]}
+            title="Review complete"
+            message="All visible mock suggestions were applied or ignored."
+          />
+        ) : mockState.reviewState === 'empty' ? (
+          <ForgeEmptyState
+            actions={[
+              { label: 'Open Library', onClick: onNavigateToLibrary || (() => {}), tone: 'secondary' },
+              { label: 'Open Enrich Mode', onClick: onOpenEnrichMode || (() => {}), tone: 'primary' },
+            ]}
+            title="No review items"
+            message="There are no pending metadata suggestions."
+          />
+        ) : mockState.reviewState === 'noResultsFilter' ? (
+          <ForgeEmptyState
+            actions={[{ label: 'Reset filters', onClick: () => { setActiveSort('priority'); onClearFilter?.() }, tone: 'secondary' }]}
+            title="No matching review items"
+            message="Try adjusting your filters or sort order."
+          />
+        ) : (
+          <div className="mt-8 flex flex-col items-center gap-3 text-center">
+            <p className="text-lg font-medium text-white">Review queue clear</p>
+            <p className="max-w-[230px] text-sm leading-5 text-white/50">No pending items for this view.</p>
+            <div className="mt-2 flex gap-2">
+              {onClearFilter && filter !== 'all' && (
+                <button className="h-9 rounded-lg border border-white/[0.065] bg-white/[0.045] px-4 text-xs font-medium text-white transition hover:bg-white/[0.075]" onClick={onClearFilter} type="button">View all</button>
+              )}
+              {onResetQueue && (
+                <button className="flex h-9 items-center gap-1.5 rounded-lg border border-white/[0.065] bg-white/[0.045] px-4 text-xs font-medium text-white transition hover:bg-white/[0.075]" onClick={onResetQueue} type="button">
+                  <RotateCcw size={13} />
+                  Reset mock queue
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )
       ) : (
         <div className="space-y-2.5">
           {visibleItems.map((item) => (

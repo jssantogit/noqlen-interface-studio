@@ -68,6 +68,13 @@ Enrich Mode visual rules:
 - Sticky header with warm charcoal backdrop blur keeps step context visible while scrolling.
 - No generic wizard feel; no terminal/config feel; no page-level overflow.
 
+State coverage visual rules:
+
+- Empty, warning, error and no-results cards use matte warm-charcoal surfaces with restrained peach-orange accents.
+- Error states use subtle red only for local mock failure emphasis; avoid full-screen alarming red panels.
+- Preview States controls live quietly in Settings > Advanced and must not dominate normal Forge flows.
+- State actions must remain compact enough for the 390px phone viewport and must not imply real providers, files, galleries or updates were touched.
+
 Must not:
 
 - Collapse into generic review cards.

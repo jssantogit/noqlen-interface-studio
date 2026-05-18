@@ -1,7 +1,9 @@
 import { ArrowLeft, BadgeCheck, ImageIcon, Search } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { MockAlbum, MockArtist, MockSong } from '../forgeMockData'
+import type { ForgeMockState } from '../forgeMockState'
 import { CoverGradient } from './ForgeCard'
+import { ForgeStateNotice } from './ForgeStateNotice'
 
 export type EditorEntityType = 'artist' | 'album' | 'track'
 
@@ -12,6 +14,7 @@ export interface ForgeMetadataEditorProps {
   songs?: MockSong[]
   onClose: () => void
   onSave: (updated: MockArtist | MockAlbum | MockSong) => void
+  mockState: ForgeMockState
   initialTab?: string
   showConfirm: (opts: {
     title: string
@@ -251,6 +254,7 @@ export function ForgeMetadataEditor({
   songs = [],
   onClose,
   onSave,
+  mockState,
   initialTab,
   showConfirm,
   onOpenTrackEditor,
@@ -262,6 +266,7 @@ export function ForgeMetadataEditor({
   const [pendingImage, setPendingImage] = useState<{ gradient: string; source: string } | null>(null)
   const [showImagePicker, setShowImagePicker] = useState(false)
   const [showSavePreview, setShowSavePreview] = useState(false)
+  const [saveError, setSaveError] = useState(false)
 
   const original = useMemo(() => buildDraft(entity, entityType), [entity, entityType])
 
@@ -305,9 +310,13 @@ export function ForgeMetadataEditor({
 
   const applySave = useCallback(() => {
     setShowSavePreview(false)
+    if (mockState.libraryState === 'editorSaveFailed') {
+      setSaveError(true)
+      return
+    }
     const updated = applyDraftToEntity(entity, entityType, draft, pendingImage)
     onSave(updated)
-  }, [entity, entityType, draft, pendingImage, onSave])
+  }, [entity, entityType, draft, pendingImage, mockState.libraryState, onSave])
 
   const entityTitle = entityType === 'artist' ? (entity as MockArtist).name : entityType === 'album' ? (entity as MockAlbum).title : (entity as MockSong).title
 
@@ -361,6 +370,17 @@ export function ForgeMetadataEditor({
 
       {/* Content */}
       <div className="forge-editor-scroll min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-8 pt-4 sm:px-5">
+        {saveError && (
+          <ForgeStateNotice
+            actions={[
+              { label: 'Retry', onClick: () => setSaveError(false), tone: 'primary' },
+              { label: 'Cancel', onClick: () => setSaveError(false), tone: 'secondary' },
+            ]}
+            message="Could not save mock changes. No real metadata or files were changed."
+            title="Save failed"
+            variant="error"
+          />
+        )}
         {entityType === 'track' && (
           <TrackTabContent
             activeTab={activeTab}

@@ -371,12 +371,12 @@ Layout constraints:
 
 ### Global
 
-- Loading: not implemented.
-- Disabled (buttons during apply): not implemented.
+- Loading/progress: implemented for Review, Settings, Library save and Enrich Mode deterministic mock flows.
+- Disabled: implemented for validation-gated Enrich buttons, inactive save buttons and planned/deferred Advanced controls.
 - Toast: implemented (ForgeToast in ForgePreview overlay).
 - Confirmation dialog: implemented as foundation (ForgeConfirmDialog in ForgePreview overlay).
 - Bottom sheet: implemented (ForgeBottomSheet used by settings and safety note).
-- Mock state controls: not implemented.
+- Mock state controls: implemented in Forge Settings > Advanced.
 
 ## Component Inventory
 
@@ -484,11 +484,12 @@ Layout constraints:
 
 ### Batch 6: State Coverage
 
-- Empty states for Home, Review, Library, Activity.
-- Loading states for summary, search, fix apply.
-- Error/ignored/fixed states for review items and groups.
-- All-clear state for Home.
-- Mock state controls inside Forge Settings for Studio QA.
+- Empty states for Home, Review, Library and Activity: implemented in Bloco 3.6.
+- Provider unavailable, missing credential, no-results, conflict-heavy, applied/ignored, warning, failed and offline mock states: implemented in Bloco 3.6.
+- Library missing artwork, incomplete metadata badges and metadata editor save failure: implemented in Bloco 3.6.
+- Settings unsaved, credential, provider and update state variants: implemented in Bloco 3.6.
+- Enrich Mode no-options, no-target, overwrite/protected warnings, dry-run no changes, dry-run failure, rewrite failure and result counts: implemented in Bloco 3.6.
+- Mock state controls inside Forge Settings > Advanced for Studio QA: implemented in Bloco 3.6.
 
 ### Batch 7: Completion Audit
 

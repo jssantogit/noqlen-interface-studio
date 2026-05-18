@@ -18,6 +18,7 @@ import {
   type ReviewItemStatus,
   type ReviewItemType,
 } from './forgeMockData'
+import { buildMockState, type ForgeMockScenario } from './forgeMockState'
 import { ForgeActivity } from './components/ForgeActivity'
 import { ForgeActivityDetailSheet } from './components/ForgeActivityDetailSheet'
 import { ForgeActivityFilterSheet } from './components/ForgeActivityFilterSheet'
@@ -247,6 +248,12 @@ export function ForgePreview() {
   const [activitySort, setActivitySort] = useState<'newest' | 'oldest'>('newest')
   const [activeActivitySheet, setActiveActivitySheet] = useState<'detail' | 'summary' | 'filter' | null>(null)
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null)
+
+  /* Mock state coverage */
+  const [mockState, setMockState] = useState(() => buildMockState('normal'))
+  const setMockScenario = useCallback((scenario: ForgeMockScenario) => {
+    setMockState(buildMockState(scenario))
+  }, [])
 
   // Lazy-init activity items from mock data on first render
   useMemo(() => {
@@ -689,10 +696,14 @@ export function ForgePreview() {
   const screens: Record<ForgeTab, ReactNode> = {
     home: (
       <ForgeHome
+        mockState={mockState}
         onFilterReview={handleFilterReview}
+        onNavigateToActivity={() => setActiveTab('activity')}
+        onNavigateToLibrary={() => setActiveTab('library')}
         onOpenSafetyNote={openSafetyNote}
         onOpenSettings={openSettings}
         onReviewNow={handleReviewNow}
+        onOpenEnrichMode={openEnrichMode}
       />
     ),
     review: (
@@ -700,6 +711,7 @@ export function ForgePreview() {
         filter={reviewFilter}
         metadataFilter={metadataFilter}
         itemStatuses={itemStatuses}
+        mockState={mockState}
         selectedIds={selectedIds}
         sessionFixed={sessionFixed}
         sessionIgnored={sessionIgnored}
@@ -707,7 +719,10 @@ export function ForgePreview() {
         showConfirm={showConfirm}
         showProgress={startProgress}
         onClearFilter={clearReviewFilter}
+        onNavigateToActivity={() => setActiveTab('activity')}
+        onNavigateToLibrary={() => setActiveTab('library')}
         onOpenEnrichMode={openEnrichMode}
+        onOpenSettings={openSettings}
         onOpenItemDetail={openItemDetail}
         onResetQueue={resetQueue}
         onSetFilter={setReviewFilter}
@@ -720,15 +735,18 @@ export function ForgePreview() {
     ),
     library: (
       <ForgeLibrary
+        mockState={mockState}
         onOpenAlbumEditor={openAlbumEditor}
         onOpenArtistEditor={openArtistEditor}
         onOpenTrackEditor={openTrackEditor}
+        onOpenSettings={openSettings}
       />
     ),
     activity: (
       <ForgeActivity
         activeFilter={activityFilter}
         items={activityItemsState}
+        mockState={mockState}
         onNavigateToReview={navigateActivityToReview}
         onOpenDetail={openActivityDetail}
         onOpenFilter={openActivityFilter}
@@ -757,8 +775,10 @@ export function ForgePreview() {
       {/* Overlay layers */}
       {activeSheet === 'settings' && (
         <ForgeSettingsSheet
+          mockState={mockState}
           onClose={closeSheet}
           onSave={handleSaveSettings}
+          onSetMockScenario={setMockScenario}
           showConfirm={showConfirm}
           showToast={showToast}
         />
@@ -770,6 +790,7 @@ export function ForgePreview() {
         <ForgeEnrichMode
           appendActivity={appendActivity}
           markSafeItemsApplied={markSafeItemsApplied}
+          mockState={mockState}
           onClose={closeEnrichMode}
           onOpenSettings={() => {
             closeEnrichMode()
@@ -906,6 +927,7 @@ export function ForgePreview() {
           entity={editorEntity}
           entityType={editorType}
           initialTab={editorInitialTab}
+          mockState={mockState}
           showConfirm={showConfirm}
           songs={librarySongs}
           onClose={closeEditor}

@@ -1,5 +1,13 @@
 # Delta
 
+Bloco 3.6 delta:
+
+- Added Forge mock state coverage with local `ForgeMockScenario` selection and derived `ForgeMockState` flags.
+- Added the Studio-only Preview States panel in Forge Settings > Advanced.
+- Added shared Forge state UI components for empty, warning, error and preview-state control patterns.
+- Covered alternate states across Forge Home, Review, Library, Activity, Settings and Enrich Mode without adding real backend, filesystem, provider, download, gallery, update or metadata behavior.
+- Documented the state matrix, cross-surface actions, mock-only safety result and deferred gaps in `docs/audits/forge-state-coverage.md`.
+
 Workflow retrofit delta:
 
 - Inspected latest `noqlen-playbook` outside this repository at commit `27d637f`.

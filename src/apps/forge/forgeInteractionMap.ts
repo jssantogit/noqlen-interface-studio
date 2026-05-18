@@ -63,7 +63,7 @@ export const forgeInteractions: InteractionEntry[] = [
   { id: 'GL-1', name: 'Toast', screen: 'global', status: 'implemented' },
   { id: 'GL-2', name: 'Confirm Dialog', screen: 'global', status: 'implemented' },
   { id: 'GL-3', name: 'Bottom Sheet', screen: 'global', status: 'implemented' },
-  { id: 'GL-4', name: 'Mock State Controls', screen: 'global', status: 'not-implemented' },
+  { id: 'GL-4', name: 'Mock State Controls', screen: 'global', status: 'implemented' },
 ]
 
 export const forgeInteractionBatches = [

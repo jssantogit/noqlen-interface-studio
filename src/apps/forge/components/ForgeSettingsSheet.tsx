@@ -25,6 +25,7 @@ import {
 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
+import type { ForgeMockState, ForgeMockScenario } from '../forgeMockState'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
 import {
   defaultForgeSettingsState,
@@ -34,7 +35,9 @@ import {
   type ForgeSettingsState,
 } from '../forgeSettingsCatalog'
 import { ForgeConfirmDialog } from './ForgeConfirmDialog'
+import { ForgeMockStatePanel } from './ForgeMockStatePanel'
 import { ForgeProgressSheet } from './ForgeProgressSheet'
+import { ForgeStateNotice } from './ForgeStateNotice'
 
 type SettingsCategory =
   | 'Metadata Providers'
@@ -98,6 +101,8 @@ export function ForgeSettingsSheet({
   onSave,
   showToast,
   showConfirm,
+  mockState,
+  onSetMockScenario,
 }: {
   onClose: () => void
   onSave: () => void
@@ -109,6 +114,8 @@ export function ForgeSettingsSheet({
     onConfirm: () => void
     tone?: 'amber' | 'danger'
   }) => void
+  mockState: ForgeMockState
+  onSetMockScenario: (scenario: ForgeMockScenario) => void
 }) {
   const [state, setState] = useState<ForgeSettingsState>({ ...defaultForgeSettingsState })
   const [activeCategory, setActiveCategory] = useState<SettingsCategory | null>(null)
@@ -201,7 +208,7 @@ export function ForgeSettingsSheet({
   }, [showToast])
 
   const handleClose = useCallback(() => {
-    if (unsaved) {
+    if (unsaved || mockState.settingsState === 'unsavedChanges') {
       showConfirm({
         title: 'Unsaved changes',
         description: 'You have unsaved settings. Discard changes?',
@@ -212,7 +219,7 @@ export function ForgeSettingsSheet({
     } else {
       onClose()
     }
-  }, [unsaved, onClose, showConfirm])
+  }, [mockState.settingsState, unsaved, onClose, showConfirm])
 
   const handleTestProvider = useCallback((providerName: string) => {
     const steps = providerTestSteps[providerName] || ['Preparing mock request', 'Simulating provider response']
@@ -361,6 +368,38 @@ export function ForgeSettingsSheet({
     return map
   }, [])
 
+  const effectiveState = useMemo<ForgeSettingsState>(() => {
+    if (mockState.settingsState === 'missingCredentials') {
+      return {
+        ...state,
+        credentials: { ...state.credentials, lastfm_api_key: '', discogs_token: '', acoustid_api_key: '' },
+      }
+    }
+    if (mockState.settingsState === 'providerDisabled') {
+      return {
+        ...state,
+        providers: state.providers.map((p) =>
+          p.id === 'discogs' || p.id === 'lastfm' ? { ...p, enabled: false } : p,
+        ),
+      }
+    }
+    if (mockState.settingsState === 'updateAvailable') {
+      return {
+        ...state,
+        updateStatus: 'available',
+        availableVersion: '0.1.1',
+        lastCheckedUpdate: 'Today',
+        updateReleaseNotes: ['Metadata provider improvements', 'Review settings', 'Bug fixes'],
+      }
+    }
+    if (mockState.settingsState === 'updateFailed') {
+      return { ...state, updateStatus: 'failed', lastCheckedUpdate: 'Today' }
+    }
+    return state
+  }, [mockState.settingsState, state])
+
+  const effectiveUnsaved = unsaved || mockState.settingsState === 'unsavedChanges'
+
   if (progressFlow) {
     return (
       <ForgeProgressSheet
@@ -463,7 +502,7 @@ export function ForgeSettingsSheet({
     return (
       <ForgeBottomSheet
         onClose={() => {
-          if (unsaved) {
+          if (unsaved || mockState.settingsState === 'unsavedChanges') {
             showConfirm({
               title: 'Unsaved changes',
               description: 'You have unsaved settings. Discard changes?',
@@ -479,10 +518,38 @@ export function ForgeSettingsSheet({
         title={activeCategory}
       >
         <div className="space-y-4 pb-2">
+          {mockState.settingsState === 'missingCredentials' && (
+            <ForgeStateNotice
+              message="Some providers need API credentials before they can be tested."
+              title="Credentials missing"
+              variant="warning"
+            />
+          )}
+          {mockState.settingsState === 'invalidCredential' && (
+            <ForgeStateNotice
+              message="One or more credentials failed local validation in this mock preview."
+              title="Invalid credential"
+              variant="error"
+            />
+          )}
+          {mockState.settingsState === 'providerUnavailable' && (
+            <ForgeStateNotice
+              message="Provider test returned a mock failure. No network request was sent."
+              title="Provider unavailable"
+              variant="warning"
+            />
+          )}
+          {mockState.settingsState === 'unsavedChanges' && (
+            <ForgeStateNotice
+              message="You have unsaved changes in this mock preview. Save or discard before leaving."
+              title="Unsaved changes"
+              variant="info"
+            />
+          )}
           {activeCategory === 'Metadata Providers' && (
             <MetadataProvidersPanel
-              providers={state.providers}
-              credentials={state.credentials}
+              providers={effectiveState.providers}
+              credentials={effectiveState.credentials}
               onToggle={toggleProvider}
               onOpenDetail={setProviderDetail}
               onTest={handleTestProvider}
@@ -490,8 +557,8 @@ export function ForgeSettingsSheet({
           )}
           {activeCategory === 'API Keys' && (
             <ApiKeysPanel
-              providers={state.providers}
-              credentials={state.credentials}
+              providers={effectiveState.providers}
+              credentials={effectiveState.credentials}
               onChange={updateCredential}
               onTest={handleTestProvider}
               onReset={resetCredentials}
@@ -500,8 +567,8 @@ export function ForgeSettingsSheet({
           )}
           {activeCategory === 'Tags & Metadata' && (
             <TagsMetadataPanel
-              settings={state.settings}
-              rewriteRules={state.rewriteRules}
+              settings={effectiveState.settings}
+              rewriteRules={effectiveState.rewriteRules}
               onChange={updateSetting}
               onUpdateRule={updateRule}
               onAddRule={addRule}
@@ -511,33 +578,33 @@ export function ForgeSettingsSheet({
           {activeCategory === 'Artwork' && (
             <GenericSettingsPanel
               category="Artwork"
-              settings={state.settings}
+              settings={effectiveState.settings}
               onChange={updateSetting}
             />
           )}
           {activeCategory === 'Lyrics' && (
             <GenericSettingsPanel
               category="Lyrics"
-              settings={state.settings}
+              settings={effectiveState.settings}
               onChange={updateSetting}
             />
           )}
           {activeCategory === 'Audio' && (
             <GenericSettingsPanel
               category="Audio"
-              settings={state.settings}
+              settings={effectiveState.settings}
               onChange={updateSetting}
             />
           )}
           {activeCategory === 'Safety & Review' && (
             <SafetyReviewPanel
-              settings={state.settings}
+              settings={effectiveState.settings}
               onChange={updateSetting}
             />
           )}
           {activeCategory === 'App Updates' && (
             <AppUpdatesPanel
-              state={state}
+              state={effectiveState}
               onChange={(patch) => setState((prev) => ({ ...prev, ...patch }))}
               onCheck={handleCheckUpdate}
               onDownload={handleDownloadUpdate}
@@ -546,15 +613,17 @@ export function ForgeSettingsSheet({
           )}
           {activeCategory === 'Advanced' && (
             <AdvancedPanel
-              settings={state.settings}
+              activeScenario={mockState.scenario}
+              settings={effectiveState.settings}
               onChange={updateSetting}
               onPlanned={(label) => setPlannedSheetOpen(label)}
+              onSetMockScenario={onSetMockScenario}
             />
           )}
           <button
             className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-xs font-medium text-slate-300 transition hover:bg-white/[0.06]"
             onClick={() => {
-              if (unsaved) {
+              if (unsaved || mockState.settingsState === 'unsavedChanges') {
                 showConfirm({
                   title: 'Unsaved changes',
                   description: 'You have unsaved settings. Discard changes?',
@@ -597,7 +666,7 @@ export function ForgeSettingsSheet({
               Reset
             </button>
           </div>
-          {unsaved && (
+          {effectiveUnsaved && (
             <p className="text-center text-[11px] text-orange-100/50">
               You have unsaved changes.
             </p>
@@ -630,12 +699,12 @@ export function ForgeSettingsSheet({
                     <div className="text-sm font-semibold text-white">{cat}</div>
                     <div className="text-[11px] text-orange-100/50">
                       {cat === 'Metadata Providers'
-                        ? `${state.providers.filter((p) => p.enabled).length} active`
+                        ? `${effectiveState.providers.filter((p) => p.enabled).length} active`
                         : cat === 'API Keys'
-                          ? `${Object.values(state.credentials).filter((v) => (v as string)?.length > 0).length} set`
+                          ? `${Object.values(effectiveState.credentials).filter((v) => (v as string)?.length > 0).length} set`
                           : cat === 'App Updates'
-                            ? state.lastCheckedUpdate
-                              ? `Last checked: ${state.lastCheckedUpdate}`
+                            ? effectiveState.lastCheckedUpdate
+                              ? `Last checked: ${effectiveState.lastCheckedUpdate}`
                               : 'Never checked'
                             : `${count} option${count !== 1 ? 's' : ''}`}
                     </div>
@@ -673,7 +742,7 @@ export function ForgeSettingsSheet({
             </button>
           </div>
 
-          {unsaved && (
+          {effectiveUnsaved && (
             <p className="text-center text-[11px] text-orange-100/50">
               You have unsaved changes.
             </p>
@@ -1193,10 +1262,14 @@ function AdvancedPanel({
   settings,
   onChange,
   onPlanned,
+  activeScenario,
+  onSetMockScenario,
 }: {
   settings: Record<string, unknown>
   onChange: (id: string, value: unknown) => void
   onPlanned: (label: string) => void
+  activeScenario: string
+  onSetMockScenario: (scenario: ForgeMockScenario) => void
 }) {
   const items = forgeSettingsCatalog.filter((s) => s.category === 'Advanced')
   const enrichIds = items.filter((s) => s.id.startsWith('advanced.enrich_')).map((s) => s.id)
@@ -1215,6 +1288,8 @@ function AdvancedPanel({
           ))}
         </div>
       </div>
+
+      <ForgeMockStatePanel activeScenario={activeScenario as ForgeMockScenario} onChange={onSetMockScenario} />
 
       <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5">
         <div className="mb-2.5 flex items-center gap-2 text-sm font-semibold text-white">

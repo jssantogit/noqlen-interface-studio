@@ -9,7 +9,10 @@ import {
   Tags,
 } from 'lucide-react'
 import type { ActivityItem, ActivityFilter } from '../forgeMockData'
+import type { ForgeMockState } from '../forgeMockState'
 import { ForgeCard, ForgeScreenHeader } from './ForgeCard'
+import { ForgeEmptyState } from './ForgeEmptyState'
+import { ForgeStateNotice } from './ForgeStateNotice'
 
 const iconMap = {
   CheckCircle2,
@@ -24,6 +27,7 @@ const iconMap = {
 export function ForgeActivity({
   items,
   activeFilter,
+  mockState,
   onOpenDetail,
   onOpenSummary,
   onNavigateToReview,
@@ -32,13 +36,14 @@ export function ForgeActivity({
 }: {
   items: ActivityItem[]
   activeFilter: ActivityFilter
+  mockState: ForgeMockState
   onOpenDetail: (item: ActivityItem) => void
   onOpenSummary: (item: ActivityItem) => void
   onNavigateToReview: (target: ActivityItem['relatedReviewTarget']) => void
   onOpenFilter: () => void
   onResetFilters: () => void
 }) {
-  const filtered = filterItems(items, activeFilter)
+  const filtered = filterItems(items, activeFilter, mockState)
   const todayItems = filtered.filter((item) => item.dateGroup === 'today')
   const yesterdayItems = filtered.filter((item) => item.dateGroup === 'yesterday')
 
@@ -76,21 +81,47 @@ export function ForgeActivity({
         </div>
       ) : null}
 
+      {mockState.activityState === 'failedItem' && (
+        <ForgeStateNotice
+          actions={[{ label: 'View Review', onClick: () => onNavigateToReview('all'), tone: 'primary' }]}
+          message="A recent mock operation failed. Check the failed activity card below for details."
+          title="Recent failure"
+          variant="error"
+        />
+      )}
+
+      {mockState.activityState === 'warningItem' && (
+        <ForgeStateNotice
+          actions={[{ label: 'View Review', onClick: () => onNavigateToReview('all'), tone: 'primary' }]}
+          message="Some protected fields were skipped during the last mock run."
+          title="Protected fields skipped"
+          variant="warning"
+        />
+      )}
+
       {!hasItems ? (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-white/[0.05]">
-            <Clock3 size={24} className="text-white/30" />
+        mockState.activityState === 'empty' ? (
+          <ForgeEmptyState
+            actions={[{ label: 'Open Review', onClick: () => onNavigateToReview('all'), tone: 'primary' }]}
+            title="No activity yet"
+            message="Applied changes and Enrich Mode runs will appear here."
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-white/[0.05]">
+              <Clock3 size={24} className="text-white/30" />
+            </div>
+            <p className="text-base font-medium text-white/80">No activity found</p>
+            <p className="mt-1 text-sm text-white/45">Try another filter or reset the activity view.</p>
+            <button
+              className="mt-5 rounded-xl bg-white/[0.07] px-5 py-2.5 text-sm font-medium text-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:bg-white/[0.11]"
+              onClick={onResetFilters}
+              type="button"
+            >
+              Reset filters
+            </button>
           </div>
-          <p className="text-base font-medium text-white/80">No activity found</p>
-          <p className="mt-1 text-sm text-white/45">Try another filter or reset the activity view.</p>
-          <button
-            className="mt-5 rounded-xl bg-white/[0.07] px-5 py-2.5 text-sm font-medium text-white/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition hover:bg-white/[0.11]"
-            onClick={onResetFilters}
-            type="button"
-          >
-            Reset filters
-          </button>
-        </div>
+        )
       ) : (
         <>
           {todayItems.length > 0 ? (
@@ -134,15 +165,65 @@ export function ForgeActivity({
   )
 }
 
-function filterItems(items: ActivityItem[], filter: ActivityFilter): ActivityItem[] {
-  if (filter === 'all') return items
-  if (filter === 'metadata') {
-    return items.filter((i) => ['tags', 'identity', 'release', 'audio'].includes(i.activityType))
+function filterItems(items: ActivityItem[], filter: ActivityFilter, mockState: ForgeMockState): ActivityItem[] {
+  let result = items
+  if (mockState.activityState === 'empty') return []
+  if (mockState.activityState === 'filterNoResults') return []
+
+  if (mockState.activityState === 'failedItem') {
+    const failedItem: ActivityItem = {
+      id: 'mock-failed',
+      title: 'Enrich Mode failed',
+      subtitle: 'Mock provider unreachable',
+      time: 'Just now',
+      icon: 'AlertTriangle',
+      accent: 'text-red-300',
+      bgAccent: 'bg-red-400/13',
+      summary: ['Tags', 'Covers'],
+      detail: 'Mock failure: provider returned an error. No files were changed.',
+      activityType: 'error',
+      dateGroup: 'today',
+      affectedCount: 0,
+      affectedItems: ['No items changed'],
+      changedFields: [],
+      provider: 'Forge mock',
+      status: 'failed',
+      relatedReviewTarget: 'all',
+    }
+    result = [failedItem, ...result]
   }
-  if (filter === 'warning') return items.filter((i) => i.status === 'warning')
-  if (filter === 'failed') return items.filter((i) => i.status === 'failed')
-  if (filter === 'completed') return items.filter((i) => i.status === 'completed')
-  return items.filter((i) => i.activityType === filter)
+
+  if (mockState.activityState === 'warningItem') {
+    const warningItem: ActivityItem = {
+      id: 'mock-warning',
+      title: 'Protected fields skipped',
+      subtitle: 'Identity rewrite skipped',
+      time: 'Just now',
+      icon: 'AlertTriangle',
+      accent: 'text-orange-300',
+      bgAccent: 'bg-orange-400/13',
+      summary: ['Album MBID', 'Artist MBID'],
+      detail: 'Protected identity fields were skipped during the mock Enrich Mode run. Review these items manually.',
+      activityType: 'identity',
+      dateGroup: 'today',
+      affectedCount: 2,
+      affectedItems: ['All Melody', 'Spaces'],
+      changedFields: ['Album MBID', 'Artist MBID'],
+      provider: 'MusicBrainz',
+      status: 'warning',
+      relatedReviewTarget: 'metadata/identity',
+    }
+    result = [warningItem, ...result]
+  }
+
+  if (filter === 'all') return result
+  if (filter === 'metadata') {
+    return result.filter((i) => ['tags', 'identity', 'release', 'audio'].includes(i.activityType))
+  }
+  if (filter === 'warning') return result.filter((i) => i.status === 'warning')
+  if (filter === 'failed') return result.filter((i) => i.status === 'failed')
+  if (filter === 'completed') return result.filter((i) => i.status === 'completed')
+  return result.filter((i) => i.activityType === filter)
 }
 
 function filterLabel(filter: ActivityFilter): string {
@@ -193,6 +274,12 @@ function ActivityCard({
           <span className="shrink-0 text-xs text-white/46">{item.time}</span>
         </div>
         <p className="mt-1 text-sm text-white/52">{item.subtitle}</p>
+        {item.status === 'failed' && (
+          <span className="mt-1.5 inline-block rounded-md bg-red-400/10 px-1.5 py-0.5 text-[10px] font-medium text-red-300">Failed</span>
+        )}
+        {item.status === 'warning' && (
+          <span className="mt-1.5 inline-block rounded-md bg-orange-400/10 px-1.5 py-0.5 text-[10px] font-medium text-orange-300">Warning</span>
+        )}
       </div>
       <div className="flex shrink-0 flex-col gap-2">
         <button

@@ -238,6 +238,17 @@ All data is static and fictional. All state changes are local React state only.
   - Updated docs: created `docs/audits/forge-enrich-mode-ux-refinement.md`; updated existing audits, interaction maps, screen contracts, visual targets and context files.
   - Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real metadata edits, no real file changes.
 
+- **Bloco 3.6 (Forge State Coverage):** implemented.
+  - Added `ForgeMockState` scenarios and the Studio-only Preview States control inside Forge Settings > Advanced.
+  - Added shared `ForgeEmptyState`, `ForgeStateNotice` and `ForgeMockStatePanel` components.
+  - Covered Home clean/provider/credential/offline/Enrich-complete states.
+  - Covered Review empty/all-applied/provider/credential/conflict/no-results/applied/ignored states.
+  - Covered Library empty/no-results/missing-artwork/incomplete-metadata/editor-save-failed states.
+  - Covered Activity empty/filter-no-results/failed/warning activity states.
+  - Covered Settings unsaved/credential/provider/update states.
+  - Covered Enrich no-options/no-target/overwrite/protected/dry-run/rewrite/result states.
+  - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, provider calls, storage persistence or config writes.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:
