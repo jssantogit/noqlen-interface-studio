@@ -473,3 +473,23 @@ Bloco 3.5.1 delta (Forge Settings — Metadata Providers, Tags & Updates):
 - Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network calls; no real credential storage; no real config writes.
 - Did not start Forge State Coverage, Aria or Flux.
 - Build, lint, tests pass.
+
+Bloco 3.5.2 delta (Forge Settings — Interaction Closure):
+
+- Audited every visible control in Forge Settings and closed all interaction gaps.
+- Added API Keys as a real category with dedicated `ApiKeysPanel`: 7 provider credential rows, password inputs, show/hide toggle, clear button, test button, save credentials and reset credentials actions.
+- Fixed provider test steps from generic 2-step to provider-specific mock progress per provider (MusicBrainz, Discogs, Last.fm, AcoustID, etc.).
+- Fixed secret input bug: removed `maskSecret()` from the `value` prop of `type="password"` inputs so typing does not corrupt values.
+- Added clear button for all secret fields.
+- Save settings now toasts "No settings changes to save" when there are no unsaved changes instead of always showing progress.
+- Added app update failed state for Nightly channel with deterministic mock cycle (available → up_to_date → failed) and a "Retry check" button.
+- Added expandable/collapsible release notes in update available card.
+- Added "Back to categories" button inside every category panel.
+- Added Save settings and Reset buttons inside every category panel.
+- Added credential status dot on provider cards (green when credential is set, dim when empty).
+- Deferred Enrich Mode controls: all `advanced.enrich_*` toggles are visually disabled, show a "Planned" badge, and open a planned sheet explaining they will be configured in the next Forge block.
+- Updated docs: `docs/audits/forge-settings-interaction-closure.md`, interaction maps, screen contracts, integration contracts, and context files.
+- Verified no dead controls remain in Settings.
+- Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real credential storage, no real config writes.
+- Did not implement Enrich Mode, Forge State Coverage, Aria or Flux.
+- Build, lint, tests pass.

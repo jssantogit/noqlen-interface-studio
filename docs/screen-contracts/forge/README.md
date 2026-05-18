@@ -194,6 +194,24 @@ All data is static and fictional. All state changes are local React state only.
   - Preserved mock-only boundaries: no real network, no real credential storage, no real config writes.
   - Did not start Forge State Coverage, Aria or Flux.
 
+- **Bloco 3.5.2 (Forge Settings — Interaction Closure):** implemented.
+  - Audited every visible control in Forge Settings and closed all interaction gaps.
+  - Added API Keys as a real category with dedicated panel: 7 provider credential rows, password inputs, show/hide, clear, test, save and reset.
+  - Fixed provider test steps from generic 2-step to provider-specific mock progress (MusicBrainz, Discogs, Last.fm, AcoustID, etc.).
+  - Fixed secret input bug: removed `maskSecret` from the `value` prop of `type="password"` inputs so typing does not corrupt values.
+  - Added clear button for all secret fields.
+  - Save settings now toasts "No settings changes to save" when there are no unsaved changes instead of always showing progress.
+  - Added app update failed state for Nightly channel with deterministic mock cycle (available → up_to_date → failed) and a "Retry check" button.
+  - Added expandable/collapsible release notes in update available card.
+  - Added "Back to categories" button inside every category panel.
+  - Added Save settings and Reset buttons inside every category panel.
+  - Added credential status dot on provider cards (green when set, dim when empty).
+  - Deferred Enrich Mode controls: all `advanced.enrich_*` toggles are visually disabled, show a "Planned" badge, and open a planned sheet explaining they will be configured in the next Forge block.
+  - Updated docs: interaction maps, screen contracts, integration contracts, audit doc, and context files.
+  - Verified no dead controls remain in Settings.
+  - Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader, no real network, no real credential storage, no real config writes.
+  - Did not implement Enrich Mode, Forge State Coverage, Aria or Flux.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:

@@ -47,21 +47,21 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### HN-5: Settings Gear
 
 - **Trigger:** tap the gear icon in the Home header.
-- **Resulting UI:** `ForgeSettingsSheet` opens as a bottom sheet overlay with 8 categories + API Keys.
+- **Resulting UI:** `ForgeSettingsSheet` opens as a bottom sheet overlay with 9 categories.
 - **Sections:**
-  - Metadata Providers: provider cards with enable toggle, configure sheet, test mock action.
+  - Metadata Providers: provider cards with enable toggle, configure sheet, test mock action, credential status dot.
+  - API Keys: masked credential fields per provider, show/hide, clear, test, save credentials, reset credentials.
   - Tags & Metadata: behavior toggles, conflict policy, confidence, rewrite rule editor.
   - Artwork: embed, folder cover, confidence, front preference, max size.
   - Lyrics: synced, local, sidecar, cache, conflict review, custom endpoint.
   - Audio: ReplayGain, backend, LUFS, key detection, advanced limits.
   - Safety & Review: dry-run, confirmation, conflict behavior, auto-apply.
-  - App Updates: version, channel, check/download/install mock flow.
-  - Advanced: database auto-scan, enrich presets, verbosity.
-  - API Keys: masked credential fields for 9 providers.
+  - App Updates: version, channel, check/download/install/retry mock flow, failed state, expandable release notes.
+  - Advanced: database auto-scan, verbosity/debug, deferred enrich presets with Planned badge.
 - **Mock state changes:** `activeSheet = 'settings'`; local `ForgeSettingsState` updated; unsaved changes tracked.
 - **Data used:** `forgeSettingsCatalog`, `defaultForgeSettingsState`.
 - **Forbidden real behavior:** no real app or OS settings read/write; no real credential storage; no real network calls.
-- **Status:** implemented (full settings with categories, provider cards, rewrite rules, API keys, app update mock flow, save/reset progress).
+- **Status:** implemented (full settings with categories, provider cards, API Keys panel, rewrite rules, app update mock flow with failed state, save/reset progress, unsaved-changes guard, deferred enrich presets).
 
 ### HN-6: Safety Note Card
 
@@ -466,16 +466,25 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### GL-6: Test Mock Provider
 
 - **Trigger:** tap Test mock on a provider card or provider detail sheet.
-- **Resulting UI:** `ForgeProgressSheet` with steps: Preparing mock request / Simulating provider response.
+- **Resulting UI:** `ForgeProgressSheet` with provider-specific mock steps:
+  - MusicBrainz: Preparing mock lookup → Checking identity rules → Mock provider reachable
+  - Discogs: Checking masked token → Testing catalog enrichment → Mock provider ready
+  - Last.fm: Checking tag source → Mock tags available
+  - AcoustID: Checking identifier settings → Fingerprint test skipped in Studio mock
 - **Mock state changes:** none.
 - **Data used:** provider name.
 - **Forbidden real behavior:** no real network call; no real API request.
 - **Status:** implemented.
 
-### GL-7: App Update Check / Download / Install
+### GL-7: App Update Check / Download / Install / Retry
 
-- **Trigger:** tap Check for updates, Download update, or Restart app in App Updates.
-- **Resulting UI:** `ForgeProgressSheet` with mock steps; result state updates (up_to_date / available / ready / idle).
+- **Trigger:** tap Check for updates, Download update, Restart app, or Retry check in App Updates.
+- **Resulting UI:** `ForgeProgressSheet` with mock steps; result state updates (up_to_date / available / ready / idle / failed).
+  - Stable channel → up_to_date
+  - Beta channel → available
+  - Nightly channel → cycles: available → up_to_date → failed (deterministic mock)
+- Failed state shows "Update check failed" card with "Retry check" button.
+- Update available card shows expandable/collapsible release notes.
 - **Mock state changes:** `updateStatus`, `lastCheckedUpdate`, `availableVersion`, `updateReleaseNotes`.
 - **Data used:** `updateChannel`.
 - **Forbidden real behavior:** no real network call; no real download; no real install.

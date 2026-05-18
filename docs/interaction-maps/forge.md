@@ -82,17 +82,17 @@ Layout constraints:
 - Trigger: gear icon in the Home header.
 - Result: opens Forge settings sheet.
 - Sections:
-  1. Metadata Providers (provider cards, toggles, configure, test mock)
-  2. Tags & Metadata (behavior, rewrite rules)
-  3. Artwork (embed, folder cover, sources)
-  4. Lyrics (synced, local, sidecar, cache)
-  5. Audio (ReplayGain, key detection, limits)
-  6. Safety & Review (dry-run, confirmation, conflict behavior)
-  7. App Updates (version, channel, check/download/install mock)
-  8. Advanced (database, enrich presets, verbosity)
-  - API Keys quick card (masked credential fields)
+  1. Metadata Providers (provider cards, toggles, configure, test mock, credential status dot)
+  2. API Keys (masked credential fields per provider, show/hide, clear, test, save, reset)
+  3. Tags & Metadata (behavior, rewrite rules)
+  4. Artwork (embed, folder cover, sources)
+  5. Lyrics (synced, local, sidecar, cache)
+  6. Audio (ReplayGain, key detection, limits)
+  7. Safety & Review (dry-run, confirmation, conflict behavior)
+  8. App Updates (version, channel, check/download/install/retry mock, expandable release notes)
+  9. Advanced (database, verbosity/debug, deferred enrich presets with Planned badge)
 - Safety: mock-only settings; no real app, server or library settings are read or changed.
-- Current status: implemented (opens ForgeSettingsSheet with full categories, provider cards, rewrite rules, API keys, app update mock flow, and save/reset with progress).
+- Current status: implemented (opens ForgeSettingsSheet with full categories, provider cards, API Keys panel, rewrite rules, app update mock flow including failed state, save/reset with progress, unsaved-changes guard, disabled enrich presets).
 
 ### Any Home Summary Card
 

@@ -43,6 +43,7 @@ export interface ForgeProviderConfig {
   hasCredential: boolean
   credentialLabel?: string
   credentialEnv?: string
+  credentialKey?: string
   actions: string[]
 }
 
@@ -87,6 +88,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       hasCredential: true,
       credentialLabel: 'Discogs token',
       credentialEnv: 'DISCOGS_TOKEN',
+      credentialKey: 'discogs_token',
       actions: ['Configure catalog fields', 'Test mock lookup'],
     },
     {
@@ -99,6 +101,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       hasCredential: true,
       credentialLabel: 'AcoustID API key',
       credentialEnv: 'ACOUSTID_API_KEY',
+      credentialKey: 'acoustid_api_key',
       actions: ['Configure matching', 'Test mock fingerprint'],
     },
     {
@@ -111,6 +114,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       hasCredential: true,
       credentialLabel: 'Deezer API key',
       credentialEnv: 'DEEZER_API_KEY',
+      credentialKey: 'deezer_api_key',
       actions: ['Enable fallback'],
     },
     {
@@ -133,6 +137,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       hasCredential: true,
       credentialLabel: 'Last.fm API key',
       credentialEnv: 'LASTFM_API_KEY',
+      credentialKey: 'lastfm_api_key',
       actions: ['Configure enrichment'],
     },
     {
@@ -155,6 +160,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       hasCredential: true,
       credentialLabel: 'Genius access token',
       credentialEnv: 'GENIUS_ACCESS_TOKEN',
+      credentialKey: 'genius_access_token',
       actions: ['Configure (advanced)'],
     },
     {
@@ -167,6 +173,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       hasCredential: true,
       credentialLabel: 'Musixmatch API key',
       credentialEnv: 'MUSIXMATCH_API_KEY',
+      credentialKey: 'musixmatch_api_key',
       actions: ['Configure (advanced)'],
     },
     {
@@ -179,6 +186,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       hasCredential: true,
       credentialLabel: 'AudD API key',
       credentialEnv: 'AUDD_API_KEY',
+      credentialKey: 'audd_api_key',
       actions: ['Configure (advanced)'],
     },
   ],

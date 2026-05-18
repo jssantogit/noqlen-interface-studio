@@ -1,6 +1,7 @@
 import {
   ArrowLeft,
   Check,
+  ChevronDown,
   ChevronRight,
   Clock,
   Download,
@@ -19,6 +20,7 @@ import {
   Trash2,
   Volume2,
   Wrench,
+  X,
   Zap,
 } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
@@ -36,6 +38,7 @@ import { ForgeProgressSheet } from './ForgeProgressSheet'
 
 type SettingsCategory =
   | 'Metadata Providers'
+  | 'API Keys'
   | 'Tags & Metadata'
   | 'Artwork'
   | 'Lyrics'
@@ -46,6 +49,7 @@ type SettingsCategory =
 
 const categoryOrder: SettingsCategory[] = [
   'Metadata Providers',
+  'API Keys',
   'Tags & Metadata',
   'Artwork',
   'Lyrics',
@@ -57,6 +61,7 @@ const categoryOrder: SettingsCategory[] = [
 
 const categoryIcons: Record<SettingsCategory, ReactNode> = {
   'Metadata Providers': <Globe size={16} />,
+  'API Keys': <KeyRound size={16} />,
   'Tags & Metadata': <TagsIcon />,
   Artwork: <Image size={16} />,
   Lyrics: <Languages size={16} />,
@@ -75,10 +80,17 @@ function TagsIcon() {
   )
 }
 
-function maskSecret(value: string): string {
-  if (!value) return ''
-  if (value.length <= 8) return '•'.repeat(value.length)
-  return `${value.slice(0, 4)}${'•'.repeat(value.length - 8)}${value.slice(-4)}`
+const providerTestSteps: Record<string, string[]> = {
+  MusicBrainz: ['Preparing mock lookup', 'Checking identity rules', 'Mock provider reachable'],
+  Discogs: ['Checking masked token', 'Testing catalog enrichment', 'Mock provider ready'],
+  AcoustID: ['Checking identifier settings', 'Fingerprint test skipped in Studio mock'],
+  Deezer: ['Checking fallback settings', 'Mock fallback provider ready'],
+  iTunes: ['Checking storefront settings', 'Mock storefront ready'],
+  'Last.fm': ['Checking tag source', 'Mock tags available'],
+  LRCLIB: ['Checking lyrics source', 'Mock lyrics provider ready'],
+  Genius: ['Checking advanced lyrics settings', 'Mock provider ready'],
+  Musixmatch: ['Checking translation settings', 'Mock provider ready'],
+  AudD: ['Checking audio recognition settings', 'Mock provider ready'],
 }
 
 export function ForgeSettingsSheet({
@@ -108,6 +120,8 @@ export function ForgeSettingsSheet({
   } | null>(null)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [unsaved, setUnsaved] = useState(false)
+  const [plannedSheetOpen, setPlannedSheetOpen] = useState<string | null>(null)
+  const [updateCheckCount, setUpdateCheckCount] = useState(0)
 
   const updateSetting = useCallback((id: string, value: unknown) => {
     setState((prev) => ({
@@ -157,6 +171,10 @@ export function ForgeSettingsSheet({
   }, [])
 
   const handleSave = useCallback(() => {
+    if (!unsaved) {
+      showToast('No settings changes to save', 'info')
+      return
+    }
     setProgressFlow({
       title: 'Saving settings',
       steps: ['Preparing settings', 'Applying mock preferences'],
@@ -166,7 +184,7 @@ export function ForgeSettingsSheet({
         onSave()
       },
     })
-  }, [onSave])
+  }, [unsaved, onSave, showToast])
 
   const handleReset = useCallback(() => {
     setShowResetConfirm(false)
@@ -197,9 +215,10 @@ export function ForgeSettingsSheet({
   }, [unsaved, onClose, showConfirm])
 
   const handleTestProvider = useCallback((providerName: string) => {
+    const steps = providerTestSteps[providerName] || ['Preparing mock request', 'Simulating provider response']
     setProgressFlow({
       title: `Testing ${providerName}`,
-      steps: ['Preparing mock request', 'Simulating provider response'],
+      steps,
       onComplete: () => {
         setProgressFlow(null)
         showToast(`${providerName} mock test completed`, 'success')
@@ -208,14 +227,51 @@ export function ForgeSettingsSheet({
   }, [showToast])
 
   const handleCheckUpdate = useCallback(() => {
+    setUpdateCheckCount((c) => c + 1)
     setState((prev) => ({ ...prev, updateStatus: 'checking' }))
     setProgressFlow({
       title: 'Checking for updates',
       steps: ['Checking update channel', 'Comparing versions', 'Verifying mock package'],
       onComplete: () => {
         setProgressFlow(null)
-        const hasUpdate = state.updateChannel !== 'stable'
-        if (hasUpdate) {
+        const count = updateCheckCount + 1
+        if (state.updateChannel === 'stable') {
+          setState((prev) => ({
+            ...prev,
+            updateStatus: 'up_to_date',
+            lastCheckedUpdate: 'Today',
+          }))
+          showToast('Forge is up to date', 'success')
+        } else if (state.updateChannel === 'nightly') {
+          if (count % 3 === 0) {
+            setState((prev) => ({
+              ...prev,
+              updateStatus: 'available',
+              availableVersion: '0.1.1',
+              lastCheckedUpdate: 'Today',
+              updateReleaseNotes: [
+                'Metadata provider improvements',
+                'Review settings',
+                'Bug fixes',
+              ],
+            }))
+            showToast('Update available in mock preview', 'info')
+          } else if (count % 3 === 1) {
+            setState((prev) => ({
+              ...prev,
+              updateStatus: 'up_to_date',
+              lastCheckedUpdate: 'Today',
+            }))
+            showToast('Forge is up to date', 'success')
+          } else {
+            setState((prev) => ({
+              ...prev,
+              updateStatus: 'failed',
+              lastCheckedUpdate: 'Today',
+            }))
+            showToast('Update check failed in mock preview', 'warning')
+          }
+        } else {
           setState((prev) => ({
             ...prev,
             updateStatus: 'available',
@@ -228,17 +284,10 @@ export function ForgeSettingsSheet({
             ],
           }))
           showToast('Update available in mock preview', 'info')
-        } else {
-          setState((prev) => ({
-            ...prev,
-            updateStatus: 'up_to_date',
-            lastCheckedUpdate: 'Today',
-          }))
-          showToast('Forge is up to date', 'success')
         }
       },
     })
-  }, [state.updateChannel, showToast])
+  }, [state.updateChannel, updateCheckCount, showToast])
 
   const handleDownloadUpdate = useCallback(() => {
     setState((prev) => ({ ...prev, updateStatus: 'downloading' }))
@@ -270,6 +319,39 @@ export function ForgeSettingsSheet({
     })
   }, [showToast])
 
+  const updateCredential = useCallback((key: string, value: string) => {
+    setState((prev) => ({
+      ...prev,
+      credentials: { ...prev.credentials, [key]: value },
+    }))
+    setUnsaved(true)
+  }, [])
+
+  const resetCredentials = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      credentials: { ...defaultForgeSettingsState.credentials },
+    }))
+    setUnsaved(true)
+    showToast('Credentials reset to defaults', 'info')
+  }, [showToast])
+
+  const saveCredentials = useCallback(() => {
+    if (!unsaved) {
+      showToast('No credential changes to save', 'info')
+      return
+    }
+    setProgressFlow({
+      title: 'Saving credentials',
+      steps: ['Preparing credential update', 'Applying mock preferences'],
+      onComplete: () => {
+        setProgressFlow(null)
+        setUnsaved(false)
+        showToast('Credentials saved in mock preview', 'success')
+      },
+    })
+  }, [unsaved, showToast])
+
   const categoriesWithSettings = useMemo(() => {
     const map: Record<string, typeof forgeSettingsCatalog> = {}
     forgeSettingsCatalog.forEach((s) => {
@@ -290,6 +372,29 @@ export function ForgeSettingsSheet({
         }}
         onClose={() => setProgressFlow(null)}
       />
+    )
+  }
+
+  if (plannedSheetOpen) {
+    return (
+      <ForgeBottomSheet
+        onClose={() => setPlannedSheetOpen(null)}
+        subtitle="This control will be configured in the next Forge block."
+        title="Planned for Enrich Mode"
+      >
+        <div className="space-y-4">
+          <p className="text-xs leading-5 text-orange-100/60">
+            {plannedSheetOpen}
+          </p>
+          <button
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] transition hover:bg-[#efad6c]"
+            onClick={() => setPlannedSheetOpen(null)}
+            type="button"
+          >
+            Got it
+          </button>
+        </div>
+      </ForgeBottomSheet>
     )
   }
 
@@ -357,17 +462,40 @@ export function ForgeSettingsSheet({
   if (activeCategory) {
     return (
       <ForgeBottomSheet
-        onClose={() => setActiveCategory(null)}
-        subtitle="Tap a setting to change its value."
+        onClose={() => {
+          if (unsaved) {
+            showConfirm({
+              title: 'Unsaved changes',
+              description: 'You have unsaved settings. Discard changes?',
+              confirmLabel: 'Discard',
+              onConfirm: () => setActiveCategory(null),
+              tone: 'amber',
+            })
+          } else {
+            setActiveCategory(null)
+          }
+        }}
+        subtitle={activeCategory === 'API Keys' ? 'Manage mock credentials for metadata providers.' : 'Tap a setting to change its value.'}
         title={activeCategory}
       >
         <div className="space-y-4 pb-2">
           {activeCategory === 'Metadata Providers' && (
             <MetadataProvidersPanel
               providers={state.providers}
+              credentials={state.credentials}
               onToggle={toggleProvider}
               onOpenDetail={setProviderDetail}
               onTest={handleTestProvider}
+            />
+          )}
+          {activeCategory === 'API Keys' && (
+            <ApiKeysPanel
+              providers={state.providers}
+              credentials={state.credentials}
+              onChange={updateCredential}
+              onTest={handleTestProvider}
+              onReset={resetCredentials}
+              onSave={saveCredentials}
             />
           )}
           {activeCategory === 'Tags & Metadata' && (
@@ -417,21 +545,62 @@ export function ForgeSettingsSheet({
             />
           )}
           {activeCategory === 'Advanced' && (
-            <GenericSettingsPanel
-              category="Advanced"
+            <AdvancedPanel
               settings={state.settings}
               onChange={updateSetting}
+              onPlanned={(label) => setPlannedSheetOpen(label)}
             />
           )}
-          {activeCategory !== 'App Updates' && (
+          <button
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-xs font-medium text-slate-300 transition hover:bg-white/[0.06]"
+            onClick={() => {
+              if (unsaved) {
+                showConfirm({
+                  title: 'Unsaved changes',
+                  description: 'You have unsaved settings. Discard changes?',
+                  confirmLabel: 'Discard',
+                  onConfirm: () => setActiveCategory(null),
+                  tone: 'amber',
+                })
+              } else {
+                setActiveCategory(null)
+              }
+            }}
+            type="button"
+          >
+            <ArrowLeft size={14} />
+            Back to categories
+          </button>
+          <div className="flex gap-2 pt-1">
             <button
-              className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-xs font-medium text-slate-300 transition hover:bg-white/[0.06]"
-              onClick={() => setActiveCategory(null)}
+              className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]"
+              onClick={handleSave}
               type="button"
             >
-              <ArrowLeft size={14} />
-              Back to categories
+              <Save size={15} />
+              Save settings
             </button>
+            <button
+              className="flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-sm font-medium text-slate-300 transition hover:bg-white/[0.06]"
+              onClick={() =>
+                showConfirm({
+                  title: 'Reset settings?',
+                  description: 'This will restore all settings to their default values.',
+                  confirmLabel: 'Reset',
+                  onConfirm: () => setShowResetConfirm(true),
+                  tone: 'danger',
+                })
+              }
+              type="button"
+            >
+              <RotateCcw size={15} />
+              Reset
+            </button>
+          </div>
+          {unsaved && (
+            <p className="text-center text-[11px] text-orange-100/50">
+              You have unsaved changes.
+            </p>
           )}
         </div>
       </ForgeBottomSheet>
@@ -462,11 +631,13 @@ export function ForgeSettingsSheet({
                     <div className="text-[11px] text-orange-100/50">
                       {cat === 'Metadata Providers'
                         ? `${state.providers.filter((p) => p.enabled).length} active`
-                        : cat === 'App Updates'
-                          ? state.lastCheckedUpdate
-                            ? `Last checked: ${state.lastCheckedUpdate}`
-                            : 'Never checked'
-                          : `${count} option${count !== 1 ? 's' : ''}`}
+                        : cat === 'API Keys'
+                          ? `${Object.values(state.credentials).filter((v) => (v as string)?.length > 0).length} set`
+                          : cat === 'App Updates'
+                            ? state.lastCheckedUpdate
+                              ? `Last checked: ${state.lastCheckedUpdate}`
+                              : 'Never checked'
+                            : `${count} option${count !== 1 ? 's' : ''}`}
                     </div>
                   </div>
                 </div>
@@ -474,24 +645,6 @@ export function ForgeSettingsSheet({
               </button>
             )
           })}
-
-          {/* API Keys quick card */}
-          <button
-            className="flex w-full items-center justify-between gap-3 rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5 text-left transition hover:bg-white/[0.055]"
-            onClick={() => setActiveCategory('Metadata Providers')}
-            type="button"
-          >
-            <div className="flex items-center gap-2.5">
-              <KeyRound className="text-orange-300" size={16} />
-              <div>
-                <div className="text-sm font-semibold text-white">API Keys</div>
-                <div className="text-[11px] text-orange-100/50">
-                  Manage mock credentials
-                </div>
-              </div>
-            </div>
-            <ChevronRight className="shrink-0 text-orange-100/40" size={16} />
-          </button>
 
           <div className="flex gap-2 pt-1">
             <button
@@ -544,75 +697,211 @@ export function ForgeSettingsSheet({
 
 function MetadataProvidersPanel({
   providers,
+  credentials,
   onToggle,
   onOpenDetail,
   onTest,
 }: {
   providers: ForgeProviderConfig[]
+  credentials: Record<string, string>
   onToggle: (id: string) => void
   onOpenDetail: (p: ForgeProviderConfig) => void
   onTest: (name: string) => void
 }) {
   return (
     <div className="space-y-3">
-      {providers.map((provider) => (
-        <div
-          className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5"
-          key={provider.id}
-        >
-          <div className="mb-2.5 flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <div className="text-sm font-semibold text-white">{provider.name}</div>
-              <div className="text-[11px] text-orange-100/50">{provider.role}</div>
-            </div>
-            <button
-              aria-pressed={provider.enabled}
-              className={`flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition ${
-                provider.enabled ? 'bg-[#e7a35f]' : 'bg-white/14'
-              }`}
-              onClick={() => onToggle(provider.id)}
-              type="button"
-            >
-              <span
-                className={`h-4 w-4 rounded-full bg-[#071014] transition ${
-                  provider.enabled ? 'translate-x-4' : 'translate-x-0'
+      {providers.map((provider) => {
+        const credSet = provider.credentialKey && (credentials[provider.credentialKey] as string)?.length > 0
+        return (
+          <div
+            className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5"
+            key={provider.id}
+          >
+            <div className="mb-2.5 flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <div className="text-sm font-semibold text-white">{provider.name}</div>
+                  {provider.hasCredential && (
+                    <span
+                      className={`inline-block h-1.5 w-1.5 rounded-full ${credSet ? 'bg-emerald-400' : 'bg-orange-100/30'}`}
+                      title={credSet ? 'Credential set' : 'Credential empty'}
+                    />
+                  )}
+                </div>
+                <div className="text-[11px] text-orange-100/50">{provider.role}</div>
+              </div>
+              <button
+                aria-pressed={provider.enabled}
+                className={`flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition ${
+                  provider.enabled ? 'bg-[#e7a35f]' : 'bg-white/14'
                 }`}
-              />
-            </button>
-          </div>
-          <div className="mb-2.5 flex flex-wrap gap-1">
-            {provider.fields.slice(0, 4).map((f) => (
-              <span
-                className="rounded bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-slate-200/70"
-                key={f}
+                onClick={() => onToggle(provider.id)}
+                type="button"
               >
-                {f}
-              </span>
-            ))}
-            {provider.fields.length > 4 && (
-              <span className="rounded bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-slate-200/50">
-                +{provider.fields.length - 4}
-              </span>
-            )}
+                <span
+                  className={`h-4 w-4 rounded-full bg-[#071014] transition ${
+                    provider.enabled ? 'translate-x-4' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+            <div className="mb-2.5 flex flex-wrap gap-1">
+              {provider.fields.slice(0, 4).map((f) => (
+                <span
+                  className="rounded bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-slate-200/70"
+                  key={f}
+                >
+                  {f}
+                </span>
+              ))}
+              {provider.fields.length > 4 && (
+                <span className="rounded bg-white/[0.06] px-1.5 py-0.5 text-[10px] text-slate-200/50">
+                  +{provider.fields.length - 4}
+                </span>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <button
+                className="flex h-8 flex-1 items-center justify-center rounded-lg bg-white/[0.05] text-[11px] font-medium text-slate-300 transition hover:bg-white/[0.08]"
+                onClick={() => onOpenDetail(provider)}
+                type="button"
+              >
+                Configure
+              </button>
+              <button
+                className="flex h-8 flex-1 items-center justify-center rounded-lg bg-white/[0.05] text-[11px] font-medium text-slate-300 transition hover:bg-white/[0.08]"
+                onClick={() => onTest(provider.name)}
+                type="button"
+              >
+                Test mock
+              </button>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <button
-              className="flex h-8 flex-1 items-center justify-center rounded-lg bg-white/[0.05] text-[11px] font-medium text-slate-300 transition hover:bg-white/[0.08]"
-              onClick={() => onOpenDetail(provider)}
-              type="button"
-            >
-              Configure
-            </button>
-            <button
-              className="flex h-8 flex-1 items-center justify-center rounded-lg bg-white/[0.05] text-[11px] font-medium text-slate-300 transition hover:bg-white/[0.08]"
-              onClick={() => onTest(provider.name)}
-              type="button"
-            >
-              Test mock
-            </button>
+        )
+      })}
+    </div>
+  )
+}
+
+function ApiKeysPanel({
+  providers,
+  credentials,
+  onChange,
+  onTest,
+  onReset,
+  onSave,
+}: {
+  providers: ForgeProviderConfig[]
+  credentials: Record<string, string>
+  onChange: (key: string, value: string) => void
+  onTest: (name: string) => void
+  onReset: () => void
+  onSave: () => void
+}) {
+  const credProviders = providers.filter((p) => p.hasCredential && p.credentialKey)
+
+  return (
+    <div className="space-y-3">
+      <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5">
+        <div className="mb-2.5 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 text-sm font-semibold text-white">
+            <KeyRound className="text-orange-300" size={16} />
+            Provider credentials
           </div>
+          <span className="rounded-md bg-white/[0.06] px-2 py-0.5 text-[10px] text-slate-200/70">
+            Mock-only
+          </span>
         </div>
-      ))}
+        <p className="mb-3 text-[11px] leading-4 text-orange-100/50">
+          Credentials are stored in local preview state only. No real secrets are persisted.
+        </p>
+        <div className="space-y-2">
+          {credProviders.map((provider) => (
+            <div
+              className="flex items-center gap-2 rounded-xl bg-white/[0.03] px-2.5 py-2"
+              key={provider.id}
+            >
+              <div className="min-w-0 flex-1">
+                <div className="text-[11px] font-medium text-slate-200/90">{provider.credentialLabel}</div>
+                {provider.credentialEnv && (
+                  <div className="text-[10px] text-orange-100/40">{provider.credentialEnv}</div>
+                )}
+              </div>
+              <CredentialInput
+                value={credentials[provider.credentialKey!] as string}
+                onChange={(val) => onChange(provider.credentialKey!, val)}
+                onTest={() => onTest(provider.name)}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <button
+          className="flex h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] transition hover:bg-[#efad6c]"
+          onClick={onSave}
+          type="button"
+        >
+          <Save size={14} />
+          Save credentials
+        </button>
+        <button
+          className="flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-sm font-medium text-slate-300 transition hover:bg-white/[0.06]"
+          onClick={onReset}
+          type="button"
+        >
+          <RotateCcw size={14} />
+          Reset
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function CredentialInput({
+  value,
+  onChange,
+  onTest,
+}: {
+  value: string
+  onChange: (val: string) => void
+  onTest: () => void
+}) {
+  const [visible, setVisible] = useState(false)
+  const hasValue = (value as string)?.length > 0
+
+  return (
+    <div className="flex min-w-0 flex-1 items-center gap-1.5">
+      <input
+        className="h-7 min-w-0 flex-1 rounded-md bg-white/[0.06] px-2 text-[11px] text-slate-200 outline-none placeholder:text-slate-500"
+        placeholder="••••••••"
+        type={visible ? 'text' : 'password'}
+        value={value ?? ''}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      <button
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-slate-400 transition hover:bg-white/[0.06] hover:text-slate-200"
+        onClick={() => setVisible((v) => !v)}
+        type="button"
+      >
+        {visible ? <EyeOff size={13} /> : <Eye size={13} />}
+      </button>
+      {hasValue && (
+        <button
+          className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-slate-400 transition hover:bg-white/[0.06] hover:text-red-300"
+          onClick={() => onChange('')}
+          type="button"
+        >
+          <X size={13} />
+        </button>
+      )}
+      <button
+        className="flex h-7 shrink-0 items-center rounded-md bg-white/[0.05] px-2 text-[10px] font-medium text-slate-300 transition hover:bg-white/[0.08]"
+        onClick={onTest}
+        type="button"
+      >
+        Test
+      </button>
     </div>
   )
 }
@@ -757,6 +1046,8 @@ function AppUpdatesPanel({
   onDownload: () => void
   onInstall: () => void
 }) {
+  const [notesExpanded, setNotesExpanded] = useState(true)
+
   return (
     <div className="space-y-3">
       <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5">
@@ -814,14 +1105,27 @@ function AppUpdatesPanel({
           <div className="mb-2 text-xs text-orange-100/70">
             New version: <span className="text-slate-200">{state.availableVersion}</span>
           </div>
-          <div className="mb-3 space-y-1">
-            {state.updateReleaseNotes.map((note, i) => (
-              <div className="flex items-start gap-2 text-xs text-orange-100/60" key={i}>
-                <Check className="mt-0.5 shrink-0 text-emerald-400/70" size={12} />
-                {note}
-              </div>
-            ))}
-          </div>
+          <button
+            className="mb-2 flex w-full items-center justify-between text-xs text-orange-100/60"
+            onClick={() => setNotesExpanded((v) => !v)}
+            type="button"
+          >
+            <span>Release notes</span>
+            <ChevronDown
+              className={`shrink-0 text-orange-100/40 transition ${notesExpanded ? 'rotate-180' : ''}`}
+              size={14}
+            />
+          </button>
+          {notesExpanded && (
+            <div className="mb-3 space-y-1">
+              {state.updateReleaseNotes.map((note, i) => (
+                <div className="flex items-start gap-2 text-xs text-orange-100/60" key={i}>
+                  <Check className="mt-0.5 shrink-0 text-emerald-400/70" size={12} />
+                  {note}
+                </div>
+              ))}
+            </div>
+          )}
           <button
             className="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] transition hover:bg-[#efad6c]"
             onClick={onDownload}
@@ -829,6 +1133,25 @@ function AppUpdatesPanel({
           >
             <Download size={15} />
             Download update
+          </button>
+        </div>
+      )}
+
+      {state.updateStatus === 'failed' && (
+        <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5">
+          <div className="mb-2 text-sm font-semibold text-red-300">
+            Update check failed
+          </div>
+          <p className="mb-3 text-xs text-orange-100/60">
+            Mock failure state. No network error occurred.
+          </p>
+          <button
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-sm font-medium text-slate-300 transition hover:bg-white/[0.06]"
+            onClick={onCheck}
+            type="button"
+          >
+            <RotateCcw size={15} />
+            Retry check
           </button>
         </div>
       )}
@@ -862,6 +1185,98 @@ function AppUpdatesPanel({
           Check for updates
         </button>
       )}
+    </div>
+  )
+}
+
+function AdvancedPanel({
+  settings,
+  onChange,
+  onPlanned,
+}: {
+  settings: Record<string, unknown>
+  onChange: (id: string, value: unknown) => void
+  onPlanned: (label: string) => void
+}) {
+  const items = forgeSettingsCatalog.filter((s) => s.category === 'Advanced')
+  const enrichIds = items.filter((s) => s.id.startsWith('advanced.enrich_')).map((s) => s.id)
+  const otherIds = items.filter((s) => !s.id.startsWith('advanced.enrich_')).map((s) => s.id)
+
+  return (
+    <div className="space-y-3">
+      <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5">
+        <div className="mb-2.5 flex items-center gap-2 text-sm font-semibold text-white">
+          <Wrench className="text-orange-300" size={16} />
+          Advanced
+        </div>
+        <div className="space-y-1">
+          {otherIds.map((id) => (
+            <SettingRow key={id} settingId={id} value={settings[id]} onChange={onChange} />
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5">
+        <div className="mb-2.5 flex items-center gap-2 text-sm font-semibold text-white">
+          <Sparkles className="text-orange-300" size={16} />
+          Enrich presets
+        </div>
+        <p className="mb-2 text-[11px] text-orange-100/50">
+          Planned for the next Forge block. Controls are disabled in preview.
+        </p>
+        <div className="space-y-1">
+          {enrichIds.map((id) => (
+            <DeferredSettingRow
+              key={id}
+              settingId={id}
+              value={settings[id]}
+              onClick={() => onPlanned(forgeSettingsCatalog.find((s) => s.id === id)?.appLabel || id)}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DeferredSettingRow({
+  settingId,
+  value,
+  onClick,
+}: {
+  settingId: string
+  value: unknown
+  onClick: () => void
+}) {
+  const def = forgeSettingsCatalog.find((s) => s.id === settingId)
+  if (!def) return null
+  const enabled = Boolean(value ?? def.defaultValue)
+
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-xl px-2 py-2.5 opacity-50">
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-slate-200/60">{def.appLabel}</span>
+          <span className="rounded bg-orange-300/10 px-1.5 py-0.5 text-[9px] font-semibold text-orange-300/80">
+            Planned
+          </span>
+        </div>
+        {def.notes && (
+          <div className="mt-0.5 text-[10px] text-orange-100/30">{def.notes}</div>
+        )}
+      </div>
+      <button
+        aria-pressed={enabled}
+        className="flex h-5 w-9 shrink-0 items-center rounded-full bg-white/14 p-0.5 cursor-not-allowed"
+        onClick={onClick}
+        type="button"
+      >
+        <span
+          className={`h-4 w-4 rounded-full bg-[#071014] transition ${
+            enabled ? 'translate-x-4 opacity-40' : 'translate-x-0 opacity-40'
+          }`}
+        />
+      </button>
     </div>
   )
 }
@@ -976,23 +1391,33 @@ function Control({
 
   if (def.type === 'text' || def.type === 'secret') {
     const isSecret = def.type === 'secret'
-    const displayValue = isSecret && !visible ? maskSecret(String(value)) : String(value)
     return (
       <div className="flex items-center gap-1.5">
         <input
           className="h-7 min-w-0 flex-1 rounded-md bg-white/[0.06] px-2 text-[11px] text-slate-200 outline-none"
           type={isSecret && !visible ? 'password' : 'text'}
-          value={displayValue}
+          value={String(value ?? '')}
           onChange={(e) => onChange(e.target.value)}
         />
         {isSecret && (
-          <button
-            className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-slate-400 transition hover:bg-white/[0.06] hover:text-slate-200"
-            onClick={() => setVisible((v) => !v)}
-            type="button"
-          >
-            {visible ? <EyeOff size={13} /> : <Eye size={13} />}
-          </button>
+          <>
+            <button
+              className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-slate-400 transition hover:bg-white/[0.06] hover:text-slate-200"
+              onClick={() => setVisible((v) => !v)}
+              type="button"
+            >
+              {visible ? <EyeOff size={13} /> : <Eye size={13} />}
+            </button>
+            {String(value ?? '').length > 0 && (
+              <button
+                className="grid h-7 w-7 shrink-0 place-items-center rounded-md text-slate-400 transition hover:bg-white/[0.06] hover:text-red-300"
+                onClick={() => onChange('')}
+                type="button"
+              >
+                <X size={13} />
+              </button>
+            )}
+          </>
         )}
       </div>
     )

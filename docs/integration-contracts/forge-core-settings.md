@@ -162,10 +162,15 @@ App Updates are fully mock-only. No real network call is made. The flow is:
 
 1. **Check for updates** → deterministic mock progress → compares `updateChannel`:
    - `stable` → returns "up to date"
-   - `beta` / `nightly` → returns "update available" with mock version `0.1.1`
+   - `beta` → returns "update available" with mock version `0.1.1`
+   - `nightly` → cycles deterministically:
+     - check 1 → "update available"
+     - check 2 → "up to date"
+     - check 3 → "failed" (mock failure state)
 2. **Download update** → mock progress → state becomes `ready`
 3. **Install / Restart** → mock progress → state resets to `idle`
-4. Copy: "Studio preview only. No update was downloaded or installed."
+4. **Retry check** → appears when update check returns failed; re-runs the mock check cycle.
+5. Copy: "Studio preview only. No update was downloaded or installed."
 
 ## Future Real App Rules
 

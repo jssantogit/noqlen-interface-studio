@@ -19,7 +19,7 @@ Current app state:
 - Anchor has a documented interaction map and implementation contract for all visible mock-only actions, secondary surfaces and required state variants.
 - Anchor has implemented Home, Servers, Library, dedicated Navidrome Settings, Activity mock interactions and a complete first-run setup/onboarding flow with UX fixes for folder selection and advanced settings; visible interaction gaps and mock state coverage are complete, and final Anchor completion audit remains the next Anchor block.
 - Flux still renders a static visual placeholder inside the phone.
-- Forge now has a legacy-informed mock preview with Home, Review, Library and Activity sections inside the phone, plus a full Settings surface with Metadata Providers, Tags & Metadata, Artwork, Lyrics, Audio, Safety & Review, App Updates and Advanced categories.
+- Forge now has a legacy-informed mock preview with Home, Review, Library and Activity sections inside the phone, plus a full Settings surface with Metadata Providers, API Keys, Tags & Metadata, Artwork, Lyrics, Audio, Safety & Review, App Updates and Advanced categories. All visible Settings controls are wired: no dead toggles, buttons, inputs or selects remain.
 - Aria now has a richer mock player, queue and library preview informed by the legacy planned tab taxonomy.
 - Visual reference images and visual target contracts for Anchor, Forge, Aria and Flux are now part of the project source of truth for app fidelity.
 - Mock-only boundary remains active and visually subtle.
