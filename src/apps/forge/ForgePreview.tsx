@@ -2,11 +2,17 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import {
+  albumData,
+  artistData,
   forgeAllReviewItems,
   reviewGroups,
+  songData,
   type ForgeMetadataFilter,
   type ForgeReviewQueueItem,
   type ForgeReviewSection,
+  type MockAlbum,
+  type MockArtist,
+  type MockSong,
   type ReviewItemStatus,
   type ReviewItemType,
 } from './forgeMockData'
@@ -18,6 +24,7 @@ import { ForgeGenrePickerSheet } from './components/ForgeGenrePickerSheet'
 import { ForgeHome } from './components/ForgeHome'
 import { ForgeLibrary } from './components/ForgeLibrary'
 import { ForgeLyricsDetailSheet } from './components/ForgeLyricsDetailSheet'
+import { ForgeMetadataEditor, type EditorEntityType } from './components/ForgeMetadataEditor'
 import { ForgeMetadataDiffSheet } from './components/ForgeMetadataDiffSheet'
 import { ForgeProgressSheet, type ForgeProgressFlow } from './components/ForgeProgressSheet'
 import { ForgeReview } from './components/ForgeReview'
@@ -133,6 +140,17 @@ export function ForgePreview() {
     tone?: 'amber' | 'danger'
   } | null>(null)
   const [progressFlow, setProgressFlow] = useState<ForgeProgressFlow | null>(null)
+
+  /* Mutable mock library data */
+  const [libraryArtists, setLibraryArtists] = useState<MockArtist[]>([...artistData])
+  const [libraryAlbums, setLibraryAlbums] = useState<MockAlbum[]>([...albumData])
+  const [librarySongs, setLibrarySongs] = useState<MockSong[]>([...songData])
+
+  /* Metadata editor state */
+  const [editorOpen, setEditorOpen] = useState(false)
+  const [editorType, setEditorType] = useState<EditorEntityType>('track')
+  const [editorEntityId, setEditorEntityId] = useState<string | null>(null)
+  const [editorInitialTab, setEditorInitialTab] = useState<string | undefined>(undefined)
 
   const showToast = useCallback((message: string, tone: 'success' | 'info' | 'warning' = 'success') => {
     setToast({ message, tone })
@@ -382,6 +400,61 @@ export function ForgePreview() {
     setActiveDetailSheet('metadata')
   }, [])
 
+  /* Library metadata editor callbacks */
+  const openArtistEditor = useCallback((artist: MockArtist, initialTab?: string) => {
+    setEditorType('artist')
+    setEditorEntityId(artist.id)
+    setEditorInitialTab(initialTab)
+    setEditorOpen(true)
+  }, [])
+
+  const openAlbumEditor = useCallback((album: MockAlbum, initialTab?: string) => {
+    setEditorType('album')
+    setEditorEntityId(album.id)
+    setEditorInitialTab(initialTab)
+    setEditorOpen(true)
+  }, [])
+
+  const openTrackEditor = useCallback((song: MockSong, initialTab?: string) => {
+    setEditorType('track')
+    setEditorEntityId(song.id)
+    setEditorInitialTab(initialTab)
+    setEditorOpen(true)
+  }, [])
+
+  const closeEditor = useCallback(() => {
+    setEditorOpen(false)
+    setEditorEntityId(null)
+    setEditorInitialTab(undefined)
+  }, [])
+
+  const handleSaveEntity = useCallback((updated: MockArtist | MockAlbum | MockSong) => {
+    startProgress({
+      title: 'Applying changes',
+      steps: ['Preparing changes', 'Applying mock metadata'],
+      sourceBadge: 'Forge mock',
+      completeMessage: 'Metadata updated in mock preview',
+      onComplete: () => {
+        if (editorType === 'artist') {
+          setLibraryArtists((prev) => prev.map((a) => (a.id === (updated as MockArtist).id ? (updated as MockArtist) : a)))
+        } else if (editorType === 'album') {
+          setLibraryAlbums((prev) => prev.map((a) => (a.id === (updated as MockAlbum).id ? (updated as MockAlbum) : a)))
+        } else {
+          setLibrarySongs((prev) => prev.map((s) => (s.id === (updated as MockSong).id ? (updated as MockSong) : s)))
+        }
+        showToast('Metadata updated in mock preview')
+      },
+    })
+    closeEditor()
+  }, [editorType, startProgress, showToast, closeEditor])
+
+  const editorEntity = useMemo(() => {
+    if (!editorOpen || !editorEntityId) return null
+    if (editorType === 'artist') return libraryArtists.find((a) => a.id === editorEntityId) ?? null
+    if (editorType === 'album') return libraryAlbums.find((a) => a.id === editorEntityId) ?? null
+    return librarySongs.find((s) => s.id === editorEntityId) ?? null
+  }, [editorOpen, editorEntityId, editorType, libraryArtists, libraryAlbums, librarySongs])
+
   const screens: Record<ForgeTab, ReactNode> = {
     home: (
       <ForgeHome
@@ -413,7 +486,13 @@ export function ForgePreview() {
         onSetSessionIgnored={setSessionIgnored}
       />
     ),
-    library: <ForgeLibrary />,
+    library: (
+      <ForgeLibrary
+        onOpenAlbumEditor={openAlbumEditor}
+        onOpenArtistEditor={openArtistEditor}
+        onOpenTrackEditor={openTrackEditor}
+      />
+    ),
     activity: <ForgeActivity />,
   }
 
@@ -505,6 +584,22 @@ export function ForgePreview() {
           }}
           tone={confirmDialog.tone}
           title={confirmDialog.title}
+        />
+      )}
+
+      {/* Metadata editor */}
+      {editorOpen && editorEntity && (
+        <ForgeMetadataEditor
+          albums={libraryAlbums}
+          entity={editorEntity}
+          entityType={editorType}
+          initialTab={editorInitialTab}
+          showConfirm={showConfirm}
+          songs={librarySongs}
+          onClose={closeEditor}
+          onOpenAlbumEditor={openAlbumEditor}
+          onOpenTrackEditor={openTrackEditor}
+          onSave={handleSaveEntity}
         />
       )}
     </div>

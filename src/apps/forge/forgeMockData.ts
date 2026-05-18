@@ -9,6 +9,25 @@ export interface MockAlbum {
   genres: string[]
   note: string
   tracks: string[]
+  // Extended metadata
+  albumArtist?: string
+  date?: string
+  originalDate?: string
+  trackTotal?: string
+  discTotal?: string
+  style?: string
+  lastFmTags?: string
+  mbAlbumId?: string
+  mbReleaseGroupId?: string
+  label?: string
+  catalogNumber?: string
+  barcode?: string
+  releaseCountry?: string
+  media?: string
+  releaseFormat?: string
+  releaseType?: string
+  edition?: string
+  coverSize?: string
 }
 
 export interface MockSong {
@@ -22,6 +41,38 @@ export interface MockSong {
   genres: string[]
   mood: string
   note: string
+  // Extended metadata
+  albumArtist?: string
+  trackNumber?: string
+  trackTotal?: string
+  discNumber?: string
+  discTotal?: string
+  date?: string
+  originalDate?: string
+  style?: string
+  lastFmTags?: string
+  lyrics?: string
+  syncedLyrics?: string
+  sidecarLrc?: string
+  mbTrackId?: string
+  mbReleaseTrackId?: string
+  acoustId?: string
+  isrc?: string
+  bpm?: string
+  key?: string
+  energy?: string
+  danceability?: string
+  replayGainTrackGain?: string
+  replayGainTrackPeak?: string
+  replayGainAlbumGain?: string
+  replayGainAlbumPeak?: string
+  // File info (read-only)
+  filePath?: string
+  fileFormat?: string
+  codec?: string
+  bitrate?: string
+  sampleRate?: string
+  duration?: string
 }
 
 export interface MockArtist {
@@ -31,6 +82,15 @@ export interface MockArtist {
   note: string
   genres: string[]
   mood: string
+  // Extended metadata
+  sortName?: string
+  displayName?: string
+  country?: string
+  biography?: string
+  style?: string
+  lastFmTags?: string
+  mbArtistId?: string
+  imageSize?: string
 }
 
 export type ReviewItemType = 'lyrics' | 'covers' | 'genres'
@@ -100,6 +160,14 @@ export const artistData: MockArtist[] = [
     note: '2 items need attention',
     genres: ['Modern Classical', 'Ambient'],
     mood: 'Introspective',
+    sortName: 'Frahm, Nils',
+    displayName: 'Nils Frahm',
+    country: 'DE',
+    biography: 'German composer and pianist based in Berlin.',
+    style: 'Modern Classical, Minimal, Piano',
+    lastFmTags: 'piano, instrumental, ambient, modern classical',
+    mbArtistId: 'mock-mbid-nils-frahm',
+    imageSize: '600 x 600',
   },
   {
     id: 'vola',
@@ -108,6 +176,14 @@ export const artistData: MockArtist[] = [
     note: '',
     genres: ['Progressive Metal'],
     mood: 'Dense',
+    sortName: 'VOLA',
+    displayName: 'VOLA',
+    country: 'DK',
+    biography: 'Danish progressive metal band.',
+    style: 'Progressive Metal, Djent',
+    lastFmTags: 'progressive metal, danish, djent',
+    mbArtistId: 'mock-mbid-vola',
+    imageSize: '800 x 800',
   },
   {
     id: 'chon',
@@ -116,6 +192,14 @@ export const artistData: MockArtist[] = [
     note: '',
     genres: ['Math Rock'],
     mood: 'Bright',
+    sortName: 'CHON',
+    displayName: 'CHON',
+    country: 'US',
+    biography: 'American math rock band from California.',
+    style: 'Math Rock, Instrumental',
+    lastFmTags: 'math rock, instrumental, progressive',
+    mbArtistId: 'mock-mbid-chon',
+    imageSize: '800 x 800',
   },
 ]
 
@@ -131,6 +215,24 @@ export const albumData: MockAlbum[] = [
     mood: 'Introspective',
     genres: ['Classical', 'Ambient'],
     tracks: ['The Whole Universe Wants', 'Sunson', 'A Place', 'My Friend the Forest'],
+    albumArtist: 'Nils Frahm',
+    date: '2018-01-26',
+    originalDate: '2018-01-26',
+    trackTotal: '12',
+    discTotal: '1',
+    style: 'Modern Classical, Ambient, Minimal',
+    lastFmTags: 'piano, ambient, modern classical, introspective',
+    mbAlbumId: 'mock-mbid-all-melody-2018',
+    mbReleaseGroupId: 'mock-rgid-all-melody-2018',
+    label: 'Erased Tapes',
+    catalogNumber: 'ERATP106',
+    barcode: '4050486123456',
+    releaseCountry: 'DE',
+    media: 'CD',
+    releaseFormat: 'Album',
+    releaseType: 'Album',
+    edition: 'Standard',
+    coverSize: '320 x 320',
   },
   {
     id: 'spaces',
@@ -143,6 +245,24 @@ export const albumData: MockAlbum[] = [
     mood: 'Live / Expansive',
     genres: ['Ambient', 'Modern Classical'],
     tracks: ['An Aborted Beginning', 'Says', 'Hammers'],
+    albumArtist: 'Nils Frahm',
+    date: '2013-11-19',
+    originalDate: '2013-11-19',
+    trackTotal: '8',
+    discTotal: '1',
+    style: 'Ambient, Live, Piano',
+    lastFmTags: 'ambient, live, piano, modern classical',
+    mbAlbumId: 'mock-mbid-spaces-2013',
+    mbReleaseGroupId: 'mock-rgid-spaces-2013',
+    label: 'Erased Tapes',
+    catalogNumber: 'ERATP085',
+    barcode: '4050486012345',
+    releaseCountry: 'DE',
+    media: 'CD',
+    releaseFormat: 'Album',
+    releaseType: 'Album',
+    edition: 'Standard',
+    coverSize: '600 x 600',
   },
   {
     id: 'the-bells',
@@ -155,6 +275,24 @@ export const albumData: MockAlbum[] = [
     mood: 'Minimal',
     genres: ['Piano', 'Modern Classical'],
     tracks: ['In the Sky and on the Ground', 'I Would Like to Think', 'Over There'],
+    albumArtist: 'Nils Frahm',
+    date: '2009-02-17',
+    originalDate: '2009-02-17',
+    trackTotal: '9',
+    discTotal: '1',
+    style: 'Piano, Minimal, Modern Classical',
+    lastFmTags: 'piano, minimal, modern classical',
+    mbAlbumId: 'mock-mbid-the-bells-2009',
+    mbReleaseGroupId: 'mock-rgid-the-bells-2009',
+    label: 'Erased Tapes',
+    catalogNumber: 'ERATP032',
+    barcode: '4050486001234',
+    releaseCountry: 'DE',
+    media: 'CD',
+    releaseFormat: 'Album',
+    releaseType: 'Album',
+    edition: 'Standard',
+    coverSize: '800 x 800',
   },
   {
     id: 'music-for-animals',
@@ -167,6 +305,24 @@ export const albumData: MockAlbum[] = [
     mood: 'Slow / Textural',
     genres: ['Ambient'],
     tracks: ['The Dog with 1000 Faces', 'Mussel Memory', 'Seagull Scene'],
+    albumArtist: 'Nils Frahm',
+    date: '2022-09-23',
+    originalDate: '2022-09-23',
+    trackTotal: '10',
+    discTotal: '1',
+    style: 'Ambient, Textural, Slow',
+    lastFmTags: 'ambient, textural, piano',
+    mbAlbumId: 'mock-mbid-music-for-animals-2022',
+    mbReleaseGroupId: 'mock-rgid-music-for-animals-2022',
+    label: 'LEITER',
+    catalogNumber: 'LEITER001',
+    barcode: '4050486999999',
+    releaseCountry: 'DE',
+    media: 'CD',
+    releaseFormat: 'Album',
+    releaseType: 'Album',
+    edition: 'Standard',
+    coverSize: '1200 x 1200',
   },
   {
     id: 'felt',
@@ -179,6 +335,24 @@ export const albumData: MockAlbum[] = [
     mood: 'Soft / Close',
     genres: ['Piano'],
     tracks: ['Keep', 'Less', 'Familiar'],
+    albumArtist: 'Nils Frahm',
+    date: '2011-10-07',
+    originalDate: '2011-10-07',
+    trackTotal: '8',
+    discTotal: '1',
+    style: 'Piano, Minimal, Intimate',
+    lastFmTags: 'piano, minimal, intimate',
+    mbAlbumId: 'mock-mbid-felt-2011',
+    mbReleaseGroupId: 'mock-rgid-felt-2011',
+    label: 'Erased Tapes',
+    catalogNumber: 'ERATP051',
+    barcode: '4050486111111',
+    releaseCountry: 'DE',
+    media: 'CD',
+    releaseFormat: 'Album',
+    releaseType: 'Album',
+    edition: 'Standard',
+    coverSize: '600 x 600',
   },
   {
     id: 'empty',
@@ -191,6 +365,24 @@ export const albumData: MockAlbum[] = [
     mood: 'Quiet',
     genres: ['Piano', 'Ambient'],
     tracks: ['First Defeat', 'No Step on Wing', 'Black Notes'],
+    albumArtist: 'Nils Frahm',
+    date: '2020-03-28',
+    originalDate: '2020-03-28',
+    trackTotal: '8',
+    discTotal: '1',
+    style: 'Piano, Ambient, Quiet',
+    lastFmTags: 'piano, ambient, quiet',
+    mbAlbumId: 'mock-mbid-empty-2020',
+    mbReleaseGroupId: 'mock-rgid-empty-2020',
+    label: 'LEITER',
+    catalogNumber: 'LEITER002',
+    barcode: '4050486222222',
+    releaseCountry: 'DE',
+    media: 'Digital',
+    releaseFormat: 'Album',
+    releaseType: 'Album',
+    edition: 'Standard',
+    coverSize: '1000 x 1000',
   },
 ]
 
@@ -206,6 +398,36 @@ export const songData: MockSong[] = [
     genres: [],
     mood: 'Warm',
     note: 'Missing lyrics',
+    albumArtist: 'Nils Frahm',
+    trackNumber: '1',
+    trackTotal: '12',
+    discNumber: '1',
+    discTotal: '1',
+    date: '2018-01-26',
+    originalDate: '2018-01-26',
+    style: 'Modern Classical, Ambient',
+    lastFmTags: 'piano, ambient, modern classical',
+    lyrics: '',
+    syncedLyrics: '',
+    sidecarLrc: '',
+    mbTrackId: 'mock-mbid-track-whole-universe',
+    mbReleaseTrackId: 'mock-mbid-release-track-whole-universe',
+    acoustId: 'mock-acoustid-whole-universe',
+    isrc: 'mock-isrc-2018-0001',
+    bpm: '72',
+    key: 'A minor',
+    energy: 'Low',
+    danceability: 'Very low',
+    replayGainTrackGain: '-8.2 dB',
+    replayGainTrackPeak: '0.98',
+    replayGainAlbumGain: '-8.5 dB',
+    replayGainAlbumPeak: '0.99',
+    filePath: '/mock/music/Nils Frahm/All Melody/01 The Whole Universe Wants.flac',
+    fileFormat: 'FLAC',
+    codec: 'FLAC',
+    bitrate: '1411 kbps',
+    sampleRate: '44.1 kHz',
+    duration: '4:32',
   },
   {
     id: 'says',
@@ -218,6 +440,36 @@ export const songData: MockSong[] = [
     genres: ['Ambient'],
     mood: 'Expansive',
     note: 'Missing lyrics',
+    albumArtist: 'Nils Frahm',
+    trackNumber: '2',
+    trackTotal: '8',
+    discNumber: '1',
+    discTotal: '1',
+    date: '2013-11-19',
+    originalDate: '2013-11-19',
+    style: 'Ambient, Live, Piano',
+    lastFmTags: 'ambient, live, piano',
+    lyrics: '',
+    syncedLyrics: '',
+    sidecarLrc: '',
+    mbTrackId: 'mock-mbid-track-says',
+    mbReleaseTrackId: 'mock-mbid-release-track-says',
+    acoustId: 'mock-acoustid-says',
+    isrc: 'mock-isrc-2013-0002',
+    bpm: '120',
+    key: 'A minor',
+    energy: 'Medium',
+    danceability: 'Low',
+    replayGainTrackGain: '-7.8 dB',
+    replayGainTrackPeak: '0.97',
+    replayGainAlbumGain: '-8.1 dB',
+    replayGainAlbumPeak: '0.98',
+    filePath: '/mock/music/Nils Frahm/Spaces/02 Says.flac',
+    fileFormat: 'FLAC',
+    codec: 'FLAC',
+    bitrate: '1411 kbps',
+    sampleRate: '44.1 kHz',
+    duration: '8:19',
   },
   {
     id: 'a-place',
@@ -230,6 +482,36 @@ export const songData: MockSong[] = [
     genres: [],
     mood: 'Quiet',
     note: 'Missing genre',
+    albumArtist: 'Nils Frahm',
+    trackNumber: '3',
+    trackTotal: '12',
+    discNumber: '1',
+    discTotal: '1',
+    date: '2018-01-26',
+    originalDate: '2018-01-26',
+    style: '',
+    lastFmTags: '',
+    lyrics: '',
+    syncedLyrics: '',
+    sidecarLrc: '',
+    mbTrackId: 'mock-mbid-track-a-place',
+    mbReleaseTrackId: 'mock-mbid-release-track-a-place',
+    acoustId: 'mock-acoustid-a-place',
+    isrc: 'mock-isrc-2018-0003',
+    bpm: '65',
+    key: 'C major',
+    energy: 'Low',
+    danceability: 'Very low',
+    replayGainTrackGain: '-9.1 dB',
+    replayGainTrackPeak: '0.95',
+    replayGainAlbumGain: '-8.5 dB',
+    replayGainAlbumPeak: '0.99',
+    filePath: '/mock/music/Nils Frahm/All Melody/03 A Place.flac',
+    fileFormat: 'FLAC',
+    codec: 'FLAC',
+    bitrate: '1411 kbps',
+    sampleRate: '44.1 kHz',
+    duration: '3:47',
   },
   {
     id: 'sunson',
@@ -242,6 +524,36 @@ export const songData: MockSong[] = [
     genres: ['Ambient'],
     mood: 'Bright',
     note: '',
+    albumArtist: 'Nils Frahm',
+    trackNumber: '2',
+    trackTotal: '12',
+    discNumber: '1',
+    discTotal: '1',
+    date: '2018-01-26',
+    originalDate: '2018-01-26',
+    style: 'Ambient, Modern Classical',
+    lastFmTags: 'ambient, piano, modern classical',
+    lyrics: '',
+    syncedLyrics: '',
+    sidecarLrc: '',
+    mbTrackId: 'mock-mbid-track-sunson',
+    mbReleaseTrackId: 'mock-mbid-release-track-sunson',
+    acoustId: 'mock-acoustid-sunson',
+    isrc: 'mock-isrc-2018-0004',
+    bpm: '88',
+    key: 'F major',
+    energy: 'Medium',
+    danceability: 'Low',
+    replayGainTrackGain: '-7.5 dB',
+    replayGainTrackPeak: '0.99',
+    replayGainAlbumGain: '-8.5 dB',
+    replayGainAlbumPeak: '0.99',
+    filePath: '/mock/music/Nils Frahm/All Melody/02 Sunson.flac',
+    fileFormat: 'FLAC',
+    codec: 'FLAC',
+    bitrate: '1411 kbps',
+    sampleRate: '44.1 kHz',
+    duration: '6:12',
   },
   {
     id: 'hammers',
@@ -254,6 +566,36 @@ export const songData: MockSong[] = [
     genres: [],
     mood: 'Energetic',
     note: 'Missing genre',
+    albumArtist: 'Nils Frahm',
+    trackNumber: '3',
+    trackTotal: '8',
+    discNumber: '1',
+    discTotal: '1',
+    date: '2013-11-19',
+    originalDate: '2013-11-19',
+    style: '',
+    lastFmTags: '',
+    lyrics: '',
+    syncedLyrics: '',
+    sidecarLrc: '',
+    mbTrackId: 'mock-mbid-track-hammers',
+    mbReleaseTrackId: 'mock-mbid-release-track-hammers',
+    acoustId: 'mock-acoustid-hammers',
+    isrc: 'mock-isrc-2013-0005',
+    bpm: '135',
+    key: 'D minor',
+    energy: 'High',
+    danceability: 'Low',
+    replayGainTrackGain: '-6.2 dB',
+    replayGainTrackPeak: '0.99',
+    replayGainAlbumGain: '-8.1 dB',
+    replayGainAlbumPeak: '0.98',
+    filePath: '/mock/music/Nils Frahm/Spaces/03 Hammers.flac',
+    fileFormat: 'FLAC',
+    codec: 'FLAC',
+    bitrate: '1411 kbps',
+    sampleRate: '44.1 kHz',
+    duration: '4:55',
   },
   {
     id: 'my-friend',
@@ -266,6 +608,36 @@ export const songData: MockSong[] = [
     genres: [],
     mood: 'Calm',
     note: 'Missing genre',
+    albumArtist: 'Nils Frahm',
+    trackNumber: '4',
+    trackTotal: '12',
+    discNumber: '1',
+    discTotal: '1',
+    date: '2018-01-26',
+    originalDate: '2018-01-26',
+    style: '',
+    lastFmTags: '',
+    lyrics: '',
+    syncedLyrics: '',
+    sidecarLrc: '',
+    mbTrackId: 'mock-mbid-track-my-friend',
+    mbReleaseTrackId: 'mock-mbid-release-track-my-friend',
+    acoustId: 'mock-acoustid-my-friend',
+    isrc: 'mock-isrc-2018-0006',
+    bpm: '60',
+    key: 'E minor',
+    energy: 'Low',
+    danceability: 'Very low',
+    replayGainTrackGain: '-9.5 dB',
+    replayGainTrackPeak: '0.94',
+    replayGainAlbumGain: '-8.5 dB',
+    replayGainAlbumPeak: '0.99',
+    filePath: '/mock/music/Nils Frahm/All Melody/04 My Friend the Forest.flac',
+    fileFormat: 'FLAC',
+    codec: 'FLAC',
+    bitrate: '1411 kbps',
+    sampleRate: '44.1 kHz',
+    duration: '5:21',
   },
 ]
 

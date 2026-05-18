@@ -192,11 +192,11 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### LB-1: Search
 
 - **Trigger:** tap search icon or focus the search bar.
-- **Resulting UI:** search field active; list filters in real time.
+- **Resulting UI:** search field active; list filters in real time by title/artist/album.
 - **Mock state changes:** `query` string; filtered list derived from `query`.
 - **Data used:** `artistData`, `albumData`, `songData`.
 - **Forbidden real behavior:** no backend search, no filesystem scan.
-- **Status:** partially implemented (static affordance; no live filtering).
+- **Status:** implemented.
 
 ### LB-2: Segmented Control
 
@@ -210,52 +210,56 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### LB-3: Artist Row Tap
 
 - **Trigger:** tap an artist row in Artists tab.
-- **Resulting UI:** `ForgeLibraryDetailSheet` opens in artist mode.
-- **Shows:** name, subtitle, genres, mood, Albums/Songs/Details tabs, related content.
-- **Mock state changes:** `libraryDetail = { type: 'artist', id }`.
-- **Data used:** `artistData`, `albumData`, `songData`.
+- **Resulting UI:** `ForgeMetadataEditor` opens in artist mode.
+- **Shows:** name, subtitle, genres, mood, Overview / Image / Metadata / Albums / Identity tabs, editable fields, mock image picker.
+- **Actions:** edit fields, choose mock image, save with preview/progress/toast.
+- **Mock state changes:** `editorOpen = true`, `editorType = 'artist'`, `editorEntityId = id`.
+- **Data used:** `artistData`, `albumData`.
 - **Forbidden real behavior:** no backend query.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### LB-4: Album Row Tap
 
 - **Trigger:** tap an album row in Albums tab.
-- **Resulting UI:** `ForgeLibraryDetailSheet` opens in album mode.
-- **Shows:** cover gradient, title, artist, year, genres, mood, track list.
-- **Actions:** `Review album`.
-- **Mock state changes:** `libraryDetail = { type: 'album', id }`.
-- **Data used:** `albumData`.
+- **Resulting UI:** `ForgeMetadataEditor` opens in album mode.
+- **Shows:** cover gradient, title, artist, year, Overview / Artwork / Metadata / Release / Tracks / File info tabs, editable fields, mock cover picker.
+- **Actions:** edit fields, choose mock cover, save with preview/progress/toast.
+- **Mock state changes:** `editorOpen = true`, `editorType = 'album'`, `editorEntityId = id`.
+- **Data used:** `albumData`, `songData`.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### LB-5: Song Row Tap
 
 - **Trigger:** tap a song row in Songs tab.
-- **Resulting UI:** `ForgeLibraryDetailSheet` opens in song mode.
-- **Shows:** title, artist, album, year, lyrics status, genres, mood, editable fields.
-- **Actions:** `Review song`.
-- **Mock state changes:** `libraryDetail = { type: 'song', id }`.
+- **Resulting UI:** `ForgeMetadataEditor` opens in track mode.
+- **Shows:** title, artist, album, year, Overview / Artwork / Lyrics / Metadata / Audio / File info tabs, editable fields.
+- **Actions:** edit fields, lyrics, audio metadata, save with preview/progress/toast.
+- **Mock state changes:** `editorOpen = true`, `editorType = 'track'`, `editorEntityId = id`.
 - **Data used:** `songData`.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### LB-6: Missing Metadata Badge Tap
 
 - **Trigger:** tap the orange metadata badge on a library row.
-- **Resulting UI:** navigates to Review tab filtered by the relevant issue type.
-- **Mock state changes:** `activeTab = 'review'`, `reviewFilter` set by badge type.
+- **Resulting UI:** opens `ForgeMetadataEditor` focused on the relevant tab:
+  - missing lyrics → Track editor → Lyrics tab
+  - missing genre → Track editor → Metadata tab
+  - cover needs review → Album editor → Artwork tab
+- **Mock state changes:** `editorOpen = true`, `editorType` and `editorInitialTab` set by badge type.
 - **Data used:** item note string.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### LB-7: Chevron Rows
 
 - **Trigger:** tap the chevron on a library row.
-- **Resulting UI:** opens the same detail sheet as the row body.
+- **Resulting UI:** opens the same metadata editor as the row body.
 - **Mock state changes:** same as LB-3, LB-4 or LB-5.
 - **Data used:** same as LB-3, LB-4 or LB-5.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ### LB-8: Sort/Filter
 
@@ -266,6 +270,58 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Data used:** static options.
 - **Forbidden real behavior:** none.
 - **Status:** not implemented.
+
+### LB-9: Direct Metadata Editing
+
+- **Trigger:** tap any editable field input in `ForgeMetadataEditor`.
+- **Resulting UI:** field shows current value and input below; typing updates draft state; Save becomes active; "Unsaved" badge appears.
+- **Mock state changes:** `draft` object updated locally; dirty state tracked by comparing draft to original.
+- **Data used:** entity fields.
+- **Forbidden real behavior:** no real metadata write, no file edit.
+- **Status:** implemented.
+
+### LB-10: Image Picker Mock
+
+- **Trigger:** tap "Choose from gallery" or "Search online" in Artwork/Image tab.
+- **Resulting UI:** `ForgeImagePickerSheet` opens with Gallery / Online tabs.
+- **Gallery:** 3 fake local images with CSS gradient placeholders and fake filenames.
+- **Online:** local-only search input filtering 4 fake provider results (Discogs, MusicBrainz Cover Art, Deezer, iTunes).
+- **Mock state changes:** `pendingImage` set with gradient and source badge.
+- **Forbidden real behavior:** no real gallery access, no FileReader, no network call, no download.
+- **Status:** implemented.
+
+### LB-11: Save / Apply Changes
+
+- **Trigger:** tap Save button when dirty.
+- **Resulting UI:** `ForgeSavePreviewSheet` opens showing changed fields (Current → New) with source badges; tap "Apply changes" → `ForgeProgressSheet` (Preparing changes / Applying mock metadata) → completes with toast.
+- **Mock state changes:** local mutable entity array updated; toast shown.
+- **Data used:** draft changes.
+- **Forbidden real behavior:** no real metadata write, no file edit.
+- **Status:** implemented.
+
+### LB-12: Unsaved Changes Confirmation
+
+- **Trigger:** tap back button in `ForgeMetadataEditor` with unsaved changes.
+- **Resulting UI:** `ForgeConfirmDialog` asks "Discard changes?" with Keep editing / Discard options.
+- **Mock state changes:** none if kept; editor closes if discarded.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
+
+### LB-13: File Info Read-Only
+
+- **Trigger:** open File info tab in Track or Album editor.
+- **Resulting UI:** read-only fields with no editable inputs, no Apply button.
+- **Mock state changes:** none.
+- **Forbidden real behavior:** no filesystem access.
+- **Status:** implemented.
+
+### LB-14: Nested Editor Navigation
+
+- **Trigger:** tap a track row in Album editor Tracks tab, or tap an album row in Artist editor Albums tab.
+- **Resulting UI:** swaps to the relevant editor (Track or Album) preserving the same editor overlay.
+- **Mock state changes:** `editorType` and `editorEntityId` updated.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
 
 ---
 

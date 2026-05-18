@@ -111,6 +111,24 @@ All data is static and fictional. All state changes are local React state only.
   - Updated `forgeMockData.ts` with richer album gradients and activity `bgAccent` fields.
   - Preserved all existing interactions; no new Library/Activity interactions added.
 
+- **Bloco 3.4.5 (Forge Library Metadata Editor):** implemented.
+  - Created `ForgeMetadataEditor` reusable full-screen editor for Artist, Album and Track entities.
+  - Organized tabs per entity: Track (Overview, Artwork, Lyrics, Metadata, Audio, File info), Album (Overview, Artwork, Metadata, Release, Tracks, File info), Artist (Overview, Image, Metadata, Albums, Identity).
+  - Implemented editable field pattern: label, current value, input below, dirty indicator, optional source badge, protected-field warning.
+  - Implemented mock gallery picker (`ForgeImagePickerSheet`) with fake local images and fake online search results from Discogs, MusicBrainz Cover Art, Deezer and iTunes.
+  - Implemented save/apply flow: Save → preview sheet (changed fields, Current → New, source badges) → progress sheet (Preparing changes / Applying mock metadata) → toast → local mock data update.
+  - Implemented unsaved changes confirmation on back/cancel.
+  - Wired Library row taps (artist, album, song) and chevron taps to open the corresponding editor.
+  - Wired issue badge taps to open editor focused on relevant tab (Lyrics, Metadata, Artwork).
+  - Added live search filtering with empty results state.
+  - Nested navigation: Album Tracks tab rows open Track editor; Artist Albums tab rows open Album editor.
+  - File info tabs are read-only with no editable fields and no Apply button.
+  - Extended `forgeMockData.ts` with comprehensive metadata fields for all entity types.
+  - Added mutable local library state in `ForgePreview` so edits persist within the session.
+  - Review ↔ Library sync is partial/deferred; Library edits update local rows and toast, but do not automatically mutate Review queue state.
+  - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits or downloads.
+  - Did not start Forge Activity, Aria or Flux implementation.
+
 - **Bloco 3.4.2 (Forge Review Architecture Redesign):** implemented.
   - Used `docs/references/forge/forge_review_redesign.png` as the active Review composition target.
   - Replaced the old grouped Missing Lyrics / Better Covers / Missing Genres primary structure with All / Artwork / Lyrics / Metadata.

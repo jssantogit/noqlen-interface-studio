@@ -381,3 +381,37 @@ Bloco 3.4.4 delta (Forge Review Progress Flows and Interaction Closure):
 - Local mock state updates after progress: items become fixed/ignored, removed from pending queue, session counters increment, toast confirms.
 - Preserved Forge Home, Library and Activity rendering; did not start Activity interactions, Aria or Flux.
 - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, FileReader, secrets or analytics.
+
+Bloco 3.4.5 delta (Forge Library Metadata Editor):
+
+- Created `ForgeMetadataEditor` reusable full-screen editor for Artist, Album and Track entities.
+- Organized tabs per entity:
+  - Track: Overview, Artwork, Lyrics, Metadata, Audio, File info.
+  - Album: Overview, Artwork, Metadata, Release, Tracks, File info.
+  - Artist: Overview, Image, Metadata, Albums, Identity.
+- Implemented editable field pattern: label, current value, input below, dirty indicator, optional source badge, protected-field warning for MBID/AcoustID/ISRC.
+- Implemented `ForgeImagePickerSheet` with Gallery and Online tabs:
+  - Gallery shows 3 fake local CSS-gradient images with fake filenames.
+  - Online search is local-only input filtering 4 fake provider results (Discogs, MusicBrainz Cover Art, Deezer, iTunes).
+- Implemented save/apply flow:
+  - Save button activates when dirty; "Unsaved" badge appears.
+  - Tap Save → `ForgeSavePreviewSheet` shows changed fields (Current → New) with source badges.
+  - Tap "Apply changes" → `ForgeProgressSheet` (Preparing changes / Applying mock metadata) → toast "Metadata updated in mock preview".
+- Implemented unsaved changes confirmation on back: "Discard changes?" dialog with Keep editing / Discard.
+- Extended `forgeMockData.ts` with comprehensive metadata fields for all entities (genres, style, mood, dates, track/disc numbers, lyrics, audio analysis, ReplayGain, file info, release data, identity fields, etc.).
+- Updated `ForgeLibrary.tsx`:
+  - Live search filtering by title/artist/album with empty results state.
+  - Row taps open the corresponding editor.
+  - Issue badge taps open editor focused on relevant tab (Lyrics, Metadata, Artwork).
+  - Chevron behavior same as row tap.
+- Updated `ForgePreview.tsx`:
+  - Added mutable local copies `libraryArtists`, `libraryAlbums`, `librarySongs`.
+  - Added editor state and callbacks: `openArtistEditor`, `openAlbumEditor`, `openTrackEditor`, `closeEditor`, `handleSaveEntity`.
+  - `handleSaveEntity` triggers progress flow then updates local mutable array and shows toast.
+  - Nested navigation: Album Tracks → Track editor; Artist Albums → Album editor.
+- File info tabs are read-only with no editable inputs and no Apply button.
+- Review ↔ Library sync is partial/deferred: Library edits update local rows and toast, but do not automatically mutate Review queue state.
+- Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, FileReader, secrets or analytics.
+- Did not start Forge Activity interactions, Aria or Flux.
+- Browser MCP validation was skipped per user request.
+- Build, lint, tests pass.

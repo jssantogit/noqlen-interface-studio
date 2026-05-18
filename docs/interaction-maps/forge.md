@@ -205,11 +205,10 @@ Layout constraints:
 
 ### Search Icon
 
-- Trigger: search icon in the Library header.
-- Result: opens search field or focuses the existing search bar.
-- Filters: local mock library by title, artist, album.
+- Trigger: search icon in the Library header or focus the search bar.
+- Result: search field active; list filters in real time by title, artist, album.
 - Empty state: `No results found` when query yields nothing.
-- Current status: partially implemented (static search affordance; no live filtering).
+- Current status: implemented.
 
 ### Segmented Control
 
@@ -220,38 +219,41 @@ Layout constraints:
 ### Artist Row Tap
 
 - Trigger: artist row in Artists tab.
-- Result: opens artist detail sheet.
-- Shows: name, subtitle, genre chips, mood, related albums list, related songs list.
-- Secondary tabs inside artist detail: Albums, Songs, Details.
-- Current status: not implemented.
+- Result: opens `ForgeMetadataEditor` in artist mode.
+- Shows: name, subtitle, genre chips, mood, Overview / Image / Metadata / Albums / Identity tabs.
+- Actions: edit text fields, choose mock gallery/online image, save with preview/progress/toast.
+- Current status: implemented.
 
 ### Album Row Tap
 
 - Trigger: album row in Albums tab.
-- Result: opens album detail sheet.
-- Shows: cover gradient, title, artist, year, genres, mood, track list, editable fields.
-- Actions: `Review album` (navigates to review), `Edit metadata`.
-- Current status: not implemented.
+- Result: opens `ForgeMetadataEditor` in album mode.
+- Shows: cover gradient, title, artist, year, Overview / Artwork / Metadata / Release / Tracks / File info tabs.
+- Actions: edit text fields, choose mock gallery/online cover, save with preview/progress/toast.
+- Current status: implemented.
 
 ### Song Row Tap
 
 - Trigger: song row in Songs tab.
-- Result: opens song metadata detail sheet.
-- Shows: title, artist, album, year, lyrics status, genres, mood, editable fields.
-- Actions: `Review song` (navigates to review), `Edit metadata`.
-- Current status: not implemented.
+- Result: opens `ForgeMetadataEditor` in track mode.
+- Shows: title, artist, album, year, Overview / Artwork / Lyrics / Metadata / Audio / File info tabs.
+- Actions: edit text fields, lyrics, audio metadata, save with preview/progress/toast.
+- Current status: implemented.
 
 ### Missing Metadata Badge Tap
 
 - Trigger: orange dot + `Missing lyrics`, `Missing genre` or `Cover needs review` badge on a library row.
-- Result: navigates to the relevant review queue or opens the item detail sheet.
-- Current status: partially implemented (badge renders; not interactive).
+- Result: opens `ForgeMetadataEditor` focused on the relevant tab:
+  - missing lyrics → Track editor → Lyrics tab
+  - missing genre → Track editor → Metadata tab
+  - cover needs review → Album editor → Artwork tab
+- Current status: implemented.
 
 ### Chevron Rows
 
 - Trigger: chevron on any library row.
-- Result: must respond with a detail sheet or be clearly disabled.
-- Current status: partially implemented (chevron renders; rows are not interactive except segment switching).
+- Result: opens the same metadata editor as the row body.
+- Current status: implemented.
 
 ### Sort/Filter
 
@@ -416,14 +418,21 @@ Layout constraints:
 - Metadata diff sheet (old vs new mock values).
 - Item status changes: fixed, ignored, error.
 
-### Batch 4: Library Interactions
+### Batch 4: Library Interactions (Bloco 3.4.5)
 
 - Live search filtering.
-- Artist detail sheet with Albums/Songs/Details tabs.
-- Album detail sheet with track list and metadata fields.
-- Song detail sheet with lyrics status and metadata fields.
-- Missing metadata badge navigation to review.
-- Sort/filter sheet.
+- Full-screen metadata editor for Artist, Album and Track with organized tabs.
+- Editable field pattern: label, current value, input, dirty indicator, source badge, protected-field warning.
+- Mock gallery image picker and mock online search picker.
+- Save preview sheet with changed fields list (Current → New).
+- Progress sheet for apply: Preparing changes / Applying mock metadata.
+- Toast confirmation: "Metadata updated in mock preview".
+- Missing metadata badge navigation to editor focused on relevant tab.
+- Chevron rows open same editor as row body.
+- Nested navigation: Album Tracks → Track editor; Artist Albums → Album editor.
+- File info read-only tabs.
+- Unsaved changes confirmation dialog on back.
+- Partial/deferred Review ↔ Library sync.
 - Empty and no-results states.
 
 ### Batch 5: Activity Interactions
