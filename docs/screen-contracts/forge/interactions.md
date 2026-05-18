@@ -78,7 +78,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### RV-2: Review Safe Fixes
 
 - **Trigger:** tap `Review safe fixes` in the All summary card.
-- **Resulting UI:** `ForgeConfirmDialog` opens for safe proposals in the active view.
+- **Resulting UI:** `ForgeConfirmDialog` opens for safe proposals in the active view; on confirm, `ForgeProgressSheet` opens with steps: Preparing safe fixes / Applying local mock updates; completes with success state.
 - **Mock state changes:** confirmed safe proposals increment `sessionFixed`; mixed rows remain visible when manual review proposals still exist; toast shown.
 - **Data used:** static redesigned Review queues and `itemStatuses`.
 - **Forbidden real behavior:** no metadata write, no file edit, no lyric fetch, no artwork download.
@@ -87,7 +87,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### RV-3: Contextual Apply Selected
 
 - **Trigger:** select one or more row checkboxes, then tap `Apply selected` in the compact contextual bar.
-- **Resulting UI:** `ForgeConfirmDialog` opens for selected rows.
+- **Resulting UI:** `ForgeConfirmDialog` opens for selected rows; on confirm, `ForgeProgressSheet` opens with steps: Preparing selected fixes / Applying mock changes; completes with success state.
 - **Mock state changes:** selected rows move to `status = 'fixed'`; selected set clears; `sessionFixed` increments; toast shown.
 - **Data used:** `selected` Set, redesigned Review queues, `itemStatuses`.
 - **Forbidden real behavior:** same as RV-2.
@@ -96,7 +96,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### RV-4: Ignore Selected
 
 - **Trigger:** select one or more row checkboxes, then tap `Ignore` in the compact contextual bar.
-- **Resulting UI:** `ForgeBottomSheet` opens as an ignore reason sheet with optional reason chips.
+- **Resulting UI:** `ForgeBottomSheet` opens as an ignore reason sheet with optional reason chips; on confirm, `ForgeProgressSheet` opens with step: Marking items ignored; completes with success state.
 - **Mock state changes:** selected items move to `status = 'ignored'`; selected set clears; `sessionIgnored` increments; toast shown.
 - **Data used:** `selected` Set.
 - **Forbidden real behavior:** no file deletion, no metadata deletion.
@@ -116,7 +116,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Trigger:** tap a lyrics review item outside the checkbox.
 - **Resulting UI:** `ForgeLyricsDetailSheet` opens as a bottom sheet.
 - **Shows:** song title, artist, album, provider badge (`Lyrics provider mock`), metadata rows, mock lyrics preview using placeholder text only (no real/copyrighted lyrics), `Preview changes` link.
-- **Actions:** `Apply lyrics`, `Review lyrics` or `Apply synced` affordances open the same mock lyrics preview; sheet actions set fixed/ignored locally.
+- **Actions:** `Apply lyrics` shows progress flow (Preparing lyrics / Updating mock lyrics) then marks fixed; `Apply synced` shows progress flow (Preparing synced lyrics / Updating mock LRC) then marks fixed; `Ignore this item` shows progress flow (Marking item ignored) then marks ignored; `Close`, `Preview changes` (opens metadata diff).
 - **Mock state changes:** item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - **Data used:** `reviewGroups` item.
 - **Forbidden real behavior:** no lyric API call, no lyric download, no file write, no copyrighted lyrics.
@@ -127,8 +127,8 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Trigger:** tap an All queue row outside its checkbox.
 - **Resulting UI:** `ForgeReviewItemOverviewSheet` opens as a bottom sheet instead of jumping directly to Artwork or another category.
 - **Shows:** item title, artist, album if present, thumbnail, total proposed fixes and grouped fix cards for Artwork, Lyrics and Metadata subcategories.
-- **Actions:** `Review artwork`, `Review lyrics`, `Review tags`, `Review identity`, `Review release data`, `Review audio data`, `Apply safe fixes`, `Ignore item`, `Close`.
-- **Mock state changes:** action buttons route to existing preview sheets; safe fixes increment local session applied count after confirmation; ignore marks the All item ignored locally.
+- **Actions:** `Review artwork`, `Review lyrics`, `Review tags`, `Review identity`, `Review release data`, `Review audio data` route to existing preview sheets; `Apply safe fixes` shows confirmation → progress flow → increments local session applied count; `Ignore item` shows progress flow → marks item ignored locally; `Close` dismisses sheet.
+- **Mock state changes:** action buttons route to existing preview sheets; safe fixes increment local session applied count after progress completes; ignore marks the All item ignored locally.
 - **Forbidden real behavior:** no metadata write, no file edit, no network call.
 - **Status:** implemented.
 
@@ -148,7 +148,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Shows:** album title, artist, side-by-side current/suggested cover placeholders, current resolution, suggested resolution and `Preview changes` link.
 - **List rule:** Review list rows show current-cover or missing-cover facts only; no confidence as primary artwork data and no list-level comparison.
 - **Provider:** Discogs source badge.
-- **Actions:** `Apply artwork` (sets fixed), `Keep current` (sets ignored), `Ignore` (sets ignored), `Cancel`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
+- **Actions:** `Apply artwork` shows progress flow (Preparing artwork update / Replacing mock artwork) then sets fixed; `Keep current` shows progress flow (Marking item ignored) then sets ignored; `Ignore` shows progress flow (Marking item ignored) then sets ignored; `Cancel`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
 - **Mock state changes:** item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - **Data used:** `reviewGroups` item.
 - **Forbidden real behavior:** no cover download, no image replacement, no file write.
@@ -158,9 +158,10 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 
 - **Trigger:** tap a Metadata row or its specific action affordance.
 - **Resulting UI:** `ForgeMetadataDiffSheet` opens as a bottom sheet.
-- **Shows:** readable field-by-field current vs suggested values for Tags, Identity, Release or Audio with wrapping text and provider/source badges.
+- **Shows:** readable field-by-field current vs suggested values for Tags, Identity, Release or Audio with wrapping text, chips for suggested values and provider/source badges.
 - **Providers:** Tags use Last.fm; Identity uses MusicBrainz / AcoustID; Release uses Discogs / MusicBrainz; Audio uses Audio analysis mock.
-- **Actions:** `Apply tags`, `Apply identity`, `Choose match`, `Apply release data` or `Apply audio data` depending on row type.
+- **Actions:** `Apply tags` shows progress (Preparing tag update / Applying mock tags); `Apply identity` shows progress (Validating identity choice / Applying protected mock identity); `Choose match` shows progress (Resolving mock match); `Apply release data` shows progress (Preparing release metadata / Applying mock release fields); `Apply audio data` shows progress (Preparing audio analysis / Applying mock audio metadata).
+- **Protected identity fields require explicit confirmation through the preview sheet.**
 - **Mock state changes:** item status becomes `fixed`; toast confirms; item removed from pending queue.
 - **Data used:** static `forgeMetadataReviewItems`.
 - **Forbidden real behavior:** no genre API lookup, no metadata write.

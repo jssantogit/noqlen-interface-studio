@@ -358,3 +358,26 @@ Bloco 3.4.3 delta (Forge Review Redesign Interaction Fixes):
 - Added provider/source badges to artwork, lyrics and metadata preview/apply sheets.
 - Preserved Home deep links, Forge Library rendering, Forge Activity rendering and Anchor/Aria/Flux app switching.
 - Preserved mock-only safety boundaries: no real files, metadata, lyrics, artwork, backend, network, FileReader, filesystem, secrets or analytics behavior.
+
+Bloco 3.4.4 delta (Forge Review Progress Flows and Interaction Closure):
+
+- Created `ForgeProgressSheet` component: reusable progress flow with animated step list, source/provider badge, deterministic ~650ms per step timing and result state with Done button.
+- Added progress coverage for every apply/fix action in Forge Review:
+  - Review safe fixes (All summary) → confirmation → progress: Preparing safe fixes / Applying local mock updates.
+  - Apply artwork → comparison sheet → progress: Preparing artwork update / Replacing mock artwork.
+  - Apply lyrics → lyrics preview → progress: Preparing lyrics / Updating mock lyrics.
+  - Apply synced → lyrics preview → progress: Preparing synced lyrics / Updating mock LRC.
+  - Apply tags → metadata preview → progress: Preparing tag update / Applying mock tags.
+  - Apply identity → protected preview → progress: Validating identity choice / Applying protected mock identity.
+  - Choose match → conflict preview → progress: Resolving mock match.
+  - Apply release data → release preview → progress: Preparing release metadata / Applying mock release fields.
+  - Apply audio data → audio preview → progress: Preparing audio analysis / Applying mock audio metadata.
+  - Ignore item / Ignore selected → reason/confirmation → progress: Marking item(s) ignored.
+  - Apply selected → confirmation → progress: Preparing selected fixes / Applying mock changes.
+- Completed All item repair overview interactions: grouped fix cards route to correct previews; Apply safe fixes and Ignore item use progress flows.
+- Verified Sort, tab/filter, row/chevron and selection/contextual bar interactions remain fully functional.
+- Improved Metadata preview readability: added Artist MBID, Release Group MBID, Barcode, Edition, Release type, Energy, Danceability fields; added `afterChips` support in `ForgeMetadataDiffSheet` for suggested value chips.
+- Ensured provider/source badges (Discogs, Last.fm, MusicBrainz, AcoustID, Lyrics provider mock, LRC mock, Audio analysis mock) are visible in previews, progress sheets and overview cards.
+- Local mock state updates after progress: items become fixed/ignored, removed from pending queue, session counters increment, toast confirms.
+- Preserved Forge Home, Library and Activity rendering; did not start Activity interactions, Aria or Flux.
+- Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, FileReader, secrets or analytics.

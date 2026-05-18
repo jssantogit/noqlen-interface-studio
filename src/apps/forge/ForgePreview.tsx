@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState, useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import {
   forgeAllReviewItems,
   reviewGroups,
   type ForgeMetadataFilter,
+  type ForgeReviewQueueItem,
   type ForgeReviewSection,
   type ReviewItemStatus,
   type ReviewItemType,
@@ -18,6 +19,7 @@ import { ForgeHome } from './components/ForgeHome'
 import { ForgeLibrary } from './components/ForgeLibrary'
 import { ForgeLyricsDetailSheet } from './components/ForgeLyricsDetailSheet'
 import { ForgeMetadataDiffSheet } from './components/ForgeMetadataDiffSheet'
+import { ForgeProgressSheet, type ForgeProgressFlow } from './components/ForgeProgressSheet'
 import { ForgeReview } from './components/ForgeReview'
 import { ForgeSafetyNoteSheet } from './components/ForgeSafetyNoteSheet'
 import { ForgeSettingsSheet } from './components/ForgeSettingsSheet'
@@ -33,6 +35,81 @@ function buildInitialItemStatuses(): Record<string, ReviewItemStatus> {
   reviewGroups.forEach((g) => g.items.forEach((i) => { map[i.id] = i.status }))
   forgeAllReviewItems.forEach((i) => { map[i.id] = 'pending' })
   return map
+}
+
+function getProgressConfig(item: ForgeReviewQueueItem | null): {
+  title: string
+  steps: string[]
+  source: string
+  message: string
+} | null {
+  if (!item) return null
+  const action = item.actionLabel || 'Apply change'
+  switch (action) {
+    case 'Apply artwork':
+      return {
+        title: 'Applying artwork',
+        steps: ['Preparing artwork update', 'Replacing mock artwork'],
+        source: 'Discogs',
+        message: 'Artwork updated in mock preview',
+      }
+    case 'Apply lyrics':
+      return {
+        title: 'Applying lyrics',
+        steps: ['Preparing lyrics', 'Updating mock lyrics'],
+        source: 'Lyrics provider mock',
+        message: 'Lyrics added in mock preview',
+      }
+    case 'Apply synced':
+      return {
+        title: 'Applying synced lyrics',
+        steps: ['Preparing synced lyrics', 'Updating mock LRC'],
+        source: 'LRC mock',
+        message: 'Synced lyrics applied in mock preview',
+      }
+    case 'Apply tags':
+      return {
+        title: 'Applying tags',
+        steps: ['Preparing tag update', 'Applying mock tags'],
+        source: 'Last.fm',
+        message: 'Tags applied in mock preview',
+      }
+    case 'Apply identity':
+      return {
+        title: 'Applying identity',
+        steps: ['Validating identity choice', 'Applying protected mock identity'],
+        source: 'MusicBrainz',
+        message: 'Identity applied in mock preview',
+      }
+    case 'Choose match':
+      return {
+        title: 'Resolving match',
+        steps: ['Resolving mock match'],
+        source: 'MusicBrainz',
+        message: 'Match selected in mock preview',
+      }
+    case 'Apply release data':
+      return {
+        title: 'Applying release data',
+        steps: ['Preparing release metadata', 'Applying mock release fields'],
+        source: 'Discogs',
+        message: 'Release data applied in mock preview',
+      }
+    case 'Apply audio data':
+      return {
+        title: 'Applying audio data',
+        steps: ['Preparing audio analysis', 'Applying mock audio metadata'],
+        source: 'Audio analysis mock',
+        message: 'Audio data applied in mock preview',
+      }
+    default:
+      return {
+        title: 'Applying change',
+        steps: ['Preparing change', 'Applying mock update'],
+        source: 'Forge mock',
+        message: 'Change applied in mock preview',
+      }
+  }
 }
 
 export function ForgePreview() {
@@ -55,6 +132,7 @@ export function ForgePreview() {
     onConfirm: () => void
     tone?: 'amber' | 'danger'
   } | null>(null)
+  const [progressFlow, setProgressFlow] = useState<ForgeProgressFlow | null>(null)
 
   const showToast = useCallback((message: string, tone: 'success' | 'info' | 'warning' = 'success') => {
     setToast({ message, tone })
@@ -163,13 +241,19 @@ export function ForgePreview() {
     [],
   )
 
+  const startProgress = useCallback((flow: ForgeProgressFlow) => {
+    setProgressFlow(flow)
+  }, [])
+
+  const closeProgress = useCallback(() => {
+    setProgressFlow(null)
+  }, [])
+
   const clearReviewFilter = useCallback(() => setReviewFilter('all'), [])
 
   const selectedReviewItem = useMemo(() => {
     if (!selectedReviewItemId) return null
-    return reviewGroups.flatMap((g) => g.items).find((i) => i.id === selectedReviewItemId)
-      ?? forgeAllReviewItems.find((i) => i.id === selectedReviewItemId)
-      ?? null
+    return forgeAllReviewItems.find((i) => i.id === selectedReviewItemId) ?? null
   }, [selectedReviewItemId])
 
   const metadataPreviewRows = useMemo(() => {
@@ -187,9 +271,10 @@ export function ForgePreview() {
 
     if (selectedReviewItem.metadataFilter === 'tags') {
       return [
-        { label: 'Genre', before: 'Empty', after: 'Post-rock · Ambient · Instrumental', source: 'Last.fm' },
-        { label: 'Mood', before: 'Empty', after: 'Calm · Melancholic', source: 'Last.fm' },
-        { label: 'Style', before: 'Electronic', after: 'Modern Classical · Minimal · Piano', source: 'Last.fm' },
+        { label: 'Genre', before: 'Empty', after: 'Post-rock · Ambient · Instrumental', afterChips: ['Post-rock', 'Ambient', 'Instrumental'], source: 'Last.fm' },
+        { label: 'Mood', before: 'Empty', after: 'Calm · Melancholic', afterChips: ['Calm', 'Melancholic'], source: 'Last.fm' },
+        { label: 'Style', before: 'Electronic', after: 'Modern Classical · Minimal · Piano', afterChips: ['Modern Classical', 'Minimal', 'Piano'], source: 'Last.fm' },
+        { label: 'Last.fm Tags', before: 'Empty', after: 'Instrumental, Piano-driven, Atmospheric', source: 'Last.fm' },
       ]
     }
     if (selectedReviewItem.metadataFilter === 'identity') {
@@ -201,8 +286,10 @@ export function ForgePreview() {
           ]
         : [
             { label: 'Album MBID', before: 'Empty', after: 'mock-mbid-all-melody-2018', source, note: 'Protected identity field.' },
-            { label: 'AcoustID', before: 'Empty', after: 'mock-acoustid-all-melody', source, note: 'Protected identity field.' },
+            { label: 'Artist MBID', before: 'Empty', after: 'mock-mbid-nils-frahm', source, note: 'Protected identity field.' },
+            { label: 'Release Group MBID', before: 'Empty', after: 'mock-rgid-all-melody-2018', source, note: 'Protected identity field.' },
             { label: 'ISRC', before: 'Empty', after: 'mock-isrc-2018-0001', source, note: 'Protected identity field.' },
+            { label: 'AcoustID', before: 'Empty', after: 'mock-acoustid-all-melody', source, note: 'Protected identity field.' },
           ]
     }
     if (selectedReviewItem.metadataFilter === 'release') {
@@ -210,6 +297,9 @@ export function ForgePreview() {
         { label: 'Label', before: 'Empty', after: 'Erased Tapes', source: 'Discogs' },
         { label: 'Country', before: 'Empty', after: 'DE', source: 'Discogs / MusicBrainz' },
         { label: 'Catalog number', before: 'Empty', after: 'ERATP106', source: 'Discogs' },
+        { label: 'Barcode', before: 'Empty', after: '4050486123456', source: 'Discogs' },
+        { label: 'Edition', before: 'Empty', after: 'Standard', source: 'Discogs' },
+        { label: 'Release type', before: 'Empty', after: 'Album', source: 'MusicBrainz' },
       ]
     }
     if (selectedReviewItem.metadataFilter === 'audio') {
@@ -217,41 +307,75 @@ export function ForgePreview() {
         { label: 'BPM', before: 'Empty', after: '120', source: 'Audio analysis mock' },
         { label: 'Key', before: 'Empty', after: 'A minor', source: 'Audio analysis mock' },
         { label: 'ReplayGain', before: 'Empty', after: 'Available', source: 'Audio analysis mock' },
+        { label: 'Energy', before: 'Empty', after: 'Low', source: 'Audio analysis mock' },
+        { label: 'Danceability', before: 'Empty', after: 'Very low', source: 'Audio analysis mock' },
       ]
     }
     return []
   }, [itemGenres, selectedReviewItem])
 
   const applyDetailFix = useCallback(() => {
-    if (!selectedReviewItemId) return
-    updateItemStatus(selectedReviewItemId, 'fixed')
+    if (!selectedReviewItemId || !selectedReviewItem) return
+    const config = getProgressConfig(selectedReviewItem)
+    if (!config) return
     closeDetailSheet()
-    showToast('Item fixed in mock preview')
-  }, [selectedReviewItemId, updateItemStatus, closeDetailSheet, showToast])
+    startProgress({
+      title: config.title,
+      steps: config.steps,
+      sourceBadge: config.source,
+      completeMessage: config.message,
+      onComplete: () => {
+        updateItemStatus(selectedReviewItemId, 'fixed')
+        showToast(config.message)
+      },
+    })
+  }, [selectedReviewItemId, selectedReviewItem, closeDetailSheet, startProgress, updateItemStatus, showToast])
 
   const ignoreDetailItem = useCallback(() => {
     if (!selectedReviewItemId) return
-    updateItemStatus(selectedReviewItemId, 'ignored')
     closeDetailSheet()
-    showToast('Item ignored in mock preview')
-  }, [selectedReviewItemId, updateItemStatus, closeDetailSheet, showToast])
+    startProgress({
+      title: 'Ignoring item',
+      steps: ['Marking item ignored'],
+      completeMessage: 'Item ignored in mock preview',
+      onComplete: () => {
+        updateItemStatus(selectedReviewItemId, 'ignored')
+        showToast('Item ignored in mock preview')
+      },
+    })
+  }, [selectedReviewItemId, closeDetailSheet, startProgress, updateItemStatus, showToast])
 
   const keepCurrentCover = useCallback(() => {
     if (!selectedReviewItemId) return
-    updateItemStatus(selectedReviewItemId, 'ignored')
     closeDetailSheet()
-    showToast('Current cover kept in mock preview')
-  }, [selectedReviewItemId, updateItemStatus, closeDetailSheet, showToast])
+    startProgress({
+      title: 'Keeping current cover',
+      steps: ['Marking item ignored'],
+      completeMessage: 'Current cover kept in mock preview',
+      onComplete: () => {
+        updateItemStatus(selectedReviewItemId, 'ignored')
+        showToast('Current cover kept in mock preview')
+      },
+    })
+  }, [selectedReviewItemId, closeDetailSheet, startProgress, updateItemStatus, showToast])
 
   const applyGenre = useCallback(
     (genres: string[]) => {
       if (!selectedReviewItemId) return
       setItemGenres((prev) => ({ ...prev, [selectedReviewItemId]: genres }))
-      updateItemStatus(selectedReviewItemId, 'fixed')
       closeDetailSheet()
-      showToast('Genre applied in mock preview')
+      startProgress({
+        title: 'Applying genre',
+        steps: ['Preparing genre update', 'Applying mock genres'],
+        sourceBadge: 'Last.fm',
+        completeMessage: 'Genre applied in mock preview',
+        onComplete: () => {
+          updateItemStatus(selectedReviewItemId, 'fixed')
+          showToast('Genre applied in mock preview')
+        },
+      })
     },
-    [selectedReviewItemId, updateItemStatus, closeDetailSheet, showToast],
+    [selectedReviewItemId, closeDetailSheet, startProgress, updateItemStatus, showToast],
   )
 
   const openMetadataDiff = useCallback(() => {
@@ -277,6 +401,7 @@ export function ForgePreview() {
         sessionIgnored={sessionIgnored}
         showToast={showToast}
         showConfirm={showConfirm}
+        showProgress={startProgress}
         onClearFilter={clearReviewFilter}
         onOpenItemDetail={openItemDetail}
         onResetQueue={resetQueue}
@@ -353,6 +478,11 @@ export function ForgePreview() {
           onApply={applyDetailFix}
           onClose={closeDetailSheet}
         />
+      )}
+
+      {/* Progress sheet */}
+      {progressFlow && (
+        <ForgeProgressSheet flow={progressFlow} onClose={closeProgress} />
       )}
 
       {toast && (

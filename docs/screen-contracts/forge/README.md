@@ -134,6 +134,17 @@ All data is static and fictional. All state changes are local React state only.
   - Added provider/source badges to artwork, lyrics and metadata preview/apply flows.
   - Preserved mock-only local state and did not start Forge Activity, Aria or Flux implementation.
 
+- **Bloco 3.4.4 (Forge Review Progress Flows and Interaction Closure):** implemented.
+  - Created `ForgeProgressSheet` component with deterministic step timing, source badge and result state.
+  - Added progress flows for every apply/fix action: Review safe fixes, Apply artwork, Apply lyrics, Apply synced, Apply tags, Apply identity, Choose match, Apply release data, Apply audio data, Ignore item, Apply selected, Ignore selected.
+  - Completed All item overview interactions: every grouped card action routes correctly; Apply safe fixes and Ignore item show progress.
+  - Verified Sort, tab/filter, row/chevron and selection/contextual interactions are fully functional.
+  - Improved Metadata preview readability with additional fields and `afterChips` rendering for suggested values.
+  - Ensured provider/source badges are visible in previews, progress sheets and overview cards.
+  - Local mock state updates after progress completion: items move to fixed/ignored, session counters increment, toast confirms.
+  - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits or downloads.
+  - Did not start Forge Activity, Aria or Flux implementation.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:

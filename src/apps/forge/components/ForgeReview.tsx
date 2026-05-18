@@ -12,6 +12,7 @@ import {
   type ReviewItemStatus,
   type ReviewItemType,
 } from '../forgeMockData'
+import type { ForgeProgressFlow } from './ForgeProgressSheet'
 import { CoverGradient, ForgeCard, ForgeScreenHeader } from './ForgeCard'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
 
@@ -375,6 +376,7 @@ export function ForgeReview({
   sessionIgnored,
   showToast,
   showConfirm,
+  showProgress,
   onClearFilter,
   onOpenItemDetail,
   onResetQueue,
@@ -399,6 +401,7 @@ export function ForgeReview({
     onConfirm: () => void
     tone?: 'amber' | 'danger'
   }) => void
+  showProgress: (flow: ForgeProgressFlow) => void
   onClearFilter?: () => void
   onOpenItemDetail?: (itemId: string, type: ReviewItemType, section?: ForgeReviewSection) => void
   onResetQueue?: () => void
@@ -464,8 +467,15 @@ export function ForgeReview({
       description: `Forge will apply ${safeFixCount} safe mock fixes in this local Studio preview only. Protected and conflict fields stay untouched.`,
       confirmLabel: 'Apply safe fixes',
       onConfirm: () => {
-        onSetSessionFixed((s) => s + safeFixCount)
-        showToast('Safe fixes applied in mock preview')
+        showProgress({
+          title: 'Applying safe fixes',
+          steps: ['Preparing safe fixes', 'Applying local mock updates'],
+          completeMessage: 'Safe fixes applied in mock preview',
+          onComplete: () => {
+            onSetSessionFixed((s) => s + safeFixCount)
+            showToast('Safe fixes applied in mock preview')
+          },
+        })
       },
     })
   }
@@ -477,21 +487,35 @@ export function ForgeReview({
       title: 'Apply selected fixes?',
       description: `Forge will apply ${idsToFix.length} selected mock fixes locally. No files or metadata are changed.`,
       confirmLabel: 'Apply selected',
-      onConfirm: () => applyIds(idsToFix, 'Selected fixes applied in mock preview'),
+      onConfirm: () => {
+        showProgress({
+          title: 'Applying selected fixes',
+          steps: ['Preparing selected fixes', 'Applying mock changes'],
+          completeMessage: 'Selected fixes applied in mock preview',
+          onComplete: () => applyIds(idsToFix, 'Selected fixes applied in mock preview'),
+        })
+      },
     })
   }
 
   const applyIgnoreSelected = () => {
     const idsToIgnore = Array.from(selectedIds).filter((id) => itemStatuses[id] === 'pending')
-    onSetItemStatuses((prev) => {
-      const next = { ...prev }
-      idsToIgnore.forEach((id) => { next[id] = 'ignored' })
-      return next
+    showProgress({
+      title: 'Ignoring selected items',
+      steps: ['Marking items ignored'],
+      completeMessage: 'Selected items ignored in mock preview',
+      onComplete: () => {
+        onSetItemStatuses((prev) => {
+          const next = { ...prev }
+          idsToIgnore.forEach((id) => { next[id] = 'ignored' })
+          return next
+        })
+        onSetSessionIgnored((s) => s + idsToIgnore.length)
+        onSetSelectedIds(new Set())
+        setIgnoreSheetOpen(false)
+        showToast('Selected items ignored in mock preview')
+      },
     })
-    onSetSessionIgnored((s) => s + idsToIgnore.length)
-    onSetSelectedIds(new Set())
-    setIgnoreSheetOpen(false)
-    showToast('Selected items ignored in mock preview')
   }
 
   const toggleItem = (id: string) => {
@@ -524,19 +548,33 @@ export function ForgeReview({
       description: `Forge will apply ${safeCount} safe mock fixes for ${overviewItem.title}. Items needing review stay pending.`,
       confirmLabel: 'Apply safe fixes',
       onConfirm: () => {
-        onSetSessionFixed((s) => s + safeCount)
-        setOverviewItem(null)
-        showToast('Safe fixes applied in mock preview')
+        showProgress({
+          title: 'Applying safe fixes',
+          steps: ['Preparing safe fixes', 'Applying local mock updates'],
+          completeMessage: 'Safe fixes applied in mock preview',
+          onComplete: () => {
+            onSetSessionFixed((s) => s + safeCount)
+            setOverviewItem(null)
+            showToast('Safe fixes applied in mock preview')
+          },
+        })
       },
     })
   }
 
   const ignoreOverviewItem = () => {
     if (!overviewItem) return
-    onSetItemStatuses((prev) => ({ ...prev, [overviewItem.id]: 'ignored' }))
-    onSetSessionIgnored((s) => s + 1)
-    setOverviewItem(null)
-    showToast('Item ignored in mock preview')
+    showProgress({
+      title: 'Ignoring item',
+      steps: ['Marking item ignored'],
+      completeMessage: 'Item ignored in mock preview',
+      onComplete: () => {
+        onSetItemStatuses((prev) => ({ ...prev, [overviewItem.id]: 'ignored' }))
+        onSetSessionIgnored((s) => s + 1)
+        setOverviewItem(null)
+        showToast('Item ignored in mock preview')
+      },
+    })
   }
 
   return (

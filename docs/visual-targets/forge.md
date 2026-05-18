@@ -46,6 +46,7 @@ Review redesign rules:
 - Metadata actions use specific labels such as `Apply tags`, `Apply identity`, `Choose match`, `Apply release data` and `Apply audio data`.
 - Metadata preview sheets show field-by-field current/suggested values with wrapping text and provider/source badges.
 - Artwork, lyrics and metadata preview sheets show subtle provider/source badges.
+- Progress sheets show step list, animated progress indicator, source badge and result state with Done button.
 - File info is read-only and excluded from the main Review surface.
 - Use soft peach-orange/warm amber accents only; avoid neon, cyan spill, blue glow and saturated orange.
 

@@ -106,7 +106,7 @@ Layout constraints:
 ### Review Safe Fixes
 
 - Trigger: `Review safe fixes` in the All summary card.
-- Result: opens confirmation dialog for safe proposals in the active view.
+- Result: opens confirmation dialog for safe proposals in the active view; on confirm shows progress flow with steps: Preparing safe fixes / Applying local mock updates; completes with success state.
 - Mock state: confirmed safe proposals increment local applied session state; mixed rows remain visible when manual review work still exists.
 - Safety: must not write metadata, edit files, fetch lyrics or download covers.
 - Current status: implemented.
@@ -115,7 +115,7 @@ Layout constraints:
 
 - Trigger: select row checkboxes, then tap `Apply selected` in the compact contextual bar.
 - Requires: at least one selected item.
-- Result: opens confirmation dialog for selected rows.
+- Result: opens confirmation dialog for selected rows; on confirm shows progress flow with steps: Preparing selected fixes / Applying mock changes; completes with success state.
 - Mock state: selected items move to fixed/applied local state; toast confirms.
 - Safety: same as Review safe fixes.
 - Current status: implemented.
@@ -124,7 +124,7 @@ Layout constraints:
 
 - Trigger: select row checkboxes, then tap `Ignore` in the compact contextual bar.
 - Requires: at least one selected item.
-- Result: opens ignore reason bottom sheet with optional reason chips.
+- Result: opens ignore reason bottom sheet with optional reason chips; on confirm shows progress flow: Marking items ignored; completes with success state.
 - Options: `Not needed`, `Wrong suggestion`, `Review later`, `Keep current metadata`.
 - Mock state: selected items move to `ignored` status locally; toast confirms.
 - Safety: must not delete, hide or modify real files or metadata.
@@ -147,7 +147,7 @@ Layout constraints:
 - Trigger: tap an All queue row.
 - Result: opens a complete item repair overview bottom sheet showing grouped proposed fixes across Artwork, Lyrics and Metadata.
 - Overview actions route to the relevant preview sheet: Review artwork, Review lyrics, Review tags, Review identity, Review release data and Review audio data.
-- Mock state: overview `Apply safe fixes` increments local applied state after confirmation; `Ignore item` hides the item locally; routed preview sheets keep their existing mock state behavior.
+- Mock state: overview `Apply safe fixes` shows confirmation → progress flow → increments local applied session state; `Ignore item` shows progress flow → hides the item locally; routed preview sheets keep their existing mock state behavior.
 - Current status: implemented.
 
 ### Sort Review Queue
@@ -161,7 +161,7 @@ Layout constraints:
 
 - Trigger: tap a Lyrics row or its `Apply lyrics`, `Review lyrics` or `Apply synced` affordance.
 - Result: opens `ForgeLyricsDetailSheet` with fake placeholder lyrics only.
-- Actions: `Apply lyrics` (marks fixed), `Ignore this item` (marks ignored), `Close`, `Preview changes` (opens metadata diff).
+- Actions: `Apply lyrics` shows progress flow: Preparing lyrics / Updating mock lyrics → marks fixed; `Apply synced` shows progress flow: Preparing synced lyrics / Updating mock LRC → marks fixed; `Ignore this item` shows progress flow: Marking item ignored → marks ignored; `Close`, `Preview changes` (opens metadata diff).
 - Mock state: item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - Current status: implemented.
 
@@ -172,7 +172,7 @@ Layout constraints:
 - Shows: album title, artist, current cover placeholder, suggested cover placeholder, current resolution and suggested resolution.
 - List rule: artwork rows show current-cover facts only; no confidence as main artwork data and no direct list-level current-vs-suggested comparison.
 - Provider badge: Discogs.
-- Actions: `Apply artwork` (marks fixed), `Keep current` (marks ignored), `Ignore` (marks ignored), `Cancel`, `Preview changes` (opens metadata diff).
+- Actions: `Apply artwork` shows progress flow: Preparing artwork update / Replacing mock artwork → marks fixed; `Keep current` shows progress flow: Marking item ignored → marks ignored; `Ignore` shows progress flow: Marking item ignored → marks ignored; `Cancel`, `Preview changes` (opens metadata diff).
 - Mock state: item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - Current status: implemented.
 
@@ -180,10 +180,11 @@ Layout constraints:
 
 - Trigger: tap a Metadata row or its specific action affordance.
 - Result: opens `ForgeMetadataDiffSheet` with current vs suggested values.
-- Preview readability: field-by-field vertical rows with wrapping Current and Suggested values; no important value is hidden by ellipsis.
-- Provider badges: Tags use Last.fm, Identity uses MusicBrainz / AcoustID, Release uses Discogs / MusicBrainz, Audio uses Audio analysis mock.
+- Preview readability: field-by-field vertical rows with wrapping Current and Suggested values; suggested values may render as chips; no important value is hidden by ellipsis.
+- Provider badges: Tags use Last.fm; Identity uses MusicBrainz / AcoustID; Release uses Discogs / MusicBrainz; Audio uses Audio analysis mock.
 - Tags rows use `Apply tags`; Identity rows use `Apply identity`; conflicts use `Choose match`; Release rows use `Apply release data`; Audio rows use `Apply audio data`.
 - Protected identity fields require explicit confirmation through the preview sheet.
+- Progress flow: each Apply action shows a progress sheet before completing (e.g., Preparing tag update / Applying mock tags for Tags; Validating identity choice / Applying protected mock identity for Identity).
 - Mock state: item status becomes `fixed`; toast confirms; item removed from pending queue.
 - Current status: implemented.
 

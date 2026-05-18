@@ -5,6 +5,7 @@ export interface DiffRow {
   label: string
   before: string
   after: string
+  afterChips?: string[]
   source?: string
   note?: string
 }
@@ -53,7 +54,20 @@ export function ForgeMetadataDiffSheet({
                 </div>
                 <div className="rounded-lg border border-emerald-300/10 bg-emerald-300/[0.045] p-2">
                   <p className="text-[10px] uppercase tracking-wider text-emerald-200/55">Suggested</p>
-                  <p className="mt-1 whitespace-normal break-words text-xs leading-4 text-emerald-200">{row.after}</p>
+                  {row.afterChips ? (
+                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                      {row.afterChips.map((chip) => (
+                        <span
+                          key={chip}
+                          className="rounded-md bg-emerald-400/13 px-2 py-0.5 text-[11px] font-medium text-emerald-200"
+                        >
+                          {chip}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="mt-1 whitespace-normal break-words text-xs leading-4 text-emerald-200">{row.after}</p>
+                  )}
                 </div>
               </div>
               {row.note && <p className="mt-2 text-[11px] leading-4 text-[#f0b879]/75">{row.note}</p>}
