@@ -269,46 +269,49 @@ Layout constraints:
 
 ## Required UI States
 
+Access path: Anchor Home -> Settings -> Studio mock states. These controls are Studio-only, local and not part of a production Anchor feature.
+
 Home:
 
-- Server active.
-- Server stopped.
-- Restarting.
-- Degraded.
-- Offline.
+- Server active: implemented.
+- Server stopped: implemented.
+- Restarting: implemented.
+- Degraded: implemented.
+- Offline: implemented.
+- Disabled: implemented.
 
 Servers:
 
-- One running server.
-- No servers.
-- Adding server.
-- Coming soon server.
-- Server disabled.
+- One running server: implemented.
+- No servers: implemented.
+- Adding server: implemented.
+- Coming soon only: implemented.
+- Server disabled: implemented.
 
 Library:
 
-- Accessible.
-- Scanning.
-- Empty.
-- Permission warning.
-- Access denied.
-- Scan failed.
+- Accessible: implemented.
+- Scanning: implemented.
+- Empty: implemented.
+- Permission warning: implemented.
+- Access denied: implemented.
+- Scan failed: implemented.
 
 Activity:
 
-- Populated.
-- Filtered.
-- Empty.
-- Errors only.
+- Populated: implemented.
+- Filtered no-results: implemented.
+- Empty: implemented.
+- Errors only: implemented.
 
 Global:
 
-- Loading.
-- Disabled.
-- Toast.
-- Confirmation dialog.
-- Bottom sheet.
-- Detail sheet.
+- Loading overlay: implemented.
+- Disabled primary actions: implemented.
+- Toast active: implemented.
+- Dialog active: implemented through existing confirmation flows.
+- Bottom sheet active: implemented through existing secondary surfaces.
+- Detail sheet active: implemented through server, stats, scan and activity detail surfaces.
 
 ## Component Inventory
 
@@ -347,6 +350,11 @@ Batch 3 components now implemented:
 - `AnchorLibraryStatsSheet`.
 - `AnchorScanHistorySheet`.
 
+Bloco 2.9 components now implemented:
+
+- `AnchorMockStateControls`.
+- `anchorState.ts` typed local state model.
+
 Batch 4 components now implemented:
 
 - `AnchorActivityFilterSheet`.
@@ -359,7 +367,6 @@ Needed components:
 - `AnchorHeader`.
 - `AnchorButton`.
 - `AnchorStatusPill`.
-- Shared app-level state coverage components remain future work.
 
 ## Implementation Batches
 

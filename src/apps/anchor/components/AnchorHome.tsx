@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import type { AnchorScanState } from './AnchorScanProgress'
 import type { AnchorServerState } from '../AnchorPreview'
+import type { AnchorLibraryState } from '../anchorState'
 import {
   anchorLibrary,
   anchorQuickActions,
@@ -30,6 +31,8 @@ const serverView: Record<
     status: string
     statusClass: string
     uptime: string
+    note?: string
+    address?: string
   }
 > = {
   active: {
@@ -47,6 +50,7 @@ const serverView: Record<
     status: 'Server stopped',
     statusClass: 'text-slate-300',
     uptime: 'Offline in preview',
+    address: 'Unavailable in stopped state',
   },
   restarting: {
     actionLabel: 'Stop server',
@@ -63,6 +67,17 @@ const serverView: Record<
     status: 'Server degraded',
     statusClass: 'text-orange-300',
     uptime: anchorServer.uptime,
+    note: 'Limited availability. Review settings or restart the mock server.',
+  },
+  offline: {
+    actionLabel: 'Start server',
+    iconClass: 'border-red-300 text-red-300',
+    primaryButton: 'bg-red-400 text-white hover:bg-red-300',
+    status: 'Server offline',
+    statusClass: 'text-red-300',
+    uptime: 'Offline in preview',
+    address: 'Unavailable while offline',
+    note: 'Mock network is unavailable. Restart remains visual-only.',
   },
   disabled: {
     actionLabel: 'Start server',
@@ -71,11 +86,24 @@ const serverView: Record<
     status: 'Server disabled',
     statusClass: 'text-slate-300',
     uptime: 'Disabled in preview',
+    address: 'Disabled from mock menu',
+    note: 'Primary controls are disabled until the mock server is re-enabled.',
   },
+}
+
+const libraryStatus: Record<AnchorLibraryState, { label: string; className: string; updated: string }> = {
+  accessible: { label: anchorLibrary.status, className: 'text-emerald-300', updated: anchorLibrary.updated },
+  scanning: { label: 'Scanning', className: 'text-amber-200', updated: 'Scan running now' },
+  empty: { label: 'Empty', className: 'text-slate-300', updated: 'No music indexed' },
+  permissionWarning: { label: 'Permission warning', className: 'text-orange-300', updated: 'Access should be reviewed' },
+  accessDenied: { label: 'Access denied', className: 'text-red-300', updated: 'Folder unavailable in mock state' },
+  scanFailed: { label: 'Scan failed', className: 'text-red-300', updated: 'Retry mock scan available' },
 }
 
 export function AnchorHome({
   onCopyAddress,
+  globalDisabled,
+  libraryState,
   onLibraryOpen,
   onRefreshLibrary,
   onRestartServer,
@@ -86,6 +114,8 @@ export function AnchorHome({
   scanState,
   serverState,
 }: {
+  globalDisabled: boolean
+  libraryState: AnchorLibraryState
   onCopyAddress: () => void
   onLibraryOpen: () => void
   onRefreshLibrary: () => void
@@ -99,7 +129,9 @@ export function AnchorHome({
 }) {
   const server = serverView[serverState]
   const isRestarting = serverState === 'restarting'
-  const isStopped = serverState === 'stopped' || serverState === 'disabled'
+  const isStopped = serverState === 'stopped' || serverState === 'offline'
+  const controlsDisabled = isRestarting || serverState === 'disabled' || globalDisabled
+  const currentLibraryStatus = libraryStatus[libraryState]
 
   const quickActionHandlers = [onCopyAddress, onShowQrCode, onRefreshLibrary]
 
@@ -143,7 +175,7 @@ export function AnchorHome({
           {[
             ['Uptime', server.uptime],
             ['Library size', anchorServer.librarySize],
-            ['Address', anchorServer.address],
+            ['Address', server.address ?? anchorServer.address],
           ].map(([label, value]) => (
             <div
               className="grid min-w-0 grid-cols-1 gap-1 rounded-xl border border-white/[0.045] bg-black/10 px-3 py-2"
@@ -158,10 +190,15 @@ export function AnchorHome({
             </div>
           ))}
         </dl>
+        {server.note ? (
+          <p className="mt-3 rounded-xl border border-orange-300/16 bg-orange-300/[0.055] px-3 py-2 text-xs leading-5 text-orange-100/88">
+            {server.note}
+          </p>
+        ) : null}
         <div className="mt-6 space-y-2.5">
           <button
             className={`flex h-10 w-full items-center justify-center gap-2 rounded-lg text-sm font-semibold shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_0.8rem_1.5rem_rgba(245,158,11,0.12)] transition focus:outline-none focus:ring-2 focus:ring-amber-100/60 disabled:cursor-not-allowed disabled:opacity-60 ${server.primaryButton}`}
-            disabled={isRestarting}
+            disabled={controlsDisabled}
             onClick={isStopped ? onRestartServer : onStopServer}
             type="button"
           >
@@ -170,7 +207,7 @@ export function AnchorHome({
           </button>
           <button
             className="flex h-10 w-full items-center justify-center gap-2 rounded-lg border border-white/[0.065] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
-            disabled={isRestarting}
+            disabled={controlsDisabled}
             onClick={onRestartServer}
             type="button"
           >
@@ -191,12 +228,12 @@ export function AnchorHome({
           </span>
           <span className="min-w-0 flex-1">
             <span className="block break-words text-sm font-semibold text-white">Library</span>
-            <span className="mt-1 block break-words text-xs text-emerald-300">
-              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-300" />
-              {anchorLibrary.status}
+            <span className={`mt-1 block break-words text-xs ${currentLibraryStatus.className}`}>
+              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-current" />
+              {currentLibraryStatus.label}
             </span>
             <span className="mt-1 block break-words text-[0.72rem] text-slate-300/72">
-              {anchorLibrary.updated}
+              {currentLibraryStatus.updated}
             </span>
           </span>
           <ChevronRight className="shrink-0 text-slate-300/75" size={19} />
@@ -211,6 +248,7 @@ export function AnchorHome({
             return (
               <button
                 className="flex min-h-[4.7rem] min-w-0 flex-col items-center justify-center gap-1.5 rounded-xl border border-white/[0.065] bg-white/[0.045] px-1.5 py-2.5 text-center text-[0.66rem] leading-4 text-slate-200 transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30 sm:min-h-[5.2rem] sm:gap-2 sm:px-2 sm:py-3 sm:text-[0.7rem]"
+                disabled={globalDisabled}
                 key={action}
                 onClick={quickActionHandlers[index]}
                 type="button"

@@ -1,5 +1,6 @@
 import { Filter } from 'lucide-react'
 import type { AnchorActivityEvent, AnchorActivityFilter } from '../anchorMockData'
+import type { AnchorActivityState } from '../anchorState'
 import { AnchorActivityItem } from './AnchorActivityItem'
 import { AnchorCard, AnchorIconButton, AnchorScreenHeader } from './AnchorCard'
 import { AnchorActivityEmptyState } from './AnchorActivityEmptyState'
@@ -46,12 +47,14 @@ function ActivitySection({
 
 export function AnchorActivity({
   activeFilter,
+  activityState,
   events,
   onFilterOpen,
   onOpenEvent,
   onResetFilter,
 }: {
   activeFilter: AnchorActivityFilter
+  activityState: AnchorActivityState
   events: AnchorActivityEvent[]
   onFilterOpen: () => void
   onOpenEvent: (eventId: string) => void
@@ -81,6 +84,29 @@ export function AnchorActivity({
           {filterLabels[activeFilter]}
         </span>
       </div>
+
+      {activityState === 'empty' ? (
+        <div className="mb-4 rounded-2xl border border-white/[0.06] bg-white/[0.035] px-3.5 py-3">
+          <p className="text-sm font-semibold text-white">No activity yet</p>
+          <p className="mt-1 text-xs leading-5 text-slate-300/76">
+            This mock state clears the event stream without reading real logs.
+          </p>
+        </div>
+      ) : activityState === 'errorsOnly' ? (
+        <div className="mb-4 rounded-2xl border border-red-300/16 bg-red-300/[0.055] px-3.5 py-3">
+          <p className="text-sm font-semibold text-red-100">Errors only</p>
+          <p className="mt-1 text-xs leading-5 text-red-50/76">
+            Static error events remain available for diagnostic sheet testing.
+          </p>
+        </div>
+      ) : activityState === 'filteredNoResults' ? (
+        <div className="mb-4 rounded-2xl border border-amber-300/16 bg-amber-300/[0.055] px-3.5 py-3">
+          <p className="text-sm font-semibold text-amber-100">Filtered no-results</p>
+          <p className="mt-1 text-xs leading-5 text-amber-50/76">
+            The selected mock filter intentionally returns no local events.
+          </p>
+        </div>
+      ) : null}
 
       {hasEvents ? (
         <>

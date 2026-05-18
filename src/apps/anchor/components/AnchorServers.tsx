@@ -9,6 +9,7 @@ import {
   Zap,
 } from 'lucide-react'
 import { anchorServers } from '../anchorMockData'
+import type { AnchorServerListState } from '../anchorState'
 import { AnchorCard, AnchorIconButton, AnchorScreenHeader } from './AnchorCard'
 
 export function AnchorServers({
@@ -20,6 +21,7 @@ export function AnchorServers({
   onOpenMenu,
   onOpenSettings,
   onRestoreServer,
+  serverListState = 'normal',
   serverState = 'active',
 }: {
   navidromeVisible?: boolean
@@ -30,15 +32,25 @@ export function AnchorServers({
   onOpenMenu: () => void
   onOpenSettings: () => void
   onRestoreServer: () => void
-  serverState?: 'active' | 'stopped' | 'restarting' | 'disabled'
+  serverListState?: AnchorServerListState
+  serverState?: 'active' | 'stopped' | 'restarting' | 'degraded' | 'offline' | 'disabled'
 }) {
   const navidrome = anchorServers[0]
-  const isDisabled = serverState === 'disabled'
-  const statusBadge = isDisabled ? 'Disabled' : navidrome.badge
-  const statusClass = isDisabled
+  const isDisabled = serverState === 'disabled' || serverListState === 'navidromeDisabled'
+  const showNavidrome = navidromeVisible && serverListState !== 'noServers' && serverListState !== 'comingSoonOnly'
+  const statusBadge = isDisabled
+    ? 'Disabled'
+    : serverState === 'offline'
+      ? 'Offline'
+      : serverState === 'degraded'
+        ? 'Degraded'
+        : navidrome.badge
+  const statusClass = isDisabled || serverState === 'offline'
     ? 'bg-slate-400/12 text-slate-300'
-    : 'bg-emerald-400/14 text-emerald-300'
-  const statusDotClass = isDisabled ? 'bg-slate-300' : 'bg-emerald-300'
+    : serverState === 'degraded'
+      ? 'bg-orange-400/14 text-orange-300'
+      : 'bg-emerald-400/14 text-emerald-300'
+  const statusDotClass = isDisabled || serverState === 'offline' ? 'bg-slate-300' : serverState === 'degraded' ? 'bg-orange-300' : 'bg-emerald-300'
 
   return (
     <div className="w-full min-w-0 max-w-full px-4 pt-5 sm:px-5">
@@ -52,7 +64,16 @@ export function AnchorServers({
         title="Servers"
       />
 
-      {navidromeVisible ? (
+      {serverListState === 'addingServer' ? (
+        <AnchorCard className="mb-3.5 border-amber-300/16 bg-amber-300/[0.045] p-4">
+          <p className="text-sm font-semibold text-amber-100">Adding mock server</p>
+          <p className="mt-1 text-xs leading-5 text-amber-50/78">
+            The Add Server sheet is open with local-only validation. No discovery or connection is attempted.
+          </p>
+        </AnchorCard>
+      ) : null}
+
+      {showNavidrome ? (
         <AnchorCard className="overflow-hidden">
           <div className="flex items-start gap-3 p-4 transition hover:bg-white/[0.035]">
             <button
@@ -98,9 +119,9 @@ export function AnchorServers({
           <div className="border-t border-white/[0.055] px-4 py-4">
             <dl className="space-y-3 text-xs">
               {[
-                ['Address', navidrome.address],
+                ['Address', serverState === 'offline' ? 'Unavailable while offline' : navidrome.address],
                 ['Version', navidrome.version],
-                ['Uptime', navidrome.uptime],
+                ['Uptime', isDisabled ? 'Disabled in preview' : serverState === 'offline' ? 'Offline in preview' : navidrome.uptime],
               ].map(([label, value]) => (
                 <div className="grid min-w-0 grid-cols-1 gap-1 rounded-xl border border-white/[0.045] bg-black/10 px-3 py-2" key={label}>
                   <dt className="text-[0.64rem] font-semibold uppercase tracking-[0.13em] text-slate-300/74">{label}</dt>
@@ -128,18 +149,32 @@ export function AnchorServers({
             </div>
           </div>
         </AnchorCard>
+      ) : serverListState === 'comingSoonOnly' ? (
+        <AnchorCard className="p-5 text-center">
+          <p className="font-serif text-xl tracking-[-0.04em] text-white">Planned servers only</p>
+          <p className="mt-2 text-xs leading-5 text-slate-300/78">
+            Navidrome is hidden so only Jellyfin and Emby coming-soon cards are visible.
+          </p>
+        </AnchorCard>
       ) : (
         <AnchorCard className="p-5 text-center">
-          <p className="font-serif text-xl tracking-[-0.04em] text-white">No active servers</p>
+          <p className="font-serif text-xl tracking-[-0.04em] text-white">No servers configured</p>
           <p className="mt-2 text-xs leading-5 text-slate-300/78">
-            Navidrome was removed from this local preview. Refresh the Studio to restore the baseline mock data.
+            Add a mock server profile to preview server management.
           </p>
           <button
             className="mt-4 h-10 w-full rounded-xl bg-amber-400 text-sm font-semibold text-[#211508] transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-100/70"
+            onClick={onAddServer}
+            type="button"
+          >
+            Add mock server
+          </button>
+          <button
+            className="mt-2 h-10 w-full rounded-xl border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
             onClick={onRestoreServer}
             type="button"
           >
-            Restore mock server
+            Restore baseline preview
           </button>
         </AnchorCard>
       )}

@@ -1,5 +1,6 @@
 import { Bell, Info, Network, ShieldCheck, SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 import { AnchorBottomSheet } from './AnchorBottomSheet'
 
 const sections = [
@@ -30,7 +31,13 @@ const sections = [
   },
 ]
 
-export function AnchorSettingsSheet({ onClose }: { onClose: () => void }) {
+export function AnchorSettingsSheet({
+  mockStateControls,
+  onClose,
+}: {
+  mockStateControls?: ReactNode
+  onClose: () => void
+}) {
   const [enabledRows, setEnabledRows] = useState<Record<string, boolean>>({
     'Confirm server actions': true,
     'Mock-only controls': true,
@@ -44,6 +51,7 @@ export function AnchorSettingsSheet({ onClose }: { onClose: () => void }) {
       title="Settings"
     >
       <div className="space-y-3">
+        {mockStateControls}
         {sections.map(({ Icon, rows, title }) => (
           <section
             className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5"

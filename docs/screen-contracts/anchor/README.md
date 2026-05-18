@@ -93,6 +93,8 @@ Bloco 2.7 implements Activity filter, event detail, Startup failed error detail,
 
 Bloco 2.8 closes visible interaction gaps before State Coverage: no visible Anchor control should remain a silent no-op; implemented controls respond with local mock state, sheets, dialogs or toasts, and unavailable future behavior remains described as visual-only/deferred.
 
+Bloco 2.9 implements Studio-only mock state coverage. The controls live inside Anchor Home -> Settings -> Studio mock states and can switch server, server-list, library, activity and global UI states without leaving the phone viewport.
+
 Completion requires consistent Anchor-styled sheets, dialogs and state variants while preserving the no-backend, no-filesystem and no-real-server-control boundary.
 
 ## Disabled / Visual-Only Actions
@@ -108,6 +110,7 @@ Completion requires consistent Anchor-styled sheets, dialogs and state variants 
 - Activity filters, details and diagnostics are visual-only and use static mock event data.
 - Add Server validation is local visual validation only; it never probes addresses or ports.
 - Restore mock server restores only the static preview card after local removal.
+- Studio mock state controls mutate local React preview state only and are not production settings.
 
 ## Anchor Does Not Do
 

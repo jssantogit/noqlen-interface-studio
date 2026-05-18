@@ -77,44 +77,45 @@ This contract translates the Anchor interaction map into implementation-oriented
 
 Home states:
 
-- Server active: current visual baseline.
-- Server stopped: required.
-- Restarting: required.
-- Degraded: required.
-- Offline: required.
+- Server active: implemented.
+- Server stopped: implemented.
+- Restarting: implemented.
+- Degraded: implemented.
+- Offline: implemented.
+- Disabled: implemented.
 
 Servers states:
 
-- One running server: current visual baseline.
-- No servers: required.
-- Adding server: required.
-- Coming soon server: current visual baseline, still needs interaction.
-- Server disabled: required.
+- One running server: implemented.
+- No servers: implemented.
+- Adding server: implemented.
+- Coming soon only: implemented.
+- Server disabled: implemented.
 
 Library states:
 
-- Accessible: current visual baseline.
-- Scanning: required.
-- Empty: required.
-- Permission warning: required.
-- Access denied: required.
-- Scan failed: required.
+- Accessible: implemented.
+- Scanning: implemented.
+- Empty: implemented.
+- Permission warning: implemented.
+- Access denied: implemented.
+- Scan failed: implemented.
 
 Activity states:
 
-- Populated: current visual baseline.
-- Filtered: required.
-- Empty: required.
-- Errors only: required.
+- Populated: implemented.
+- Filtered no-results: implemented.
+- Empty: implemented.
+- Errors only: implemented.
 
 Global states:
 
-- Loading: required.
-- Disabled: required.
-- Toast: required.
-- Confirmation dialog: required.
-- Bottom sheet: required.
-- Detail sheet: required.
+- Loading: implemented through Studio mock state controls.
+- Disabled: implemented through Studio mock state controls.
+- Toast: implemented through Studio mock state controls and existing actions.
+- Confirmation dialog: implemented through existing stop/restart/remove flows.
+- Bottom sheet: implemented through existing secondary surfaces and state controls.
+- Detail sheet: implemented through server, library and activity detail surfaces.
 
 ## Completion Tracking
 
@@ -122,5 +123,6 @@ Global states:
 - Current implementation has bottom nav, Home Batch 1 interactions, Servers Batch 2 interactions and Library Batch 3 interactions.
 - Activity interactions are implemented for filter, event detail, error detail, Today/Yesterday filtering, errors-only state, empty-state handling and diagnostic copy toast.
 - Bloco 2.8 closes visible interaction gaps found after QA: Home server menu icon is wired, Add Server validation is visible, secret fields accept masked local draft edits, and the removed-server empty state has a restore action.
-- Remaining Anchor work is state coverage polish and final completion audit.
+- Bloco 2.9 adds accessible Studio mock state controls under Anchor Home -> Settings and implements server, server-list, library, activity and global mock states.
+- Remaining Anchor work is final completion audit.
 - No app-specific implementation should be considered complete unless its forbidden real behavior has also been checked.

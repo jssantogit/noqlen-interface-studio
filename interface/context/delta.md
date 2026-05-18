@@ -160,3 +160,13 @@ Bloco 2.8 delta:
 - Added local Add Server validation for empty display name, missing address and invalid mock port before toast-only save feedback.
 - Added a local `Restore mock server` action for the post-remove empty Servers state and made masked Navidrome secret fields editable in local draft state.
 - Updated Anchor contracts and audit docs while preserving the no-backend, no-filesystem, no-real-server-control mock-only boundary.
+
+Bloco 2.9 delta:
+
+- Added a typed Anchor-local mock state model for server, server-list, library, activity and global UI coverage.
+- Added Studio-only mock state controls inside Anchor Home -> Settings so state coverage is testable from inside the phone viewport.
+- Implemented visible server states for active, stopped, restarting, degraded, offline and disabled.
+- Implemented visible Servers states for normal list, no servers, adding server, Navidrome disabled and coming-soon only.
+- Implemented visible Library states for accessible, scanning, empty, permission warning, access denied and scan failed.
+- Implemented visible Activity states for populated, empty, errors-only and filtered no-results, plus global loading, disabled actions, toast and clear-overlays controls.
+- Preserved the mock-only boundary: no Anchor Core, Navidrome, backend, filesystem, log, process, port, auth, analytics or credential behavior was added.

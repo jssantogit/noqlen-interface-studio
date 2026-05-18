@@ -19,6 +19,7 @@ import type { AnchorLibrarySettings } from './components/AnchorLibrarySettingsSh
 import { AnchorLibraryStatsSheet } from './components/AnchorLibraryStatsSheet'
 import { AnchorLogViewerSheet } from './components/AnchorLogViewerSheet'
 import { AnchorMockQrCode } from './components/AnchorMockQrCode'
+import { AnchorMockStateControls } from './components/AnchorMockStateControls'
 import { AnchorNavidromeSettingsSheet } from './components/AnchorNavidromeSettingsSheet'
 import { AnchorScanProgress } from './components/AnchorScanProgress'
 import { AnchorScanHistorySheet } from './components/AnchorScanHistorySheet'
@@ -32,9 +33,11 @@ import { AnchorToast } from './components/AnchorToast'
 import type { AnchorToastTone } from './components/AnchorToast'
 import { anchorActivity, anchorServer } from './anchorMockData'
 import type { AnchorActivityFilter } from './anchorMockData'
+import { initialAnchorMockState } from './anchorState'
+import type { AnchorMockState } from './anchorState'
 
 export type AnchorTab = 'home' | 'servers' | 'library' | 'activity'
-export type AnchorServerState = 'active' | 'stopped' | 'restarting' | 'degraded' | 'disabled'
+export type { AnchorServerState } from './anchorState'
 type AnchorSheet =
   | 'settings'
   | 'qr'
@@ -71,7 +74,7 @@ const initialLibrarySettings: AnchorLibrarySettings = {
 
 export function AnchorPreview() {
   const [activeTab, setActiveTab] = useState<AnchorTab>('home')
-  const [serverState, setServerState] = useState<AnchorServerState>('active')
+  const [mockState, setMockState] = useState<AnchorMockState>(initialAnchorMockState)
   const [activeSheet, setActiveSheet] = useState<AnchorSheet>(null)
   const [activeDialog, setActiveDialog] = useState<AnchorDialog>(null)
   const [scanState, setScanState] = useState<AnchorScanState>('idle')
@@ -83,6 +86,7 @@ export function AnchorPreview() {
   const [activityFilter, setActivityFilter] = useState<AnchorActivityFilter>('all')
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null)
   const [toast, setToast] = useState<AnchorToastState>(null)
+  const serverState = mockState.server
 
   const showToast = (message: string, tone: AnchorToastTone = 'success') => {
     setToast({ message, tone })
@@ -97,7 +101,7 @@ export function AnchorPreview() {
   useEffect(() => {
     if (serverState !== 'restarting') return undefined
     const timeout = window.setTimeout(() => {
-      setServerState('active')
+      setMockState((current) => ({ ...current, server: 'active' }))
       showToast('Server restarted')
     }, 2200)
     return () => window.clearTimeout(timeout)
@@ -115,10 +119,28 @@ export function AnchorPreview() {
 
   const startRestart = () => {
     setActiveDialog(null)
-    setServerState('restarting')
+    setMockState((current) => ({ ...current, server: 'restarting' }))
   }
 
-  const filteredActivity = anchorActivity.filter((event) => {
+  const updateMockState = (state: AnchorMockState) => {
+    setMockState(state)
+    if (state.serverList === 'addingServer') setActiveSheet('addServer')
+    if (state.library === 'scanning') setScanState('scanning')
+    if (state.library === 'scanFailed') setScanState('failed')
+    if (state.library !== 'scanning' && state.library !== 'scanFailed') setScanState('idle')
+    if (state.activity === 'errorsOnly') setActivityFilter('errors')
+    if (state.activity === 'filteredNoResults') setActivityFilter('server')
+    if (state.activity === 'populated' || state.activity === 'empty') setActivityFilter('all')
+  }
+
+  const stateActivity =
+    mockState.activity === 'empty' || mockState.activity === 'filteredNoResults'
+      ? []
+      : mockState.activity === 'errorsOnly'
+        ? anchorActivity.filter((event) => event.severity === 'error')
+        : anchorActivity
+
+  const filteredActivity = stateActivity.filter((event) => {
     if (activityFilter === 'all') return true
     if (activityFilter === 'errors') return event.severity === 'error'
     if (activityFilter === 'today' || activityFilter === 'yesterday') {
@@ -140,6 +162,8 @@ export function AnchorPreview() {
     home: (
       <AnchorHome
         onCopyAddress={() => showToast('Address copied')}
+        globalDisabled={mockState.globalDisabled}
+        libraryState={mockState.library}
         onLibraryOpen={() => setActiveTab('library')}
         onRefreshLibrary={() => {
           setScanState('scanning')
@@ -157,6 +181,7 @@ export function AnchorPreview() {
     servers: (
       <AnchorServers
         navidromeVisible={navidromeVisible}
+        serverListState={mockState.serverList}
         onAddServer={() => setActiveSheet('addServer')}
         onComingSoon={(server) => {
           setComingSoonServer(server)
@@ -168,15 +193,16 @@ export function AnchorPreview() {
         onOpenSettings={() => setActiveSheet('navidromeSettings')}
         onRestoreServer={() => {
           setNavidromeVisible(true)
-          setServerState('active')
+          setMockState((current) => ({ ...current, server: 'active', serverList: 'normal' }))
           showToast('Mock server restored')
         }}
-        serverState={serverState === 'degraded' ? 'active' : serverState}
+        serverState={mockState.serverList === 'navidromeDisabled' ? 'disabled' : serverState}
       />
     ),
     library: (
       <AnchorLibrary
         lastScan={mockLibraryLastScan}
+        libraryState={mockState.library}
         onChangeFolder={() => setActiveSheet('folderPicker')}
         onOpenScanHistory={() => setActiveSheet('scanHistory')}
         onOpenSettings={() => setActiveSheet('librarySettings')}
@@ -192,6 +218,7 @@ export function AnchorPreview() {
     activity: (
       <AnchorActivity
         activeFilter={activityFilter}
+        activityState={mockState.activity}
         events={filteredActivity}
         onFilterOpen={() => setActiveSheet('activityFilter')}
         onOpenEvent={openActivityEvent}
@@ -214,10 +241,33 @@ export function AnchorPreview() {
           {screens[activeTab]}
         </motion.div>
       </AnimatePresence>
+      {mockState.globalLoading ? (
+        <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center bg-black/42 backdrop-blur-[2px]">
+          <div className="rounded-2xl border border-amber-300/18 bg-[#071014]/92 px-4 py-3 text-center shadow-2xl">
+            <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-amber-300/25 border-t-amber-300" />
+            <p className="text-sm font-semibold text-white">Loading mock state</p>
+            <p className="mt-1 text-xs text-slate-300/76">Studio-only overlay</p>
+          </div>
+        </div>
+      ) : null}
       <AnchorBottomNav activeTab={activeTab} onTabChange={setActiveTab} />
 
       {activeSheet === 'settings' ? (
-        <AnchorSettingsSheet onClose={() => setActiveSheet(null)} />
+        <AnchorSettingsSheet
+          mockStateControls={
+            <AnchorMockStateControls
+              mockState={mockState}
+              onClearSurfaces={() => {
+                setActiveSheet(null)
+                setActiveDialog(null)
+                setToast(null)
+              }}
+              onShowToast={() => showToast('Mock state toast active', 'info')}
+              onStateChange={updateMockState}
+            />
+          }
+          onClose={() => setActiveSheet(null)}
+        />
       ) : null}
 
       {activeSheet === 'qr' ? (
@@ -312,6 +362,7 @@ export function AnchorPreview() {
           onSave={() => {
             setActiveSheet(null)
             setNavidromeVisible(true)
+            setMockState((current) => ({ ...current, serverList: 'normal' }))
             showToast('Mock server added')
           }}
         />
@@ -322,7 +373,7 @@ export function AnchorPreview() {
           onClose={() => setActiveSheet(null)}
           onOpenLogs={() => setActiveSheet('logs')}
           onOpenSettings={() => setActiveSheet('navidromeSettings')}
-          statusLabel={serverState === 'disabled' ? 'Disabled' : 'Running'}
+          statusLabel={serverState === 'disabled' ? 'Disabled' : serverState === 'offline' ? 'Offline' : 'Running'}
         />
       ) : null}
 
@@ -340,7 +391,7 @@ export function AnchorPreview() {
             }
             if (action === 'disable') {
               setActiveSheet(null)
-              setServerState('disabled')
+              setMockState((current) => ({ ...current, server: 'disabled', serverList: 'navidromeDisabled' }))
               showToast('Mock server disabled', 'warning')
               return
             }
@@ -371,7 +422,7 @@ export function AnchorPreview() {
           onClose={() => setActiveSheet(null)}
           onMockApply={() => showToast('Navidrome settings saved in mock preview')}
           onMockReset={() => showToast('Mock changes reset', 'info')}
-          onRestartRecommended={() => setServerState('degraded')}
+          onRestartRecommended={() => setMockState((current) => ({ ...current, server: 'degraded' }))}
         />
       ) : null}
 
@@ -393,7 +444,7 @@ export function AnchorPreview() {
           onCancel={() => setActiveDialog(null)}
           onConfirm={() => {
             setActiveDialog(null)
-            setServerState('stopped')
+            setMockState((current) => ({ ...current, server: 'stopped' }))
             showToast('Server stopped in mock preview', 'warning')
           }}
           title="Stop Navidrome?"
@@ -419,6 +470,7 @@ export function AnchorPreview() {
           onConfirm={() => {
             setActiveDialog(null)
             setNavidromeVisible(false)
+            setMockState((current) => ({ ...current, serverList: 'noServers' }))
             showToast('Mock server removed', 'warning')
           }}
           title="Remove mock server?"

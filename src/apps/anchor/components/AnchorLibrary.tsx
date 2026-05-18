@@ -8,13 +8,72 @@ import {
   SignalHigh,
 } from 'lucide-react'
 import { anchorLibrary, anchorLibraryActions } from '../anchorMockData'
+import type { AnchorLibraryState } from '../anchorState'
 import { AnchorActionRow } from './AnchorActionRow'
 import { AnchorCard, AnchorScreenHeader } from './AnchorCard'
 
 const actionIcons = [FolderOpen, RefreshCw, ShieldCheck, Settings]
 
+const libraryStateView: Record<AnchorLibraryState, {
+  detail: string
+  footer: string
+  note?: string
+  stats: Array<{ label: string; value: string }>
+  status: string
+  statusClass: string
+}> = {
+  accessible: {
+    detail: 'Last updated',
+    footer: '12 min ago',
+    stats: anchorLibrary.stats,
+    status: anchorLibrary.status,
+    statusClass: 'text-emerald-300',
+  },
+  scanning: {
+    detail: 'Scanning',
+    footer: 'running now',
+    note: 'Mock scan is in progress. Refresh is already active.',
+    stats: anchorLibrary.stats,
+    status: 'Scanning',
+    statusClass: 'text-amber-200',
+  },
+  empty: {
+    detail: 'No music indexed',
+    footer: 'never',
+    note: 'No music indexed. Choose a folder or refresh the library preview.',
+    stats: anchorLibrary.stats.map((stat) => ({ ...stat, value: '0' })),
+    status: 'Empty',
+    statusClass: 'text-slate-300',
+  },
+  permissionWarning: {
+    detail: 'Access warning',
+    footer: 'needs review',
+    note: 'Folder permissions should be reviewed in the mock access check.',
+    stats: anchorLibrary.stats,
+    status: 'Permission warning',
+    statusClass: 'text-orange-300',
+  },
+  accessDenied: {
+    detail: 'Access denied',
+    footer: 'blocked',
+    note: 'The selected folder cannot be read in this mock state. Change folder or verify access.',
+    stats: anchorLibrary.stats.map((stat) => ({ ...stat, value: '0' })),
+    status: 'Access denied',
+    statusClass: 'text-red-300',
+  },
+  scanFailed: {
+    detail: 'Scan failed',
+    footer: 'failed',
+    note: 'The last mock scan failed. Retry refresh to replay scan progress.',
+    stats: anchorLibrary.stats,
+    status: 'Scan failed',
+    statusClass: 'text-red-300',
+  },
+}
+
 export function AnchorLibrary({
   lastScan,
+  libraryState,
   onChangeFolder,
   onOpenScanHistory,
   onOpenStats,
@@ -24,6 +83,7 @@ export function AnchorLibrary({
   path,
 }: {
   lastScan: string
+  libraryState: AnchorLibraryState
   onChangeFolder: () => void
   onOpenScanHistory: () => void
   onOpenSettings: () => void
@@ -32,9 +92,10 @@ export function AnchorLibrary({
   onVerifyAccess: () => void
   path: string
 }) {
+  const view = libraryStateView[libraryState]
   const actionHandlers = [onChangeFolder, onRefreshLibrary, onVerifyAccess, onOpenSettings]
   const footer = anchorLibrary.footer.map((item) =>
-    item.label === 'Last scan' ? { ...item, value: lastScan } : item,
+    item.label === 'Last scan' ? { ...item, value: libraryState === 'accessible' ? lastScan : view.footer } : item,
   )
 
   return (
@@ -53,17 +114,17 @@ export function AnchorLibrary({
             <h2 className="break-words text-base font-semibold text-white">
               {anchorLibrary.name}
             </h2>
-            <p className="mt-2 break-words text-xs font-medium text-emerald-300">
-              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-300" />
-              {anchorLibrary.status}
+            <p className={`mt-2 break-words text-xs font-medium ${view.statusClass}`}>
+              <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-current" />
+              {view.status}
             </p>
             <p className="mt-1 break-words text-[0.72rem] text-slate-300/72">
-              Last updated {lastScan}
+              {view.detail} {libraryState === 'accessible' ? lastScan : ''}
             </p>
           </div>
         </div>
         <div className="grid min-w-0 grid-cols-3 border-t border-white/[0.055]">
-          {anchorLibrary.stats.map((stat) => (
+          {view.stats.map((stat) => (
             <button
               className="border-r border-white/[0.045] px-2 py-4 text-center transition hover:bg-white/[0.035] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-300/30 last:border-r-0"
               key={stat.label}
@@ -78,6 +139,13 @@ export function AnchorLibrary({
           ))}
         </div>
       </AnchorCard>
+
+      {view.note ? (
+        <AnchorCard className="mt-3.5 border-orange-300/16 bg-orange-300/[0.045] p-4">
+          <p className="text-sm font-semibold text-orange-100">{view.status}</p>
+          <p className="mt-1 text-xs leading-5 text-orange-50/82">{view.note}</p>
+        </AnchorCard>
+      ) : null}
 
       <AnchorCard className="mt-3.5 overflow-hidden">
         {anchorLibraryActions.map((action, index) => {
