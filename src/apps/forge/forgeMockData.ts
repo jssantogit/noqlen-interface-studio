@@ -33,6 +33,18 @@ export interface MockArtist {
   mood: string
 }
 
+export type ReviewItemType = 'lyrics' | 'covers' | 'genres'
+export type ReviewItemStatus = 'pending' | 'fixed' | 'ignored'
+
+export interface ReviewItem {
+  id: string
+  title: string
+  artist: string
+  album?: string
+  type: ReviewItemType
+  status: ReviewItemStatus
+}
+
 export interface ReviewGroup {
   id: string
   icon: 'Music2' | 'Image' | 'Tags'
@@ -40,7 +52,7 @@ export interface ReviewGroup {
   subtitle: string
   action: string
   accent: string
-  items: string[]
+  items: ReviewItem[]
   detail: string
 }
 
@@ -240,7 +252,10 @@ export const reviewGroups: ReviewGroup[] = [
     subtitle: '2 songs need lyrics',
     action: 'Start',
     accent: 'text-orange-300',
-    items: ['The Whole Universe Wants', 'Says'],
+    items: [
+      { id: 'lyrics-1', title: 'The Whole Universe Wants', artist: 'Nils Frahm', album: 'All Melody', type: 'lyrics', status: 'pending' },
+      { id: 'lyrics-2', title: 'Says', artist: 'Nils Frahm', album: 'Spaces', type: 'lyrics', status: 'pending' },
+    ],
     detail: 'Select items to fix or ignore.',
   },
   {
@@ -250,7 +265,12 @@ export const reviewGroups: ReviewGroup[] = [
     subtitle: '4 albums need cover review',
     action: 'Choose',
     accent: 'text-violet-300',
-    items: ['All Melody', 'Spaces', 'Felt', 'Empty'],
+    items: [
+      { id: 'covers-1', title: 'All Melody', artist: 'Nils Frahm', type: 'covers', status: 'pending' },
+      { id: 'covers-2', title: 'Spaces', artist: 'Nils Frahm', type: 'covers', status: 'pending' },
+      { id: 'covers-3', title: 'Felt', artist: 'Nils Frahm', type: 'covers', status: 'pending' },
+      { id: 'covers-4', title: 'Empty', artist: 'Nils Frahm', type: 'covers', status: 'pending' },
+    ],
     detail: 'Compare current artwork with suggested covers before replacing anything.',
   },
   {
@@ -260,7 +280,11 @@ export const reviewGroups: ReviewGroup[] = [
     subtitle: '3 songs need genres',
     action: 'Review',
     accent: 'text-lime-300',
-    items: ['A Place', 'My Friend the Forest', 'The Bells'],
+    items: [
+      { id: 'genres-1', title: 'A Place', artist: 'Nils Frahm', album: 'All Melody', type: 'genres', status: 'pending' },
+      { id: 'genres-2', title: 'My Friend the Forest', artist: 'Nils Frahm', album: 'All Melody', type: 'genres', status: 'pending' },
+      { id: 'genres-3', title: 'The Bells', artist: 'Nils Frahm', album: 'The Bells', type: 'genres', status: 'pending' },
+    ],
     detail: 'Complete missing genres using album, artist and track context.',
   },
 ]

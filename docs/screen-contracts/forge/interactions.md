@@ -69,29 +69,29 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### RV-1: Fix Selected
 
 - **Trigger:** tap `Fix selected (N)` button.
-- **Resulting UI:** `ForgeFixSummarySheet` opens showing selected items and a before/after preview.
-- **Mock state changes:** selected items move to `status = 'fixed'` in local state; `selected` set cleared; toast shown.
-- **Data used:** `selected` Set, `reviewGroups`.
+- **Resulting UI:** `ForgeConfirmDialog` opens showing selected count and type breakdown.
+- **Mock state changes:** selected items move to `status = 'fixed'` in local state; `selected` set cleared; `sessionFixed` incremented; toast shown.
+- **Data used:** `selected` Set, `reviewGroups`, `itemStatuses`.
 - **Forbidden real behavior:** no metadata write, no file edit, no download.
-- **Status:** not implemented (button counts selection only).
+- **Status:** implemented.
 
 ### RV-2: Fix All
 
 - **Trigger:** tap `Fix all (N)` button.
-- **Resulting UI:** confirmation dialog or summary sheet for all visible items.
-- **Mock state changes:** all items in current queue move to `status = 'fixed'`; `selected` cleared; toast shown.
-- **Data used:** current `reviewGroups` items.
+- **Resulting UI:** `ForgeConfirmDialog` for all pending items in current filter.
+- **Mock state changes:** all pending items in current filter move to `status = 'fixed'`; `selected` cleared; `sessionFixed` incremented; toast shown.
+- **Data used:** current `reviewGroups` items, `itemStatuses`, active filter.
 - **Forbidden real behavior:** same as RV-1.
-- **Status:** not implemented (button selects all locally only).
+- **Status:** implemented.
 
 ### RV-3: Ignore Selected
 
 - **Trigger:** tap `Ignore selected` button.
-- **Resulting UI:** `ForgeIgnoreReasonSheet` opens with reason options.
-- **Mock state changes:** selected items move to `status = 'ignored'` with a reason tag; `selected` cleared; toast shown.
+- **Resulting UI:** `ForgeBottomSheet` opens as an ignore reason sheet with optional reason chips.
+- **Mock state changes:** selected items move to `status = 'ignored'`; `selected` cleared; `sessionIgnored` incremented; toast shown.
 - **Data used:** `selected` Set.
 - **Forbidden real behavior:** no file deletion, no metadata deletion.
-- **Status:** not implemented (button clears selection only).
+- **Status:** implemented.
 
 ### RV-4: Item Checkbox
 
@@ -105,7 +105,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### RV-5: Group Expand/Collapse
 
 - **Trigger:** tap the group header or the `Show`/`Hide` pill.
-- **Resulting UI:** group items appear or disappear.
+- **Resulting UI:** group items appear or disappear; chevron icon updates; groups with zero pending items are hidden.
 - **Mock state changes:** `openGroups` Set add/remove.
 - **Data used:** group id.
 - **Forbidden real behavior:** none.
@@ -156,11 +156,11 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### RV-10: Status After Fix/Ignore
 
 - **Trigger:** after RV-1, RV-2 or RV-3 completes.
-- **Resulting UI:** fixed items show check badge or move out of queue; ignored items show strikethrough or move out.
-- **Mock state changes:** item `status` updated; group may become empty.
+- **Resulting UI:** fixed/ignored items are removed from the active pending queue; group pending counts update; session summary card appears; empty queue state renders when no pending items remain.
+- **Mock state changes:** item `status` updated; group may become empty; `sessionFixed`/`sessionIgnored` updated.
 - **Data used:** item ids and group ids.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** implemented.
 
 ---
 

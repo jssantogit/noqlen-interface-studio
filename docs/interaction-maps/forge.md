@@ -100,40 +100,40 @@ Layout constraints:
 
 - Trigger: `Fix selected (N)` button.
 - Requires: at least one selected item.
-- Result: opens batch confirmation sheet showing selected items and a preview of changes.
-- Mock state: selected items move to a `fixed` status locally; toast confirms `N changes applied in preview`.
+- Result: opens batch confirmation dialog showing selected items and a preview of changes.
+- Mock state: selected items move to a `fixed` status locally; toast confirms `Selected fixes applied in mock preview`.
 - Safety: must not write metadata, edit files, fetch lyrics or download covers.
-- Current status: partially implemented (Fix selected button exists but only counts selection; no confirmation or apply).
+- Current status: implemented.
 
 ### Fix All
 
 - Trigger: `Fix all (N)` button.
-- Result: opens confirmation sheet for all current queue items.
+- Result: opens confirmation dialog for all current queue items.
 - Mock state: all items in the current view move to `fixed` locally; toast confirms.
 - Safety: same as Fix selected.
-- Current status: partially implemented (Fix all button only selects all items locally; no confirmation or apply).
+- Current status: implemented.
 
 ### Ignore Selected
 
 - Trigger: `Ignore selected` button.
 - Requires: at least one selected item.
-- Result: opens ignore reason sheet or confirmation.
-- Options: `Not relevant`, `Already correct`, `Skip for now`, `Other`.
+- Result: opens ignore reason bottom sheet with optional reason chips.
+- Options: `Not needed`, `Wrong suggestion`, `Review later`, `Keep current metadata`.
 - Mock state: selected items move to `ignored` status locally; toast confirms.
 - Safety: must not delete, hide or modify real files or metadata.
-- Current status: not implemented (Ignore selected button only clears selection).
+- Current status: implemented.
 
 ### Item Checkbox
 
 - Trigger: checkbox on a review item row.
-- Result: toggles selection state.
-- Current status: implemented (local React state toggle).
+- Result: toggles selection state for pending items only.
+- Current status: implemented.
 
 ### Group Header Expand/Collapse
 
 - Trigger: group header or `Show`/`Hide` pill.
-- Result: toggles group open/closed.
-- Current status: implemented (local React state toggle).
+- Result: toggles group open/closed; groups with zero pending items are hidden.
+- Current status: implemented.
 
 ### Missing Lyrics Item Tap
 
@@ -171,9 +171,9 @@ Layout constraints:
 ### Clear/Fix/Ignore Status
 
 - Trigger: after a fix or ignore action.
-- Result: item should move to completed/ignored state or show a badge (checkmark or strikethrough).
-- Empty queue state: when all items in a group are fixed or ignored, show an empty-group message.
-- Current status: not implemented.
+- Result: fixed/ignored items are removed from the active pending queue; session summary card appears; group counts update.
+- Empty queue state: when all items in a group are fixed or ignored, show an empty queue message with `View all` and `Reset mock queue` actions.
+- Current status: implemented.
 
 ## Library Interaction Map
 
@@ -284,9 +284,9 @@ Layout constraints:
 - No selected items: implemented.
 - Selected items: implemented.
 - Fixing (applying state): not implemented.
-- Fixed (all items in group fixed): not implemented.
-- Ignored (all items in group ignored): not implemented.
-- Empty queue (no items remaining): not implemented.
+- Fixed (all items in group fixed): implemented (items hidden from queue, session summary visible).
+- Ignored (all items in group ignored): implemented (items hidden from queue, session summary visible).
+- Empty queue (no items remaining): implemented (empty state with `View all` and `Reset mock queue`).
 - Group collapsed: implemented.
 - Group expanded: implemented.
 - Partial errors (mock failure state): not implemented.
@@ -373,12 +373,14 @@ Layout constraints:
 
 ### Batch 2: Review Queue Interactions
 
-- Selection system (refactor from inline to `ForgeReviewItem`).
-- `Fix selected` with confirmation sheet.
-- `Fix all` with confirmation sheet.
-- `Ignore selected` with reason sheet.
-- Group expand/collapse polish.
-- Empty group states.
+- Selection system with checkbox toggles for pending items only.
+- `Fix selected` with confirmation dialog.
+- `Fix all` with confirmation dialog.
+- `Ignore selected` with reason bottom sheet.
+- Group expand/collapse polish with chevron icons and pending-count updates.
+- Empty queue state with `View all` and `Reset mock queue`.
+- Session summary card for fixed/ignored counts.
+- Review filter compatibility from Home cards.
 
 ### Batch 3: Review Item Detail Flows
 

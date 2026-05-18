@@ -241,3 +241,29 @@ Bloco 3.1 delta (Forge interaction foundation and home actions):
   - Created `docs/audits/forge-interaction-batch-1.md`.
 - Preserved Anchor, Aria, Flux and Studio shell unchanged.
 - Preserved mock-only boundary: no backend, filesystem, metadata edits, downloads, FileReader, secrets or network behavior.
+
+Bloco 3.2 delta (Forge Review Queue Interactions):
+
+- Added `ReviewItem` data model to `src/apps/forge/forgeMockData.ts` with `id`, `title`, `artist`, `album`, `type`, `status`.
+- Refactored `ForgeReview` to manage local mock state:
+  - `selectedIds` — Set of selected pending item ids.
+  - `itemStatuses` — Record mapping item id to `pending` | `fixed` | `ignored`.
+  - `sessionFixed` / `sessionIgnored` — counters for the current preview session.
+  - `openGroups` — group expand/collapse state.
+- Implemented item checkbox selection for pending items only; fixed/ignored items are removed from the queue and cannot be selected.
+- Implemented `Fix selected` with `ForgeConfirmDialog` showing count and type breakdown; on confirm marks selected items as fixed, clears selection, increments session counter, shows toast.
+- Implemented `Fix all` with `ForgeConfirmDialog` scoped to current filter; on confirm marks all pending items in current filter as fixed, clears selection, increments session counter, shows toast.
+- Implemented `Ignore selected` with `ForgeBottomSheet` ignore reason sheet including optional reason chips (`Not needed`, `Wrong suggestion`, `Review later`, `Keep current metadata`); on confirm marks selected items as ignored, clears selection, increments session counter, shows toast.
+- Added session summary card above action buttons showing `X fixed` and `Y ignored` counts.
+- Added empty queue state when all items are fixed/ignored: `Review queue clear` message with `View all` (when filter active) and `Reset mock queue` actions.
+- Polished group expand/collapse with `ChevronUp`/`ChevronDown` icons, pending-count updates and hidden empty groups.
+- Preserved review filter compatibility from Home cards; `ForgeReview` accepts `filter`, `showToast`, `showConfirm` and `onClearFilter` props from `ForgePreview`.
+- Disabled `Fix selected` and `Ignore selected` buttons when no items are selected, with clear visual state.
+- Updated docs:
+  - `docs/interaction-maps/forge.md` status updates for Review queue interactions.
+  - `docs/screen-contracts/forge/interactions.md` status updates.
+  - `docs/screen-contracts/forge/README.md` batch status.
+  - `src/apps/forge/forgeInteractionMap.ts` status updates.
+  - Created `docs/audits/forge-interaction-batch-2.md`.
+- Preserved Anchor, Aria, Flux and Studio shell unchanged.
+- Preserved mock-only boundary: no backend, filesystem, metadata edits, downloads, FileReader, secrets or network behavior.

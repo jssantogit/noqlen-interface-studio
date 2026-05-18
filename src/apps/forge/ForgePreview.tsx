@@ -74,6 +74,27 @@ export function ForgePreview() {
     showToast('Forge settings saved in mock preview')
   }, [closeSheet, showToast])
 
+  const showConfirm = useCallback(
+    (opts: {
+      title: string
+      description: string
+      confirmLabel: string
+      onConfirm: () => void
+      tone?: 'amber' | 'danger'
+    }) => {
+      setConfirmDialog({
+        title: opts.title,
+        description: opts.description,
+        confirmLabel: opts.confirmLabel,
+        onConfirm: opts.onConfirm,
+        tone: opts.tone,
+      })
+    },
+    [],
+  )
+
+  const clearReviewFilter = useCallback(() => setReviewFilter('all'), [])
+
   const screens: Record<ForgeTab, ReactNode> = {
     home: (
       <ForgeHome
@@ -83,7 +104,14 @@ export function ForgePreview() {
         onReviewNow={handleReviewNow}
       />
     ),
-    review: <ForgeReview filter={reviewFilter} />,
+    review: (
+      <ForgeReview
+        filter={reviewFilter}
+        showToast={showToast}
+        showConfirm={showConfirm}
+        onClearFilter={clearReviewFilter}
+      />
+    ),
     library: <ForgeLibrary />,
     activity: <ForgeActivity />,
   }

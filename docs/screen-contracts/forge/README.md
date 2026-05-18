@@ -78,6 +78,17 @@ All data is static and fictional. All state changes are local React state only.
   - Wired Home `Review now`, attention cards with Review filter navigation, settings gear and safety note card.
   - Added minimal review-filter awareness to `ForgeReview`.
 
+- **Batch 2 (Review Queue Interactions):** implemented in Bloco 3.2.
+  - Added `ReviewItem` data model with `id`, `title`, `artist`, `album`, `type`, `status`.
+  - Wired item checkbox selection for pending items only.
+  - Implemented `Fix selected` with confirmation dialog and type breakdown.
+  - Implemented `Fix all` with confirmation dialog and filter-aware scope.
+  - Implemented `Ignore selected` with reason bottom sheet and optional reason chips.
+  - Added session summary card (`X fixed`, `Y ignored`).
+  - Added empty queue state with `View all` and `Reset mock queue`.
+  - Polished group expand/collapse with chevron icons and pending-count updates.
+  - Preserved review filter compatibility from Home cards.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:
