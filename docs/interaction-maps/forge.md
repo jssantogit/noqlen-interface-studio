@@ -125,6 +125,13 @@ Layout constraints:
 - Trigger: `Open Enrich Mode →` helper row under `Review safe fixes` in the All summary card.
 - Result: opens the full-screen Enrich Mode flow with 6 steps: Rewrite options → Target selection → Confirmation → Dry-run → Progress → Result.
 - Distinction: Enrich Mode is a force rewrite/reprocess workflow, not safe automatic repair. It can overwrite existing metadata and runs a dry-run before applying.
+- Step 1 (Rewrite options) refinements:
+  - Cards are collapsible; Tags expanded by default, others collapsed.
+  - Selection status uses count-based badge: `0 selected`, `N selected`, `All selected`.
+  - Advanced Metadata shows improved caution copy.
+  - Open Forge Settings helper is a compact row that opens Settings directly.
+  - Sticky header with backdrop blur keeps context visible while scrolling.
+  - No automatic toast on entry.
 - Mock state: on completion, appends an activity entry, marks pending safe review items as fixed locally, increments session fixed counter.
 - Safety: mock-only; no real metadata or files changed.
 - Current status: implemented.

@@ -771,6 +771,11 @@ export function ForgePreview() {
           appendActivity={appendActivity}
           markSafeItemsApplied={markSafeItemsApplied}
           onClose={closeEnrichMode}
+          onOpenSettings={() => {
+            closeEnrichMode()
+            setActiveSheet('settings')
+            showToast('Forge Settings opened', 'info')
+          }}
           onViewActivity={() => {
             setActiveTab('activity')
             showToast('Activity opened', 'info')

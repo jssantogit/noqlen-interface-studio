@@ -511,3 +511,21 @@ Bloco 3.5.3 delta (Forge Enrich Mode App Flow):
 - Updated docs: created `docs/audits/forge-enrich-mode-app-flow.md`; updated interaction maps, screen contracts, integration contracts, visual targets, and context files.
 - Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real metadata edits, no real file changes.
 - Build, lint, tests pass.
+
+Bloco 3.5.3b delta (Forge Enrich Mode UX Refinement):
+
+- Refined Step 1 (Rewrite options) experience of `ForgeEnrichMode`:
+  - Removed automatic toast on Enrich Mode entry; toasts now only appear after real user actions.
+  - Updated header subtitle to `"Choose what Forge should rewrite."` and added `"Reprocess selected metadata using current provider settings."` helper text.
+  - Made category cards collapsible: Tags expanded by default; Covers, Lyrics, Advanced Metadata collapsed by default.
+  - Replaced `"Active"`/`"Off"` badge with count-based labels: `0 selected`, `N selected`, `All selected`.
+  - Improved Advanced Metadata caution copy under toggle and in conditional warning card.
+  - Replaced large Settings card with compact single-row helper: `"Using current mock provider settings"` + `"Open Forge Settings →"` that opens Forge Settings directly.
+  - Added `onOpenSettings` prop to `ForgeEnrichMode`; `ForgePreview.tsx` closes Enrich Mode and opens Settings sheet when helper is tapped.
+  - Added sticky header with warm charcoal backdrop blur to keep step context visible while scrolling.
+  - Updated validation copy to `"Select at least one rewrite option to continue."`.
+- Preserved full 6-step flow and all existing interactions: target selection, confirmation, dry-run, progress, result.
+- Verified no regressions: Review safe fixes, Forge Settings, Forge Library, Forge Activity, Anchor, Aria, Flux all still work/render.
+- Updated docs: created `docs/audits/forge-enrich-mode-ux-refinement.md`; updated `docs/audits/forge-enrich-mode-app-flow.md`, `docs/interaction-maps/forge.md`, `docs/screen-contracts/forge/README.md`, `docs/screen-contracts/forge/interactions.md`, `docs/visual-targets/forge.md`, `interface/context/delta.md`, `interface/context/current.md`.
+- Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real metadata edits, no real file changes.
+- Build, lint, tests pass.

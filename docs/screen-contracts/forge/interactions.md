@@ -99,7 +99,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Trigger:** tap `Open Enrich Mode →` helper row under `Review safe fixes` in the All summary card.
 - **Resulting UI:** full-screen `ForgeEnrichMode` flow opens with step indicator: Options → Targets → Confirm → Dry-run → Apply.
 - **Flow steps:**
-  1. **Rewrite options** — choose Tags, Covers, Lyrics, Advanced Metadata sub-options; toggle overwrite per category; provider hints shown.
+  1. **Rewrite options** — choose Tags, Covers, Lyrics, Advanced Metadata sub-options; cards are collapsible (Tags expanded by default, others collapsed); selection status shows count-based badge (`0 selected`, `N selected`, `All selected`); toggle overwrite per category; provider hints shown; Advanced Metadata shows improved caution copy; compact `Open Forge Settings →` helper opens Settings directly; sticky header keeps context visible while scrolling.
   2. **Target selection** — choose Library, Artists, Albums or Songs; search, select rows, select all visible, clear selection.
   3. **Confirmation** — summary of selected categories, target and overwrite options; warning card; Run dry-run button.
   4. **Dry-run** — deterministic mock progress (5 steps); result shows scanned tracks, fields to rewrite, existing values to replace, protected fields, conflicts.

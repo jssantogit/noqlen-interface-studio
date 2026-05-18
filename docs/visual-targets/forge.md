@@ -55,6 +55,8 @@ Enrich Mode visual rules:
 - Full-screen overlay inside the phone viewport with warm charcoal gradient background.
 - Step indicator pill row at top: Options → Targets → Confirm → Dry-run → Apply.
 - Category cards use `ForgeCard` with premium gradient surface and inner highlight.
+- Cards are collapsible: header row shows title, description, count-based selection badge and expand chevron; body shows checkboxes, toggles and extras only when expanded.
+- Tags expanded by default; other categories collapsed by default.
 - Overwrite toggles use the same switch style as Settings toggles.
 - Warning cards use calm orange-tinged border and background, not scary red.
 - Target rows use compact checkbox + thumbnail + metadata pattern.
@@ -62,6 +64,8 @@ Enrich Mode visual rules:
 - Result screen uses success emerald icon + summary stat grid + category result cards.
 - Primary actions use the warm orange CTA with inner highlight.
 - Secondary actions use bordered buttons with subtle background.
+- Settings helper is a compact single-row link, not a large card.
+- Sticky header with warm charcoal backdrop blur keeps step context visible while scrolling.
 - No generic wizard feel; no terminal/config feel; no page-level overflow.
 
 Must not:

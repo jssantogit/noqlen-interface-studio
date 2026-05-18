@@ -229,6 +229,15 @@ All data is static and fictional. All state changes are local React state only.
   - Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real metadata edits, no real file changes.
   - Build, lint, tests pass.
 
+- **Bloco 3.5.3b (Forge Enrich Mode UX Refinement):** implemented.
+  - Refined Step 1 visual experience: removed automatic toast on entry, improved header/subtitle copy, made category cards collapsible (Tags expanded by default), replaced `"Active"`/`"Off"` badges with count-based labels (`0 selected`, `N selected`, `All selected`), improved Advanced Metadata caution copy, made Open Forge Settings helper a compact working row.
+  - Added `onOpenSettings` prop to `ForgeEnrichMode` so the Settings helper opens Forge Settings directly instead of showing a tutorial toast.
+  - Sticky header with backdrop blur keeps step context visible while scrolling.
+  - Validation copy updated to `"Select at least one rewrite option to continue."`.
+  - Interaction closure preserved: all controls remain functional, flow works through result, no regressions in Review/Library/Activity/Settings/Anchor/Aria/Flux.
+  - Updated docs: created `docs/audits/forge-enrich-mode-ux-refinement.md`; updated existing audits, interaction maps, screen contracts, visual targets and context files.
+  - Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network, no real metadata edits, no real file changes.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:

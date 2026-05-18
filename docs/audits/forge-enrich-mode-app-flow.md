@@ -23,6 +23,13 @@ Implemented a dedicated app-style Enrich Mode workflow for Forge focused on forc
 ## Rewrite Option Behavior (Step 1)
 
 - Four categories: **Tags**, **Covers**, **Lyrics**, **Advanced Metadata**.
+- Cards are **collapsible**:
+  - **Tags** expanded by default.
+  - Covers, Lyrics, Advanced Metadata collapsed by default.
+  - Tapping the card header expands/collapses.
+  - Internal controls (checkboxes, toggles) do not collapse the card.
+- Collapsed card shows: title, description, **selection count badge**, provider chips, expand chevron.
+- Expanded card shows: all checkable sub-options, overwrite toggle, conditional extras.
 - Each category has checkable sub-options (e.g., Genre, Style, Mood, Last.fm Tags for Tags).
 - Overwrite toggles per category:
   - Tags: Replace existing tag values
@@ -32,8 +39,10 @@ Implemented a dedicated app-style Enrich Mode workflow for Forge focused on forc
 - Covers category exposes minimum image size chips (600px, 1000px, 1400px) for display.
 - Advanced overwrite shows a caution card when enabled.
 - Provider hint chips appear below each category (Last.fm, Discogs, MusicBrainz, etc.).
-- Continue disabled until at least one category option is selected.
-- Settings integration hint: `Using current mock provider settings` with `Open Forge Settings →` link.
+- Continue disabled until at least one rewrite option is selected.
+- Validation message: `"Select at least one rewrite option to continue."`
+- Settings integration: compact helper row `Using current mock provider settings` with `Open Forge Settings →` link.
+- No automatic toast on screen entry.
 
 ## Target Selection Behavior (Step 2)
 
@@ -104,8 +113,9 @@ Implemented a dedicated app-style Enrich Mode workflow for Forge focused on forc
 ## Settings Integration
 
 - Enrich Mode references current mock provider settings implicitly.
-- Displays `Using current mock provider settings` with a link to open Forge Settings.
-- Clicking opens a toast directing the user to the Home gear icon (non-blocking; full Settings sync is partial by design).
+- Displays a compact helper row: `Using current mock provider settings` with `Open Forge Settings →` link.
+- Clicking closes Enrich Mode and opens the Forge Settings sheet directly.
+- No automatic toast on entry.
 
 ## Review Integration
 
@@ -129,7 +139,8 @@ All visible Enrich Mode controls respond:
 
 - `Open Enrich Mode` → opens Enrich Mode
 - Back/close buttons work on every step
-- Category toggles toggle
+- Category cards expand/collapse
+- Category checkboxes toggle and update selection count badge live
 - Overwrite toggles toggle with warning states
 - Target tabs switch
 - Search filters rows
@@ -138,7 +149,7 @@ All visible Enrich Mode controls respond:
 - Dry-run progress completes
 - Start rewrite, review conflicts, back work
 - Result actions (view review, view activity, done) work
-- Settings link shows toast
+- Settings helper row opens Forge Settings sheet
 
 No dead controls remain.
 

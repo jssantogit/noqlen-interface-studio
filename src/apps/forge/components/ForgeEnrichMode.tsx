@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, BadgeCheck, Check, ChevronRight, Image, Music2, Search, ShieldAlert, SlidersHorizontal, Tags, Text, Users, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BadgeCheck, Check, ChevronDown, ChevronRight, Image, Music2, Search, ShieldAlert, SlidersHorizontal, Tags, Text, Users, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { artistData, albumData, songData } from '../forgeMockData'
 import { CoverGradient, ForgeCard, ForgeScreenHeader } from './ForgeCard'
@@ -123,118 +123,150 @@ function CategoryToggle({
   category,
   options,
   overwrite,
+  expanded,
   onToggleOption,
   onToggleOverwrite,
+  onToggleExpand,
 }: {
   category: EnrichCategory
   options: EnrichOption[]
   overwrite: boolean
+  expanded: boolean
   onToggleOption: (optionId: string) => void
   onToggleOverwrite: () => void
+  onToggleExpand: () => void
 }) {
-  const anyChecked = options.some((o) => o.checked)
+  const selectedCount = options.filter((o) => o.checked).length
+  const totalCount = options.length
+  const allSelected = selectedCount === totalCount && totalCount > 0
+
+  const statusLabel = allSelected ? 'All selected' : `${selectedCount} selected`
+
   return (
-    <ForgeCard className="mb-3 p-4">
-      <div className="mb-2 flex items-center justify-between gap-3">
-        <div>
-          <p className="text-sm font-semibold text-white">{category.label}</p>
+    <ForgeCard className="mb-2.5 overflow-hidden">
+      <button
+        className="flex w-full items-center justify-between gap-3 p-3 text-left transition hover:bg-white/[0.02]"
+        onClick={onToggleExpand}
+        type="button"
+      >
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-semibold text-white">{category.label}</p>
+            <span
+              className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                selectedCount > 0
+                  ? 'bg-[#e7a35f]/15 text-[#f0b879]'
+                  : 'bg-white/[0.05] text-white/35'
+              }`}
+            >
+              {statusLabel}
+            </span>
+          </div>
           <p className="mt-0.5 text-[11px] leading-4 text-white/45">{category.description}</p>
         </div>
-        <span
-          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-            anyChecked ? 'bg-[#e7a35f]/15 text-[#f0b879]' : 'bg-white/[0.05] text-white/35'
-          }`}
-        >
-          {anyChecked ? 'Active' : 'Off'}
-        </span>
-      </div>
+        <ChevronDown
+          size={16}
+          className={`shrink-0 text-white/30 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+        />
+      </button>
 
-      <div className="mb-3 space-y-2">
-        {options.map((opt) => (
-          <label
-            className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2 transition hover:bg-white/[0.04]"
-            key={opt.id}
-          >
+      {expanded && (
+        <div className="px-3 pb-3">
+          <div className="mb-3 space-y-1.5">
+            {options.map((opt) => (
+              <label
+                className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-white/[0.04] bg-white/[0.02] px-3 py-2 transition hover:bg-white/[0.04]"
+                key={opt.id}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  className={`grid h-4 w-4 shrink-0 place-items-center rounded border text-[9px] transition ${
+                    opt.checked
+                      ? 'border-[#e7a35f] bg-[#e7a35f] text-[#211508]'
+                      : 'border-white/25 text-transparent hover:border-white/45'
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onToggleOption(opt.id)
+                  }}
+                  type="button"
+                >
+                  <Check size={11} strokeWidth={2.5} />
+                </button>
+                <span className="text-xs text-white/75">{opt.label}</span>
+              </label>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] px-3 py-2.5">
+            <div>
+              <p className="text-[11px] font-medium text-white/70">
+                {category.id === 'tags'
+                  ? 'Replace existing tag values'
+                  : category.id === 'covers'
+                    ? 'Replace existing artwork'
+                    : category.id === 'lyrics'
+                      ? 'Replace existing lyrics'
+                      : 'Replace protected identity fields'}
+              </p>
+              <p className="mt-0.5 text-[10px] text-white/40">
+                {category.id === 'advanced'
+                  ? 'Advanced metadata can rewrite identity, release and audio fields. Protected fields should usually stay unchanged unless the source is verified.'
+                  : 'Existing values will be overwritten in the mock preview.'}
+              </p>
+            </div>
             <button
-              className={`grid h-4 w-4 shrink-0 place-items-center rounded border text-[9px] transition ${
-                opt.checked
-                  ? 'border-[#e7a35f] bg-[#e7a35f] text-[#211508]'
-                  : 'border-white/25 text-transparent hover:border-white/45'
-              }`}
-              onClick={() => onToggleOption(opt.id)}
+              className={`relative h-5 w-9 shrink-0 rounded-full transition ${overwrite ? 'bg-[#e7a35f]' : 'bg-white/15'}`}
+              onClick={(e) => {
+                e.stopPropagation()
+                onToggleOverwrite()
+              }}
               type="button"
             >
-              <Check size={11} strokeWidth={2.5} />
-            </button>
-            <span className="text-xs text-white/75">{opt.label}</span>
-          </label>
-        ))}
-      </div>
-
-      <div className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] px-3 py-2.5">
-        <div>
-          <p className="text-[11px] font-medium text-white/70">
-            {category.id === 'tags'
-              ? 'Replace existing tag values'
-              : category.id === 'covers'
-                ? 'Replace existing artwork'
-                : category.id === 'lyrics'
-                  ? 'Replace existing lyrics'
-                  : 'Replace protected identity fields'}
-          </p>
-          <p className="mt-0.5 text-[10px] text-white/40">
-            {category.id === 'advanced'
-              ? 'Caution: protected fields should stay unchanged unless necessary.'
-              : 'Existing values will be overwritten in the mock preview.'}
-          </p>
-        </div>
-        <button
-          className={`relative h-5 w-9 shrink-0 rounded-full transition ${overwrite ? 'bg-[#e7a35f]' : 'bg-white/15'}`}
-          onClick={onToggleOverwrite}
-          type="button"
-        >
-          <span
-            className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition ${overwrite ? 'left-4.5' : 'left-0.5'}`}
-          />
-        </button>
-      </div>
-
-      {category.id === 'covers' && anyChecked && (
-        <div className="mt-3">
-          <p className="mb-1.5 text-[10px] font-medium text-white/50">Minimum image size</p>
-          <div className="flex gap-2">
-            {minImageSizes.map((size) => (
               <span
-                className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1 text-[10px] text-white/55"
-                key={size}
+                className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition ${overwrite ? 'left-4.5' : 'left-0.5'}`}
+              />
+            </button>
+          </div>
+
+          {category.id === 'covers' && selectedCount > 0 && (
+            <div className="mt-3">
+              <p className="mb-1.5 text-[10px] font-medium text-white/50">Minimum image size</p>
+              <div className="flex gap-2">
+                {minImageSizes.map((size) => (
+                  <span
+                    className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-2.5 py-1 text-[10px] text-white/55"
+                    key={size}
+                  >
+                    {size}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {category.id === 'advanced' && overwrite && (
+            <div className="mt-3 flex items-start gap-2 rounded-lg border border-orange-300/15 bg-orange-300/8 p-2.5">
+              <ShieldAlert size={13} className="mt-0.5 shrink-0 text-orange-300/80" />
+              <p className="text-[10px] leading-4 text-orange-200/75">
+                Only enable this when MusicBrainz or AcoustID identity is trusted.
+              </p>
+            </div>
+          )}
+
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {providerHints[category.id]?.map((p) => (
+              <span
+                className="inline-flex items-center gap-1 rounded-full border border-[#e7a35f]/12 bg-[#e7a35f]/8 px-2 py-0.5 text-[10px] font-medium text-[#f0b879]/80"
+                key={p}
               >
-                {size}
+                <BadgeCheck size={9} />
+                {p}
               </span>
             ))}
           </div>
         </div>
       )}
-
-      {category.id === 'advanced' && overwrite && (
-        <div className="mt-3 flex items-start gap-2 rounded-lg border border-orange-300/15 bg-orange-300/8 p-2.5">
-          <ShieldAlert size={13} className="mt-0.5 shrink-0 text-orange-300/80" />
-          <p className="text-[10px] leading-4 text-orange-200/75">
-            Replacing protected identity fields can break library consistency. Only enable if you are rebuilding identity data.
-          </p>
-        </div>
-      )}
-
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {providerHints[category.id]?.map((p) => (
-          <span
-            className="inline-flex items-center gap-1 rounded-full border border-[#e7a35f]/12 bg-[#e7a35f]/8 px-2 py-0.5 text-[10px] font-medium text-[#f0b879]/80"
-            key={p}
-          >
-            <BadgeCheck size={9} />
-            {p}
-          </span>
-        ))}
-      </div>
     </ForgeCard>
   )
 }
@@ -810,6 +842,7 @@ export function ForgeEnrichMode({
   onClose,
   onViewReview,
   onViewActivity,
+  onOpenSettings,
   showToast,
   appendActivity,
   markSafeItemsApplied,
@@ -817,6 +850,7 @@ export function ForgeEnrichMode({
   onClose: () => void
   onViewReview: () => void
   onViewActivity: () => void
+  onOpenSettings?: () => void
   showToast: (message: string, tone?: 'success' | 'info' | 'warning') => void
   appendActivity: (entry: {
     id: string
@@ -849,6 +883,12 @@ export function ForgeEnrichMode({
     lyrics: false,
     advanced: false,
   })
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
+    tags: true,
+    covers: false,
+    lyrics: false,
+    advanced: false,
+  })
   const [target, setTarget] = useState<EnrichTarget>({ mode: 'library', selectedIds: new Set() })
   const [searchQuery, setSearchQuery] = useState('')
   const [dryRunComplete, setDryRunComplete] = useState(false)
@@ -873,6 +913,10 @@ export function ForgeEnrichMode({
 
   const toggleOverwrite = (catId: string) => {
     setOverwrite((prev) => ({ ...prev, [catId]: !prev[catId] }))
+  }
+
+  const toggleExpand = (catId: string) => {
+    setExpandedCategories((prev) => ({ ...prev, [catId]: !prev[catId] }))
   }
 
   const setTargetMode = (mode: EnrichTarget['mode']) => {
@@ -977,7 +1021,11 @@ export function ForgeEnrichMode({
   }
 
   const openSettings = () => {
-    showToast('Open Forge Settings from the Home gear icon', 'info')
+    if (onOpenSettings) {
+      onOpenSettings()
+    } else {
+      showToast('Forge Settings opened', 'info')
+    }
   }
 
   return (
@@ -1007,15 +1055,22 @@ export function ForgeEnrichMode({
 
         {step === 'options' && (
           <div>
-            <ForgeScreenHeader title="Enrich Mode" />
-            <p className="-mt-5 mb-5 text-sm leading-5 text-white/52">
-              Choose which metadata Forge should reprocess and rewrite.
-            </p>
+            <div className="sticky top-0 z-10 -mx-5 mb-5 bg-[#0f0c0a]/90 px-5 py-3 backdrop-blur-xl">
+              <ForgeScreenHeader title="Enrich Mode" />
+              <p className="-mt-5 text-sm leading-5 text-white/52">
+                Choose what Forge should rewrite.
+              </p>
+              <p className="mt-1 text-[11px] text-white/40">
+                Reprocess selected metadata using current provider settings.
+              </p>
+            </div>
 
             {categories.map((cat) => (
               <CategoryToggle
                 category={cat}
+                expanded={expandedCategories[cat.id] ?? false}
                 key={cat.id}
+                onToggleExpand={() => toggleExpand(cat.id)}
                 onToggleOption={(optId) => toggleOption(cat.id, optId)}
                 onToggleOverwrite={() => toggleOverwrite(cat.id)}
                 options={cat.options}
@@ -1024,19 +1079,19 @@ export function ForgeEnrichMode({
             ))}
 
             {!anyOptionSelected && (
-              <p className="mt-2 text-xs text-orange-300/70">Select at least one category to continue.</p>
+              <p className="mt-2 text-xs text-orange-300/70">Select at least one rewrite option to continue.</p>
             )}
 
-            <div className="mt-4 rounded-xl border border-white/[0.06] bg-white/[0.03] p-3">
-              <p className="text-[11px] text-white/50">Using current mock provider settings</p>
-              <button
-                className="mt-1.5 text-[11px] font-medium text-[#f0b879] transition hover:text-[#efad6c]"
-                onClick={openSettings}
-                type="button"
-              >
+            <button
+              className="mt-4 flex w-full items-center justify-between rounded-xl border border-white/[0.05] bg-white/[0.02] px-3 py-2.5 text-left transition hover:bg-white/[0.04]"
+              onClick={openSettings}
+              type="button"
+            >
+              <span className="text-[11px] text-white/50">Using current mock provider settings</span>
+              <span className="text-[11px] font-medium text-[#f0b879] transition hover:text-[#efad6c]">
                 Open Forge Settings →
-              </button>
-            </div>
+              </span>
+            </button>
           </div>
         )}
 
