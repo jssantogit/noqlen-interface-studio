@@ -475,6 +475,21 @@ export const forgeLyricsReviewItems: ForgeReviewQueueItem[] = [
 
 export const forgeMetadataReviewItems: ForgeReviewQueueItem[] = [
   {
+    id: 'metadata-tags-all-melody',
+    title: 'All Melody',
+    artist: 'Nils Frahm',
+    type: 'genres',
+    section: 'metadata',
+    metadataFilter: 'tags',
+    proposalStatus: 'Safe',
+    current: 'Current: Genre Classical, Mood empty, Style empty',
+    suggested: 'Suggested: Modern Classical, Ambient, Minimal, Introspective',
+    detail: 'Tags + Style',
+    actionLabel: 'Apply tags',
+    chips: ['Tags'],
+    gradient: 'from-emerald-950 via-lime-800 to-stone-950',
+  },
+  {
     id: 'metadata-tags-a-place',
     title: 'A Place',
     artist: 'Hammock',

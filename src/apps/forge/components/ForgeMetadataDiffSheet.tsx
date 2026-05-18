@@ -1,10 +1,12 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, BadgeCheck } from 'lucide-react'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
 
 export interface DiffRow {
   label: string
   before: string
   after: string
+  source?: string
+  note?: string
 }
 
 export function ForgeMetadataDiffSheet({
@@ -26,18 +28,35 @@ export function ForgeMetadataDiffSheet({
     <ForgeBottomSheet onClose={onClose} subtitle={subtitle} title={title}>
       <div className="space-y-5">
         {/* Diff rows */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {rows.map((row, idx) => (
             <div
               key={idx}
               className="rounded-xl border border-white/[0.06] bg-white/[0.035] p-3"
             >
-              <p className="mb-2 text-[10px] font-medium uppercase tracking-wider text-white/40">{row.label}</p>
-              <div className="flex items-center gap-2">
-                <span className="min-w-0 flex-1 truncate text-xs text-white/50 line-through">{row.before}</span>
-                <ArrowRight className="shrink-0 text-white/20" size={12} />
-                <span className="min-w-0 flex-1 truncate text-xs text-emerald-300">{row.after}</span>
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <p className="text-[10px] font-medium uppercase tracking-wider text-white/42">{row.label}</p>
+                {row.source && (
+                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#e7a35f]/18 bg-[#e7a35f]/10 px-2 py-1 text-[10px] font-semibold text-[#f0b879]">
+                    <BadgeCheck size={10} />
+                    {row.source}
+                  </span>
+                )}
               </div>
+              <div className="space-y-2">
+                <div className="rounded-lg bg-black/20 p-2">
+                  <p className="text-[10px] uppercase tracking-wider text-white/34">Current</p>
+                  <p className="mt-1 whitespace-normal break-words text-xs leading-4 text-white/55">{row.before}</p>
+                </div>
+                <div className="flex justify-center">
+                  <ArrowRight className="text-white/22" size={13} />
+                </div>
+                <div className="rounded-lg border border-emerald-300/10 bg-emerald-300/[0.045] p-2">
+                  <p className="text-[10px] uppercase tracking-wider text-emerald-200/55">Suggested</p>
+                  <p className="mt-1 whitespace-normal break-words text-xs leading-4 text-emerald-200">{row.after}</p>
+                </div>
+              </div>
+              {row.note && <p className="mt-2 text-[11px] leading-4 text-[#f0b879]/75">{row.note}</p>}
             </div>
           ))}
         </div>

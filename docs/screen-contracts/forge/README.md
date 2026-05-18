@@ -125,6 +125,15 @@ All data is static and fictional. All state changes are local React state only.
   - Preserved existing Forge Home, Library and Activity rendering and did not start Activity interactions.
   - Preserved mock-only boundaries: no backend, fetch/axios behavior, filesystem, FileReader, downloads, real metadata writes, real lyrics or artwork changes.
 
+- **Bloco 3.4.3 (Forge Review Redesign Interaction Fixes):** implemented.
+  - Fixed All item click behavior so rows open a complete item repair overview sheet instead of routing directly to Artwork.
+  - Added grouped overview fix cards and routing actions for artwork, lyrics, tags, identity, release and audio previews.
+  - Implemented the Review sort control with Priority, Most fixes, Needs review first, Artwork first, Lyrics first, Metadata first, Title A-Z and Recently found.
+  - Removed Safe / Review counters from All queue rows while keeping the summary card manual-review count.
+  - Reworked metadata previews into readable field-by-field current/suggested rows with wrapping text.
+  - Added provider/source badges to artwork, lyrics and metadata preview/apply flows.
+  - Preserved mock-only local state and did not start Forge Activity, Aria or Flux implementation.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:

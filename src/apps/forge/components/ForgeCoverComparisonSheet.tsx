@@ -1,3 +1,4 @@
+import { BadgeCheck } from 'lucide-react'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
 import { CoverGradient } from './ForgeCard'
 
@@ -25,6 +26,11 @@ export function ForgeCoverComparisonSheet({
           <p className="text-xs text-white/50">{item.artist}</p>
         </div>
 
+        <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[#e7a35f]/18 bg-[#e7a35f]/10 px-3 py-1.5 text-[11px] font-semibold text-[#f0b879]">
+          <BadgeCheck size={12} />
+          Source: Discogs
+        </div>
+
         {/* Comparison */}
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
@@ -41,6 +47,10 @@ export function ForgeCoverComparisonSheet({
 
         {/* Metadata rows */}
         <div className="space-y-2 rounded-xl border border-white/[0.06] bg-white/[0.035] p-3">
+          <div className="flex justify-between text-xs">
+            <span className="text-white/40">Source</span>
+            <span className="text-[#f0b879]">Discogs</span>
+          </div>
           <div className="flex justify-between text-xs">
             <span className="text-white/40">Current</span>
             <span className="text-white/70">320 x 320</span>
@@ -69,14 +79,14 @@ export function ForgeCoverComparisonSheet({
             onClick={onClose}
             type="button"
           >
-             Cancel
+            Cancel
           </button>
           <button
             className="h-10 rounded-lg bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]"
             onClick={onApply}
             type="button"
           >
-            Apply
+            Apply artwork
           </button>
         </div>
         <div className="grid grid-cols-2 gap-2.5">

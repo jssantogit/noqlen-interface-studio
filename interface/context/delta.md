@@ -346,3 +346,15 @@ Bloco 3.4.2 delta (Forge Review Architecture Redesign):
 - Preserved Home navigation into Review / All, Review / Lyrics, Review / Artwork and Review / Metadata / Tags.
 - Preserved Forge Home, Library and Activity rendering and did not start Forge Activity interactions, Aria or Flux work.
 - Preserved mock-only safety boundaries: no real files, metadata, lyrics, artwork, backend, network, FileReader, filesystem, secrets or analytics behavior.
+
+Bloco 3.4.3 delta (Forge Review Redesign Interaction Fixes):
+
+- Used Tool Mode `combo` and kept `docs/references/forge/forge_review_redesign.png` as the Review visual target.
+- Fixed All queue row taps so they open an item repair overview sheet instead of routing directly to Artwork.
+- Added grouped overview cards for Artwork, Lyrics and Metadata repairs with specific routing actions.
+- Implemented the Review sort sheet and deterministic local ordering for Priority, Most fixes, Needs review first, Artwork first, Lyrics first, Metadata first, Title A-Z and Recently found.
+- Removed Safe / Review counters from All queue rows; rows now show proposed fix count, compact chips and optional conflict status only.
+- Reworked metadata preview rows into readable field-by-field Current and Suggested values with wrapping text.
+- Added provider/source badges to artwork, lyrics and metadata preview/apply sheets.
+- Preserved Home deep links, Forge Library rendering, Forge Activity rendering and Anchor/Aria/Flux app switching.
+- Preserved mock-only safety boundaries: no real files, metadata, lyrics, artwork, backend, network, FileReader, filesystem, secrets or analytics behavior.

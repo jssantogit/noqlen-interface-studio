@@ -172,6 +172,56 @@ export function ForgePreview() {
       ?? null
   }, [selectedReviewItemId])
 
+  const metadataPreviewRows = useMemo(() => {
+    if (!selectedReviewItem) return []
+    if (!('metadataFilter' in selectedReviewItem)) {
+      return [
+        {
+          label: selectedReviewItem.type === 'lyrics' ? 'Lyrics' : selectedReviewItem.type === 'covers' ? 'Artwork' : 'Metadata',
+          before: 'current' in selectedReviewItem && selectedReviewItem.current ? selectedReviewItem.current : selectedReviewItem.type === 'lyrics' ? 'Missing' : selectedReviewItem.type === 'covers' ? 'Low resolution' : 'Unknown',
+          after: 'suggested' in selectedReviewItem && selectedReviewItem.suggested ? selectedReviewItem.suggested : selectedReviewItem.type === 'lyrics' ? 'Mock lyrics preview' : selectedReviewItem.type === 'covers' ? 'Suggested cover' : (itemGenres[selectedReviewItem.id]?.join(', ') || 'Selected metadata'),
+          source: selectedReviewItem.type === 'lyrics' ? 'Lyrics provider mock' : selectedReviewItem.type === 'covers' ? 'Discogs' : 'Forge mock',
+        },
+      ]
+    }
+
+    if (selectedReviewItem.metadataFilter === 'tags') {
+      return [
+        { label: 'Genre', before: 'Empty', after: 'Post-rock · Ambient · Instrumental', source: 'Last.fm' },
+        { label: 'Mood', before: 'Empty', after: 'Calm · Melancholic', source: 'Last.fm' },
+        { label: 'Style', before: 'Electronic', after: 'Modern Classical · Minimal · Piano', source: 'Last.fm' },
+      ]
+    }
+    if (selectedReviewItem.metadataFilter === 'identity') {
+      const source = selectedReviewItem.proposalStatus === 'Conflict' ? 'MusicBrainz' : 'MusicBrainz / AcoustID'
+      return selectedReviewItem.proposalStatus === 'Conflict'
+        ? [
+            { label: 'Match option A', before: 'Current match unclear', after: 'All Melody · Nils Frahm · 2018', source, note: 'Conflict: choose a match before applying identity data.' },
+            { label: 'Match option B', before: 'Current match unclear', after: 'All Melody live edition · Nils Frahm · 2019', source, note: 'Conflict: choose a match before applying identity data.' },
+          ]
+        : [
+            { label: 'Album MBID', before: 'Empty', after: 'mock-mbid-all-melody-2018', source, note: 'Protected identity field.' },
+            { label: 'AcoustID', before: 'Empty', after: 'mock-acoustid-all-melody', source, note: 'Protected identity field.' },
+            { label: 'ISRC', before: 'Empty', after: 'mock-isrc-2018-0001', source, note: 'Protected identity field.' },
+          ]
+    }
+    if (selectedReviewItem.metadataFilter === 'release') {
+      return [
+        { label: 'Label', before: 'Empty', after: 'Erased Tapes', source: 'Discogs' },
+        { label: 'Country', before: 'Empty', after: 'DE', source: 'Discogs / MusicBrainz' },
+        { label: 'Catalog number', before: 'Empty', after: 'ERATP106', source: 'Discogs' },
+      ]
+    }
+    if (selectedReviewItem.metadataFilter === 'audio') {
+      return [
+        { label: 'BPM', before: 'Empty', after: '120', source: 'Audio analysis mock' },
+        { label: 'Key', before: 'Empty', after: 'A minor', source: 'Audio analysis mock' },
+        { label: 'ReplayGain', before: 'Empty', after: 'Available', source: 'Audio analysis mock' },
+      ]
+    }
+    return []
+  }, [itemGenres, selectedReviewItem])
+
   const applyDetailFix = useCallback(() => {
     if (!selectedReviewItemId) return
     updateItemStatus(selectedReviewItemId, 'fixed')
@@ -298,13 +348,7 @@ export function ForgePreview() {
         <ForgeMetadataDiffSheet
           title="Metadata preview"
           subtitle="Review the changes before applying."
-          rows={[
-            {
-              label: selectedReviewItem.type === 'lyrics' ? 'Lyrics' : selectedReviewItem.type === 'covers' ? 'Artwork' : 'Metadata',
-              before: 'current' in selectedReviewItem && selectedReviewItem.current ? selectedReviewItem.current : selectedReviewItem.type === 'lyrics' ? 'Missing' : selectedReviewItem.type === 'covers' ? 'Low resolution' : 'Unknown',
-              after: 'suggested' in selectedReviewItem && selectedReviewItem.suggested ? selectedReviewItem.suggested : selectedReviewItem.type === 'lyrics' ? 'Mock lyrics preview' : selectedReviewItem.type === 'covers' ? 'Suggested cover' : (itemGenres[selectedReviewItem.id]?.join(', ') || 'Selected metadata'),
-            },
-          ]}
+          rows={metadataPreviewRows}
           applyLabel={'actionLabel' in selectedReviewItem && selectedReviewItem.actionLabel ? selectedReviewItem.actionLabel : 'Apply change'}
           onApply={applyDetailFix}
           onClose={closeDetailSheet}

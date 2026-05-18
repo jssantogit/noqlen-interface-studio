@@ -145,8 +145,16 @@ Layout constraints:
 ### All Item Tap
 
 - Trigger: tap an All queue row.
-- Result: opens the relevant existing detail or preview sheet based on item type.
-- Mock state: apply/ignore inside the sheet updates local row status.
+- Result: opens a complete item repair overview bottom sheet showing grouped proposed fixes across Artwork, Lyrics and Metadata.
+- Overview actions route to the relevant preview sheet: Review artwork, Review lyrics, Review tags, Review identity, Review release data and Review audio data.
+- Mock state: overview `Apply safe fixes` increments local applied state after confirmation; `Ignore item` hides the item locally; routed preview sheets keep their existing mock state behavior.
+- Current status: implemented.
+
+### Sort Review Queue
+
+- Trigger: tap `Sort: Priority` or the active sort label.
+- Result: opens an in-phone sort sheet with Priority, Most fixes, Needs review first, Artwork first, Lyrics first, Metadata first, Title A-Z and Recently found.
+- Mock state: selected sort updates local `activeSort` and reorders the current visible queue deterministically.
 - Current status: implemented.
 
 ### Lyrics Item Tap
@@ -163,7 +171,8 @@ Layout constraints:
 - Result: opens `ForgeCoverComparisonSheet` before applying.
 - Shows: album title, artist, current cover placeholder, suggested cover placeholder, current resolution and suggested resolution.
 - List rule: artwork rows show current-cover facts only; no confidence as main artwork data and no direct list-level current-vs-suggested comparison.
-- Actions: `Apply` (marks fixed), `Keep current` (marks ignored), `Ignore` (marks ignored), `Cancel`, `Preview changes` (opens metadata diff).
+- Provider badge: Discogs.
+- Actions: `Apply artwork` (marks fixed), `Keep current` (marks ignored), `Ignore` (marks ignored), `Cancel`, `Preview changes` (opens metadata diff).
 - Mock state: item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - Current status: implemented.
 
@@ -171,6 +180,8 @@ Layout constraints:
 
 - Trigger: tap a Metadata row or its specific action affordance.
 - Result: opens `ForgeMetadataDiffSheet` with current vs suggested values.
+- Preview readability: field-by-field vertical rows with wrapping Current and Suggested values; no important value is hidden by ellipsis.
+- Provider badges: Tags use Last.fm, Identity uses MusicBrainz / AcoustID, Release uses Discogs / MusicBrainz, Audio uses Audio analysis mock.
 - Tags rows use `Apply tags`; Identity rows use `Apply identity`; conflicts use `Choose match`; Release rows use `Apply release data`; Audio rows use `Apply audio data`.
 - Protected identity fields require explicit confirmation through the preview sheet.
 - Mock state: item status becomes `fixed`; toast confirms; item removed from pending queue.

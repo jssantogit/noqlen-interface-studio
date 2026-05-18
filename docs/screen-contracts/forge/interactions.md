@@ -115,11 +115,30 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 
 - **Trigger:** tap a lyrics review item outside the checkbox.
 - **Resulting UI:** `ForgeLyricsDetailSheet` opens as a bottom sheet.
-- **Shows:** song title, artist, album, metadata rows (Source: Studio mock suggestion, Confidence: High, Status: Ready to apply), mock lyrics preview using placeholder text only (no real/copyrighted lyrics), `Preview changes` link.
+- **Shows:** song title, artist, album, provider badge (`Lyrics provider mock`), metadata rows, mock lyrics preview using placeholder text only (no real/copyrighted lyrics), `Preview changes` link.
 - **Actions:** `Apply lyrics`, `Review lyrics` or `Apply synced` affordances open the same mock lyrics preview; sheet actions set fixed/ignored locally.
 - **Mock state changes:** item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - **Data used:** `reviewGroups` item.
 - **Forbidden real behavior:** no lyric API call, no lyric download, no file write, no copyrighted lyrics.
+- **Status:** implemented.
+
+### RV-6A: All Item Repair Overview
+
+- **Trigger:** tap an All queue row outside its checkbox.
+- **Resulting UI:** `ForgeReviewItemOverviewSheet` opens as a bottom sheet instead of jumping directly to Artwork or another category.
+- **Shows:** item title, artist, album if present, thumbnail, total proposed fixes and grouped fix cards for Artwork, Lyrics and Metadata subcategories.
+- **Actions:** `Review artwork`, `Review lyrics`, `Review tags`, `Review identity`, `Review release data`, `Review audio data`, `Apply safe fixes`, `Ignore item`, `Close`.
+- **Mock state changes:** action buttons route to existing preview sheets; safe fixes increment local session applied count after confirmation; ignore marks the All item ignored locally.
+- **Forbidden real behavior:** no metadata write, no file edit, no network call.
+- **Status:** implemented.
+
+### RV-6B: Sort Review Queue
+
+- **Trigger:** tap the `Sort: ...` control in Review.
+- **Resulting UI:** sort bottom sheet opens inside the phone viewport.
+- **Options:** Priority, Most fixes, Needs review first, Artwork first, Lyrics first, Metadata first, Title A-Z, Recently found.
+- **Mock state changes:** selected sort updates local `activeSort`; current visible queue order changes deterministically; active sort label updates.
+- **Forbidden real behavior:** no backend query or persisted preference.
 - **Status:** implemented.
 
 ### RV-7: Artwork Item Tap / Apply Artwork
@@ -128,7 +147,8 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Resulting UI:** `ForgeCoverComparisonSheet` opens as a bottom sheet.
 - **Shows:** album title, artist, side-by-side current/suggested cover placeholders, current resolution, suggested resolution and `Preview changes` link.
 - **List rule:** Review list rows show current-cover or missing-cover facts only; no confidence as primary artwork data and no list-level comparison.
-- **Actions:** `Apply` (sets fixed), `Keep current` (sets ignored), `Ignore` (sets ignored), `Cancel`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
+- **Provider:** Discogs source badge.
+- **Actions:** `Apply artwork` (sets fixed), `Keep current` (sets ignored), `Ignore` (sets ignored), `Cancel`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
 - **Mock state changes:** item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - **Data used:** `reviewGroups` item.
 - **Forbidden real behavior:** no cover download, no image replacement, no file write.
@@ -138,7 +158,8 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 
 - **Trigger:** tap a Metadata row or its specific action affordance.
 - **Resulting UI:** `ForgeMetadataDiffSheet` opens as a bottom sheet.
-- **Shows:** current vs suggested values for Tags, Identity, Release or Audio.
+- **Shows:** readable field-by-field current vs suggested values for Tags, Identity, Release or Audio with wrapping text and provider/source badges.
+- **Providers:** Tags use Last.fm; Identity uses MusicBrainz / AcoustID; Release uses Discogs / MusicBrainz; Audio uses Audio analysis mock.
 - **Actions:** `Apply tags`, `Apply identity`, `Choose match`, `Apply release data` or `Apply audio data` depending on row type.
 - **Mock state changes:** item status becomes `fixed`; toast confirms; item removed from pending queue.
 - **Data used:** static `forgeMetadataReviewItems`.

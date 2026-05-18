@@ -3,7 +3,7 @@
 Reference image:
 
 - `docs/references/forge/forge-screens-reference.png`
-- `docs/references/forge/forge_review_redesign.png` is the active Review architecture target for Bloco 3.4.2.
+- `docs/references/forge/forge_review_redesign.png` is the active Review architecture target for Bloco 3.4.2 and 3.4.3.
 
 Goal: preserve legacy Forge visual fidelity when implementing Forge screens.
 
@@ -37,11 +37,15 @@ Design identity:
 
 Review redesign rules:
 
-- All tab is item-first with a summary card, `Review safe fixes` CTA, compact chips and safe/review counts.
+- All tab is item-first with a summary card, `Review safe fixes` CTA and compact chips. Individual All rows must not show Safe / Review counters.
+- Tapping an All row opens a complete item repair overview sheet; it must not jump directly into Artwork.
+- Sort control opens an in-phone sort sheet and updates current queue order.
 - Artwork tab lists current-cover facts only; list rows do not show confidence or side-by-side comparison. `Apply artwork` opens the comparison sheet before applying.
 - Lyrics tab shows missing/incomplete/unsynced lyric fixes and opens mock placeholder previews before applying.
 - Metadata tab groups non-artwork/non-lyrics changes under Tags, Identity, Release and Audio.
 - Metadata actions use specific labels such as `Apply tags`, `Apply identity`, `Choose match`, `Apply release data` and `Apply audio data`.
+- Metadata preview sheets show field-by-field current/suggested values with wrapping text and provider/source badges.
+- Artwork, lyrics and metadata preview sheets show subtle provider/source badges.
 - File info is read-only and excluded from the main Review surface.
 - Use soft peach-orange/warm amber accents only; avoid neon, cyan spill, blue glow and saturated orange.
 

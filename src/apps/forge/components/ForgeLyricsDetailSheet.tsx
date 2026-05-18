@@ -1,4 +1,4 @@
-import { FileText } from 'lucide-react'
+import { BadgeCheck, FileText } from 'lucide-react'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
 import { CoverGradient } from './ForgeCard'
 
@@ -36,11 +36,16 @@ export function ForgeLyricsDetailSheet({
           </div>
         </div>
 
+        <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[#e7a35f]/18 bg-[#e7a35f]/10 px-3 py-1.5 text-[11px] font-semibold text-[#f0b879]">
+          <BadgeCheck size={12} />
+          Source: Lyrics provider mock
+        </div>
+
         {/* Metadata rows */}
         <div className="space-y-2 rounded-xl border border-white/[0.06] bg-white/[0.035] p-3">
           <div className="flex justify-between text-xs">
             <span className="text-white/40">Source</span>
-            <span className="text-white/70">Studio mock suggestion</span>
+            <span className="text-white/70">Lyrics provider mock</span>
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-white/40">Confidence</span>

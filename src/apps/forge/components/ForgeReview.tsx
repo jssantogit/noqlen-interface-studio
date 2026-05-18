@@ -1,4 +1,4 @@
-import { Check, ChevronDown, ChevronRight, FileText, Image, Music2, RotateCcw, Tags } from 'lucide-react'
+import { BadgeCheck, Check, ChevronDown, ChevronRight, FileText, Image, Music2, RotateCcw, SlidersHorizontal, Tags } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useMemo, useState } from 'react'
 import {
@@ -16,6 +16,7 @@ import { CoverGradient, ForgeCard, ForgeScreenHeader } from './ForgeCard'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
 
 export type ReviewFilter = ForgeReviewSection
+type ReviewSort = 'priority' | 'most-fixes' | 'needs-review' | 'artwork-first' | 'lyrics-first' | 'metadata-first' | 'title' | 'recent'
 
 const tabs: { id: ForgeReviewSection; label: string }[] = [
   { id: 'all', label: 'All' },
@@ -29,6 +30,17 @@ const metadataFilters: { id: ForgeMetadataFilter; label: string }[] = [
   { id: 'identity', label: 'Identity' },
   { id: 'release', label: 'Release' },
   { id: 'audio', label: 'Audio' },
+]
+
+const sortOptions: { id: ReviewSort; label: string }[] = [
+  { id: 'priority', label: 'Priority' },
+  { id: 'most-fixes', label: 'Most fixes' },
+  { id: 'needs-review', label: 'Needs review first' },
+  { id: 'artwork-first', label: 'Artwork first' },
+  { id: 'lyrics-first', label: 'Lyrics first' },
+  { id: 'metadata-first', label: 'Metadata first' },
+  { id: 'title', label: 'Title A-Z' },
+  { id: 'recent', label: 'Recently found' },
 ]
 
 const ignoreReasons = [
@@ -45,6 +57,27 @@ function getVisibleItems(filter: ReviewFilter, metadataFilter: ForgeMetadataFilt
     return forgeMetadataReviewItems.filter((item) => item.metadataFilter === metadataFilter)
   }
   return forgeReviewItems
+}
+
+function categoryWeight(item: ForgeReviewQueueItem, preferred: ReviewSort) {
+  const text = `${item.section} ${item.metadataFilter ?? ''} ${item.chips.join(' ')}`.toLowerCase()
+  if (preferred === 'artwork-first') return text.includes('artwork') || item.type === 'covers' ? 0 : 1
+  if (preferred === 'lyrics-first') return text.includes('lyrics') || item.type === 'lyrics' ? 0 : 1
+  if (preferred === 'metadata-first') return item.section === 'metadata' || item.type === 'genres' || text.includes('tags') || text.includes('identity') ? 0 : 1
+  return 0
+}
+
+function sortItems(items: ForgeReviewQueueItem[], sort: ReviewSort) {
+  return [...items].sort((a, b) => {
+    if (sort === 'recent') return 0
+    if (sort === 'title') return a.title.localeCompare(b.title)
+    if (sort === 'most-fixes') return (b.proposedFixes ?? 1) - (a.proposedFixes ?? 1)
+    if (sort === 'needs-review') return (b.reviewCount ?? (b.proposalStatus === 'Review' || b.proposalStatus === 'Protected' || b.proposalStatus === 'Conflict' ? 1 : 0)) - (a.reviewCount ?? (a.proposalStatus === 'Review' || a.proposalStatus === 'Protected' || a.proposalStatus === 'Conflict' ? 1 : 0))
+    if (sort === 'artwork-first' || sort === 'lyrics-first' || sort === 'metadata-first') {
+      return categoryWeight(a, sort) - categoryWeight(b, sort) || a.title.localeCompare(b.title)
+    }
+    return (b.proposedFixes ?? 1) - (a.proposedFixes ?? 1) || a.title.localeCompare(b.title)
+  })
 }
 
 function sectionSubtitle(filter: ReviewFilter) {
@@ -166,6 +199,100 @@ function MetadataFilterChips({ active, onChange }: { active: ForgeMetadataFilter
   )
 }
 
+function SourceBadge({ children }: { children: string }) {
+  return (
+    <span className="inline-flex w-fit items-center gap-1 rounded-full border border-[#e7a35f]/18 bg-[#e7a35f]/10 px-2 py-1 text-[10px] font-semibold text-[#f0b879]">
+      <BadgeCheck size={10} />
+      {children}
+    </span>
+  )
+}
+
+function overviewFixesFor(item: ForgeReviewQueueItem) {
+  if (item.id === 'all-melody-review') {
+    return [
+      { group: 'Artwork', title: 'Cover update available', current: '320 x 320', suggested: '1400 x 1400', source: 'Discogs', action: 'Review artwork', targetId: 'artwork-all-melody', type: 'covers' as ReviewItemType, section: 'artwork' as ForgeReviewSection, safe: true },
+      { group: 'Metadata / Tags', title: 'Genre + Mood suggestions', current: 'Genre Classical, Mood empty, Style empty', suggested: 'Modern Classical · Ambient · Minimal · Introspective', source: 'Last.fm', action: 'Review tags', targetId: 'metadata-tags-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
+      { group: 'Metadata / Identity', title: 'Album MBID found', current: 'Empty', suggested: 'mock-mbid-all-melody-2018', source: 'MusicBrainz', action: 'Review identity', targetId: 'metadata-identity-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: false },
+      { group: 'Metadata / Release', title: 'Release data found', current: 'Label, country and catalog empty', suggested: 'Erased Tapes · DE · ERATP106', source: 'Discogs / MusicBrainz', action: 'Review release data', targetId: 'metadata-release-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
+      { group: 'Metadata / Audio', title: 'Audio analysis available', current: 'BPM, key and ReplayGain empty', suggested: 'BPM 120 · A minor · ReplayGain available', source: 'Audio analysis mock', action: 'Review audio data', targetId: 'metadata-audio-says', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
+    ]
+  }
+  if (item.id === 'whole-universe-review') {
+    return [
+      { group: 'Lyrics', title: 'Plain lyrics available', current: 'No lyrics found', suggested: 'Mock lyrics preview available', source: 'Lyrics provider mock', action: 'Review lyrics', targetId: 'lyrics-whole-universe', type: 'lyrics' as ReviewItemType, section: 'lyrics' as ForgeReviewSection, safe: false },
+      { group: 'Metadata / Tags', title: 'Style suggestion', current: 'Style empty', suggested: 'Modern Classical · Minimal', source: 'Last.fm', action: 'Review tags', targetId: 'metadata-tags-a-place', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
+    ]
+  }
+  return [
+    { group: 'Metadata / Tags', title: 'Genre + Mood suggestions', current: 'Genre empty, Mood empty', suggested: 'Post-rock · Ambient · Calm · Melancholic', source: 'Last.fm', action: 'Review tags', targetId: 'metadata-tags-a-place', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
+    { group: 'Metadata / Identity', title: 'MBID candidate found', current: 'Identity incomplete', suggested: 'MusicBrainz candidate available', source: 'MusicBrainz', action: 'Review identity', targetId: 'metadata-identity-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: false },
+    { group: 'Lyrics', title: 'Synced lyrics available', current: 'Unsynced lyrics', suggested: 'Synced LRC available', source: 'Lyrics provider mock', action: 'Review lyrics', targetId: 'lyrics-a-place', type: 'lyrics' as ReviewItemType, section: 'lyrics' as ForgeReviewSection, safe: false },
+  ]
+}
+
+function ForgeReviewItemOverviewSheet({
+  item,
+  onClose,
+  onOpenFix,
+  onApplySafe,
+  onIgnore,
+}: {
+  item: ForgeReviewQueueItem
+  onClose: () => void
+  onOpenFix: (targetId: string, type: ReviewItemType, section: ForgeReviewSection) => void
+  onApplySafe: () => void
+  onIgnore: () => void
+}) {
+  const fixes = overviewFixesFor(item)
+  const safeCount = fixes.filter((fix) => fix.safe).length
+  return (
+    <ForgeBottomSheet onClose={onClose} subtitle="Review all proposed repairs for this item." title="Item repair overview">
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <CoverGradient className="h-14 w-14 shrink-0 rounded-xl" gradient={item.gradient} />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-white">{item.title}</p>
+            <p className="text-xs text-white/50">{item.artist}{item.album ? ` · ${item.album}` : ''}</p>
+            <p className="mt-1 text-xs text-[#f0b879]">{item.proposedFixes ?? fixes.length} proposed fixes</p>
+          </div>
+        </div>
+
+        <div className="space-y-2.5">
+          {fixes.map((fix) => (
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.035] p-3" key={`${fix.group}-${fix.action}`}>
+              <div className="mb-2 flex items-start justify-between gap-2">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-white/42">{fix.group}</p>
+                  <p className="mt-1 text-sm font-medium text-white/90">{fix.title}</p>
+                </div>
+                <SourceBadge>{fix.source}</SourceBadge>
+              </div>
+              <div className="space-y-1.5 text-xs leading-4">
+                <p className="text-white/50"><span className="text-white/34">Current:</span> {fix.current}</p>
+                <p className="text-emerald-200/85"><span className="text-white/34">Suggested:</span> {fix.suggested}</p>
+              </div>
+              <button
+                className="mt-3 h-8 rounded-lg border border-[#e7a35f]/25 bg-[#e7a35f]/10 px-3 text-[11px] font-semibold text-[#f0b879] transition hover:bg-[#e7a35f]/16"
+                onClick={() => onOpenFix(fix.targetId, fix.type, fix.section)}
+                type="button"
+              >
+                {fix.action}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-2 gap-2.5 pt-1">
+          <button className="h-10 rounded-lg border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075]" onClick={onClose} type="button">Close</button>
+          <button className="h-10 rounded-lg bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]" onClick={onApplySafe} type="button">Apply safe fixes ({safeCount})</button>
+        </div>
+        <button className="w-full rounded-lg border border-white/[0.075] bg-transparent py-2.5 text-xs font-medium text-white/55 transition hover:bg-white/[0.045] hover:text-white/80" onClick={onIgnore} type="button">Ignore item</button>
+      </div>
+    </ForgeBottomSheet>
+  )
+}
+
 function ReviewRow({
   filter,
   item,
@@ -215,7 +342,7 @@ function ReviewRow({
                 ))}
                 {item.extraCount && <span className="rounded-lg bg-white/[0.07] px-2 py-0.5 text-[10px] text-white/65">+{item.extraCount}</span>}
               </div>
-              <p className="mt-2 text-xs"><span className="text-emerald-300">Safe {item.safeCount}</span><span className="text-white/30"> · </span><span className="text-[#e7a35f]">Review {item.reviewCount}</span></p>
+              {item.proposalStatus === 'Conflict' && <p className="mt-2 text-xs text-red-200/80">Conflict</p>}
             </>
           )}
 
@@ -284,11 +411,18 @@ export function ForgeReview({
 }) {
   const [ignoreSheetOpen, setIgnoreSheetOpen] = useState(false)
   const [ignoreReason, setIgnoreReason] = useState<string | null>(null)
+  const [overviewItem, setOverviewItem] = useState<ForgeReviewQueueItem | null>(null)
+  const [sortSheetOpen, setSortSheetOpen] = useState(false)
+  const [activeSort, setActiveSort] = useState<ReviewSort>('priority')
 
   const visibleItems = useMemo(
-    () => getVisibleItems(filter, metadataFilter).filter((item) => itemStatuses[item.id] === 'pending'),
-    [filter, metadataFilter, itemStatuses],
+    () => sortItems(
+      getVisibleItems(filter, metadataFilter).filter((item) => itemStatuses[item.id] === 'pending'),
+      activeSort,
+    ),
+    [activeSort, filter, metadataFilter, itemStatuses],
   )
+  const activeSortLabel = sortOptions.find((option) => option.id === activeSort)?.label ?? 'Priority'
 
   const safeFixCount = useMemo(
     () => visibleItems.reduce((total, item) => total + (item.safeCount ?? (item.proposalStatus === 'Safe' ? 1 : 0)), 0),
@@ -369,6 +503,42 @@ export function ForgeReview({
     })
   }
 
+  const openReviewItem = (item: ForgeReviewQueueItem) => {
+    if (filter === 'all') {
+      setOverviewItem(item)
+      return
+    }
+    onOpenItemDetail?.(item.id, item.type, item.section)
+  }
+
+  const openOverviewFix = (targetId: string, type: ReviewItemType, section: ForgeReviewSection) => {
+    setOverviewItem(null)
+    onOpenItemDetail?.(targetId, type, section)
+  }
+
+  const applyOverviewSafeFixes = () => {
+    if (!overviewItem) return
+    const safeCount = overviewFixesFor(overviewItem).filter((fix) => fix.safe).length
+    showConfirm({
+      title: 'Apply safe fixes?',
+      description: `Forge will apply ${safeCount} safe mock fixes for ${overviewItem.title}. Items needing review stay pending.`,
+      confirmLabel: 'Apply safe fixes',
+      onConfirm: () => {
+        onSetSessionFixed((s) => s + safeCount)
+        setOverviewItem(null)
+        showToast('Safe fixes applied in mock preview')
+      },
+    })
+  }
+
+  const ignoreOverviewItem = () => {
+    if (!overviewItem) return
+    onSetItemStatuses((prev) => ({ ...prev, [overviewItem.id]: 'ignored' }))
+    onSetSessionIgnored((s) => s + 1)
+    setOverviewItem(null)
+    showToast('Item ignored in mock preview')
+  }
+
   return (
     <div className="min-h-full px-7 pb-32 text-white">
       <ForgeScreenHeader title="Review" />
@@ -391,11 +561,9 @@ export function ForgeReview({
 
       <div className="mb-3 flex items-center justify-between gap-3">
         <p className="text-sm font-medium text-white/82">{sectionQueueTitle(filter)}</p>
-        {filter === 'all' && (
-          <button className="flex items-center gap-1 text-[11px] text-white/48" type="button">
-            Sort: Priority <ChevronDown size={12} />
-          </button>
-        )}
+        <button className="flex items-center gap-1 text-[11px] text-white/48 transition hover:text-white/75" onClick={() => setSortSheetOpen(true)} type="button">
+          Sort: {activeSortLabel} <ChevronDown size={12} />
+        </button>
       </div>
 
       {visibleItems.length === 0 ? (
@@ -421,7 +589,7 @@ export function ForgeReview({
               filter={filter}
               item={item}
               key={item.id}
-              onOpen={() => onOpenItemDetail?.(item.id, item.type, item.section)}
+              onOpen={() => openReviewItem(item)}
               onToggleSelected={() => toggleItem(item.id)}
               selected={selectedIds.has(item.id)}
             />
@@ -457,6 +625,48 @@ export function ForgeReview({
               <button className="h-10 rounded-lg border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075]" onClick={() => setIgnoreSheetOpen(false)} type="button">Cancel</button>
               <button className="h-10 rounded-lg bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]" onClick={applyIgnoreSelected} type="button">Ignore selected</button>
             </div>
+          </div>
+        </ForgeBottomSheet>
+      )}
+
+      {overviewItem && (
+        <ForgeReviewItemOverviewSheet
+          item={overviewItem}
+          onApplySafe={applyOverviewSafeFixes}
+          onClose={() => setOverviewItem(null)}
+          onIgnore={ignoreOverviewItem}
+          onOpenFix={openOverviewFix}
+        />
+      )}
+
+      {sortSheetOpen && (
+        <ForgeBottomSheet onClose={() => setSortSheetOpen(false)} subtitle="Sort the current Review queue." title="Sort review queue">
+          <div className="space-y-2">
+            {sortOptions.map((option) => (
+              <button
+                className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition ${activeSort === option.id ? 'border-[#e7a35f]/28 bg-[#e7a35f]/10 text-[#f0b879]' : 'border-white/[0.06] bg-white/[0.035] text-white/72 hover:bg-white/[0.06]'}`}
+                key={option.id}
+                onClick={() => {
+                  setActiveSort(option.id)
+                  setSortSheetOpen(false)
+                }}
+                type="button"
+              >
+                <SlidersHorizontal className="shrink-0" size={15} />
+                <span className="flex-1 text-sm font-medium">{option.label}</span>
+                {activeSort === option.id && <Check size={15} />}
+              </button>
+            ))}
+            <button
+              className="mt-3 w-full rounded-lg border border-white/[0.075] bg-transparent py-2.5 text-xs font-medium text-white/55 transition hover:bg-white/[0.045] hover:text-white/80"
+              onClick={() => {
+                setActiveSort('priority')
+                setSortSheetOpen(false)
+              }}
+              type="button"
+            >
+              Reset to Priority
+            </button>
           </div>
         </ForgeBottomSheet>
       )}
