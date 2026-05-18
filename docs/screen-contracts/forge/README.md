@@ -177,6 +177,23 @@ All data is static and fictional. All state changes are local React state only.
   - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits or downloads.
   - Did not start Forge Activity, Aria or Flux implementation.
 
+- **Bloco 3.5.1 (Forge Settings — Metadata Providers, Tags & Updates):** implemented.
+  - Created `forgeSettingsCatalog.ts` typed model with 70+ settings, 10 provider configs, rewrite rules, credentials, and app update state.
+  - Redesigned `ForgeSettingsSheet` from simple toggles into a full 8-category settings surface:
+    - Metadata Providers: provider cards with role, fields, enable toggle, configure sheet, test mock action.
+    - API Keys: masked credential fields for 9 providers with mock-only storage.
+    - Tags & Metadata: behavior toggles, conflict policy, confidence, separator, rewrite rule editor.
+    - Artwork: embed, folder cover, confidence, front preference, max size.
+    - Lyrics: synced, local, sidecar, cache, conflict review, custom endpoint.
+    - Audio: ReplayGain, backend, LUFS, key detection mode, advanced limits.
+    - Safety & Review: dry-run, confirmation, conflict behavior, auto-apply, prune jobs.
+    - App Updates: version info, channel, check/download/install mock flow with progress.
+    - Advanced: database auto-scan, enrich presets, verbosity/debug.
+  - Added progress flows for Save settings, Test mock provider, Check updates, Download update, Install update, Reset settings.
+  - Added unsaved-changes confirmation on back.
+  - Preserved mock-only boundaries: no real network, no real credential storage, no real config writes.
+  - Did not start Forge State Coverage, Aria or Flux.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:

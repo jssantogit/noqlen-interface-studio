@@ -47,11 +47,21 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### HN-5: Settings Gear
 
 - **Trigger:** tap the gear icon in the Home header.
-- **Resulting UI:** `ForgeSettingsSheet` opens as a bottom sheet overlay.
-- **Mock state changes:** `activeSheet = 'settings'`.
-- **Data used:** static settings options.
-- **Forbidden real behavior:** no real app or OS settings read/write.
-- **Status:** implemented (opens ForgeSettingsSheet with local toggles and save toast).
+- **Resulting UI:** `ForgeSettingsSheet` opens as a bottom sheet overlay with 8 categories + API Keys.
+- **Sections:**
+  - Metadata Providers: provider cards with enable toggle, configure sheet, test mock action.
+  - Tags & Metadata: behavior toggles, conflict policy, confidence, rewrite rule editor.
+  - Artwork: embed, folder cover, confidence, front preference, max size.
+  - Lyrics: synced, local, sidecar, cache, conflict review, custom endpoint.
+  - Audio: ReplayGain, backend, LUFS, key detection, advanced limits.
+  - Safety & Review: dry-run, confirmation, conflict behavior, auto-apply.
+  - App Updates: version, channel, check/download/install mock flow.
+  - Advanced: database auto-scan, enrich presets, verbosity.
+  - API Keys: masked credential fields for 9 providers.
+- **Mock state changes:** `activeSheet = 'settings'`; local `ForgeSettingsState` updated; unsaved changes tracked.
+- **Data used:** `forgeSettingsCatalog`, `defaultForgeSettingsState`.
+- **Forbidden real behavior:** no real app or OS settings read/write; no real credential storage; no real network calls.
+- **Status:** implemented (full settings with categories, provider cards, rewrite rules, API keys, app update mock flow, save/reset progress).
 
 ### HN-6: Safety Note Card
 
@@ -435,14 +445,59 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 - **Forbidden real behavior:** none.
 - **Status:** implemented (ForgeBottomSheet used by ForgeSettingsSheet and ForgeSafetyNoteSheet).
 
-### GL-4: Mock State Controls
+### GL-4: Save Settings
+
+- **Trigger:** tap Save settings in `ForgeSettingsSheet`.
+- **Resulting UI:** `ForgeProgressSheet` with steps: Preparing settings / Applying mock preferences.
+- **Mock state changes:** settings persisted to local state; unsaved flag cleared; toast confirms.
+- **Data used:** `ForgeSettingsState`.
+- **Forbidden real behavior:** no real config file write; no real server update.
+- **Status:** implemented.
+
+### GL-5: Reset Settings
+
+- **Trigger:** tap Reset in `ForgeSettingsSheet`.
+- **Resulting UI:** `ForgeConfirmDialog` asks for confirmation; on confirm, `ForgeProgressSheet` with steps: Preparing reset / Restoring defaults.
+- **Mock state changes:** `ForgeSettingsState` restored to `defaultForgeSettingsState`.
+- **Data used:** `defaultForgeSettingsState`.
+- **Forbidden real behavior:** no real config file deletion.
+- **Status:** implemented.
+
+### GL-6: Test Mock Provider
+
+- **Trigger:** tap Test mock on a provider card or provider detail sheet.
+- **Resulting UI:** `ForgeProgressSheet` with steps: Preparing mock request / Simulating provider response.
+- **Mock state changes:** none.
+- **Data used:** provider name.
+- **Forbidden real behavior:** no real network call; no real API request.
+- **Status:** implemented.
+
+### GL-7: App Update Check / Download / Install
+
+- **Trigger:** tap Check for updates, Download update, or Restart app in App Updates.
+- **Resulting UI:** `ForgeProgressSheet` with mock steps; result state updates (up_to_date / available / ready / idle).
+- **Mock state changes:** `updateStatus`, `lastCheckedUpdate`, `availableVersion`, `updateReleaseNotes`.
+- **Data used:** `updateChannel`.
+- **Forbidden real behavior:** no real network call; no real download; no real install.
+- **Status:** implemented.
+
+### GL-8: Unsaved Changes Prompt
+
+- **Trigger:** close `ForgeSettingsSheet` with unsaved changes.
+- **Resulting UI:** `ForgeConfirmDialog` asks "Discard changes?" with Keep editing / Discard.
+- **Mock state changes:** none if kept; sheet closes if discarded.
+- **Data used:** unsaved flag.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
+
+### GL-9: Mock State Controls
 
 - **Trigger:** inside `ForgeSettingsSheet`, a Studio-only section.
 - **Resulting UI:** toggles for empty states, loading states, error states, all-clear states.
 - **Mock state changes:** `forgeMockState` flags.
 - **Data used:** static control definitions.
 - **Forbidden real behavior:** none.
-- **Status:** not implemented.
+- **Status:** not implemented (deferred to Forge State Coverage).
 
 ---
 

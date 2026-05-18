@@ -731,7 +731,12 @@ export function ForgePreview() {
 
       {/* Overlay layers */}
       {activeSheet === 'settings' && (
-        <ForgeSettingsSheet onClose={closeSheet} onSave={handleSaveSettings} />
+        <ForgeSettingsSheet
+          onClose={closeSheet}
+          onSave={handleSaveSettings}
+          showConfirm={showConfirm}
+          showToast={showToast}
+        />
       )}
       {activeSheet === 'safetyNote' && <ForgeSafetyNoteSheet onClose={closeSheet} />}
 

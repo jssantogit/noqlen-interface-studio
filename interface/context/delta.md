@@ -443,3 +443,33 @@ Bloco 3.5 delta (Forge Activity Interactions):
 - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, FileReader, secrets or analytics.
 - Browser MCP validation skipped per user request.
 - Build, lint, tests pass.
+
+Bloco 3.5.1 delta (Forge Settings — Metadata Providers, Tags & Updates):
+
+- Cloned and inspected `noqlen-forge-core` at `/tmp/noqlen-forge-core` commit `27953ef`.
+- Read `README.md`, `config.example.toml`, `noqlen_forge/config.py`, `noqlen_forge/fields.py`, `noqlen_forge/metadata_providers.py`, `noqlen_forge/cover.py` and docs.
+- Created `src/apps/forge/forgeSettingsCatalog.ts` typed model with 70+ settings, 10 provider configs, rewrite rules, 9 API credentials, app update state and full Forge Core config mapping.
+- Redesigned `ForgeSettingsSheet` from simple toggles into a full 8-category settings surface:
+  - Metadata Providers: provider cards (MusicBrainz, Discogs, AcoustID, Deezer, iTunes, Last.fm, LRCLIB, Genius, Musixmatch, AudD) with role badges, enable toggle, fields chips, Configure sheet and Test mock action with progress.
+  - API Keys: masked credential fields for all 9 providers with mock-only local state.
+  - Tags & Metadata: Prefer original date, Clean bad fields, Write MBIDs, Protect identity, Conflict policy, Min confidence, Multi-value separator, Trim, Deduplicate, Case normalization, Review low-confidence/existing mismatch; plus editable rewrite rule cards (Add/Delete/Edit) with pre-seeded examples.
+  - Artwork: Enable fixes, Embed, Save folder cover, Filename, Min confidence, Prefer front, Max size.
+  - Lyrics: Enable fixes, Prefer synced, Allow unsynced, Prefer local, Preserve existing, Embed, Save sidecar .lrc, Save .txt, Cache, Review conflicts/mismatches, Allow instrumental, Custom endpoint.
+  - Audio: Enable ReplayGain, Backend, Target LUFS, Write gain/peak, Skip existing, Key detection mode, Min confidence, Write low-confidence key, Advanced limits (max seconds, segments, timeout).
+  - Safety & Review: Dry-run first, Require confirmation, Send conflicts, Never overwrite lyrics/artwork, Hide advanced metadata, Show catalog/advanced fields, Track provider history/tag sync, Job history days, Prune jobs, Auto-apply safe fixes, Conflict behavior.
+  - App Updates: Current version (0.1.0 mock), Core compatibility, Last checked, Update channel (stable/beta/nightly), Check for updates with mock progress, Download update mock, Install/restart mock with clear "Studio preview only" copy.
+  - Advanced: Database auto-scan, Enrich presets (cover, lyrics, lastfm, mood, bpm, features, acoustid, replaygain), Output verbosity/debug.
+- Added progress flows for Save settings, Test mock provider, Check for updates, Download update, Install update, Reset settings.
+- Added unsaved-changes confirmation dialog on back/close.
+- Updated `ForgePreview.tsx` to pass `showConfirm` and `showToast` into `ForgeSettingsSheet`.
+- Updated docs:
+  - `docs/interaction-maps/forge.md` — expanded Settings Gear description and component inventory.
+  - `docs/screen-contracts/forge/interactions.md` — expanded HN-5 and added GL-4 through GL-9 global interactions.
+  - `docs/screen-contracts/forge/README.md` — added Bloco 3.5.1 batch status.
+  - `docs/visual-targets/forge.md` — no visual target changes; settings remain within Forge dark premium system.
+  - Created `docs/audits/forge-settings-metadata-providers-updates.md`.
+  - Created `docs/integration-contracts/forge-core-settings.md`.
+  - Updated `interface/context/delta.md` and `interface/context/current.md`.
+- Preserved mock-only boundaries: no fetch/axios/fs/child_process/FileReader; no real network calls; no real credential storage; no real config writes.
+- Did not start Forge State Coverage, Aria or Flux.
+- Build, lint, tests pass.
