@@ -330,3 +330,19 @@ Bloco 3.3.2 delta (Forge Visual System Refinement):
 - Verified Anchor, Aria, Flux still render correctly.
 - Safety grep: no fetch/axios/fs/child_process/FileReader in app behavior; only static docs/UI text matches.
 - Build, lint, and tests pass.
+
+Bloco 3.4.2 delta (Forge Review Architecture Redesign):
+
+- Used Tool Mode `combo` and reference `docs/references/forge/forge_review_redesign.png`.
+- Reworked Forge Review from old grouped Missing Lyrics / Better Covers / Missing Genres architecture to All / Artwork / Lyrics / Metadata.
+- Kept Identity inside Metadata and excluded Files from main Review; file info remains read-only and out of this main Review redesign.
+- Added Metadata subfilters: Tags, Identity, Release and Audio.
+- Added static redesigned review proposal data with statuses: Safe, Review, Protected, Conflict, Applied, Ignored and Read-only.
+- Added the All summary card with `Review safe fixes`, item-first rows, proposal chips, safe/review counts and row detail affordances.
+- Added Artwork rows with current-cover, resolution or missing-cover facts only; `Apply artwork` opens comparison before local mock apply.
+- Added Lyrics rows for missing, incomplete and unsynced lyric review; previews use fake placeholder copy only.
+- Added Metadata rows with specific actions: `Apply tags`, `Apply identity`, `Choose match`, `Apply release data`, `Apply audio data`.
+- Demoted batch actions to a contextual selected-row bar with `Apply selected` and `Ignore`.
+- Preserved Home navigation into Review / All, Review / Lyrics, Review / Artwork and Review / Metadata / Tags.
+- Preserved Forge Home, Library and Activity rendering and did not start Forge Activity interactions, Aria or Flux work.
+- Preserved mock-only safety boundaries: no real files, metadata, lyrics, artwork, backend, network, FileReader, filesystem, secrets or analytics behavior.

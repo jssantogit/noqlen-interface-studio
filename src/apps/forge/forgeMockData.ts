@@ -35,6 +35,9 @@ export interface MockArtist {
 
 export type ReviewItemType = 'lyrics' | 'covers' | 'genres'
 export type ReviewItemStatus = 'pending' | 'fixed' | 'ignored'
+export type ReviewProposalStatus = 'Safe' | 'Review' | 'Protected' | 'Conflict' | 'Applied' | 'Ignored' | 'Read-only'
+export type ForgeReviewSection = 'all' | 'artwork' | 'lyrics' | 'metadata'
+export type ForgeMetadataFilter = 'tags' | 'identity' | 'release' | 'audio'
 
 export interface ReviewItem {
   id: string
@@ -54,6 +57,27 @@ export interface ReviewGroup {
   accent: string
   items: ReviewItem[]
   detail: string
+}
+
+export interface ForgeReviewQueueItem {
+  id: string
+  title: string
+  artist: string
+  album?: string
+  type: ReviewItemType
+  section: ForgeReviewSection
+  metadataFilter?: ForgeMetadataFilter
+  proposalStatus: ReviewProposalStatus
+  proposedFixes?: number
+  safeCount?: number
+  reviewCount?: number
+  chips: string[]
+  extraCount?: number
+  current?: string
+  suggested?: string
+  detail?: string
+  actionLabel?: string
+  gradient: string
 }
 
 export interface ActivityItem {
@@ -288,6 +312,248 @@ export const reviewGroups: ReviewGroup[] = [
     ],
     detail: 'Complete missing genres using album, artist and track context.',
   },
+]
+
+export const forgeReviewItems: ForgeReviewQueueItem[] = [
+  {
+    id: 'all-melody-review',
+    title: 'All Melody',
+    artist: 'Nils Frahm',
+    type: 'covers',
+    section: 'all',
+    proposalStatus: 'Review',
+    proposedFixes: 5,
+    safeCount: 3,
+    reviewCount: 2,
+    chips: ['Artwork', 'Tags', 'Identity'],
+    extraCount: 2,
+    gradient: 'from-stone-950 via-stone-800 to-orange-200',
+  },
+  {
+    id: 'whole-universe-review',
+    title: 'The Whole Universe Wants',
+    artist: 'Nils Frahm',
+    album: 'All Melody',
+    type: 'lyrics',
+    section: 'all',
+    proposalStatus: 'Review',
+    proposedFixes: 2,
+    safeCount: 1,
+    reviewCount: 1,
+    chips: ['Lyrics', 'Style'],
+    gradient: 'from-neutral-200 via-stone-400 to-stone-700',
+  },
+  {
+    id: 'a-place-review',
+    title: 'A Place',
+    artist: 'Hammock',
+    album: 'All Melody',
+    type: 'genres',
+    section: 'all',
+    proposalStatus: 'Review',
+    proposedFixes: 4,
+    safeCount: 2,
+    reviewCount: 2,
+    chips: ['Genre', 'Mood', 'MBID'],
+    extraCount: 1,
+    gradient: 'from-stone-300 via-neutral-500 to-neutral-950',
+  },
+]
+
+export const forgeArtworkReviewItems: ForgeReviewQueueItem[] = [
+  {
+    id: 'artwork-all-melody',
+    title: 'All Melody',
+    artist: 'Nils Frahm',
+    type: 'covers',
+    section: 'artwork',
+    proposalStatus: 'Review',
+    current: 'Current cover: 320 x 320',
+    suggested: 'Suggested: 1400 x 1400',
+    actionLabel: 'Apply artwork',
+    chips: ['Album cover'],
+    gradient: 'from-stone-950 via-stone-800 to-orange-200',
+  },
+  {
+    id: 'artwork-spaces',
+    title: 'Spaces',
+    artist: 'Nils Frahm',
+    type: 'covers',
+    section: 'artwork',
+    proposalStatus: 'Review',
+    current: 'No cover found',
+    suggested: 'Suggested artwork available',
+    actionLabel: 'Apply artwork',
+    chips: ['Missing cover'],
+    gradient: 'from-neutral-800 via-neutral-700 to-neutral-950',
+  },
+  {
+    id: 'artwork-felt',
+    title: 'Felt',
+    artist: 'Nils Frahm',
+    type: 'covers',
+    section: 'artwork',
+    proposalStatus: 'Review',
+    current: 'Current cover: 600 x 600',
+    suggested: 'Low resolution',
+    actionLabel: 'Apply artwork',
+    chips: ['Low resolution'],
+    gradient: 'from-neutral-500 via-stone-700 to-neutral-950',
+  },
+  {
+    id: 'artwork-tripping',
+    title: 'Tripping With Nils Frahm',
+    artist: 'Nils Frahm',
+    type: 'covers',
+    section: 'artwork',
+    proposalStatus: 'Safe',
+    current: 'Current cover: 800 x 800',
+    suggested: 'Suggested: 1600 x 1600',
+    actionLabel: 'Apply artwork',
+    chips: ['Album cover'],
+    gradient: 'from-stone-200 via-zinc-500 to-stone-900',
+  },
+]
+
+export const forgeLyricsReviewItems: ForgeReviewQueueItem[] = [
+  {
+    id: 'lyrics-whole-universe',
+    title: 'The Whole Universe Wants',
+    artist: 'Nils Frahm',
+    album: 'All Melody',
+    type: 'lyrics',
+    section: 'lyrics',
+    proposalStatus: 'Review',
+    current: 'No lyrics found',
+    suggested: 'Suggested plain lyrics available',
+    actionLabel: 'Apply lyrics',
+    chips: ['Missing'],
+    gradient: 'from-purple-950 via-purple-700 to-stone-900',
+  },
+  {
+    id: 'lyrics-says',
+    title: 'Says',
+    artist: 'Nils Frahm',
+    album: 'Spaces',
+    type: 'lyrics',
+    section: 'lyrics',
+    proposalStatus: 'Review',
+    current: 'Lyrics incomplete',
+    suggested: 'Missing final section',
+    actionLabel: 'Review lyrics',
+    chips: ['Incomplete'],
+    gradient: 'from-purple-950 via-purple-700 to-stone-900',
+  },
+  {
+    id: 'lyrics-a-place',
+    title: 'A Place',
+    artist: 'Hammock',
+    album: 'All Melody',
+    type: 'lyrics',
+    section: 'lyrics',
+    proposalStatus: 'Review',
+    current: 'Unsynced lyrics',
+    suggested: 'Synced LRC available',
+    actionLabel: 'Apply synced',
+    chips: ['Unsynced'],
+    gradient: 'from-purple-950 via-purple-700 to-stone-900',
+  },
+  {
+    id: 'lyrics-music-for-animals',
+    title: 'Music for Animals',
+    artist: 'Nils Frahm',
+    type: 'lyrics',
+    section: 'lyrics',
+    proposalStatus: 'Safe',
+    current: 'No lyrics found',
+    suggested: 'Suggested plain lyrics available',
+    actionLabel: 'Apply lyrics',
+    chips: ['Missing'],
+    gradient: 'from-purple-950 via-purple-700 to-stone-900',
+  },
+]
+
+export const forgeMetadataReviewItems: ForgeReviewQueueItem[] = [
+  {
+    id: 'metadata-tags-a-place',
+    title: 'A Place',
+    artist: 'Hammock',
+    type: 'genres',
+    section: 'metadata',
+    metadataFilter: 'tags',
+    proposalStatus: 'Safe',
+    current: 'Current: Genre empty, Mood empty',
+    suggested: 'Suggested: Post-rock, Ambient, Instrumental, Calm, Melancholic',
+    detail: 'Genre + Mood',
+    actionLabel: 'Apply tags',
+    chips: ['Tags'],
+    gradient: 'from-emerald-950 via-lime-800 to-stone-950',
+  },
+  {
+    id: 'metadata-identity-all-melody',
+    title: 'All Melody',
+    artist: 'Nils Frahm',
+    type: 'genres',
+    section: 'metadata',
+    metadataFilter: 'identity',
+    proposalStatus: 'Protected',
+    current: 'Album MBID found',
+    suggested: 'Confidence: 96%',
+    detail: 'Protected identity field',
+    actionLabel: 'Apply identity',
+    chips: ['Identity'],
+    gradient: 'from-blue-950 via-slate-800 to-stone-950',
+  },
+  {
+    id: 'metadata-release-all-melody',
+    title: 'All Melody',
+    artist: 'Nils Frahm',
+    type: 'genres',
+    section: 'metadata',
+    metadataFilter: 'release',
+    proposalStatus: 'Safe',
+    current: 'Release data',
+    suggested: 'Label, country and catalog found',
+    actionLabel: 'Apply release data',
+    chips: ['Release'],
+    gradient: 'from-amber-950 via-yellow-700 to-stone-950',
+  },
+  {
+    id: 'metadata-audio-says',
+    title: 'Says',
+    artist: 'Nils Frahm',
+    type: 'genres',
+    section: 'metadata',
+    metadataFilter: 'audio',
+    proposalStatus: 'Safe',
+    current: 'Audio analysis',
+    suggested: 'BPM, key and ReplayGain available',
+    actionLabel: 'Apply audio data',
+    chips: ['Audio'],
+    gradient: 'from-teal-950 via-teal-800 to-stone-950',
+  },
+  {
+    id: 'metadata-conflict-sunson',
+    title: 'Sunson',
+    artist: 'Nils Frahm',
+    type: 'genres',
+    section: 'metadata',
+    metadataFilter: 'identity',
+    proposalStatus: 'Conflict',
+    current: 'Two MusicBrainz matches',
+    suggested: 'Manual match selection required',
+    detail: 'Match conflict',
+    actionLabel: 'Choose match',
+    chips: ['Identity'],
+    gradient: 'from-blue-950 via-slate-800 to-stone-950',
+  },
+]
+
+export const forgeAllReviewItems = [
+  ...forgeReviewItems,
+  ...forgeArtworkReviewItems,
+  ...forgeLyricsReviewItems,
+  ...forgeMetadataReviewItems,
 ]
 
 export const activityItems: ActivityItem[] = [

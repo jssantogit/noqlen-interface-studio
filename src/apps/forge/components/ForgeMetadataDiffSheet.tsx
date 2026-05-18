@@ -11,12 +11,14 @@ export function ForgeMetadataDiffSheet({
   title,
   subtitle,
   rows,
+  applyLabel = 'Apply change',
   onApply,
   onClose,
 }: {
   title: string
   subtitle?: string
   rows: DiffRow[]
+  applyLabel?: string
   onApply: () => void
   onClose: () => void
 }) {
@@ -59,7 +61,7 @@ export function ForgeMetadataDiffSheet({
             onClick={onApply}
             type="button"
           >
-            Apply change
+            {applyLabel}
           </button>
         </div>
       </div>

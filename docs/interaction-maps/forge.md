@@ -7,13 +7,10 @@ Forge is a mock library repair and review app inside Noqlen Interface Studio.
 It manages visual/mock flows for:
 
 - missing lyrics.
-- better cover review.
-- missing genres.
-- metadata cleanup.
-- batch review.
-- fix selected.
-- fix all.
-- ignore selected.
+- artwork/cover review.
+- metadata cleanup across Tags, Identity, Release and Audio.
+- review safe fixes.
+- contextual apply selected / ignore selected.
 - item details.
 - before/after previews.
 - library browsing.
@@ -65,20 +62,20 @@ Layout constraints:
 ### Missing Lyrics Card
 
 - Trigger: `2 tracks are missing lyrics` attention card.
-- Result: navigates to Review filtered by missing lyrics.
-- Current status: implemented (switches to Review with lyrics filter and toast).
+- Result: navigates to Review / Lyrics.
+- Current status: implemented (switches to Review / Lyrics with toast).
 
 ### Better Covers Card
 
 - Trigger: `4 albums need better covers` attention card.
-- Result: navigates to Review filtered by cover review.
-- Current status: implemented (switches to Review with covers filter and toast).
+- Result: navigates to Review / Artwork.
+- Current status: implemented (switches to Review / Artwork with toast).
 
 ### Missing Genres Card
 
 - Trigger: `3 songs are missing genres` attention card.
-- Result: navigates to Review filtered by missing genres.
-- Current status: implemented (switches to Review with genres filter and toast).
+- Result: navigates to Review / Metadata with Tags active.
+- Current status: implemented (switches to Review / Metadata / Tags with toast).
 
 ### Settings Gear
 
@@ -96,26 +93,36 @@ Layout constraints:
 
 ## Review Interaction Map
 
-### Fix Selected
+### Review Architecture
 
-- Trigger: `Fix selected (N)` button.
-- Requires: at least one selected item.
-- Result: opens batch confirmation dialog showing selected items and a preview of changes.
-- Mock state: selected items move to a `fixed` status locally; toast confirms `Selected fixes applied in mock preview`.
+- Main tabs: All, Artwork, Lyrics and Metadata.
+- Excluded main tabs: Identity and Files.
+- Identity belongs inside Metadata.
+- File info is read-only and excluded from the main Review screen.
+- Metadata subfilters: Tags, Identity, Release and Audio.
+- Proposal statuses: Safe, Review, Protected, Conflict, Applied, Ignored and Read-only.
+- Current status: implemented.
+
+### Review Safe Fixes
+
+- Trigger: `Review safe fixes` in the All summary card.
+- Result: opens confirmation dialog for safe proposals in the active view.
+- Mock state: confirmed safe proposals increment local applied session state; mixed rows remain visible when manual review work still exists.
 - Safety: must not write metadata, edit files, fetch lyrics or download covers.
 - Current status: implemented.
 
-### Fix All
+### Contextual Apply Selected
 
-- Trigger: `Fix all (N)` button.
-- Result: opens confirmation dialog for all current queue items.
-- Mock state: all items in the current view move to `fixed` locally; toast confirms.
-- Safety: same as Fix selected.
+- Trigger: select row checkboxes, then tap `Apply selected` in the compact contextual bar.
+- Requires: at least one selected item.
+- Result: opens confirmation dialog for selected rows.
+- Mock state: selected items move to fixed/applied local state; toast confirms.
+- Safety: same as Review safe fixes.
 - Current status: implemented.
 
 ### Ignore Selected
 
-- Trigger: `Ignore selected` button.
+- Trigger: select row checkboxes, then tap `Ignore` in the compact contextual bar.
 - Requires: at least one selected item.
 - Result: opens ignore reason bottom sheet with optional reason chips.
 - Options: `Not needed`, `Wrong suggestion`, `Review later`, `Keep current metadata`.
@@ -126,40 +133,47 @@ Layout constraints:
 ### Item Checkbox
 
 - Trigger: checkbox on a review item row.
-- Result: toggles selection state for pending items only.
+- Result: toggles selection state for pending items only; the contextual bar appears only while rows are selected.
 - Current status: implemented.
 
-### Group Header Expand/Collapse
+### Main Review Tabs
 
-- Trigger: group header or `Show`/`Hide` pill.
-- Result: toggles group open/closed; groups with zero pending items are hidden.
+- Trigger: All / Artwork / Lyrics / Metadata segmented tabs.
+- Result: switches scalable queue surfaces and clears row selection.
 - Current status: implemented.
 
-### Missing Lyrics Item Tap
+### All Item Tap
 
-- Trigger: tap on a lyrics review item (outside the checkbox).
-- Result: opens `ForgeLyricsDetailSheet`.
-- Shows: song title, artist, album, metadata rows (Source, Confidence, Status), mock lyrics preview using placeholder text (no real/copyrighted lyrics), `Preview changes` link.
+- Trigger: tap an All queue row.
+- Result: opens the relevant existing detail or preview sheet based on item type.
+- Mock state: apply/ignore inside the sheet updates local row status.
+- Current status: implemented.
+
+### Lyrics Item Tap
+
+- Trigger: tap a Lyrics row or its `Apply lyrics`, `Review lyrics` or `Apply synced` affordance.
+- Result: opens `ForgeLyricsDetailSheet` with fake placeholder lyrics only.
 - Actions: `Apply lyrics` (marks fixed), `Ignore this item` (marks ignored), `Close`, `Preview changes` (opens metadata diff).
 - Mock state: item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - Current status: implemented.
 
-### Cover Item Tap
+### Artwork Item Tap / Apply Artwork
 
-- Trigger: tap on a cover review item.
-- Result: opens `ForgeCoverComparisonSheet`.
-- Shows: album title, artist, side-by-side current/suggested cover placeholders, metadata rows (Confidence, Status), `Preview changes` link.
-- Actions: `Use suggested cover` (marks fixed), `Keep current` (marks ignored), `Ignore` (marks ignored), `Close`, `Preview changes` (opens metadata diff).
+- Trigger: tap an Artwork row or its `Apply artwork` affordance.
+- Result: opens `ForgeCoverComparisonSheet` before applying.
+- Shows: album title, artist, current cover placeholder, suggested cover placeholder, current resolution and suggested resolution.
+- List rule: artwork rows show current-cover facts only; no confidence as main artwork data and no direct list-level current-vs-suggested comparison.
+- Actions: `Apply` (marks fixed), `Keep current` (marks ignored), `Ignore` (marks ignored), `Cancel`, `Preview changes` (opens metadata diff).
 - Mock state: item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - Current status: implemented.
 
-### Genre Item Tap
+### Metadata Item Tap / Apply Metadata
 
-- Trigger: tap on a genre review item.
-- Result: opens `ForgeGenrePickerSheet`.
-- Shows: song title, artist, album, current genres (None), suggested genre chips, selected preview, `Preview changes` link.
-- Actions: `Apply genre` (marks fixed and stores selected genres), `Ignore this item` (marks ignored), `Close`, `Preview changes` (opens metadata diff).
-- Mock state: item status becomes `fixed` or `ignored`; selected genres stored locally; toast confirms; item removed from pending queue.
+- Trigger: tap a Metadata row or its specific action affordance.
+- Result: opens `ForgeMetadataDiffSheet` with current vs suggested values.
+- Tags rows use `Apply tags`; Identity rows use `Apply identity`; conflicts use `Choose match`; Release rows use `Apply release data`; Audio rows use `Apply audio data`.
+- Protected identity fields require explicit confirmation through the preview sheet.
+- Mock state: item status becomes `fixed`; toast confirms; item removed from pending queue.
 - Current status: implemented.
 
 ### Review Covers Button (from Library)
@@ -171,8 +185,8 @@ Layout constraints:
 ### Clear/Fix/Ignore Status
 
 - Trigger: after a fix or ignore action.
-- Result: fixed/ignored items are removed from the active pending queue; session summary card appears; group counts update.
-- Empty queue state: when all items in a group are fixed or ignored, show an empty queue message with `View all` and `Reset mock queue` actions.
+- Result: fixed/ignored items are removed from the active pending queue; session summary card appears; queue counts update.
+- Empty queue state: when all items in a view are fixed or ignored, show an empty queue message with `View all` and `Reset mock queue` actions.
 - Current status: implemented.
 
 ## Library Interaction Map

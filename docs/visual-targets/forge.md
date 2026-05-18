@@ -3,6 +3,7 @@
 Reference image:
 
 - `docs/references/forge/forge-screens-reference.png`
+- `docs/references/forge/forge_review_redesign.png` is the active Review architecture target for Bloco 3.4.2.
 
 Goal: preserve legacy Forge visual fidelity when implementing Forge screens.
 
@@ -17,7 +18,9 @@ Visual rules:
 
 - Preserve the editorial home screen.
 - Preserve the warm orange Review Now button.
-- Preserve review groups.
+- Preserve the redesigned Review architecture: All / Artwork / Lyrics / Metadata.
+- Keep Identity inside Metadata; do not expose Identity or Files as main Review tabs.
+- Preserve Metadata subfilters: Tags / Identity / Release / Audio.
 - Preserve checkboxes with orange accent.
 - Preserve album thumbnails with rich CSS gradients.
 - Preserve the library segmented control.
@@ -31,6 +34,16 @@ Design identity:
 - **Shadow:** soft dark shadows with warm orange tint on primary actions
 - **Thumbnails:** CSS gradient placeholders, no external images
 - **Mood:** editorial, warm, careful, corrective
+
+Review redesign rules:
+
+- All tab is item-first with a summary card, `Review safe fixes` CTA, compact chips and safe/review counts.
+- Artwork tab lists current-cover facts only; list rows do not show confidence or side-by-side comparison. `Apply artwork` opens the comparison sheet before applying.
+- Lyrics tab shows missing/incomplete/unsynced lyric fixes and opens mock placeholder previews before applying.
+- Metadata tab groups non-artwork/non-lyrics changes under Tags, Identity, Release and Audio.
+- Metadata actions use specific labels such as `Apply tags`, `Apply identity`, `Choose match`, `Apply release data` and `Apply audio data`.
+- File info is read-only and excluded from the main Review surface.
+- Use soft peach-orange/warm amber accents only; avoid neon, cyan spill, blue glow and saturated orange.
 
 Must not:
 

@@ -31,14 +31,14 @@ export const forgeInteractions: InteractionEntry[] = [
   { id: 'HN-6', name: 'Safety Note Card', screen: 'home', status: 'implemented' },
 
   // Review
-  { id: 'RV-1', name: 'Fix Selected', screen: 'review', status: 'implemented' },
-  { id: 'RV-2', name: 'Fix All', screen: 'review', status: 'implemented' },
-  { id: 'RV-3', name: 'Ignore Selected', screen: 'review', status: 'implemented' },
-  { id: 'RV-4', name: 'Item Checkbox', screen: 'review', status: 'implemented' },
-  { id: 'RV-5', name: 'Group Expand/Collapse', screen: 'review', status: 'implemented' },
-  { id: 'RV-6', name: 'Missing Lyrics Item Tap', screen: 'review', status: 'implemented' },
-  { id: 'RV-7', name: 'Cover Item Tap', screen: 'review', status: 'implemented' },
-  { id: 'RV-8', name: 'Genre Item Tap', screen: 'review', status: 'implemented' },
+  { id: 'RV-1', name: 'Review Architecture Tabs', screen: 'review', status: 'implemented' },
+  { id: 'RV-2', name: 'Review Safe Fixes', screen: 'review', status: 'implemented' },
+  { id: 'RV-3', name: 'Contextual Apply Selected', screen: 'review', status: 'implemented' },
+  { id: 'RV-4', name: 'Ignore Selected', screen: 'review', status: 'implemented' },
+  { id: 'RV-5', name: 'Item Checkbox', screen: 'review', status: 'implemented' },
+  { id: 'RV-6', name: 'Lyrics Item Tap', screen: 'review', status: 'implemented' },
+  { id: 'RV-7', name: 'Artwork Item Tap', screen: 'review', status: 'implemented' },
+  { id: 'RV-8', name: 'Metadata Item Tap', screen: 'review', status: 'implemented' },
   { id: 'RV-9', name: 'Review Covers from Library', screen: 'review', status: 'not-implemented' },
   { id: 'RV-10', name: 'Status After Fix/Ignore', screen: 'review', status: 'implemented' },
 
@@ -73,7 +73,7 @@ export const forgeInteractionBatches = [
   },
   {
     name: 'Batch 2: Review Queue Interactions',
-    interactions: ['RV-1', 'RV-2', 'RV-3', 'RV-5', 'RV-10'],
+    interactions: ['RV-1', 'RV-2', 'RV-3', 'RV-4', 'RV-5', 'RV-10'],
   },
   {
     name: 'Batch 3: Review Item Detail Flows',

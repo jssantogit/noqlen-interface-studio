@@ -32,7 +32,7 @@ export function ForgeHome({
   onOpenSafetyNote,
 }: {
   onReviewNow: () => void
-  onFilterReview: (filter: 'lyrics' | 'covers' | 'genres') => void
+  onFilterReview: (filter: 'all' | 'artwork' | 'lyrics' | 'metadata', metadataFilter?: 'tags' | 'identity' | 'release' | 'audio') => void
   onOpenSettings: () => void
   onOpenSafetyNote: () => void
 }) {
@@ -84,7 +84,7 @@ export function ForgeHome({
           accent="text-violet-300"
           bgTint="bg-violet-400/13"
           icon={Image}
-          onClick={() => onFilterReview('covers')}
+          onClick={() => onFilterReview('artwork')}
           subtitle="need better covers"
           title="4 albums"
         />
@@ -92,7 +92,7 @@ export function ForgeHome({
           accent="text-amber-300"
           bgTint="bg-amber-400/13"
           icon={Tags}
-          onClick={() => onFilterReview('genres')}
+          onClick={() => onFilterReview('metadata', 'tags')}
           subtitle="are missing genres"
           title="3 songs"
         />

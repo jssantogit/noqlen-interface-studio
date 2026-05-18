@@ -20,7 +20,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### HN-2: Missing Lyrics Card
 
 - **Trigger:** tap the `2 tracks are missing lyrics` attention card.
-- **Resulting UI:** Review tab opens with `reviewFilter` set to `'lyrics'`.
+- **Resulting UI:** Review tab opens on Lyrics.
 - **Mock state changes:** `activeTab = 'review'`, `reviewFilter = 'lyrics'`.
 - **Data used:** static `reviewGroups`.
 - **Forbidden real behavior:** no lyric search, no backend query.
@@ -29,8 +29,8 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### HN-3: Better Covers Card
 
 - **Trigger:** tap the `4 albums need better covers` attention card.
-- **Resulting UI:** Review tab opens with `reviewFilter` set to `'covers'`.
-- **Mock state changes:** `activeTab = 'review'`, `reviewFilter = 'covers'`.
+- **Resulting UI:** Review tab opens on Artwork.
+- **Mock state changes:** `activeTab = 'review'`, `reviewFilter = 'artwork'`.
 - **Data used:** static `reviewGroups`.
 - **Forbidden real behavior:** no cover search, no download.
 - **Status:** implemented (switches to Review with covers filter and toast).
@@ -38,8 +38,8 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### HN-4: Missing Genres Card
 
 - **Trigger:** tap the `3 songs are missing genres` attention card.
-- **Resulting UI:** Review tab opens with `reviewFilter` set to `'genres'`.
-- **Mock state changes:** `activeTab = 'review'`, `reviewFilter = 'genres'`.
+- **Resulting UI:** Review tab opens on Metadata with Tags active.
+- **Mock state changes:** `activeTab = 'review'`, `reviewFilter = 'metadata'`, `metadataFilter = 'tags'`.
 - **Data used:** static `reviewGroups`.
 - **Forbidden real behavior:** no genre lookup, no backend call.
 - **Status:** implemented (switches to Review with genres filter and toast).
@@ -66,81 +66,82 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 
 ## Review
 
-### RV-1: Fix Selected
+### RV-1: Review Architecture Tabs
 
-- **Trigger:** tap `Fix selected (N)` button.
-- **Resulting UI:** `ForgeConfirmDialog` opens showing selected count and type breakdown.
-- **Mock state changes:** selected items move to `status = 'fixed'` in local state; `selected` set cleared; `sessionFixed` incremented; toast shown.
-- **Data used:** `selected` Set, `reviewGroups`, `itemStatuses`.
-- **Forbidden real behavior:** no metadata write, no file edit, no download.
+- **Trigger:** tap All, Artwork, Lyrics or Metadata segmented tab.
+- **Resulting UI:** Review switches between the scalable main surfaces; Metadata also exposes Tags, Identity, Release and Audio subfilters.
+- **Mock state changes:** `reviewFilter` updates locally; selection clears when switching tabs.
+- **Data used:** static `forgeReviewItems`, `forgeArtworkReviewItems`, `forgeLyricsReviewItems`, `forgeMetadataReviewItems`.
+- **Forbidden real behavior:** no backend, file scan, metadata write or network call.
 - **Status:** implemented.
 
-### RV-2: Fix All
+### RV-2: Review Safe Fixes
 
-- **Trigger:** tap `Fix all (N)` button.
-- **Resulting UI:** `ForgeConfirmDialog` for all pending items in current filter.
-- **Mock state changes:** all pending items in current filter move to `status = 'fixed'`; `selected` cleared; `sessionFixed` incremented; toast shown.
-- **Data used:** current `reviewGroups` items, `itemStatuses`, active filter.
-- **Forbidden real behavior:** same as RV-1.
+- **Trigger:** tap `Review safe fixes` in the All summary card.
+- **Resulting UI:** `ForgeConfirmDialog` opens for safe proposals in the active view.
+- **Mock state changes:** confirmed safe proposals increment `sessionFixed`; mixed rows remain visible when manual review proposals still exist; toast shown.
+- **Data used:** static redesigned Review queues and `itemStatuses`.
+- **Forbidden real behavior:** no metadata write, no file edit, no lyric fetch, no artwork download.
 - **Status:** implemented.
 
-### RV-3: Ignore Selected
+### RV-3: Contextual Apply Selected
 
-- **Trigger:** tap `Ignore selected` button.
+- **Trigger:** select one or more row checkboxes, then tap `Apply selected` in the compact contextual bar.
+- **Resulting UI:** `ForgeConfirmDialog` opens for selected rows.
+- **Mock state changes:** selected rows move to `status = 'fixed'`; selected set clears; `sessionFixed` increments; toast shown.
+- **Data used:** `selected` Set, redesigned Review queues, `itemStatuses`.
+- **Forbidden real behavior:** same as RV-2.
+- **Status:** implemented.
+
+### RV-4: Ignore Selected
+
+- **Trigger:** select one or more row checkboxes, then tap `Ignore` in the compact contextual bar.
 - **Resulting UI:** `ForgeBottomSheet` opens as an ignore reason sheet with optional reason chips.
-- **Mock state changes:** selected items move to `status = 'ignored'`; `selected` cleared; `sessionIgnored` incremented; toast shown.
+- **Mock state changes:** selected items move to `status = 'ignored'`; selected set clears; `sessionIgnored` increments; toast shown.
 - **Data used:** `selected` Set.
 - **Forbidden real behavior:** no file deletion, no metadata deletion.
 - **Status:** implemented.
 
-### RV-4: Item Checkbox
+### RV-5: Item Checkbox
 
 - **Trigger:** tap the checkbox on a review item row.
-- **Resulting UI:** checkbox toggles checked/unchecked state.
+- **Resulting UI:** checkbox toggles checked/unchecked state; contextual bar appears only while selection exists.
 - **Mock state changes:** `selected` Set add/remove.
-- **Data used:** item name string.
+- **Data used:** item id.
 - **Forbidden real behavior:** none.
 - **Status:** implemented.
 
-### RV-5: Group Expand/Collapse
-
-- **Trigger:** tap the group header or the `Show`/`Hide` pill.
-- **Resulting UI:** group items appear or disappear; chevron icon updates; groups with zero pending items are hidden.
-- **Mock state changes:** `openGroups` Set add/remove.
-- **Data used:** group id.
-- **Forbidden real behavior:** none.
-- **Status:** implemented.
-
-### RV-6: Missing Lyrics Item Tap
+### RV-6: Lyrics Item Tap
 
 - **Trigger:** tap a lyrics review item outside the checkbox.
 - **Resulting UI:** `ForgeLyricsDetailSheet` opens as a bottom sheet.
 - **Shows:** song title, artist, album, metadata rows (Source: Studio mock suggestion, Confidence: High, Status: Ready to apply), mock lyrics preview using placeholder text only (no real/copyrighted lyrics), `Preview changes` link.
-- **Actions:** `Apply lyrics` (sets fixed), `Ignore this item` (sets ignored), `Close`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
+- **Actions:** `Apply lyrics`, `Review lyrics` or `Apply synced` affordances open the same mock lyrics preview; sheet actions set fixed/ignored locally.
 - **Mock state changes:** item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - **Data used:** `reviewGroups` item.
 - **Forbidden real behavior:** no lyric API call, no lyric download, no file write, no copyrighted lyrics.
 - **Status:** implemented.
 
-### RV-7: Cover Item Tap
+### RV-7: Artwork Item Tap / Apply Artwork
 
-- **Trigger:** tap a cover review item outside the checkbox.
+- **Trigger:** tap an artwork review item or its `Apply artwork` affordance.
 - **Resulting UI:** `ForgeCoverComparisonSheet` opens as a bottom sheet.
-- **Shows:** album title, artist, side-by-side current/suggested cover placeholders, metadata rows (Confidence: Medium, Status: Ready to apply), `Preview changes` link.
-- **Actions:** `Use suggested cover` (sets fixed), `Keep current` (sets ignored), `Ignore` (sets ignored), `Close`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
+- **Shows:** album title, artist, side-by-side current/suggested cover placeholders, current resolution, suggested resolution and `Preview changes` link.
+- **List rule:** Review list rows show current-cover or missing-cover facts only; no confidence as primary artwork data and no list-level comparison.
+- **Actions:** `Apply` (sets fixed), `Keep current` (sets ignored), `Ignore` (sets ignored), `Cancel`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
 - **Mock state changes:** item status becomes `fixed` or `ignored`; toast confirms; item removed from pending queue.
 - **Data used:** `reviewGroups` item.
 - **Forbidden real behavior:** no cover download, no image replacement, no file write.
 - **Status:** implemented.
 
-### RV-8: Genre Item Tap
+### RV-8: Metadata Item Tap / Specific Apply Actions
 
-- **Trigger:** tap a genre review item outside the checkbox.
-- **Resulting UI:** `ForgeGenrePickerSheet` opens as a bottom sheet.
-- **Shows:** song title, artist, album, current genres (None), suggested genre chips (Modern Classical, Ambient, Piano, Instrumental, Electronic, Progressive), selected preview, `Preview changes` link.
-- **Actions:** `Apply genre` (sets fixed and stores selected genres locally), `Ignore this item` (sets ignored), `Close`, `Preview changes` (navigates to `ForgeMetadataDiffSheet`).
-- **Mock state changes:** item status becomes `fixed` or `ignored`; selected genres stored in `itemGenres` local state; toast confirms; item removed from pending queue.
-- **Data used:** `reviewGroups` item, static suggested genres.
+- **Trigger:** tap a Metadata row or its specific action affordance.
+- **Resulting UI:** `ForgeMetadataDiffSheet` opens as a bottom sheet.
+- **Shows:** current vs suggested values for Tags, Identity, Release or Audio.
+- **Actions:** `Apply tags`, `Apply identity`, `Choose match`, `Apply release data` or `Apply audio data` depending on row type.
+- **Mock state changes:** item status becomes `fixed`; toast confirms; item removed from pending queue.
+- **Data used:** static `forgeMetadataReviewItems`.
 - **Forbidden real behavior:** no genre API lookup, no metadata write.
 - **Status:** implemented.
 
@@ -156,7 +157,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 ### RV-10: Status After Fix/Ignore
 
 - **Trigger:** after RV-1, RV-2 or RV-3 completes.
-- **Resulting UI:** fixed/ignored items are removed from the active pending queue; group pending counts update; session summary card appears; empty queue state renders when no pending items remain.
+- **Resulting UI:** fixed/ignored items are removed from the active pending queue; session summary card appears; empty queue state renders when no pending items remain.
 - **Mock state changes:** item `status` updated; group may become empty; `sessionFixed`/`sessionIgnored` updated.
 - **Data used:** item ids and group ids.
 - **Forbidden real behavior:** none.

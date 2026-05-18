@@ -7,7 +7,7 @@ Forge is a mock-only library care preview inside the Studio phone simulator, ada
 - Visible tab in the Studio app selector.
 - Home, Review, Library and Activity mock screens inside Forge.
 - Home includes the legacy-style `Forge` header, gear affordance, greeting, editorial missing-library headline, amber Review now CTA and attention cards.
-- Review includes grouped review cards, local mock checkboxes, cover thumbnails and Fix selected/Fix all/Ignore selected visual actions.
+- Review uses the redesigned All / Artwork / Lyrics / Metadata architecture with local mock checkboxes, cover thumbnails, summary CTA and contextual selected-row actions.
 - Library includes a search affordance, Artists/Albums/Songs segmented control, artwork/list rows, metadata attention badges and chevrons.
 - Activity includes Today/Yesterday sections, colored icon circles, timestamps and Summary/Review pills.
 - All actions are visual/mock-only.
@@ -17,12 +17,12 @@ Forge is a mock-only library care preview inside the Studio phone simulator, ada
 
 ## Visual Target
 
-- Forge implementation must follow `docs/visual-targets/forge.md` and `docs/references/forge/forge-screens-reference.png`.
+- Forge implementation must follow `docs/visual-targets/forge.md`, `docs/references/forge/forge-screens-reference.png` and the Review redesign target `docs/references/forge/forge_review_redesign.png`.
 
 ## Primary Screens
 
 - **ForgeHome** — editorial headline, greeting, amber CTA, attention summary cards, safety note.
-- **ForgeReview** — grouped review queues, checkboxes, fix/ignore actions, cover thumbnails.
+- **ForgeReview** — All / Artwork / Lyrics / Metadata queues, Metadata subfilters, checkboxes, summary CTA, contextual apply/ignore actions and preview-before-apply sheets.
 - **ForgeLibrary** — search affordance, segmented control (Artists/Albums/Songs), artwork rows, metadata badges.
 - **ForgeActivity** — Today/Yesterday groups, activity cards with icons, timestamps, Summary/Review pills.
 
@@ -110,6 +110,20 @@ All data is static and fictional. All state changes are local React state only.
   - Updated all overlays (bottom sheet, confirm dialog, toast) with warm charcoal gradients.
   - Updated `forgeMockData.ts` with richer album gradients and activity `bgAccent` fields.
   - Preserved all existing interactions; no new Library/Activity interactions added.
+
+- **Bloco 3.4.2 (Forge Review Architecture Redesign):** implemented.
+  - Used `docs/references/forge/forge_review_redesign.png` as the active Review composition target.
+  - Replaced the old grouped Missing Lyrics / Better Covers / Missing Genres primary structure with All / Artwork / Lyrics / Metadata.
+  - Kept Identity inside Metadata and excluded Files from the main Review tabs.
+  - Added Metadata subfilters: Tags, Identity, Release and Audio.
+  - Added static redesigned review data and proposal status labels: Safe, Review, Protected, Conflict, Applied, Ignored and Read-only.
+  - Replaced the permanent top `Fix selected` / `Fix all` / `Ignore selected` bar with the All summary CTA `Review safe fixes` and a compact contextual row-selection bar.
+  - Updated Artwork rows to show current-cover, resolution or missing-cover facts only; comparison appears only after `Apply artwork` opens the artwork sheet.
+  - Updated Lyrics rows for missing, incomplete and unsynced preview flows using fake placeholder lyrics only.
+  - Updated Metadata rows with specific action labels: `Apply tags`, `Apply identity`, `Choose match`, `Apply release data`, `Apply audio data`.
+  - Preserved Home navigation into Review: Review Now -> All, missing lyrics -> Lyrics, better covers -> Artwork, missing genres -> Metadata / Tags.
+  - Preserved existing Forge Home, Library and Activity rendering and did not start Activity interactions.
+  - Preserved mock-only boundaries: no backend, fetch/axios behavior, filesystem, FileReader, downloads, real metadata writes, real lyrics or artwork changes.
 
 ## Future Implementation Batches
 

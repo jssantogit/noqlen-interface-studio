@@ -1,7 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState, useCallback, useMemo } from 'react'
 import type { ReactNode } from 'react'
-import { reviewGroups, type ReviewItemStatus, type ReviewItemType } from './forgeMockData'
+import {
+  forgeAllReviewItems,
+  reviewGroups,
+  type ForgeMetadataFilter,
+  type ForgeReviewSection,
+  type ReviewItemStatus,
+  type ReviewItemType,
+} from './forgeMockData'
 import { ForgeActivity } from './components/ForgeActivity'
 import { ForgeBottomNav } from './components/ForgeBottomNav'
 import { ForgeConfirmDialog } from './components/ForgeConfirmDialog'
@@ -17,19 +24,21 @@ import { ForgeSettingsSheet } from './components/ForgeSettingsSheet'
 import { ForgeToast } from './components/ForgeToast'
 
 export type ForgeTab = 'home' | 'review' | 'library' | 'activity'
-export type ReviewFilter = 'all' | 'lyrics' | 'covers' | 'genres'
+export type ReviewFilter = ForgeReviewSection
 export type ForgeSheet = 'settings' | 'safetyNote' | null
 export type ForgeDetailSheet = 'lyrics' | 'covers' | 'genres' | 'metadata' | null
 
 function buildInitialItemStatuses(): Record<string, ReviewItemStatus> {
   const map: Record<string, ReviewItemStatus> = {}
   reviewGroups.forEach((g) => g.items.forEach((i) => { map[i.id] = i.status }))
+  forgeAllReviewItems.forEach((i) => { map[i.id] = 'pending' })
   return map
 }
 
 export function ForgePreview() {
   const [activeTab, setActiveTab] = useState<ForgeTab>('home')
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>('all')
+  const [metadataFilter, setMetadataFilter] = useState<ForgeMetadataFilter>('tags')
   const [activeSheet, setActiveSheet] = useState<ForgeSheet>(null)
   const [activeDetailSheet, setActiveDetailSheet] = useState<ForgeDetailSheet>(null)
   const [selectedReviewItemId, setSelectedReviewItemId] = useState<string | null>(null)
@@ -62,15 +71,18 @@ export function ForgePreview() {
   }, [showToast])
 
   const handleFilterReview = useCallback(
-    (filter: ReviewFilter) => {
+    (filter: ReviewFilter, nextMetadataFilter?: ForgeMetadataFilter) => {
       setReviewFilter(filter)
+      if (nextMetadataFilter) setMetadataFilter(nextMetadataFilter)
       setActiveTab('review')
       const label =
         filter === 'lyrics'
-          ? 'Missing lyrics queue selected'
-          : filter === 'covers'
+          ? 'Lyrics review selected'
+          : filter === 'artwork'
             ? 'Cover review queue selected'
-            : 'Missing genres queue selected'
+            : filter === 'metadata'
+              ? 'Metadata review selected'
+              : 'Review queue selected'
       showToast(label, 'info')
     },
     [showToast],
@@ -93,9 +105,9 @@ export function ForgePreview() {
     setSelectedReviewItemId(null)
   }, [])
 
-  const openItemDetail = useCallback((itemId: string, type: ReviewItemType) => {
+  const openItemDetail = useCallback((itemId: string, type: ReviewItemType, section?: ForgeReviewSection) => {
     setSelectedReviewItemId(itemId)
-    setActiveDetailSheet(type === 'lyrics' ? 'lyrics' : type === 'covers' ? 'covers' : 'genres')
+    setActiveDetailSheet(section === 'metadata' ? 'metadata' : type === 'lyrics' ? 'lyrics' : type === 'covers' ? 'covers' : 'genres')
   }, [])
 
   const updateItemStatus = useCallback(
@@ -155,7 +167,9 @@ export function ForgePreview() {
 
   const selectedReviewItem = useMemo(() => {
     if (!selectedReviewItemId) return null
-    return reviewGroups.flatMap((g) => g.items).find((i) => i.id === selectedReviewItemId) ?? null
+    return reviewGroups.flatMap((g) => g.items).find((i) => i.id === selectedReviewItemId)
+      ?? forgeAllReviewItems.find((i) => i.id === selectedReviewItemId)
+      ?? null
   }, [selectedReviewItemId])
 
   const applyDetailFix = useCallback(() => {
@@ -206,6 +220,7 @@ export function ForgePreview() {
     review: (
       <ForgeReview
         filter={reviewFilter}
+        metadataFilter={metadataFilter}
         itemStatuses={itemStatuses}
         selectedIds={selectedIds}
         sessionFixed={sessionFixed}
@@ -215,6 +230,8 @@ export function ForgePreview() {
         onClearFilter={clearReviewFilter}
         onOpenItemDetail={openItemDetail}
         onResetQueue={resetQueue}
+        onSetFilter={setReviewFilter}
+        onSetMetadataFilter={setMetadataFilter}
         onSetItemStatuses={setItemStatuses}
         onSetSelectedIds={setSelectedIds}
         onSetSessionFixed={setSessionFixed}
@@ -283,11 +300,12 @@ export function ForgePreview() {
           subtitle="Review the changes before applying."
           rows={[
             {
-              label: selectedReviewItem.type === 'lyrics' ? 'Lyrics' : selectedReviewItem.type === 'covers' ? 'Cover' : 'Genre',
-              before: selectedReviewItem.type === 'lyrics' ? 'Missing' : selectedReviewItem.type === 'covers' ? 'Low resolution' : 'Unknown',
-              after: selectedReviewItem.type === 'lyrics' ? 'Mock lyrics preview' : selectedReviewItem.type === 'covers' ? 'Suggested cover' : (itemGenres[selectedReviewItem.id]?.join(', ') || 'Selected genre'),
+              label: selectedReviewItem.type === 'lyrics' ? 'Lyrics' : selectedReviewItem.type === 'covers' ? 'Artwork' : 'Metadata',
+              before: 'current' in selectedReviewItem && selectedReviewItem.current ? selectedReviewItem.current : selectedReviewItem.type === 'lyrics' ? 'Missing' : selectedReviewItem.type === 'covers' ? 'Low resolution' : 'Unknown',
+              after: 'suggested' in selectedReviewItem && selectedReviewItem.suggested ? selectedReviewItem.suggested : selectedReviewItem.type === 'lyrics' ? 'Mock lyrics preview' : selectedReviewItem.type === 'covers' ? 'Suggested cover' : (itemGenres[selectedReviewItem.id]?.join(', ') || 'Selected metadata'),
             },
           ]}
+          applyLabel={'actionLabel' in selectedReviewItem && selectedReviewItem.actionLabel ? selectedReviewItem.actionLabel : 'Apply change'}
           onApply={applyDetailFix}
           onClose={closeDetailSheet}
         />
