@@ -226,7 +226,7 @@ export function ForgePreview() {
   }
 
   return (
-    <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_40%_0%,rgba(255,216,170,.07),transparent_35%),linear-gradient(180deg,#0c1012,#07090a_70%)] text-white">
+    <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_40%_0%,rgba(255,200,150,.08),transparent_35%),linear-gradient(180deg,#0f0c0a,#080604_70%)] text-white">
       <AnimatePresence mode="wait">
         <motion.div
           animate={{ opacity: 1, y: 0, scale: 1 }}

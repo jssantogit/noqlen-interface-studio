@@ -1,7 +1,7 @@
 import { Check, ChevronDown, ChevronUp, Image, Music2, RotateCcw, Tags } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { reviewGroups, type ReviewItemStatus, type ReviewItemType } from '../forgeMockData'
-import { CoverGradient } from './ForgeCard'
+import { CoverGradient, ForgeCard } from './ForgeCard'
 import { ForgeScreenHeader } from './ForgeCard'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
 
@@ -216,22 +216,26 @@ export function ForgeReview({
       )}
 
       {(sessionFixed > 0 || sessionIgnored > 0) && (
-        <div className="mb-4 rounded-2xl border border-white/[0.06] bg-white/[0.035] p-3">
+        <ForgeCard className="mb-4 p-3">
           <p className="text-xs font-medium text-white/70">Session summary</p>
           <div className="mt-1.5 flex gap-3">
             {sessionFixed > 0 && (
-              <span className="text-xs text-emerald-300">{sessionFixed} fixed</span>
+              <span className="rounded-lg bg-emerald-400/10 px-2 py-0.5 text-xs font-medium text-emerald-300">
+                {sessionFixed} fixed
+              </span>
             )}
             {sessionIgnored > 0 && (
-              <span className="text-xs text-orange-300">{sessionIgnored} ignored</span>
+              <span className="rounded-lg bg-orange-400/10 px-2 py-0.5 text-xs font-medium text-orange-300">
+                {sessionIgnored} ignored
+              </span>
             )}
           </div>
-        </div>
+        </ForgeCard>
       )}
 
       <div className="mb-4 grid grid-cols-3 gap-2">
         <button
-          className={`min-h-11 rounded-xl px-2 text-[11px] font-semibold leading-tight transition ${selectedCount > 0 ? 'bg-[#e7a35f] text-black hover:bg-[#efad6c]' : 'bg-white/[0.07] text-white/40 cursor-not-allowed'}`}
+          className={`min-h-11 rounded-xl px-2 text-[11px] font-semibold leading-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition ${selectedCount > 0 ? 'bg-[#e7a35f] text-[#211508] hover:bg-[#efad6c]' : 'bg-white/[0.07] text-white/40 cursor-not-allowed shadow-none'}`}
           disabled={selectedCount === 0}
           onClick={applyFixSelected}
           type="button"
@@ -239,14 +243,14 @@ export function ForgeReview({
           Fix selected{selectedCount > 0 ? ` (${selectedCount})` : ''}
         </button>
         <button
-          className="min-h-11 rounded-xl bg-white/[0.07] px-2 text-[11px] font-medium leading-tight text-white/82 transition hover:bg-white/[0.1]"
+          className="min-h-11 rounded-xl border border-white/[0.065] bg-white/[0.045] px-2 text-[11px] font-medium leading-tight text-white/82 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/[0.075]"
           onClick={applyFixAll}
           type="button"
         >
           Fix all ({allPendingIds.length})
         </button>
         <button
-          className={`min-h-11 rounded-xl px-2 text-[11px] font-medium leading-tight transition ${selectedCount > 0 ? 'bg-white/[0.07] text-white/82 hover:bg-white/[0.1]' : 'bg-white/[0.07] text-white/40 cursor-not-allowed'}`}
+          className={`min-h-11 rounded-xl px-2 text-[11px] font-medium leading-tight transition ${selectedCount > 0 ? 'border border-white/[0.065] bg-white/[0.045] text-white/82 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-white/[0.075]' : 'bg-white/[0.07] text-white/40 cursor-not-allowed'}`}
           disabled={selectedCount === 0}
           onClick={openIgnoreSheet}
           type="button"
@@ -264,7 +268,7 @@ export function ForgeReview({
           <div className="mt-2 flex gap-2">
             {onClearFilter && filter && filter !== 'all' && (
               <button
-                className="h-9 rounded-lg bg-white/[0.07] px-4 text-xs font-medium text-white transition hover:bg-white/[0.1]"
+                className="h-9 rounded-lg border border-white/[0.065] bg-white/[0.045] px-4 text-xs font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/[0.075]"
                 onClick={onClearFilter}
                 type="button"
               >
@@ -273,7 +277,7 @@ export function ForgeReview({
             )}
             {onResetQueue && (
               <button
-                className="flex h-9 items-center gap-1.5 rounded-lg bg-white/[0.07] px-4 text-xs font-medium text-white transition hover:bg-white/[0.1]"
+                className="flex h-9 items-center gap-1.5 rounded-lg border border-white/[0.065] bg-white/[0.045] px-4 text-xs font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/[0.075]"
                 onClick={onResetQueue}
                 type="button"
               >
@@ -292,7 +296,7 @@ export function ForgeReview({
             if (pendingCount === 0) return null
             return (
               <section
-                className="rounded-2xl border border-white/[0.06] bg-white/[0.035] p-3"
+                className="rounded-2xl border border-white/[0.06] bg-[linear-gradient(145deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))] p-3 shadow-[0_0.75rem_1.5rem_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.03)]"
                 key={group.id}
               >
                 <button
@@ -300,14 +304,16 @@ export function ForgeReview({
                   onClick={() => toggleGroup(group.id)}
                   type="button"
                 >
-                  <Icon className={`${group.accent} shrink-0`} size={18} />
+                  <div className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg ${group.id === 'lyrics' ? 'bg-orange-400/13' : group.id === 'covers' ? 'bg-violet-400/13' : 'bg-amber-400/13'}`}>
+                    <Icon className={`${group.accent} shrink-0`} size={16} />
+                  </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-white">{group.title}</p>
                     <p className="text-[11px] text-white/45">
                       {pendingCount} pending
                     </p>
                   </div>
-                  <span className="rounded-xl bg-white/[0.07] px-3 py-1.5 text-xs font-medium text-orange-200">
+                  <span className="rounded-xl bg-white/[0.07] px-3 py-1.5 text-xs font-medium text-orange-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
                     {isOpen ? 'Hide' : 'Show'}
                   </span>
                   {isOpen ? (
@@ -327,11 +333,11 @@ export function ForgeReview({
                           key={item.id}
                         >
                           <button
-                            className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border text-[10px] transition ${active ? 'border-[#e7a35f] bg-[#e7a35f] text-black' : 'border-white/25 text-transparent'}`}
+                            className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border text-[10px] transition ${active ? 'border-[#e7a35f] bg-[#e7a35f] text-[#211508]' : 'border-white/25 text-transparent'}`}
                             onClick={() => toggleItem(item.id)}
                             type="button"
                           >
-                            <Check size={13} />
+                            <Check size={13} strokeWidth={2.5} />
                           </button>
                           <button
                             className="flex min-w-0 flex-1 items-center gap-3 text-left"
@@ -340,10 +346,16 @@ export function ForgeReview({
                           >
                             <CoverGradient
                               className="h-9 w-9 shrink-0 rounded-lg"
-                              gradient="from-stone-200 via-stone-500 to-stone-950"
+                              gradient={
+                                item.type === 'lyrics'
+                                  ? 'from-orange-100 via-orange-300 to-stone-600'
+                                  : item.type === 'covers'
+                                    ? 'from-violet-100 via-violet-400 to-stone-700'
+                                    : 'from-amber-100 via-amber-300 to-stone-600'
+                              }
                             />
                             <div className="min-w-0 flex-1 text-left">
-                              <p className="truncate text-sm text-white/80">
+                              <p className="truncate text-sm font-medium text-white/90">
                                 {item.title}
                               </p>
                               <p className="truncate text-[11px] text-white/40">
@@ -375,7 +387,7 @@ export function ForgeReview({
               {ignoreReasons.map((reason) => (
                 <button
                   key={reason}
-                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${ignoreReason === reason ? 'bg-[#e7a35f] text-black' : 'bg-white/[0.07] text-white/70 hover:bg-white/[0.1]'}`}
+                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${ignoreReason === reason ? 'bg-[#e7a35f] text-[#211508]' : 'border border-white/[0.065] bg-white/[0.045] text-white/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-white/[0.08]'}`}
                   onClick={() => setIgnoreReason(reason)}
                   type="button"
                 >
@@ -385,14 +397,14 @@ export function ForgeReview({
             </div>
             <div className="grid grid-cols-2 gap-2.5 pt-2">
               <button
-                className="h-10 rounded-lg border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075]"
+                className="h-10 rounded-lg border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/[0.075]"
                 onClick={() => setIgnoreSheetOpen(false)}
                 type="button"
               >
                 Cancel
               </button>
               <button
-                className="h-10 rounded-lg bg-amber-400 text-sm font-semibold text-[#211508] transition hover:bg-amber-300"
+                className="h-10 rounded-lg bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]"
                 onClick={applyIgnoreSelected}
                 type="button"
               >

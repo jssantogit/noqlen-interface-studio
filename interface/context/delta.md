@@ -303,3 +303,30 @@ Bloco 3.3 delta (Forge Review Item Detail Flows):
 - Preserved Anchor, Aria, Flux and Studio shell unchanged.
 - Preserved mock-only boundary: no backend, filesystem, metadata edits, downloads, FileReader, secrets or network behavior.
 - Safety: no copyrighted lyrics were added; all lyrics text is clearly fake placeholder copy.
+
+Bloco 3.3.2 delta (Forge Visual System Refinement):
+
+- Refined Forge orange visual system across all existing screens: Home, Review, Library, Activity, bottom nav, cards, buttons, badges, thumbnails, overlays.
+- Updated `ForgeCard` with premium gradient surface (`linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.025))`), inner highlight (`inset_0_1px_0_rgba(255,255,255,0.04)`) and soft shadow.
+- Updated `CoverGradient` with stronger gloss overlay, bottom fade, refined vinyl indicator (`ring-1 ring-white/10`) and shadow.
+- Updated `ForgeHome` with tinted icon backgrounds (`bg-orange-400/13`, `bg-violet-400/13`, `bg-amber-400/13`), premium CTA shadow, refined settings button.
+- Updated `ForgeReview` with gradient group cards, premium action buttons (inner highlight + orange shadow), type-colored thumbnails (lyrics=orange, covers=violet, genres=amber), refined checkboxes, badge-style session summary pills.
+- Updated `ForgeLibrary` with search icon affordance, richer album gradients, refined issue badges with orange dot, cleaner row rhythm.
+- Updated `ForgeActivity` with tinted icon circles (`bgAccent` from mock data), improved Summary/Review pills, stronger section headers.
+- Updated `ForgeBottomNav` with warmer background (`#0a0c0e/92`), clearer active state, focus ring.
+- Updated `ForgeBottomSheet` with warm charcoal gradient (`rgba(22,18,14,0.98)`), warm subtitle text.
+- Updated `ForgeConfirmDialog` with warm background, consistent orange primary button, inner highlight.
+- Updated `ForgeToast` with warm charcoal background (`#140f0a/95`), orange-toned dismiss button.
+- Updated `ForgeSettingsSheet` save button with premium orange shadow.
+- Updated all detail sheets (`ForgeLyricsDetailSheet`, `ForgeCoverComparisonSheet`, `ForgeGenrePickerSheet`, `ForgeMetadataDiffSheet`) with consistent orange primary actions and warm thumbnails.
+- Updated `ForgePreview` background to warm near-black (`#0f0c0a` base).
+- Updated `forgeMockData.ts` with richer album cover gradients and activity `bgAccent` fields.
+- Updated `docs/visual-targets/forge.md` with design identity and orange rules.
+- Updated `docs/screen-contracts/forge/README.md` with Batch 3.3.2 status.
+- Updated `docs/screen-contracts/forge/interactions.md` to reference warm orange CTA.
+- Created `docs/audits/forge-visual-system-refinement.md` with full visual audit.
+- Verified all existing interactions still work: Home cards, Review selection, Fix selected/all, Ignore selected, group expand/collapse, item detail sheets, individual apply/ignore.
+- Verified no console errors, no horizontal overflow at 360x800/390x844/430x932/1366x768/1440x900.
+- Verified Anchor, Aria, Flux still render correctly.
+- Safety grep: no fetch/axios/fs/child_process/FileReader in app behavior; only static docs/UI text matches.
+- Build, lint, and tests pass.

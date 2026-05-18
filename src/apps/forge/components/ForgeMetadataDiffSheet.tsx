@@ -55,7 +55,7 @@ export function ForgeMetadataDiffSheet({
             Close
           </button>
           <button
-            className="h-10 rounded-lg bg-amber-400 text-sm font-semibold text-[#211508] transition hover:bg-amber-300"
+            className="h-10 rounded-lg bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]"
             onClick={onApply}
             type="button"
           >

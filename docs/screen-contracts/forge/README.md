@@ -99,6 +99,18 @@ All data is static and fictional. All state changes are local React state only.
   - Individual apply/ignore actions in detail sheets update item status, show toast, remove item from pending queue and clear selection.
   - Added `itemGenres` local state to store mock genre selections per item.
 
+- **Batch 3.3.2 (Visual System Refinement):** implemented in Bloco 3.3.2.
+  - Refined Forge orange visual system across Home, Review, Library, Activity, bottom nav, cards, buttons, badges, thumbnails, sheets and dialogs.
+  - Updated `ForgeCard` with premium gradient surface, inner highlight and soft shadow.
+  - Updated `CoverGradient` with richer gloss overlay, bottom fade and refined vinyl indicator.
+  - Replaced generic gray thumbnails with warm, evocative CSS gradients per album and per review item type.
+  - Added tinted icon backgrounds to Home attention cards and Activity icon circles.
+  - Refined primary CTA and action buttons with inner highlight and warm orange shadow.
+  - Updated bottom nav with warmer background and stronger active state.
+  - Updated all overlays (bottom sheet, confirm dialog, toast) with warm charcoal gradients.
+  - Updated `forgeMockData.ts` with richer album gradients and activity `bgAccent` fields.
+  - Preserved all existing interactions; no new Library/Activity interactions added.
+
 ## Future Implementation Batches
 
 Defined in `docs/interaction-maps/forge.md`:

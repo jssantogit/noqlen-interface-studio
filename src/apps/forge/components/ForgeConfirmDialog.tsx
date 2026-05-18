@@ -15,8 +15,8 @@ export function ForgeConfirmDialog({
 }) {
   const confirmClass =
     tone === 'danger'
-      ? 'bg-orange-500 text-white hover:bg-orange-400 focus:ring-orange-200/70 shadow-[0_0.8rem_1.5rem_rgba(249,115,22,0.16)]'
-      : 'bg-amber-400 text-[#211508] hover:bg-amber-300 focus:ring-amber-100/70 shadow-[0_0.8rem_1.5rem_rgba(245,158,11,0.16)]'
+      ? 'bg-orange-600 text-white hover:bg-orange-500 focus:ring-orange-300/40 shadow-[0_0.8rem_1.5rem_rgba(234,88,12,0.18)]'
+      : 'bg-[#e7a35f] text-[#211508] hover:bg-[#efad6c] focus:ring-orange-300/40 shadow-[0_0.8rem_1.5rem_rgba(234,154,92,0.16)]'
 
   return (
     <div className="absolute inset-0 z-50 grid min-w-0 place-items-center overflow-hidden bg-black/55 px-5 backdrop-blur-[2px]">
@@ -28,16 +28,16 @@ export function ForgeConfirmDialog({
       />
       <section
         aria-modal="true"
-        className="relative w-full max-w-[19rem] rounded-[1.35rem] border border-white/[0.09] bg-[linear-gradient(150deg,rgba(21,34,41,0.98),rgba(7,14,19,0.99))] p-4 shadow-[0_1.4rem_3rem_rgba(0,0,0,0.46),inset_0_1px_0_rgba(255,255,255,0.07)]"
+        className="relative w-full max-w-[19rem] rounded-[1.35rem] border border-white/[0.09] bg-[linear-gradient(150deg,rgba(24,18,12,0.98),rgba(8,5,3,0.99))] p-4 shadow-[0_1.4rem_3rem_rgba(0,0,0,0.46),inset_0_1px_0_rgba(255,255,255,0.07)]"
         role="dialog"
       >
         <h2 className="font-serif text-[1.35rem] leading-7 tracking-[-0.045em] text-white">
           {title}
         </h2>
-        <p className="mt-2 text-sm leading-5 text-slate-300/78">{description}</p>
+        <p className="mt-2 text-sm leading-5 text-orange-100/70">{description}</p>
         <div className="mt-5 grid grid-cols-2 gap-2.5">
           <button
-            className="h-10 rounded-lg border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
+            className="h-10 rounded-lg border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-orange-300/30"
             onClick={onCancel}
             type="button"
           >

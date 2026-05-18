@@ -22,7 +22,7 @@ export function ForgeBottomSheet({
       />
       <section
         aria-modal="true"
-        className="relative max-h-[86%] w-full min-w-0 max-w-full overflow-hidden rounded-t-[1.65rem] border border-white/[0.09] bg-[linear-gradient(180deg,rgba(18,31,38,0.98),rgba(6,13,18,0.99))] shadow-[0_-1.2rem_3rem_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.07)]"
+        className="relative max-h-[86%] w-full min-w-0 max-w-full overflow-hidden rounded-t-[1.65rem] border border-white/[0.09] bg-[linear-gradient(180deg,rgba(22,18,14,0.98),rgba(8,6,4,0.99))] shadow-[0_-1.2rem_3rem_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.07)]"
         role="dialog"
       >
         <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-white/18" />
@@ -34,12 +34,12 @@ export function ForgeBottomSheet({
               </h2>
             ) : null}
             {subtitle ? (
-              <p className="mt-1 text-xs leading-5 text-slate-300/76">{subtitle}</p>
+              <p className="mt-1 text-xs leading-5 text-orange-100/60">{subtitle}</p>
             ) : null}
           </div>
           <button
             aria-label="Close sheet"
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[0.055] text-slate-200 transition hover:bg-white/[0.09] focus:outline-none focus:ring-2 focus:ring-amber-300/35"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[0.055] text-orange-100/70 transition hover:bg-white/[0.09] hover:text-white focus:outline-none focus:ring-2 focus:ring-orange-300/35"
             onClick={onClose}
             type="button"
           >

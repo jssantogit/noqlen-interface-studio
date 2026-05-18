@@ -16,26 +16,28 @@ export function ForgeBottomNav({
   onTabChange: (tab: ForgeTab) => void
 }) {
   return (
-    <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/[0.06] bg-[#090b0d]/92 px-5 pb-5 pt-2 backdrop-blur-xl">
+    <nav className="absolute bottom-0 left-0 right-0 z-20 border-t border-white/[0.055] bg-[#0a0c0e]/92 px-3 pb-4 pt-2 backdrop-blur-xl">
       <div className="grid grid-cols-4 gap-1">
         {tabs.map((tab) => {
           const selected = activeTab === tab.id
           return (
             <button
               aria-pressed={selected}
-              className={`flex flex-col items-center gap-1 rounded-2xl py-1.5 text-[11px] transition ${
-                selected ? 'text-orange-300' : 'text-white/48 hover:text-white/80'
+              className={`flex min-w-0 flex-col items-center gap-0.5 rounded-2xl py-1.5 text-[0.64rem] transition focus:outline-none focus:ring-2 focus:ring-orange-300/35 ${
+                selected
+                  ? 'text-orange-300'
+                  : 'text-white/48 hover:text-white/80'
               }`}
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               type="button"
             >
-              <tab.Icon size={20} strokeWidth={selected ? 2.4 : 1.8} />
-              <span>{tab.label}</span>
+              <tab.Icon size={18} strokeWidth={selected ? 2.5 : 1.85} />
+              <span className="truncate">{tab.label}</span>
             </button>
           )
         })}
       </div>
-    </div>
+    </nav>
   )
 }

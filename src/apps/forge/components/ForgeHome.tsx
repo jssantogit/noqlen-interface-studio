@@ -6,13 +6,14 @@ interface AttentionCardProps {
   title: string
   subtitle: string
   accent: string
+  bgTint: string
   onClick: () => void
 }
 
-function AttentionCard({ icon: Icon, title, subtitle, accent, onClick }: AttentionCardProps) {
+function AttentionCard({ icon: Icon, title, subtitle, accent, bgTint, onClick }: AttentionCardProps) {
   return (
     <ForgeCard className="flex items-center gap-4 p-4" onClick={onClick}>
-      <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-white/[0.055]">
+      <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl ${bgTint}`}>
         <Icon className={accent} size={24} />
       </div>
       <div className="min-w-0 flex-1">
@@ -40,11 +41,11 @@ export function ForgeHome({
       <ForgeScreenHeader
         rightAction={
           <button
-            className="text-white/80 transition-colors hover:text-white"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-white/80 transition hover:bg-white/[0.07] hover:text-white"
             onClick={onOpenSettings}
             type="button"
           >
-            <Settings size={22} />
+            <Settings size={21} />
           </button>
         }
         title="Forge"
@@ -61,7 +62,7 @@ export function ForgeHome({
       </div>
 
       <button
-        className="mb-8 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e7a35f] text-sm font-semibold text-black shadow-lg shadow-orange-950/25 transition hover:bg-[#efad6c] active:scale-[0.99]"
+        className="mb-8 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_0.8rem_1.5rem_rgba(234,154,92,0.18)] transition hover:bg-[#efad6c] active:scale-[0.99]"
         onClick={onReviewNow}
         type="button"
       >
@@ -73,6 +74,7 @@ export function ForgeHome({
       <div className="space-y-3">
         <AttentionCard
           accent="text-orange-300"
+          bgTint="bg-orange-400/13"
           icon={Music2}
           onClick={() => onFilterReview('lyrics')}
           subtitle="are missing lyrics"
@@ -80,13 +82,15 @@ export function ForgeHome({
         />
         <AttentionCard
           accent="text-violet-300"
+          bgTint="bg-violet-400/13"
           icon={Image}
           onClick={() => onFilterReview('covers')}
           subtitle="need better covers"
           title="4 albums"
         />
         <AttentionCard
-          accent="text-lime-300"
+          accent="text-amber-300"
+          bgTint="bg-amber-400/13"
           icon={Tags}
           onClick={() => onFilterReview('genres')}
           subtitle="are missing genres"

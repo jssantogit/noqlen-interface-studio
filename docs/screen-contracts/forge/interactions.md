@@ -10,7 +10,7 @@ All behavior remains mock-only. No real metadata, files, network or backend beha
 
 ### HN-1: Review Now
 
-- **Trigger:** tap the amber `Review now` CTA on Forge Home.
+- **Trigger:** tap the warm orange `Review now` CTA on Forge Home.
 - **Resulting UI:** active tab changes to Review; Review scrolls to top.
 - **Mock state changes:** `activeTab` set to `'review'`.
 - **Data used:** none.

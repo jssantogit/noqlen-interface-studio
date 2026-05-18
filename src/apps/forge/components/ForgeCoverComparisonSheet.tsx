@@ -33,7 +33,7 @@ export function ForgeCoverComparisonSheet({
             <p className="text-center text-[10px] text-white/35">Low resolution / old</p>
           </div>
           <div className="space-y-2">
-            <p className="text-center text-[10px] font-medium uppercase tracking-wider text-amber-300/70">Suggested</p>
+            <p className="text-center text-[10px] font-medium uppercase tracking-wider text-orange-300/80">Suggested</p>
             <CoverGradient className="aspect-square w-full rounded-xl" gradient="from-amber-100 via-orange-400 to-stone-800" />
             <p className="text-center text-[10px] text-white/35">Higher quality</p>
           </div>
@@ -72,7 +72,7 @@ export function ForgeCoverComparisonSheet({
             Close
           </button>
           <button
-            className="h-10 rounded-lg bg-amber-400 text-sm font-semibold text-[#211508] transition hover:bg-amber-300"
+            className="h-10 rounded-lg bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]"
             onClick={onApply}
             type="button"
           >

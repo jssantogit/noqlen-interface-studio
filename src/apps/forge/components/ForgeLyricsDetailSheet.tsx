@@ -29,7 +29,7 @@ export function ForgeLyricsDetailSheet({
       <div className="space-y-5">
         {/* Item header */}
         <div className="flex items-center gap-3">
-          <CoverGradient className="h-12 w-12 shrink-0 rounded-xl" gradient="from-stone-200 via-stone-500 to-stone-950" />
+          <CoverGradient className="h-12 w-12 shrink-0 rounded-xl" gradient="from-orange-100 via-orange-300 to-stone-700" />
           <div className="min-w-0">
             <p className="text-sm font-medium text-white">{item.title}</p>
             <p className="text-xs text-white/50">{item.artist}{item.album ? ` — ${item.album}` : ''}</p>
@@ -84,7 +84,7 @@ export function ForgeLyricsDetailSheet({
             Close
           </button>
           <button
-            className="h-10 rounded-lg bg-amber-400 text-sm font-semibold text-[#211508] transition hover:bg-amber-300"
+            className="h-10 rounded-lg bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]"
             onClick={onApply}
             type="button"
           >

@@ -16,13 +16,21 @@ Screens:
 Visual rules:
 
 - Preserve the editorial home screen.
-- Preserve the amber Review Now button.
+- Preserve the warm orange Review Now button.
 - Preserve review groups.
-- Preserve checkboxes.
-- Preserve album thumbnails.
+- Preserve checkboxes with orange accent.
+- Preserve album thumbnails with rich CSS gradients.
 - Preserve the library segmented control.
-- Preserve activity cards.
-- Preserve bottom navigation.
+- Preserve activity cards with tinted icon circles.
+- Preserve bottom navigation with orange active state.
+
+Design identity:
+
+- **Accent:** warm orange (`#e7a35f`, `orange-300`)
+- **Surface:** near-black with warm tint, elevated cards use gradient + inner highlight
+- **Shadow:** soft dark shadows with warm orange tint on primary actions
+- **Thumbnails:** CSS gradient placeholders, no external images
+- **Mood:** editorial, warm, careful, corrective
 
 Must not:
 
@@ -31,5 +39,6 @@ Must not:
 - Change real metadata.
 - Touch files.
 - Use backend behavior.
+- Copy Anchor yellow directly.
 
 All Forge behavior remains mock-only.

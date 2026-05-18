@@ -44,7 +44,7 @@ export function ForgeGenrePickerSheet({
       <div className="space-y-5">
         {/* Item header */}
         <div className="flex items-center gap-3">
-          <CoverGradient className="h-12 w-12 shrink-0 rounded-xl" gradient="from-stone-200 via-stone-500 to-stone-950" />
+          <CoverGradient className="h-12 w-12 shrink-0 rounded-xl" gradient="from-amber-100 via-amber-300 to-stone-600" />
           <div className="min-w-0">
             <p className="text-sm font-medium text-white">{item.title}</p>
             <p className="text-xs text-white/50">{item.artist}{item.album ? ` — ${item.album}` : ''}</p>
@@ -86,7 +86,7 @@ export function ForgeGenrePickerSheet({
             <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wider text-white/40">Selected</p>
             <div className="flex flex-wrap gap-1.5">
               {Array.from(selected).map((g) => (
-                <span key={g} className="rounded-md bg-[#e7a35f]/15 px-2 py-0.5 text-xs font-medium text-[#e7a35f]">
+                <span key={g} className="rounded-md bg-orange-400/13 px-2 py-0.5 text-xs font-medium text-orange-300">
                   {g}
                 </span>
               ))}
@@ -115,7 +115,7 @@ export function ForgeGenrePickerSheet({
             Close
           </button>
           <button
-            className={`h-10 rounded-lg text-sm font-semibold transition ${hasSelection ? 'bg-amber-400 text-[#211508] hover:bg-amber-300' : 'bg-white/[0.07] text-white/40 cursor-not-allowed'}`}
+            className={`h-10 rounded-lg text-sm font-semibold transition ${hasSelection ? 'bg-[#e7a35f] text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] hover:bg-[#efad6c]' : 'bg-white/[0.07] text-white/40 cursor-not-allowed'}`}
             disabled={!hasSelection}
             onClick={() => onApply(Array.from(selected))}
             type="button"
