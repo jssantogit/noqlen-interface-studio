@@ -29,21 +29,21 @@ export function AriaNowPlaying({
   const repeatLabel = repeatMode === 'off' ? 'Repeat off' : repeatMode === 'all' ? 'Repeat all' : 'Repeat one'
 
   return (
-    <div className="absolute inset-0 z-40 flex min-w-0 flex-col overflow-hidden bg-[#0c0e12] text-white">
+    <div className="absolute inset-0 z-40 flex min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_50%_-6%,rgba(239,149,45,0.13),transparent_33%),radial-gradient(circle_at_14%_8%,rgba(69,106,128,0.11),transparent_30%),linear-gradient(180deg,#071018,#071016_48%,#05090e_100%)] text-[#f5ecdf]">
       {/* Header */}
       <header className="flex min-w-0 items-center justify-between px-5 pt-4">
         <button
           aria-label="Collapse player"
-          className="grid h-9 w-9 place-items-center rounded-full text-slate-300 transition hover:bg-white/[0.07] hover:text-white"
+          className="grid h-9 w-9 place-items-center rounded-full text-[#b9b1a7] transition hover:bg-white/[0.07] hover:text-white"
           onClick={onCollapse}
           type="button"
         >
           <ChevronDown size={22} />
         </button>
-        <span className="text-xs font-medium tracking-wide text-slate-400 uppercase">Now Playing</span>
+        <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#777d82]">Now Playing</span>
         <button
           aria-label="Queue"
-          className="grid h-9 w-9 place-items-center rounded-full text-slate-300 transition hover:bg-white/[0.07] hover:text-white"
+          className="grid h-9 w-9 place-items-center rounded-full text-[#b9b1a7] transition hover:bg-white/[0.07] hover:text-white"
           type="button"
         >
           <ListMusic size={20} />
@@ -52,25 +52,23 @@ export function AriaNowPlaying({
 
       {/* Artwork */}
       <div className="flex flex-1 flex-col items-center justify-center px-8">
-        <div
-          className={`aspect-square w-full max-w-[280px] rounded-[1.5rem] bg-gradient-to-br ${nowPlaying.accent} shadow-[0_1rem_2rem_rgba(0,0,0,0.35)]`}
-        />
+        <div className="aria-art aria-art-square w-full max-w-[280px] shadow-[0_1rem_2rem_rgba(0,0,0,0.35)]" />
       </div>
 
       {/* Track info */}
       <div className="px-6 pb-2">
         <div className="flex min-w-0 items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h2 className="truncate text-xl font-semibold tracking-[-0.02em] text-white">
+            <h2 className="truncate font-serif text-[22px] leading-[1.05] text-[#fff3e4]">
               {nowPlaying.title}
             </h2>
-            <p className="mt-0.5 truncate text-sm text-amber-200/80">
+            <p className="mt-0.5 truncate text-sm text-[#f0a13d]">
               {nowPlaying.artist}
             </p>
           </div>
           <button
             aria-label={isFavorite ? 'Unfavorite' : 'Favorite'}
-            className={`mt-1 shrink-0 transition ${isFavorite ? 'text-amber-300' : 'text-slate-500 hover:text-slate-300'}`}
+            className={`mt-1 shrink-0 transition ${isFavorite ? 'text-[#f0a13d]' : 'text-[#777d82] hover:text-[#b9b1a7]'}`}
             onClick={onToggleFavorite}
             type="button"
           >
@@ -81,10 +79,10 @@ export function AriaNowPlaying({
 
       {/* Progress bar */}
       <div className="px-6 py-3">
-        <div className="h-1 w-full rounded-full bg-white/[0.08]">
-          <div className="h-full w-[35%] rounded-full bg-amber-300/80" />
+        <div className="h-[3px] w-full rounded-full bg-white/[0.14]">
+          <div className="h-full w-[35%] rounded-full bg-[#f0a13d]" />
         </div>
-        <div className="mt-1.5 flex justify-between text-[0.65rem] text-slate-500">
+        <div className="mt-1.5 flex justify-between text-[10px] text-[#777d82]">
           <span>1:28</span>
           <span>{nowPlaying.duration}</span>
         </div>
@@ -102,11 +100,12 @@ export function AriaNowPlaying({
         </button>
         <button
           aria-label={isPlaying ? 'Pause' : 'Play'}
-          className="grid h-14 w-14 place-items-center rounded-full bg-amber-300 text-[#0c0e12] shadow-[0_0.5rem_1rem_rgba(212,168,83,0.25)] transition hover:bg-amber-200 active:scale-[0.97]"
+          className="grid h-12 w-12 place-items-center rounded-full text-[#fff3df] shadow-[0_8px_20px_rgba(240,161,61,0.16)] transition active:scale-[0.97]"
           onClick={onPlayPause}
+          style={{ background: 'radial-gradient(circle, rgba(240,161,61,0.93), rgba(89,59,27,0.82))' }}
           type="button"
         >
-          {isPlaying ? <Pause size={26} fill="currentColor" /> : <Play size={26} fill="currentColor" className="ml-0.5" />}
+          {isPlaying ? <Pause size={22} fill="currentColor" /> : <Play size={22} fill="currentColor" className="ml-0.5" />}
         </button>
         <button
           aria-label="Next track"
@@ -122,7 +121,7 @@ export function AriaNowPlaying({
       <div className="flex items-center justify-center gap-6 px-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
         <button
           aria-label={isShuffled ? 'Shuffle on' : 'Shuffle off'}
-          className={`grid h-9 w-9 place-items-center rounded-full transition ${isShuffled ? 'text-amber-300' : 'text-slate-500 hover:text-slate-300'}`}
+          className={`grid h-9 w-9 place-items-center rounded-full transition ${isShuffled ? 'text-[#f0a13d]' : 'text-[#777d82] hover:text-[#b9b1a7]'}`}
           onClick={onToggleShuffle}
           type="button"
         >
@@ -130,7 +129,7 @@ export function AriaNowPlaying({
         </button>
         <button
           aria-label={repeatLabel}
-          className={`grid h-9 w-9 place-items-center rounded-full transition ${repeatMode !== 'off' ? 'text-amber-300' : 'text-slate-500 hover:text-slate-300'}`}
+          className={`grid h-9 w-9 place-items-center rounded-full transition ${repeatMode !== 'off' ? 'text-[#f0a13d]' : 'text-[#777d82] hover:text-[#b9b1a7]'}`}
           onClick={onToggleRepeat}
           type="button"
         >
@@ -140,16 +139,16 @@ export function AriaNowPlaying({
 
       {/* Up next preview */}
       <div className="border-t border-white/[0.06] px-5 py-3">
-        <p className="text-xs font-medium text-slate-400">Up next</p>
+        <p className="text-[11px] font-medium text-[#b9b1a7]">Up next</p>
         <div className="mt-2 space-y-2">
           {ariaQueue.slice(0, 3).map((track) => (
             <div className="flex min-w-0 items-center gap-3" key={track.id}>
-              <div className={`h-9 w-9 shrink-0 rounded-lg bg-gradient-to-br ${track.accent}`} />
+              <div className="aria-art aria-art-micro shrink-0" />
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm text-white">{track.title}</p>
-                <p className="truncate text-xs text-slate-500">{track.artist}</p>
+                <p className="truncate text-sm text-[#f5ecdf]">{track.title}</p>
+                <p className="truncate text-[10px] text-[#777d82]">{track.artist}</p>
               </div>
-              <span className="shrink-0 text-xs text-slate-500">{track.duration}</span>
+              <span className="shrink-0 text-[10px] text-[#777d82]">{track.duration}</span>
             </div>
           ))}
         </div>

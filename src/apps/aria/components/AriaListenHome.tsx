@@ -1,124 +1,130 @@
-import { ChevronRight, Search } from 'lucide-react'
-import {
-  ariaFeaturedPlaylists,
-  ariaQuickResume,
-  ariaRecentListens,
-  nowPlaying,
-} from '../ariaMockData'
+import { Play, Search } from 'lucide-react'
+import { nowPlaying } from '../ariaMockData'
 
 export function AriaListenHome({
   onPlay,
   onNavigateToExplore,
+  onShowToast,
 }: {
   onPlay: () => void
   onNavigateToExplore: () => void
+  onShowToast: (message: string) => void
 }) {
-  return (
-    <div className="min-h-full min-w-0 overflow-x-hidden px-5 pt-5 text-white">
-      {/* Header */}
-      <p className="text-xs uppercase tracking-[0.28em] text-amber-100/55">
-        Listening space
-      </p>
-      <h1 className="mt-2 font-serif text-4xl tracking-[-0.05em]">Aria</h1>
+  const recentAdditions = [
+    { id: 'ra-1', title: 'Midnight Horizons', artist: 'Ólafur Arnalds', type: 'Album', art: 'aria-art aria-art-micro aria-art-blue' },
+    { id: 'ra-2', title: 'Sunday Morning', artist: 'Cory', type: 'Album', art: 'aria-art aria-art-micro' },
+    { id: 'ra-3', title: 'Late Ambient', artist: 'Nils Frahm', type: 'Album', art: 'aria-art aria-art-micro aria-art-blue' },
+    { id: 'ra-4', title: 'A Place', artist: 'Nils Frahm', type: 'Single', art: 'aria-art aria-art-micro' },
+  ]
 
-      {/* Now Playing Card */}
-      <section className="mt-6 rounded-[1.8rem] border border-white/[0.08] bg-gradient-to-br from-amber-100/[0.08] via-orange-200/[0.04] to-transparent p-4">
-        <div className={`aspect-square rounded-[1.4rem] bg-gradient-to-br ${nowPlaying.accent} shadow-[0_0.5rem_1.5rem_rgba(0,0,0,0.3)]`} />
-        <div className="mt-4 flex min-w-0 items-center justify-between gap-4">
-          <div className="min-w-0">
-            <p className="truncate text-lg font-semibold tracking-[-0.02em]">
-              {nowPlaying.title}
-            </p>
-            <p className="truncate text-sm text-slate-400">
-              {nowPlaying.artist} · {nowPlaying.album}
-            </p>
-          </div>
-          <span className="shrink-0 text-xs text-slate-500">{nowPlaying.duration}</span>
+  return (
+    <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
+      {/* Topbar */}
+      <div className="mb-2 flex items-start justify-between">
+        <div>
+          <p className="text-[9px] font-bold uppercase tracking-[0.34em] text-[#f0a13d]">
+            LISTENING SPACE
+          </p>
+          <h1 className="font-serif text-[35px] leading-[0.95] text-[#fff3e4]">
+            Aria
+          </h1>
         </div>
         <button
-          className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-amber-300 text-sm font-semibold text-[#0c0e12] shadow-[0_0.5rem_1rem_rgba(212,168,83,0.22)] transition hover:bg-amber-200 active:scale-[0.99]"
+          aria-label="Queue status"
+          className="relative mt-1 grid h-[25px] w-[25px] place-items-center rounded-lg border border-white/[0.22] text-[#f3e7d8]"
+          onClick={() => onShowToast('Queue status (mock)')}
+          type="button"
+        >
+          <span className="text-sm">▤</span>
+          <span className="absolute -bottom-0.5 -right-0.5 h-[6px] w-[6px] rounded-full bg-[#5de084] shadow-[0_0_0_2px_#071017]" />
+        </button>
+      </div>
+
+      {/* Compact current track card */}
+      <div className="mt-3 flex items-center gap-2.5 rounded-2xl border border-white/[0.075] bg-white/[0.035] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
+        <div className="aria-art aria-art-thumb shrink-0" />
+        <div className="min-w-0 flex-1">
+          <p className="text-[13px] font-semibold text-[#f5ecdf]">{nowPlaying.title}</p>
+          <p className="text-[10px] leading-[1.3] text-[#b9b1a7]">{nowPlaying.artist}</p>
+          <p className="text-[10px] leading-[1.3] text-[#b9b1a7]">{nowPlaying.duration}</p>
+        </div>
+        <button
+          className="flex h-[29px] shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-b from-[#ffb958] to-[#ea912c] px-3 text-xs font-bold text-[#190f07] shadow-[0_8px_16px_rgba(240,161,61,0.16)]"
           onClick={onPlay}
           type="button"
         >
+          <Play size={12} fill="currentColor" />
           Play
         </button>
-      </section>
+      </div>
 
-      {/* Recent Listens Shelf */}
-      <section className="mt-5">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-medium text-slate-300">Recent listens</h3>
-          <button className="text-xs text-slate-500 transition hover:text-amber-300" type="button">
-            See all
-          </button>
-        </div>
-        <div className="mt-3 flex gap-3 overflow-x-auto pb-2 anchor-scrollbar-none">
-          {ariaRecentListens.map((item) => (
-            <article
-              className="w-36 shrink-0 cursor-pointer"
-              key={item.id}
-            >
-              <div
-                className={`aspect-square rounded-[1.2rem] bg-gradient-to-br ${item.accent} shadow-[0_0.4rem_1rem_rgba(0,0,0,0.25)]`}
-              />
-              <p className="mt-2 truncate text-sm font-medium">{item.title}</p>
-              <p className="truncate text-xs text-slate-500">{item.subtitle}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      {/* Shortcut tiles */}
+      <div className="mt-3 grid grid-cols-2 gap-2.5">
+        <button
+          className="flex flex-col gap-1.5 rounded-[14px] border border-white/[0.075] p-3 text-left transition hover:bg-white/[0.04]"
+          onClick={() => onShowToast('Your Playlists (mock)')}
+          style={{ background: 'linear-gradient(145deg, rgba(57,35,17,0.48), rgba(255,255,255,0.02))' }}
+          type="button"
+        >
+          <span className="text-lg text-[#f0a13d]">♬</span>
+          <strong className="font-serif text-[15px] font-normal text-[#f5ecdf]">Your Playlists</strong>
+          <span className="text-[10px] leading-[1.3] text-[#b9b1a7]">12 playlists</span>
+        </button>
+        <button
+          className="flex flex-col gap-1.5 rounded-[14px] border border-white/[0.075] p-3 text-left transition hover:bg-white/[0.04]"
+          onClick={() => onShowToast('Artists (mock)')}
+          style={{ background: 'linear-gradient(145deg, rgba(15,29,39,0.55), rgba(255,255,255,0.02))' }}
+          type="button"
+        >
+          <span className="text-lg text-[#f0a13d]">♪</span>
+          <strong className="font-serif text-[15px] font-normal text-[#f5ecdf]">Artists</strong>
+          <span className="text-[10px] leading-[1.3] text-[#b9b1a7]">Local artist index</span>
+        </button>
+      </div>
 
-      {/* Quick Resume */}
-      <section className="mt-4">
-        <h3 className="text-sm font-medium text-slate-300">Quick resume</h3>
-        <div className="mt-3 space-y-2">
-          {ariaQuickResume.map((item) => (
-            <button
-              className="flex w-full min-w-0 items-center gap-3 rounded-[1.2rem] border border-white/[0.06] bg-white/[0.03] p-3 text-left transition hover:bg-white/[0.06]"
-              key={item.id}
-              type="button"
-            >
-              <div
-                className={`h-12 w-12 shrink-0 rounded-xl bg-gradient-to-br ${item.accent}`}
-              />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{item.title}</p>
-                <p className="truncate text-xs text-slate-500">{item.subtitle}</p>
-              </div>
-              <ChevronRight className="shrink-0 text-slate-600" size={16} />
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* Featured Playlists */}
-      <section className="mt-5 pb-4">
-        <h3 className="text-sm font-medium text-slate-300">Featured</h3>
-        <div className="mt-3 grid grid-cols-2 gap-3">
-          {ariaFeaturedPlaylists.map((item) => (
-            <article
-              className="cursor-pointer rounded-[1.4rem] border border-white/[0.06] bg-white/[0.03] p-3.5 transition hover:bg-white/[0.06]"
-              key={item.id}
-            >
-              <div
-                className={`aspect-square rounded-[1rem] bg-gradient-to-br ${item.accent}`}
-              />
-              <p className="mt-2.5 truncate text-sm font-medium">{item.title}</p>
-              <p className="truncate text-xs text-slate-500">{item.subtitle}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* Search affordance */}
+      {/* Search bar */}
       <button
-        className="mb-6 mt-2 flex w-full min-w-0 items-center gap-3 rounded-[1.4rem] border border-white/[0.06] bg-white/[0.035] p-3.5 text-left transition hover:bg-white/[0.05]"
+        className="mt-3 flex h-9 w-full items-center gap-2 rounded-xl border border-white/[0.075] bg-white/[0.035] px-3 text-left text-[11px] text-[#b9b1a7] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition hover:bg-white/[0.045]"
         onClick={onNavigateToExplore}
         type="button"
       >
-        <Search className="shrink-0 text-slate-500" size={18} />
-        <span className="min-w-0 truncate text-sm text-slate-500">Search tracks, albums, artists…</span>
+        <Search size={14} className="shrink-0 text-[#b9b1a7]" />
+        Search your library
       </button>
+
+      {/* Recent additions */}
+      <div className="mt-2">
+        <div className="flex items-center justify-between py-2 text-xs">
+          <strong className="text-[#f0a13d]">Recent additions</strong>
+          <button
+            className="text-[10px] text-[#f0a13d] transition hover:text-[#ffb958]"
+            onClick={() => onShowToast('See all (mock)')}
+            type="button"
+          >
+            See all
+          </button>
+        </div>
+        <div className="space-y-0">
+          {recentAdditions.map((item) => (
+            <button
+              className="flex w-full min-w-0 items-center gap-2 border-b border-white/[0.045] py-2 text-left transition hover:bg-white/[0.02]"
+              key={item.id}
+              onClick={() => onShowToast(`${item.title} (mock)`)}
+              type="button"
+            >
+              <div className={`${item.art} shrink-0`} />
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] font-semibold text-[#f5ecdf]">{item.title}</p>
+                <p className="text-[10px] leading-[1.3] text-[#b9b1a7]">{item.artist}</p>
+              </div>
+              <span className="shrink-0 text-[10px] text-[#b9b1a7]">{item.type}</span>
+              <span className="shrink-0 text-[10px] text-[#777d82]">•••</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="h-4" />
     </div>
   )
 }

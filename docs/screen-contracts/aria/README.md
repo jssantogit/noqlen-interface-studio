@@ -20,11 +20,17 @@ Aria provides a high-fidelity mock-only music playback UI, library browsing, sea
 
 - Aria implementation must follow `docs/visual-targets/aria.md`.
 - The definitive Aria references are `aria_reference1.png` and `aria_reference2.png` in `docs/references/aria/`.
+- The primary implementation style guide is `docs/references/aria/noqlen_aria_showcase.html`.
 - Older Aria references must not be used for future implementation.
+
+## Home variant rule
+
+- **Approved:** Home "Listening + Recent Additions" (mockup 2 in showcase).
+- **Rejected:** Home "Listening Space" standalone hero-only layout (mockup 1 in showcase). Do not implement or use it.
 
 ## Primary screens
 
-- **Listen (Home)** — discovery landing: recent listens, featured playlists, quick resume, editorial shelves. This is the tab that opens when "Listen" is active in the bottom nav.
+- **Listen (Home)** — discovery landing: compact current track card, shortcut tiles, search bar, recent additions list, editorial topbar. This is the tab that opens when "Listen" is active in the bottom nav.
 - **Library** — browse categories: Albums, Artists, Songs, Genres, Folders. Grid and list views.
 - **Playlists** — playlist grid/list, playlist detail with track list.
 - **Explore** — search-first discovery tab with scoped results (All, Tracks, Albums, Artists, Playlists, Folders).
@@ -58,8 +64,8 @@ Secondary navigation:
 
 Planned reusable components (to be created across batches):
 
-- `AriaBottomNav` — 4-tab navigation with active underline.
-- `AriaMiniPlayer` — compact player bar above bottom nav.
+- `AriaBottomNav` — 4-tab compact glass navigation with amber active state.
+- `AriaMiniPlayer` — compact player bar above bottom nav with amber progress underline.
 - `AriaScreenHeader` — back button + title + optional trailing action.
 - `AriaTrackRow` — thumbnail + title + artist + duration + more menu.
 - `AriaAlbumRow` — thumbnail + title + artist + year + format chip + chevron.
@@ -71,7 +77,7 @@ Planned reusable components (to be created across batches):
 - `AriaConfirmDialog` — shared confirmation dialog.
 - `AriaToast` — shared toast.
 - `AriaEmptyState` — empty/no-results state.
-- `AriaArtwork` — CSS-gradient artwork placeholder with consistent sizing.
+- `AriaArtwork` — CSS-based artwork placeholder with consistent sizing.
 - `AriaPlayButton` — amber/gold pill play CTA.
 - `AriaIconButton` — circular translucent icon button.
 - `AriaMetadataBadge` — small pill badge (format, source, status).
@@ -111,14 +117,14 @@ All data is static and fictional. All state changes are local React state only.
 
 ### Batch 1 — Visual Baseline & Navigation Shell
 
-- Implement the final Aria visual style (dark warm charcoal, amber/gold accents, large radius, minimal borders).
-- Create `AriaBottomNav` with 4 tabs and active underline indicator.
+- Implement the final Aria visual style (dark warm navy/black, amber/gold accents, large radius, minimal borders).
+- Create `AriaBottomNav` with 4 tabs and compact glass style.
 - Create core static screen shells: Listen, Library, Playlists, Explore.
-- Create `AriaMiniPlayer` baseline (compact bar above nav).
+- Create `AriaMiniPlayer` baseline (compact bar above nav with amber progress underline).
 - Create `AriaNowPlaying` baseline overlay.
 - Ensure responsive compatibility within the `390px x 844px` virtual phone viewport.
 - Update `AriaPreview` to manage `activeTab` state and render the correct screen.
-- **Status: implemented (Bloco 4.1).**
+- **Status: implemented (Bloco 4.1 + 4.1c).**
 
 ### Batch 2 — Playback Core Interactions
 

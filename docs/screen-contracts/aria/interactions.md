@@ -20,7 +20,7 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 ### GL-1: Bottom Navigation
 
 - **Trigger:** tap Listen, Library, Playlists or Explore in the bottom nav.
-- **Resulting UI:** active tab changes; corresponding screen renders; active icon and underline indicator update.
+- **Resulting UI:** active tab changes; corresponding screen renders; active icon and label update to amber.
 - **Mock state changes:** `activeTab` updates locally.
 - **Data used:** none.
 - **Forbidden real behavior:** no backend call, no library sync, no server query.
@@ -147,38 +147,47 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 
 ## Listen (Home)
 
-### LS-1: Recent Listen Shelf
+### LS-1: Compact Current Track Card
 
-- **Trigger:** horizontal scroll or tap a recent listen album/playlist card.
-- **Resulting UI:** if tapped, navigates to Album Detail or Playlist Detail.
-- **Mock state changes:** push detail screen onto stack.
-- **Data used:** static shelf data.
+- **Trigger:** tap the compact current track card or the Play button.
+- **Resulting UI:** Play button triggers mock playback state; card itself is informational.
+- **Mock state changes:** `isPlaying = true`.
+- **Data used:** static now playing track.
 - **Forbidden real behavior:** none.
-- **Status:** implemented (static shelf visible; navigation deferred to Batch 4).
+- **Status:** implemented.
 
-### LS-2: Featured Playlist Card
+### LS-2: Shortcut Tiles
 
-- **Trigger:** tap a featured playlist card.
-- **Resulting UI:** navigates to Playlist Detail.
-- **Mock state changes:** push Playlist Detail onto stack.
-- **Data used:** static playlist data.
+- **Trigger:** tap "Your Playlists" or "Artists" tile.
+- **Resulting UI:** shows mock toast.
+- **Mock state changes:** none.
+- **Data used:** static tile data.
 - **Forbidden real behavior:** none.
-- **Status:** implemented (static cards visible; navigation deferred to Batch 4).
+- **Status:** implemented.
 
-### LS-3: Quick Resume Row
+### LS-3: Recent Additions Row
 
-- **Trigger:** tap a quick resume row (last played album/playlist).
-- **Resulting UI:** sets mock queue to that album/playlist tracks; starts playback mock state; mini player appears.
-- **Mock state changes:** `currentTrackIndex = 0`; `isPlaying = true`; `queue` replaced with album/playlist tracks.
-- **Data used:** static album/playlist track list.
-- **Forbidden real behavior:** no real audio playback.
-- **Status:** implemented (static rows visible; full queue wiring deferred to Batch 2).
+- **Trigger:** tap a recent addition row or the more menu (•••).
+- **Resulting UI:** shows mock toast.
+- **Mock state changes:** none.
+- **Data used:** static recent additions data.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
 
 ### LS-4: Home Search Affordance
 
-- **Trigger:** tap search bar or search icon on Listen home.
-- **Resulting UI:** navigates to Explore tab with search focused.
-- **Mock state changes:** `activeTab = 'explore'`; `searchFocused = true`.
+- **Trigger:** tap search bar.
+- **Resulting UI:** navigates to Explore tab.
+- **Mock state changes:** `activeTab = 'explore'`.
+- **Data used:** none.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
+
+### LS-5: Topbar Mark
+
+- **Trigger:** tap the top-right queue/status mark.
+- **Resulting UI:** shows mock toast.
+- **Mock state changes:** none.
 - **Data used:** none.
 - **Forbidden real behavior:** none.
 - **Status:** implemented.

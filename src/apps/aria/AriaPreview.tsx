@@ -81,21 +81,22 @@ export function AriaPreview() {
       <AriaListenHome
         onNavigateToExplore={handleNavigateToExplore}
         onPlay={handlePlay}
+        onShowToast={showToast}
       />
     ),
-    library: <AriaLibrary />,
-    playlists: <AriaPlaylists />,
-    explore: <AriaExplore />,
+    library: <AriaLibrary onShowToast={showToast} />,
+    playlists: <AriaPlaylists onShowToast={showToast} />,
+    explore: <AriaExplore onShowToast={showToast} />,
   }
 
   const showMiniPlayer = !playerExpanded
 
   return (
-    <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_35%_0%,rgba(212,168,83,0.08),transparent_30%),linear-gradient(180deg,#0c0e12,#080a0f_70%)] text-white">
+    <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_50%_-6%,rgba(239,149,45,0.13),transparent_33%),radial-gradient(circle_at_14%_8%,rgba(69,106,128,0.11),transparent_30%),linear-gradient(180deg,#071018,#071016_48%,#05090e_100%)] text-[#f5ecdf]">
       {/* Scrollable content */}
       <div
         className={`min-h-0 flex-1 overflow-y-auto overflow-x-hidden ${
-          showMiniPlayer ? 'pb-[8.5rem]' : 'pb-[4.5rem]'
+          showMiniPlayer ? 'pb-[9.5rem]' : 'pb-[5rem]'
         }`}
       >
         <AnimatePresence mode="wait">
@@ -118,6 +119,7 @@ export function AriaPreview() {
           onExpand={handleExpandPlayer}
           onNext={handleNext}
           onPlayPause={handlePlayPause}
+          onPrevious={handlePrevious}
         />
       )}
 

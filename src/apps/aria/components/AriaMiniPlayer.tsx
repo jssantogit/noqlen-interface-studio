@@ -1,4 +1,4 @@
-import { Pause, Play, SkipForward } from 'lucide-react'
+import { Pause, Play, SkipBack, SkipForward } from 'lucide-react'
 import { nowPlaying } from '../ariaMockData'
 
 export function AriaMiniPlayer({
@@ -6,15 +6,17 @@ export function AriaMiniPlayer({
   onPlayPause,
   onExpand,
   onNext,
+  onPrevious,
 }: {
   isPlaying: boolean
   onPlayPause: () => void
   onExpand: () => void
   onNext: () => void
+  onPrevious: () => void
 }) {
   return (
     <div
-      className="absolute bottom-[calc(3.25rem+env(safe-area-inset-bottom))] left-0 right-0 z-20 min-w-0 max-w-full cursor-pointer border-t border-white/[0.06] bg-[#0c0e12]/95 px-4 py-2.5 shadow-[0_-0.5rem_1.5rem_rgba(0,0,0,0.35)] backdrop-blur-xl"
+      className="absolute bottom-[4.25rem] left-3 right-3 z-20 grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-2 rounded-[13px] border border-white/[0.065] bg-[rgba(13,18,24,0.94)] p-2 shadow-[0_8px_18px_rgba(0,0,0,0.26)]"
       onClick={onExpand}
       role="button"
       tabIndex={0}
@@ -22,41 +24,62 @@ export function AriaMiniPlayer({
         if (e.key === 'Enter' || e.key === ' ') onExpand()
       }}
     >
-      <div className="flex min-w-0 items-center gap-3">
-        <div
-          className={`h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br ${nowPlaying.accent}`}
-        />
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium tracking-[-0.01em] text-white">
-            {nowPlaying.title}
-          </p>
-          <p className="truncate text-xs text-slate-400">{nowPlaying.artist}</p>
-        </div>
-        <div className="flex shrink-0 items-center gap-1">
-          <button
-            aria-label={isPlaying ? 'Pause' : 'Play'}
-            className="grid h-8 w-8 place-items-center rounded-full text-white transition hover:bg-white/[0.08]"
-            onClick={(e) => {
-              e.stopPropagation()
-              onPlayPause()
-            }}
-            type="button"
-          >
-            {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
-          </button>
-          <button
-            aria-label="Next track"
-            className="grid h-8 w-8 place-items-center rounded-full text-white transition hover:bg-white/[0.08]"
-            onClick={(e) => {
-              e.stopPropagation()
-              onNext()
-            }}
-            type="button"
-          >
-            <SkipForward size={16} />
-          </button>
-        </div>
+      {/* Artwork */}
+      <div className="aria-art aria-art-micro shrink-0" />
+
+      {/* Info */}
+      <div className="min-w-0">
+        <p className="truncate text-[11px] font-semibold text-[#f5ecdf]">
+          {nowPlaying.title}
+        </p>
+        <p className="truncate text-[10px] leading-[1.3] text-[#b9b1a7]">
+          {nowPlaying.artist}
+        </p>
       </div>
+
+      {/* Controls */}
+      <div className="flex shrink-0 items-center gap-2 text-[13px]">
+        <button
+          aria-label="Previous track"
+          className="grid h-7 w-7 place-items-center text-[#b9b1a7] transition hover:text-white"
+          onClick={(e) => {
+            e.stopPropagation()
+            onPrevious()
+          }}
+          type="button"
+        >
+          <SkipBack size={14} />
+        </button>
+        <button
+          aria-label={isPlaying ? 'Pause' : 'Play'}
+          className="grid h-[27px] w-[27px] place-items-center rounded-full bg-gradient-to-b from-[#ffb85a] to-[#d9892d] text-[#1b1108] shadow-[0_4px_10px_rgba(240,161,61,0.18)]"
+          onClick={(e) => {
+            e.stopPropagation()
+            onPlayPause()
+          }}
+          type="button"
+        >
+          {isPlaying ? (
+            <Pause size={12} fill="currentColor" />
+          ) : (
+            <Play size={12} fill="currentColor" className="ml-0.5" />
+          )}
+        </button>
+        <button
+          aria-label="Next track"
+          className="grid h-7 w-7 place-items-center text-[#b9b1a7] transition hover:text-white"
+          onClick={(e) => {
+            e.stopPropagation()
+            onNext()
+          }}
+          type="button"
+        >
+          <SkipForward size={14} />
+        </button>
+      </div>
+
+      {/* Progress underline */}
+      <div className="pointer-events-none absolute bottom-[5px] left-[53px] h-[2px] w-[76px] rounded-full bg-[#f0a13d]/80" />
     </div>
   )
 }

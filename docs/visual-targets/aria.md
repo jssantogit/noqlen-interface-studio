@@ -2,10 +2,18 @@
 
 ## Primary visual references
 
+- `docs/references/aria/noqlen_aria_showcase.html` — **primary implementation style guide**.
 - `docs/references/aria/aria_reference1.png`
 - `docs/references/aria/aria_reference2.png`
 
 These are the only official Aria visual references. All previous Aria references are obsolete and must not be used for future implementation.
+
+The showcase HTML is not runtime code to import directly. Use it as a visual/style reference and translate its structure into the existing React Aria app.
+
+## Home variant rule
+
+- **Approved:** Home "Listening + Recent Additions" (mockup 2 in showcase).
+- **Rejected:** Home "Listening Space" standalone hero-only layout (mockup 1 in showcase). Do not implement or use it.
 
 ## Design identity
 
@@ -18,12 +26,51 @@ Aria is a dark-premium music player and library experience. It must feel:
 - **Realistic mobile app** — behaves like a polished native music player, not a dashboard.
 - **Closer to a polished music player than a dashboard** — avoid card-heavy layouts, stat grids and config panels.
 
+## Showcase tokens
+
+These tokens are extracted from `noqlen_aria_showcase.html` and must drive all Aria surfaces:
+
+- `--bg: #030609`
+- `--ink: #071017`
+- `--ink-2: #0a1219`
+- `--ink-3: #101821`
+- `--line: rgba(255,255,255,.075)`
+- `--line-warm: rgba(232,150,54,.27)`
+- `--text: #f5ecdf`
+- `--soft: #b9b1a7`
+- `--muted: #777d82`
+- `--amber: #f0a13d`
+- `--amber-2: #c97824`
+- `--cream: #fff3e4`
+- `--green: #5de084`
+
+## Typography
+
+- Serif for major titles: Georgia, Times New Roman, serif.
+- Sans for UI: Inter/system sans.
+- Uppercase letter-spaced labels: `LISTENING SPACE` (letter-spacing .34em, 9px, bold).
+
+## App surface
+
+- Dark navy/black base (`#071018` → `#05090e`).
+- Radial amber glow only subtle (circle at 50% -6%, rgba(239,149,45,.13)).
+- No bright yellow.
+- No generic card glow.
+- No Forge/Anchor style warm orange.
+
+## Phone screen style
+
+- Deep dark screen.
+- Soft inner border (`border-white/[0.055]`).
+- Subtle amber radial at top.
+- Cinematic matte feel.
+
 ## Visual principles
 
 ### Background style
 
 - Very dark charcoal/near-black base with a subtle warm undertone.
-- Avoid pure `#000000`; use deep warm darks like `#0a0b0f`, `#0c0e12` or `#0d0f14`.
+- Avoid pure `#000000`; use deep warm darks like `#071018`, `#05090e` or `#0a1219`.
 - No noisy gradients across the entire background; keep surfaces calm and flat.
 - Subtle radial or linear gradients are allowed only for hero artwork backdrops or large cover treatments.
 
@@ -47,7 +94,7 @@ Aria is a dark-premium music player and library experience. It must feel:
 
 - Primary accent: **warm amber / muted gold** — not Forge orange, not neon yellow.
 - Use for: active bottom nav, Play button, active filter chips, primary CTAs, waveform indicators.
-- Example tones: `amber-200`, `amber-300`, `orange-200/90` — always muted and premium.
+- Example tones: `#f0a13d`, `#ffb958`, `#ea912c` — always muted and premium.
 - Secondary accents: very subtle. Avoid competing accent colors.
 - Do not copy Forge orange blindly. Aria must have its own amber/gold accent language.
 
@@ -61,18 +108,20 @@ Aria is a dark-premium music player and library experience. It must feel:
 ### Bottom navigation style
 
 - 4 tabs: **Listen**, **Library**, **Playlists**, **Explore**.
-- Icons: thin line style (Lucide), 20–24 px.
-- Active tab: amber/gold icon + label + a short underline indicator.
-- Inactive tab: muted gray (`text-slate-500`), no underline.
+- Icons: thin line style (Lucide), 18px.
+- Active tab: amber/gold icon + label; no huge active pill, no heavy yellow outline.
+- Inactive tab: muted gray (`#9fa4a7`), no underline.
 - Background: translucent dark with a subtle top border or shadow to separate from content.
+- Compact glass/matte rounded rectangle (`rounded-[18px]`, `bg-white/[0.035]`, `backdrop-blur`).
 - The mini player sits **above** the bottom nav, not replacing it.
 
 ### Player controls
 
 - **Mini player**: compact bar above the bottom nav.
-  - Small square album art thumbnail (~40 px).
+  - Small square album art thumbnail (~34px micro).
   - Track title and artist name, truncated.
   - Play/pause and skip buttons.
+  - Subtle amber progress underline.
   - Tap the body to expand into the full Now Playing / Queue view.
 - **Full player**: large square artwork centered, track info below, playback controls, progress bar, shuffle/repeat/queue actions.
 - Primary Play button: solid amber/gold pill with dark text.
@@ -82,10 +131,13 @@ Aria is a dark-premium music player and library experience. It must feel:
 
 - Square aspect ratio for album covers.
 - Slight rounded corners (`rounded-xl` to `rounded-2xl`).
-- Use CSS gradients as placeholders; no real image fetching.
+- Use CSS-based local artwork placeholders; no real image fetching.
 - Large artwork in Album Detail and Playlist Detail should dominate the upper half of the screen.
 - Subtle inner shadow or gloss overlay on large artwork is acceptable for depth.
 - Playlist/Album hero images may use a bottom gradient fade into the background so text remains readable.
+- Cinematic architectural style for warm covers (`.aria-art`).
+- Blue dark wave/landscape for cool covers (`.aria-art-blue`).
+- Portrait/abstract variant if needed (`.aria-art-portrait`).
 
 ### Image / blur usage
 
@@ -130,13 +182,17 @@ Aria is a dark-premium music player and library experience. It must feel:
 - Fake backend claims ("Syncing with server…", "Fetching your library…").
 - Pure black backgrounds that feel hollow rather than immersive.
 - Bright orange or Forge-like warm tones; Aria should feel more gold/amber.
+- Giant yellow gradient hero cards.
+- Full-width yellow Play buttons.
+- Standalone "Listening Space" hero-only layout.
 
 ## Implementation status
 
 - Batch 1 (Visual Baseline & Navigation Shell) is implemented.
-- The Aria visual system is active in the Studio simulator: dark warm charcoal backgrounds, amber/gold accents, minimal bordered surfaces, large radius, thin Lucide icons, editorial typography.
+- Bloco 4.1c aligned all Aria visuals with the showcase reference (`noqlen_aria_showcase.html`).
+- The Aria visual system is active in the Studio simulator: dark warm navy/black backgrounds, amber/gold accents, minimal bordered surfaces, large radius, thin Lucide icons, editorial typography.
 - Bottom navigation (Listen / Library / Playlists / Explore), mini player and full Now Playing overlay are wired with local React state.
-- Static core screens (Listen Home, Library preview, Playlists, Explore/Search) render mock data with high visual fidelity to the final references.
+- Static core screens (Listen Home, Library, Playlists, Explore/Search) render mock data with high visual fidelity to the showcase reference.
 
 ## Mock-only limits
 

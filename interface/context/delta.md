@@ -554,29 +554,28 @@ Bloco 4.0 delta (Aria Visual Target and Interaction Map):
 - Did not implement any new Aria runtime UI or behavior; this block is planning/spec only.
 - Preserved Anchor, Forge, Flux, Studio shell, PhoneFrame and app switching unchanged.
 - Preserved mock-only boundary: no fetch/axios/fs/child_process/FileReader; no real audio, no real library access, no network calls.
+- Build, lint, tests pass.
+- Preserved Anchor, Forge, Flux, Studio shell, PhoneFrame unchanged.
+- Preserved mock-only boundary: no fetch/axios/fs/child_process/FileReader; no real audio, no real library access, no network calls.
 
-Bloco 4.1 delta (Aria Visual Baseline & Navigation Shell):
+Bloco 4.1c delta (Aria Showcase Visual Alignment):
 
-- Implemented final Aria visual system in `src/apps/aria`:
-  - Dark warm charcoal background (`#0c0e12`) with subtle amber radial glow.
-  - Minimal surfaces (`bg-white/[0.03–0.05]`, `border-white/[0.06–0.08]`), large radius (`1.4rem`–`1.8rem`).
-  - Warm amber/gold accent (`amber-300`, `#d4a853`) for active nav, primary Play buttons, filter chips, favorite state.
-  - Clean sans-serif body + serif headings with negative tracking.
-- Rewrote `AriaPreview.tsx` as the main container managing `activeTab`, `playerExpanded`, `isPlaying`, `isShuffled`, `repeatMode`, `isFavorite` and `toast` with local React state only.
-- Created `AriaBottomNav` with 4 tabs (Listen, Library, Playlists, Explore), active underline indicator, amber active state, muted slate inactive state.
-- Created `AriaMiniPlayer` with artwork thumbnail, track title/artist, play/pause and next buttons; tapping body expands to full Now Playing.
-- Created `AriaNowPlaying` full-screen overlay with large artwork, track info, static progress bar, primary amber play/pause, previous/next, shuffle/repeat toggles, favorite heart toggle, Up Next queue preview and collapse chevron.
-- Created `AriaListenHome` with editorial greeting, now playing hero card, Play CTA, Recent listens horizontal shelf, Quick resume rows, Featured playlists grid, Search affordance.
-- Created `AriaLibrary` with search affordance, category filter chips, Albums list with format/source badges, Artists circular avatar preview row.
-- Created `AriaPlaylists` with playlist cards (header artwork, title, description, track count, Play/Shuffle buttons).
-- Created `AriaExplore` with search input, filter chips, recent search pills, browse results with metadata badges and basic local string filtering.
-- Expanded `ariaMockData.ts` with tracks, albums, artists, playlists, shelves, search results, recent searches and queue.
-- Added subtle fade/slide transitions between tabs and Now Playing overlay using `framer-motion` `AnimatePresence`.
-- Added toast feedback for play/pause, next, previous, shuffle, repeat and favorite actions.
-- Updated `ariaInteractionMap.ts` statuses for Batch 1 interactions.
-- Created `docs/audits/aria-visual-baseline-navigation-shell.md` with full audit.
-- Updated `docs/screen-contracts/aria/interactions.md`, `docs/interaction-maps/aria.md`, `docs/visual-targets/aria.md`, `docs/screen-contracts/aria/README.md`.
-- Browser MCP validation skipped per user request.
+- Aligned Aria visuals with `docs/references/aria/noqlen_aria_showcase.html` as the primary implementation style guide.
+- Final PNG references (`aria_reference1.png`, `aria_reference2.png`) remain official visual references.
+- Extracted showcase tokens: dark navy/black backgrounds (`#071018`, `#05090e`), warm amber accent (`#f0a13d`), cream titles (`#fff3e4`), soft muted text (`#b9b1a7`), green status dot (`#5de084`).
+- Approved Home variant: "Listening + Recent Additions". Rejected Home variant: standalone "Listening Space" hero-only layout.
+- Rewrote `AriaListenHome` with showcase-aligned layout: topbar (`LISTENING SPACE` + `Aria` + queue mark with green dot), compact current track card (thumb + info + amber Play pill), shortcut tiles (Your Playlists / Artists), search bar, Recent additions list (Midnight Horizons, Sunday Morning, Late Ambient, A Place).
+- Added cinematic CSS artwork placeholders in `src/index.css`: `.aria-art`, `.aria-art-blue`, `.aria-art-portrait` with size variants (hero, cover, square, thumb, tiny, micro).
+- Rewrote `AriaBottomNav` to compact glass/matte rounded rectangle (`rounded-[18px]`, `bg-white/[0.035]`, `backdrop-blur`), small icons (18px) and labels (9px), amber active state, no huge active pill.
+- Rewrote `AriaMiniPlayer` to compact bar above bottom nav (`left-3 right-3 bottom-[4.25rem]`), micro artwork, track title/artist, previous / amber gradient pause / next controls, subtle amber progress underline.
+- Refined `AriaNowPlaying` with showcase screen background, cinematic square artwork, serif title, amber artist, radial-gradient big pause button, refined progress and secondary controls.
+- Restyled `AriaLibrary` toward Album Detail depth: search bar, amber-bordered filter chips, refined album rows with micro artwork and metadata pills.
+- Restyled `AriaPlaylists` toward Playlist Detail visual language: large blue artwork header per card, title, description, track count, Play/Shuffle/more buttons.
+- Restyled `AriaExplore` toward Search: search input with focus ring, chips, result rows with artwork, title, subtitle, format pill, chevron.
+- Updated `AriaPreview` background to showcase screen gradient and adjusted content padding for new mini player / bottom nav heights.
+- Updated docs: `docs/visual-targets/aria.md`, `docs/screen-contracts/aria/README.md`, `docs/screen-contracts/aria/interactions.md`, `docs/interaction-maps/aria.md`.
+- Created `docs/audits/aria-showcase-visual-alignment.md`.
+- Safety grep confirms no fetch/axios/fs/child_process/FileReader in Aria app behavior.
 - Build, lint, tests pass.
 - Preserved Anchor, Forge, Flux, Studio shell, PhoneFrame unchanged.
 - Preserved mock-only boundary: no fetch/axios/fs/child_process/FileReader; no real audio, no real library access, no network calls.
