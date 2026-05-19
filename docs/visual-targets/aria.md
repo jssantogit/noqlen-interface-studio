@@ -2,13 +2,11 @@
 
 ## Primary visual references
 
-- `docs/references/aria/noqlen_aria_showcase.html` — **primary implementation style guide**.
-- `docs/references/aria/aria_reference1.png`
-- `docs/references/aria/aria_reference2.png`
+- `docs/references/aria/aria_reference1.png` — **authoritative visual reference**.
+- `docs/references/aria/aria_reference2.png` — **authoritative visual reference**.
+- `docs/references/aria/noqlen_aria_showcase.html` — legacy intermediate style guide (no longer the primary alignment source).
 
-These are the only official Aria visual references. All previous Aria references are obsolete and must not be used for future implementation.
-
-The showcase HTML is not runtime code to import directly. Use it as a visual/style reference and translate its structure into the existing React Aria app.
+The image references (`aria_reference1.png` and `aria_reference2.png`) are the definitive source of truth for Aria visual refinement. The showcase HTML may still be consulted for structural ideas, but any conflict must be resolved in favor of the image references. All previous Aria references outside these three files are obsolete and must not be used.
 
 ## Home variant rule
 

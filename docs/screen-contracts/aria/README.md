@@ -20,7 +20,7 @@ Aria provides a high-fidelity mock-only music playback UI, library browsing, sea
 
 - Aria implementation must follow `docs/visual-targets/aria.md`.
 - The definitive Aria references are `aria_reference1.png` and `aria_reference2.png` in `docs/references/aria/`.
-- The primary implementation style guide is `docs/references/aria/noqlen_aria_showcase.html`.
+- The definitive visual references are `docs/references/aria/aria_reference1.png` and `docs/references/aria/aria_reference2.png`. The showcase HTML is a legacy intermediate guide and is no longer the primary alignment source.
 - Older Aria references must not be used for future implementation.
 
 ## Home variant rule
@@ -30,10 +30,10 @@ Aria provides a high-fidelity mock-only music playback UI, library browsing, sea
 
 ## Primary screens
 
-- **Listen (Home)** — discovery landing: compact current track card, shortcut tiles, search bar, recent additions list, editorial topbar. This is the tab that opens when "Listen" is active in the bottom nav.
+- **Listen (Home)** — discovery landing: prominent featured listening card with large artwork, title, artist and play/shuffle CTAs; shortcut tiles; search bar; recent additions list; editorial topbar. This is the tab that opens when "Listen" is active in the bottom nav.
 - **Library** — browse categories: Albums, Artists, Songs, Genres, Folders. Grid and list views.
 - **Playlists** — playlist grid/list, playlist detail with track list.
-- **Explore** — search-first discovery tab with scoped results (All, Tracks, Albums, Artists, Playlists, Folders).
+- **Explore** — category-card browsing hub for library discovery. Six category cards (Genres, Albums, Artists, Radios, Songs, Playlists) in a refined two-column grid. Not a search page.
 - **Album Detail** — large artwork, album title, artist, year, track count, duration, track list with play/shuffle CTAs.
 - **Artist Detail** — artist image/banner, name, genre tags, discography, top tracks, related artists.
 - **Track Details** — artwork thumbnail, track title, artist, album. Metadata rows (Album, Artist, Duration, Track, Genre, Year, Codec, Sample rate, Bit depth, Bitrate, Source, Path). Actions: Favorite, Add to playlist, Add to queue, Show in folder, Edit metadata.

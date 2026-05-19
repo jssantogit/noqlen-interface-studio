@@ -147,10 +147,10 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 
 ## Listen (Home)
 
-### LS-1: Compact Current Track Card
+### LS-1: Featured Current Track Card
 
-- **Trigger:** tap the compact current track card or the Play button.
-- **Resulting UI:** Play button triggers mock playback state; card itself is informational.
+- **Trigger:** tap the featured current track card or the Play button.
+- **Resulting UI:** Play button triggers mock playback state; card displays large artwork, title, artist, album and shuffle CTA.
 - **Mock state changes:** `isPlaying = true`.
 - **Data used:** static now playing track.
 - **Forbidden real behavior:** none.
@@ -292,43 +292,25 @@ All behavior remains mock-only. No real audio, files, network or backend behavio
 
 ---
 
-## Explore (Search)
+## Explore (Category Hub)
 
-### EX-1: Search Input
+### EX-1: Category Card Tap
+
+- **Trigger:** tap a category card (Genres, Albums, Artists, Radios, Songs, Playlists).
+- **Resulting UI:** shows mock toast confirming the selected category; future batches will push scoped browse screens.
+- **Mock state changes:** none.
+- **Data used:** static category metadata.
+- **Forbidden real behavior:** none.
+- **Status:** implemented.
+
+### EX-2: Search Input (deferred)
 
 - **Trigger:** type in search bar.
-- **Resulting UI:** results filter in real time across All, Tracks, Albums, Artists, Playlists, Folders depending on active chip.
+- **Resulting UI:** results filter in real time across active scope.
 - **Mock state changes:** `searchQuery` updates; filtered results derived locally.
 - **Data used:** static consolidated mock data.
 - **Forbidden real behavior:** no backend search, no network call.
-- **Status:** partial (basic local string filtering on static data works; scoped chip filtering not wired).
-
-### EX-2: Search Filter Chips
-
-- **Trigger:** tap All, Tracks, Albums, Artists, Playlists or Folders chip.
-- **Resulting UI:** active chip highlights; results scope to that type.
-- **Mock state changes:** `searchScope` updates locally.
-- **Data used:** none.
-- **Forbidden real behavior:** none.
-- **Status:** partial (active chip UI works; scoped filtering logic not wired).
-
-### EX-3: Search Result Tap
-
-- **Trigger:** tap a search result row.
-- **Resulting UI:** navigates to corresponding detail screen or starts playback for tracks.
-- **Mock state changes:** push detail or set current track.
-- **Data used:** result item type and id.
-- **Forbidden real behavior:** none.
-- **Status:** not implemented.
-
-### EX-4: Recent Searches
-
-- **Trigger:** search submitted or result tapped.
-- **Resulting UI:** recent search term added to a local recent list below the search bar.
-- **Mock state changes:** `recentSearches` array updated locally.
-- **Data used:** search query string.
-- **Forbidden real behavior:** none.
-- **Status:** partial (static recent searches visible; dynamic addition not wired).
+- **Status:** not implemented (deferred to Batch 6; Explore is now a category hub first).
 
 ---
 

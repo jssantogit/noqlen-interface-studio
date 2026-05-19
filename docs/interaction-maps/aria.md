@@ -21,9 +21,9 @@ Aria remains a complete interactive prototype target, not a real music player. E
 
 ## Visual references
 
-- `docs/references/aria/noqlen_aria_showcase.html` — primary implementation style guide.
-- `docs/references/aria/aria_reference1.png` — official visual reference.
-- `docs/references/aria/aria_reference2.png` — official visual reference.
+- `docs/references/aria/aria_reference1.png` — authoritative visual reference.
+- `docs/references/aria/aria_reference2.png` — authoritative visual reference.
+- `docs/references/aria/noqlen_aria_showcase.html` — legacy intermediate style guide (no longer the primary alignment source).
 
 ## Home variant rule
 
@@ -62,9 +62,9 @@ Layout constraints:
 
 ## Listen (Home) Interaction Map
 
-### Compact Current Track Card
+### Featured Current Track Card
 
-- Trigger: tap the Play button on the compact card.
+- Trigger: tap the Play button on the featured card.
 - Result: sets mock playback state to playing; toast confirms.
 - Status: implemented.
 
@@ -157,31 +157,19 @@ Layout constraints:
 - Result: queue set to shuffled tracks; playback mock starts.
 - Status: not implemented.
 
-## Explore (Search) Interaction Map
+## Explore (Category Hub) Interaction Map
 
-### Search Input
+### Category Card Tap
+
+- Trigger: tap a category card (Genres, Albums, Artists, Radios, Songs, Playlists).
+- Result: shows mock toast; future batches will push scoped browse screens.
+- Status: implemented.
+
+### Search Input (deferred)
 
 - Trigger: type in search bar.
 - Result: results filter in real time across active scope.
-- Status: partial (basic local string filtering on static data works; scoped chip filtering not wired).
-
-### Search Filter Chips
-
-- Trigger: tap All, Tracks, Albums, Artists, Playlists or Folders chip.
-- Result: active chip highlights; results scope to that type.
-- Status: partial (active chip UI works; scoped filtering logic not wired).
-
-### Search Result Tap
-
-- Trigger: tap a search result row.
-- Result: navigates to detail or starts playback for tracks.
-- Status: not implemented.
-
-### Recent Searches
-
-- Trigger: search submitted or result tapped.
-- Result: term added to local recent list.
-- Status: partial (static recent searches visible; dynamic addition not wired).
+- Status: not implemented (deferred to Batch 6; Explore is now a category hub first).
 
 ## Album Detail Interaction Map
 

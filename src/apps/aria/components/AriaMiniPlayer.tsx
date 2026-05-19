@@ -16,7 +16,7 @@ export function AriaMiniPlayer({
 }) {
   return (
     <div
-      className="absolute bottom-[4.25rem] left-3 right-3 z-20 grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-2 rounded-[13px] border border-white/[0.065] bg-[rgba(13,18,24,0.94)] p-2 shadow-[0_8px_18px_rgba(0,0,0,0.26)]"
+      className="absolute bottom-[5.25rem] left-3 right-3 z-20 grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-2 rounded-[13px] border border-white/[0.065] bg-[rgba(13,18,24,0.94)] p-2 shadow-[0_8px_18px_rgba(0,0,0,0.26)]"
       onClick={onExpand}
       role="button"
       tabIndex={0}

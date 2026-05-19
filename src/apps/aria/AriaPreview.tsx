@@ -96,7 +96,7 @@ export function AriaPreview() {
       {/* Scrollable content */}
       <div
         className={`min-h-0 flex-1 overflow-y-auto overflow-x-hidden ${
-          showMiniPlayer ? 'pb-[9.5rem]' : 'pb-[5rem]'
+          showMiniPlayer ? 'pb-[10.5rem]' : 'pb-[5rem]'
         }`}
       >
         <AnimatePresence mode="wait">

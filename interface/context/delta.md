@@ -390,12 +390,15 @@ Bloco 3.4.4 delta (Forge Review Progress Flows and Interaction Closure):
 - Preserved Forge Home, Library and Activity rendering; did not start Activity interactions, Aria or Flux.
 - Preserved mock-only boundaries: no backend, network, filesystem, real metadata edits, downloads, FileReader, secrets or analytics.
 
-Aria visual reference delta:
+Aria visual refinement delta (image-reference pass):
 
-- Replaced all previous Aria visual references with final definitive references: `docs/references/aria/aria_reference1.png` and `docs/references/aria/aria_reference2.png`.
-- These are now the only official Aria visual references.
-- Updated `docs/references/aria/README.md`, `docs/visual-targets/aria.md` and `docs/screen-contracts/aria/README.md` to point to the new definitive references.
-- No product UI or app behavior was changed.
+- Switched primary alignment source from HTML showcase back to image references (`aria_reference1.png`, `aria_reference2.png`). The HTML showcase is now a legacy intermediate guide only.
+- Refined Listen (Home) first card: replaced compact horizontal card with a prominent featured listening card (large square artwork, title, artist, album, Play and Shuffle CTAs) for stronger visual hierarchy.
+- Fixed mini player spacing: increased bottom offset from `4.25rem` to `5.25rem` and content padding from `pb-[9.5rem]` to `pb-[10.5rem]` to create clear separation above the bottom nav.
+- Redesigned Explore from a search duplicate into a category-card browsing hub with six tappable cards (Genres, Albums, Artists, Radios, Songs, Playlists) in a refined two-column grid.
+- Redesigned Playlists from oversized vertical cards into a clean horizontal list with thumbnails, title, description, track metadata, Play and More actions, reducing clutter and improving hierarchy.
+- Updated `docs/visual-targets/aria.md`, `docs/screen-contracts/aria/README.md`, `docs/screen-contracts/aria/interactions.md` and `docs/interaction-maps/aria.md` to document the new image-authoritative alignment and the four refined surfaces.
+- Build, lint and tests pass; no real audio, network, filesystem or backend behavior added.
 
 Bloco 3.4.5 delta (Forge Library Metadata Editor):
 
