@@ -9,10 +9,12 @@ import { AriaBottomNav } from './components/AriaBottomNav'
 import { AriaExplore } from './components/AriaExplore'
 import { AriaLibrary } from './components/AriaLibrary'
 import { AriaListenHome } from './components/AriaListenHome'
+import { AriaLyrics } from './components/AriaLyrics'
 import { AriaMiniPlayer } from './components/AriaMiniPlayer'
 import { AriaNowPlaying } from './components/AriaNowPlaying'
 import { AriaPlaylistDetail } from './components/AriaPlaylistDetail'
 import { AriaPlaylists } from './components/AriaPlaylists'
+import { AriaQueue } from './components/AriaQueue'
 import { AriaTrackDetails } from './components/AriaTrackDetails'
 
 type AriaDetailScreen =
@@ -21,9 +23,11 @@ type AriaDetailScreen =
   | { type: 'track'; track: AriaTrack }
   | { type: 'playlist'; playlist: AriaPlaylist }
 
+type AriaPlaybackOverlay = 'nowPlaying' | 'lyrics' | 'queue'
+
 export function AriaPreview() {
   const [activeTab, setActiveTab] = useState<AriaTabId>('listen')
-  const [playerExpanded, setPlayerExpanded] = useState(false)
+  const [playbackOverlay, setPlaybackOverlay] = useState<AriaPlaybackOverlay | null>(null)
   const [isPlaying, setIsPlaying] = useState(true)
   const [isShuffled, setIsShuffled] = useState(false)
   const [repeatMode, setRepeatMode] = useState<'off' | 'all' | 'one'>('off')
@@ -69,16 +73,28 @@ export function AriaPreview() {
 
   const handleTabChange = useCallback((tab: AriaTabId) => {
     setActiveTab(tab)
-    setPlayerExpanded(false)
+    setPlaybackOverlay(null)
     setDetailScreen(null)
   }, [])
 
   const handleExpandPlayer = useCallback(() => {
-    setPlayerExpanded(true)
+    setPlaybackOverlay('nowPlaying')
   }, [])
 
   const handleCollapsePlayer = useCallback(() => {
-    setPlayerExpanded(false)
+    setPlaybackOverlay(null)
+  }, [])
+
+  const handleOpenNowPlaying = useCallback(() => {
+    setPlaybackOverlay('nowPlaying')
+  }, [])
+
+  const handleOpenLyrics = useCallback(() => {
+    setPlaybackOverlay('lyrics')
+  }, [])
+
+  const handleOpenQueue = useCallback(() => {
+    setPlaybackOverlay('queue')
   }, [])
 
   const handleNavigateToExplore = useCallback(() => {
@@ -92,22 +108,22 @@ export function AriaPreview() {
   }, [showToast])
 
   const handleOpenAlbum = useCallback((album: AriaAlbum = ariaAlbums[0]) => {
-    setPlayerExpanded(false)
+    setPlaybackOverlay(null)
     setDetailScreen({ type: 'album', album })
   }, [])
 
   const handleOpenArtist = useCallback((artist: AriaArtist = ariaArtists[0]) => {
-    setPlayerExpanded(false)
+    setPlaybackOverlay(null)
     setDetailScreen({ type: 'artist', artist })
   }, [])
 
   const handleOpenTrack = useCallback((track: AriaTrack = nowPlaying) => {
-    setPlayerExpanded(false)
+    setPlaybackOverlay(null)
     setDetailScreen({ type: 'track', track })
   }, [])
 
   const handleOpenPlaylist = useCallback((playlist: AriaPlaylist = ariaPlaylists[0]) => {
-    setPlayerExpanded(false)
+    setPlaybackOverlay(null)
     setDetailScreen({ type: 'playlist', playlist })
   }, [])
 
@@ -142,7 +158,7 @@ export function AriaPreview() {
           ? <AriaPlaylistDetail playlist={detailScreen.playlist} onBack={handleBackFromDetail} onOpenTrack={handleOpenTrack} onShowToast={showToast} />
           : null
 
-  const showMiniPlayer = !playerExpanded
+  const showMiniPlayer = playbackOverlay === null
 
   return (
     <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_82%_18%,rgba(235,139,41,0.11),transparent_32%),radial-gradient(circle_at_16%_74%,rgba(222,129,34,0.09),transparent_34%),radial-gradient(circle_at_18%_10%,rgba(60,100,130,0.10),transparent_31%),linear-gradient(180deg,#061019_0%,#05090e_52%,#030609_100%)] text-[#f5ecdf]">
@@ -179,9 +195,9 @@ export function AriaPreview() {
       {/* Bottom navigation */}
       <AriaBottomNav activeTab={activeTab} onTabChange={handleTabChange} />
 
-      {/* Now Playing overlay */}
+      {/* Playback overlay */}
       <AnimatePresence>
-        {playerExpanded && (
+        {playbackOverlay && (
           <motion.div
             animate={{ opacity: 1, y: 0 }}
             className="absolute inset-0 z-40"
@@ -189,19 +205,45 @@ export function AriaPreview() {
             initial={{ opacity: 0, y: '100%' }}
             transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
           >
-            <AriaNowPlaying
-              isFavorite={isFavorite}
-              isPlaying={isPlaying}
-              isShuffled={isShuffled}
-              onCollapse={handleCollapsePlayer}
-              onNext={handleNext}
-              onPlayPause={handlePlayPause}
-              onPrevious={handlePrevious}
-              onToggleFavorite={handleToggleFavorite}
-              onToggleRepeat={handleToggleRepeat}
-              onToggleShuffle={handleToggleShuffle}
-              repeatMode={repeatMode}
-            />
+            {playbackOverlay === 'nowPlaying' ? (
+              <AriaNowPlaying
+                isFavorite={isFavorite}
+                isPlaying={isPlaying}
+                isShuffled={isShuffled}
+                onCollapse={handleCollapsePlayer}
+                onNext={handleNext}
+                onOpenLyrics={handleOpenLyrics}
+                onOpenQueue={handleOpenQueue}
+                onPlayPause={handlePlayPause}
+                onPrevious={handlePrevious}
+                onShowToast={showToast}
+                onToggleFavorite={handleToggleFavorite}
+                onToggleRepeat={handleToggleRepeat}
+                onToggleShuffle={handleToggleShuffle}
+                repeatMode={repeatMode}
+              />
+            ) : playbackOverlay === 'lyrics' ? (
+              <AriaLyrics
+                isPlaying={isPlaying}
+                onBack={handleOpenNowPlaying}
+                onCollapse={handleCollapsePlayer}
+                onNext={handleNext}
+                onOpenQueue={handleOpenQueue}
+                onPlayPause={handlePlayPause}
+                onPrevious={handlePrevious}
+                onShowToast={showToast}
+              />
+            ) : (
+              <AriaQueue
+                isShuffled={isShuffled}
+                onBack={handleOpenNowPlaying}
+                onCollapse={handleCollapsePlayer}
+                onShowToast={showToast}
+                onToggleRepeat={handleToggleRepeat}
+                onToggleShuffle={handleToggleShuffle}
+                repeatMode={repeatMode}
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>
