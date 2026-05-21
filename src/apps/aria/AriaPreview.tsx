@@ -92,11 +92,11 @@ export function AriaPreview() {
   const showMiniPlayer = !playerExpanded
 
   return (
-    <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_50%_-6%,rgba(239,149,45,0.13),transparent_33%),radial-gradient(circle_at_14%_8%,rgba(69,106,128,0.11),transparent_30%),linear-gradient(180deg,#071018,#071016_48%,#05090e_100%)] text-[#f5ecdf]">
+    <div className="relative flex h-full min-h-full min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_82%_18%,rgba(235,139,41,0.11),transparent_32%),radial-gradient(circle_at_16%_74%,rgba(222,129,34,0.09),transparent_34%),radial-gradient(circle_at_18%_10%,rgba(60,100,130,0.10),transparent_31%),linear-gradient(180deg,#061019_0%,#05090e_52%,#030609_100%)] text-[#f5ecdf]">
       {/* Scrollable content */}
       <div
         className={`min-h-0 flex-1 overflow-y-auto overflow-x-hidden ${
-          showMiniPlayer ? 'pb-[10.5rem]' : 'pb-[5rem]'
+          showMiniPlayer ? 'pb-[11.25rem]' : 'pb-[5.75rem]'
         }`}
       >
         <AnimatePresence mode="wait">

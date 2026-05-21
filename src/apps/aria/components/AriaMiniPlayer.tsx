@@ -16,7 +16,7 @@ export function AriaMiniPlayer({
 }) {
   return (
     <div
-      className="absolute bottom-[5.25rem] left-3 right-3 z-20 grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-2 rounded-[13px] border border-white/[0.065] bg-[rgba(13,18,24,0.94)] p-2 shadow-[0_8px_18px_rgba(0,0,0,0.26)]"
+      className="absolute bottom-[5.75rem] left-4 right-4 z-20 grid cursor-pointer grid-cols-[auto_1fr_auto] items-center gap-2 rounded-[15px] border border-white/[0.075] bg-[linear-gradient(180deg,rgba(17,23,29,0.94),rgba(7,11,16,0.91))] p-2 shadow-[0_10px_22px_rgba(0,0,0,0.30),inset_0_1px_0_rgba(255,255,255,0.045)] backdrop-blur-md"
       onClick={onExpand}
       role="button"
       tabIndex={0}
@@ -29,7 +29,7 @@ export function AriaMiniPlayer({
 
       {/* Info */}
       <div className="min-w-0">
-        <p className="truncate text-[11px] font-semibold text-[#f5ecdf]">
+        <p className="truncate text-[11px] font-semibold tracking-[-0.01em] text-[#fff3e4]">
           {nowPlaying.title}
         </p>
         <p className="truncate text-[10px] leading-[1.3] text-[#b9b1a7]">
@@ -38,10 +38,10 @@ export function AriaMiniPlayer({
       </div>
 
       {/* Controls */}
-      <div className="flex shrink-0 items-center gap-2 text-[13px]">
+      <div className="flex shrink-0 items-center gap-1.5 text-[13px]">
         <button
           aria-label="Previous track"
-          className="grid h-7 w-7 place-items-center text-[#b9b1a7] transition hover:text-white"
+          className="grid h-7 w-7 place-items-center rounded-full text-[#b9b1a7] transition hover:bg-white/[0.045] hover:text-white"
           onClick={(e) => {
             e.stopPropagation()
             onPrevious()
@@ -52,7 +52,7 @@ export function AriaMiniPlayer({
         </button>
         <button
           aria-label={isPlaying ? 'Pause' : 'Play'}
-          className="grid h-[27px] w-[27px] place-items-center rounded-full bg-gradient-to-b from-[#ffb85a] to-[#d9892d] text-[#1b1108] shadow-[0_4px_10px_rgba(240,161,61,0.18)]"
+          className="grid h-7 w-7 place-items-center rounded-full bg-[#f0a13d] text-[#1b1108] shadow-[0_4px_9px_rgba(0,0,0,0.22)]"
           onClick={(e) => {
             e.stopPropagation()
             onPlayPause()
@@ -67,7 +67,7 @@ export function AriaMiniPlayer({
         </button>
         <button
           aria-label="Next track"
-          className="grid h-7 w-7 place-items-center text-[#b9b1a7] transition hover:text-white"
+          className="grid h-7 w-7 place-items-center rounded-full text-[#b9b1a7] transition hover:bg-white/[0.045] hover:text-white"
           onClick={(e) => {
             e.stopPropagation()
             onNext()
@@ -79,7 +79,9 @@ export function AriaMiniPlayer({
       </div>
 
       {/* Progress underline */}
-      <div className="pointer-events-none absolute bottom-[5px] left-[53px] h-[2px] w-[76px] rounded-full bg-[#f0a13d]/80" />
+      <div className="pointer-events-none absolute bottom-[5px] left-[54px] right-[98px] h-[2px] overflow-hidden rounded-full bg-white/[0.07]">
+        <div className="h-full w-[42%] rounded-full bg-[#f0a13d]" />
+      </div>
     </div>
   )
 }
