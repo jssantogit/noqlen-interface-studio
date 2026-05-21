@@ -1,12 +1,22 @@
 # Noqlen Interface Studio
 
-Noqlen Interface Studio is the visual-only mobile simulator lab for exploring interface contracts across the Noqlen ecosystem.
+Noqlen Interface Studio is the visual-only mobile simulator lab for exploring mock interface contracts across the Noqlen ecosystem.
 
-Bloco 1 aligns the site around a premium simulator shell: a minimal external Studio UI, an app selector, and a responsive simulated phone frame where Anchor, Forge, Aria or Flux appears as a static visual placeholder. Anchor is selected by default.
+The project has moved beyond the first static shell phase. The Studio shell and phone simulator are stable enough to host app-specific mockups, while every app remains strictly visual-only and local-state-only.
+
+## Current State
+
+- **Studio Shell** — stable responsive simulator shell with app selector, phone frame and side inspector.
+- **Anchor** — high-fidelity interactive mock foundation for local media server control.
+- **Forge** — advanced interactive mock preview for library repair, metadata review and activity flows.
+- **Aria** — music player and library mock currently in visual alignment/refinement.
+- **Flux** — intentionally neutral static placeholder until dedicated concepts are provided.
 
 ## Core Rule
 
-This repository must not implement real backend access, downloads, server control, playback, music library access, secrets, personal paths or real app integration. The Studio is not the app itself; it is a visual lab/simulator. App previews inside the phone remain mock-only placeholders.
+This repository must not implement real backend access, downloads, server control, playback, music library access, secrets, personal paths or real app integration.
+
+The Studio is not the app itself. It is a visual lab/simulator. App previews inside the phone may be interactive, but interactions must stay mock-only: static data, local React state, display-only sheets/dialogs/toasts and no real integration.
 
 ## Simulator Model
 
@@ -15,8 +25,23 @@ This repository must not implement real backend access, downloads, server contro
 - Simulated phone frame as the main stage.
 - Responsive shell sizing documented in `docs/visual-contracts/responsive-shell.md`.
 - Fake phone status bar and home indicator.
-- Static app placeholders inside the phone.
-- App-specific interactive screens start only after this visual base is stable.
+- App previews render inside a fixed virtual mobile viewport.
+- App-specific work proceeds one scoped block at a time.
+- Flux remains a placeholder until a dedicated concept block begins.
+
+## Visual Alignment Model
+
+Visual work must treat references as contracts, not loose inspiration.
+
+For reference-driven UI work, use this loop:
+
+1. Compare the current screen against the reference.
+2. List concrete visual gaps before editing.
+3. Patch only the active block scope.
+4. Validate with browser screenshots when available.
+5. Report remaining differences.
+
+Do not redesign freely, change the Studio shell or modify unrelated apps during visual alignment blocks.
 
 ## Stack
 
@@ -48,8 +73,11 @@ See `docs/deploy.md` for local preview and deployed-page validation.
 
 ## Development Order
 
-1. Stabilize Studio simulator shell.
-2. Build app-specific mockups one app at a time.
-3. Keep each block visual-only unless a future handoff explicitly changes scope.
+1. Keep repository truth, contracts and handoff docs aligned with the actual implementation state.
+2. Preserve the Studio shell, PhoneFrame, PhoneStage and AppViewport unless a shell-specific block explicitly allows changes.
+3. Align Aria visually against approved references before adding new Aria product depth.
+4. Refactor Anchor and Forge only after their current behavior is protected and without changing appearance.
+5. Add behavior tests for important mock flows.
+6. Keep every block visual-only unless a future handoff explicitly changes scope.
 
-Stop after the current block scope. Bloco 1 does not start Anchor, Forge, Aria or Flux screen development.
+Stop after the current block scope. Do not batch unrelated fixes into visual, architecture or documentation blocks.
