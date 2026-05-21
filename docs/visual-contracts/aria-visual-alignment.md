@@ -18,6 +18,7 @@ Current approved image references:
 aria_home_reference.png
 aria_library_reference.png
 aria_explore_reference.png
+aria_playlist_reference.png
 aria_artist_reference.png
 aria_lyrics_reference.png
 aria_nowplaying_reference.png
@@ -123,6 +124,26 @@ Visual requirements:
 - category cards should feel intentional and visual;
 - cards must represent library discovery surfaces such as genres, albums, artists, radios, songs and playlists;
 - search may exist as an affordance, but the screen must not collapse into a plain search page unless a future contract explicitly changes it.
+
+### Playlists
+
+Reference:
+
+```txt
+aria_playlist_reference.png
+```
+
+Purpose:
+
+- top-level playlist collection surface.
+
+Visual requirements:
+
+- playlists must feel like rich music collections, not compact admin rows;
+- playlist artwork should carry the page visually;
+- the primary playlist/card area should have strong presence;
+- secondary playlist rows or cards must remain readable and calm;
+- play and more actions should be visible but not overpower the artwork/title hierarchy.
 
 ### Artist Detail
 
@@ -267,7 +288,7 @@ vite.config.ts
 Aria visual alignment is acceptable when:
 
 - the approved references are documented as the source of truth;
-- Home, Library, Explore, Artist, Lyrics and Now Playing follow the shared visual system;
+- Home, Library, Explore, Playlists, Artist, Lyrics and Now Playing follow the shared visual system;
 - mini player and bottom nav spacing is correct;
 - visual hierarchy feels like a music player;
 - no screen resembles a generic dashboard unless intentionally specified;
