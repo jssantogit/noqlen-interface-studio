@@ -12,6 +12,7 @@ Approved references:
 docs/references/aria/aria_home_reference.png
 docs/references/aria/aria_library_reference.png
 docs/references/aria/aria_explore_reference.png
+docs/references/aria/aria_playlist_reference.png
 docs/references/aria/aria_artist_reference.png
 docs/references/aria/aria_lyrics_reference.png
 docs/references/aria/aria_nowplaying_reference.png
@@ -84,6 +85,7 @@ home hero
 now playing
 album detail
 artist detail
+playlist list
 playlist detail
 queue rows
 track details
@@ -398,6 +400,30 @@ subtle active/hover feedback
 
 Explore may include search, but it must not become only a search screen unless a future contract changes that model.
 
+### Playlist list screen
+
+The Playlists tab is a top-level collection surface, not just a compact list.
+
+It should include:
+
+```txt
+large serif title
+playlist count/context
+one visually dominant playlist or rich card area
+secondary playlist collection rows/cards
+artwork-led hierarchy
+play action and more action as secondary controls
+persistent mini player and bottom nav separation
+```
+
+It must not look like:
+
+```txt
+settings rows
+plain admin list
+small cramped playlist table
+```
+
 ### Playlist / album / artist rows
 
 Rows should include:
@@ -502,6 +528,30 @@ make it identical to Search
 make it a plain two-column utility grid without music character
 ```
 
+### Playlists
+
+Priority:
+
+```txt
+playlist collection with strong artwork presence
+```
+
+Do:
+
+```txt
+make playlists feel like curated music spaces
+use rich artwork surfaces
+show playlist context clearly
+keep actions visible but secondary
+```
+
+Do not:
+
+```txt
+render only tiny compact rows
+make playlists feel like folders/settings
+```
+
 ### Detail screens
 
 Priority:
@@ -522,8 +572,8 @@ Implement Aria visual alignment from the outside in:
 1. background and global atmosphere
 2. bottom nav
 3. mini player
-4. top-level screens: Home, Library, Explore
-5. detail screens: Album, Artist, Playlist, Track
+4. top-level screens: Home, Library, Explore, Playlists
+5. detail screens: Album, Artist, Playlist Detail, Track
 6. playback screens: Now Playing, Lyrics, Queue
 7. tests and responsive audit
 ```
@@ -536,7 +586,7 @@ Use OpenCode for implementation blocks that require browser inspection and scree
 
 ```txt
 Bloco 3 — Aria Shell
-Bloco 4 — Home, Library and Explore
+Bloco 4 — Home, Library, Explore and Playlists
 Bloco 5 — Detail screens
 Bloco 6 — Now Playing, Lyrics and Queue
 ```
