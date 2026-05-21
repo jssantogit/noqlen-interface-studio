@@ -12,8 +12,8 @@ Aria provides a high-fidelity mock-only music playback UI, library browsing, pla
 - **Bottom navigation:** implemented.
 - **Mini player:** implemented.
 - **Top-level tabs:** implemented and visually aligned in Bloco 4 / Bloco 4.1.
+- **Detail screens:** implemented and visually aligned in Bloco 5 / Bloco 5.1.
 - **Now Playing:** existing baseline, pending visual alignment in Bloco 6.
-- **Detail screens:** pending Bloco 5.
 - **Lyrics and Queue:** pending Bloco 6.
 - **Tests:** pending later blocks.
 
@@ -39,7 +39,7 @@ aria_nowplaying_reference.png
 
 The old `aria_reference1.png`, `aria_reference2.png` and legacy showcase HTML are no longer the source of truth.
 
-Additional chat-approved concepts guide future detail work:
+Additional chat-approved concepts guide future work:
 
 ```txt
 Album Detail
@@ -130,7 +130,9 @@ Your Playlists
 
 The Playlists tab must not include a fake featured/music card unless a future reference explicitly adds one.
 
-## Detail screens for Bloco 5
+## Detail screens
+
+Implemented in Bloco 5 / Bloco 5.1.
 
 ### Album Detail
 
@@ -138,7 +140,7 @@ Purpose:
 
 - focused album page with artwork, album metadata and track list.
 
-Required structure:
+Implemented structure:
 
 ```txt
 back/action header
@@ -166,7 +168,7 @@ Reference:
 aria_artist_reference.png
 ```
 
-Required structure:
+Implemented structure:
 
 ```txt
 back/action header
@@ -192,7 +194,7 @@ Purpose:
 
 - inspect current track and metadata.
 
-Required structure:
+Implemented structure:
 
 ```txt
 back/action header
@@ -229,7 +231,8 @@ Visual direction:
 
 - technical metadata is secondary;
 - still feels like a music player;
-- no real filesystem access.
+- no real filesystem access;
+- no playback/progress bar inside Track Details.
 
 ### Playlist Detail
 
@@ -237,7 +240,7 @@ Purpose:
 
 - focused page for one playlist and its tracks.
 
-Required structure:
+Implemented structure:
 
 ```txt
 back/action header
@@ -297,6 +300,7 @@ Must provide:
 - Four-tab bottom navigation remains persistent for top-level screens.
 - Detail screens use stack-style local navigation inside Aria.
 - Detail screens need a visible back control.
+- Bottom nav tab changes close any open detail screen.
 - Mini player remains visible on detail screens unless the active screen intentionally uses a full overlay.
 - Now Playing remains an overlay expanded from the mini player.
 
@@ -319,7 +323,7 @@ AriaMetadataBadge
 AriaProgressBar
 ```
 
-Avoid creating a large global design system in this block. Keep shared primitives local to `src/apps/aria/`.
+Avoid creating a large global design system in one block. Keep shared primitives local to `src/apps/aria/`.
 
 ## Mock-only boundaries
 
@@ -367,9 +371,9 @@ Status: top-level browsing implemented. Deeper browsing and search states remain
 
 ### Batch 4 — Artist/Album/Song/Playlist Detail
 
-Status: pending Bloco 5.
+Status: implemented in Bloco 5 / Bloco 5.1.
 
-Bloco 5 scope:
+Implemented scope:
 
 ```txt
 Album Detail
