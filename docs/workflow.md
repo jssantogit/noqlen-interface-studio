@@ -4,7 +4,7 @@ Work in block order and stop at the active block boundary.
 
 Current Noqlen loop:
 
-Plan -> Block -> Prompt -> Tool Mode -> Implement -> Validate -> Audit -> Fix -> Commit -> Handoff -> Next block
+Plan -> Block -> Prompt -> Tool Mode -> Inspect -> Implement -> Validate -> Audit -> Fix -> Commit -> Handoff -> Next block
 
 Every tool-assisted block must declare Tool Mode. Use `none` when no optional accelerator affects the block. Supported values for this repository are:
 
@@ -23,24 +23,67 @@ Raw evidence is required for serious debugging, validation failures, audits, rel
 
 Human review is required for risky changes, including destructive operations, deploy/release changes, public boundary changes, security-sensitive changes and any departure from the mock-only product boundary.
 
-Workflow retrofit blocks must not implement product behavior, change app UI, or start Anchor, Navidrome settings, Activity, Forge, Aria or Flux work.
+## Current implementation state
 
-Current development order:
+The repository has moved beyond the initial static shell phase:
 
-1. Stabilize the Studio simulator shell.
-2. Build Anchor-specific visual mockups only when that block starts.
-3. Build Forge-specific visual mockups only when that block starts.
-4. Build Aria-specific visual mockups only when that block starts.
-5. Build Flux-specific visual mockups only when that block starts.
+1. **Studio Shell** is a stable responsive simulator shell.
+2. **Anchor** is a high-fidelity interactive mock foundation.
+3. **Forge** is an advanced interactive mock preview.
+4. **Aria** is in visual alignment/refinement using approved reference images.
+5. **Flux** remains an intentionally neutral placeholder until a dedicated concept block begins.
 
-Each block should update screen contracts, interface context and review checklists before implementation is considered complete.
+The Studio shell is a simulator, not a dashboard. The phone frame is the main stage. App previews may be interactive, but every interaction must remain mock-only, local-state-only and display-only.
 
-The Studio shell is a simulator, not a dashboard. The phone frame is the main stage, and previews inside it are placeholders until app-specific blocks begin.
+## Current development order
+
+1. Keep repository truth, contracts and handoff docs aligned with the actual implementation state.
+2. Use the visual alignment process before patching reference-driven UI.
+3. Align Aria against the approved references before adding more Aria product depth.
+4. Add or refine Aria screens one scoped batch at a time.
+5. Refactor Anchor only after preserving its current behavior and without changing appearance.
+6. Refactor Forge only after preserving its current behavior and without changing appearance.
+7. Add behavior tests for important mock flows.
+8. Run responsive and hygiene validation before release-ready handoff.
+
+## Visual alignment workflow
+
+Reference-driven UI work must treat images as visual contracts, not loose inspiration.
+
+Before editing visual code:
+
+1. Identify the approved reference image for the target screen.
+2. Inspect the current implementation in browser when available.
+3. List concrete visual gaps: layout, spacing, hierarchy, typography, color, border, blur, nav position and scroll behavior.
+4. Declare allowed files and forbidden files.
+5. Patch only the active block scope.
+6. Validate with screenshots when available.
+7. Report remaining differences honestly.
+
+Do not redesign freely. Do not change StudioLayout, PhoneFrame, PhoneStage or AppViewport during app-specific alignment unless the active block explicitly allows it.
+
+## Mock-only boundary
 
 All work remains visual-only until a future handoff explicitly changes that rule.
+
+Do not add:
+
+- real backend calls;
+- real downloads;
+- real server or process control;
+- real playback;
+- real music library access;
+- filesystem reads/writes;
+- secrets, credentials, auth or analytics;
+- network-dependent app behavior.
+
+## Validation
 
 Workflow and hygiene validation should include:
 
 ```bash
+npm run lint
+npm run test -- --run
+npm run build
 python3 scripts/check_repo_hygiene.py
 ```
