@@ -1,4 +1,5 @@
 import { Download, FolderPlus, MoreHorizontal, Plus, Share, SlidersHorizontal } from 'lucide-react'
+import type { AriaPlaylist } from '../ariaMockData'
 import { ariaPlaylists } from '../ariaMockData'
 
 const actions = [
@@ -22,7 +23,13 @@ const playlistRows = [
 
 const rowArt = ['aria-art-waves', 'aria-art-architecture', 'aria-art-mountain', 'aria-art-hall', 'aria-art-violet']
 
-export function AriaPlaylists({ onShowToast }: { onShowToast: (message: string) => void }) {
+export function AriaPlaylists({
+  onOpenPlaylist,
+  onShowToast,
+}: {
+  onOpenPlaylist: (playlist: AriaPlaylist) => void
+  onShowToast: (message: string) => void
+}) {
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-6 text-[#f5ecdf]">
       <div>
@@ -110,12 +117,12 @@ export function AriaPlaylists({ onShowToast }: { onShowToast: (message: string) 
               <button
                 className={`aria-art aria-art-row ${rowArt[index % rowArt.length]} shrink-0`}
                 aria-label={`${playlist.title} artwork`}
-                onClick={() => onShowToast(`${playlist.title} (mock)`)}
+                onClick={() => onOpenPlaylist(playlist)}
                 type="button"
               />
               <button
                 className="min-w-0 flex-1 text-left"
-                onClick={() => onShowToast(`${playlist.title} (mock)`)}
+                onClick={() => onOpenPlaylist(playlist)}
                 type="button"
               >
                 <h3 className="truncate font-serif text-[17px] leading-tight text-[#fff3e4]">{playlist.title}</h3>

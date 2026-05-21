@@ -1,5 +1,6 @@
 import { ChevronRight, Disc3, Folder, Gem, ListMusic, Music2, Search, Tags, UsersRound } from 'lucide-react'
-import { ariaAlbums, ariaPlaylists } from '../ariaMockData'
+import type { AriaAlbum, AriaArtist, AriaPlaylist } from '../ariaMockData'
+import { ariaAlbums, ariaArtists, ariaPlaylists } from '../ariaMockData'
 
 const categories = [
   { id: 'songs', label: 'Songs', count: '1,200', icon: Music2 },
@@ -13,7 +14,17 @@ const categories = [
 const playlistArt = ['aria-art-blue', 'aria-art-dune', 'aria-art-record']
 const recentArt = ['aria-art-tree', 'aria-art-violet', 'aria-art-mountain']
 
-export function AriaLibrary({ onShowToast }: { onShowToast: (message: string) => void }) {
+export function AriaLibrary({
+  onOpenAlbum,
+  onOpenArtist,
+  onOpenPlaylist,
+  onShowToast,
+}: {
+  onOpenAlbum: (album: AriaAlbum) => void
+  onOpenArtist: (artist: AriaArtist) => void
+  onOpenPlaylist: (playlist: AriaPlaylist) => void
+  onShowToast: (message: string) => void
+}) {
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-6 text-[#f5ecdf]">
       <div className="flex items-start justify-between">
@@ -48,7 +59,11 @@ export function AriaLibrary({ onShowToast }: { onShowToast: (message: string) =>
             <button
               className="group flex w-full items-center gap-4 rounded-[16px] px-1 py-1 text-left transition hover:bg-white/[0.035]"
               key={cat.id}
-              onClick={() => onShowToast(`${cat.label} (mock)`)}
+              onClick={() => {
+                if (cat.id === 'albums') onOpenAlbum(ariaAlbums[0])
+                else if (cat.id === 'artists') onOpenArtist(ariaArtists[0])
+                else onShowToast(`${cat.label} (mock)`)
+              }}
               type="button"
             >
               <span className="grid h-8 w-8 shrink-0 place-items-center text-[#ffad26]">
@@ -78,7 +93,7 @@ export function AriaLibrary({ onShowToast }: { onShowToast: (message: string) =>
             <button
               className="overflow-hidden rounded-[14px] border border-white/[0.075] bg-white/[0.035] text-left shadow-[0_12px_24px_rgba(0,0,0,0.22)] transition hover:bg-white/[0.055]"
               key={playlist.id}
-              onClick={() => onShowToast(`${playlist.title} (mock)`)}
+              onClick={() => onOpenPlaylist(playlist)}
               type="button"
             >
               <div className={`aria-art aria-art-card ${playlistArt[index % playlistArt.length]}`} />
@@ -107,7 +122,7 @@ export function AriaLibrary({ onShowToast }: { onShowToast: (message: string) =>
             <button
               className="overflow-hidden rounded-[14px] text-left transition hover:opacity-90"
               key={album.id}
-              onClick={() => onShowToast(`${album.title} (mock)`)}
+              onClick={() => onOpenAlbum(album)}
               type="button"
             >
               <div className={`aria-art aria-art-poster ${recentArt[index % recentArt.length]}`} />

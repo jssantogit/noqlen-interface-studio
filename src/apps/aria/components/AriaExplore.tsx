@@ -1,4 +1,6 @@
 import { Disc3, ListMusic, Mic2, Music2, Radio, Search, Shapes } from 'lucide-react'
+import type { AriaAlbum, AriaArtist, AriaPlaylist, AriaTrack } from '../ariaMockData'
+import { ariaAlbums, ariaArtists, ariaPlaylists, ariaQueue } from '../ariaMockData'
 
 const categories = [
   { id: 'genres', label: 'Genres', icon: Shapes, art: 'aria-art-waves' },
@@ -16,7 +18,19 @@ const recentlyExplored = [
   { id: 'rx-4', label: 'Recently Added', art: 'aria-art-clock' },
 ]
 
-export function AriaExplore({ onShowToast }: { onShowToast: (message: string) => void }) {
+export function AriaExplore({
+  onOpenAlbum,
+  onOpenArtist,
+  onOpenPlaylist,
+  onOpenTrack,
+  onShowToast,
+}: {
+  onOpenAlbum: (album: AriaAlbum) => void
+  onOpenArtist: (artist: AriaArtist) => void
+  onOpenPlaylist: (playlist: AriaPlaylist) => void
+  onOpenTrack: (track: AriaTrack) => void
+  onShowToast: (message: string) => void
+}) {
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-6 text-[#f5ecdf]">
       <div className="flex items-start justify-between">
@@ -51,7 +65,13 @@ export function AriaExplore({ onShowToast }: { onShowToast: (message: string) =>
             <button
               key={cat.id}
               className="aria-discovery-card group relative h-[110px] overflow-hidden rounded-[20px] border border-white/[0.08] bg-white/[0.035] p-4 text-left shadow-[0_14px_28px_rgba(0,0,0,0.28)] transition hover:border-white/[0.14]"
-              onClick={() => onShowToast(`${cat.label} (mock)`)}
+              onClick={() => {
+                if (cat.id === 'albums') onOpenAlbum(ariaAlbums[0])
+                else if (cat.id === 'artists') onOpenArtist(ariaArtists[0])
+                else if (cat.id === 'songs') onOpenTrack(ariaQueue[5])
+                else if (cat.id === 'playlists') onOpenPlaylist(ariaPlaylists[0])
+                else onShowToast(`${cat.label} (mock)`)
+              }}
               type="button"
             >
               <div className={`aria-art aria-art-tile absolute inset-0 ${cat.art}`} />
@@ -81,7 +101,11 @@ export function AriaExplore({ onShowToast }: { onShowToast: (message: string) =>
             <button
               className="flex min-h-[52px] items-center gap-2 rounded-[15px] border border-white/[0.075] bg-white/[0.035] px-2 text-left transition hover:bg-white/[0.055]"
               key={item.id}
-              onClick={() => onShowToast(`${item.label} (mock)`)}
+              onClick={() => {
+                if (item.label === 'Artist') onOpenArtist(ariaArtists[0])
+                else if (item.label === 'Albums') onOpenAlbum(ariaAlbums[0])
+                else onShowToast(`${item.label} (mock)`)
+              }}
               type="button"
             >
               <span className={`aria-art aria-art-chip ${item.art}`} />

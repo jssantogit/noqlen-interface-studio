@@ -1,20 +1,29 @@
 import { ListMusic, Mic2, Play, Search } from 'lucide-react'
-import { nowPlaying } from '../ariaMockData'
+import type { AriaAlbum, AriaArtist, AriaPlaylist, AriaTrack } from '../ariaMockData'
+import { ariaAlbums, ariaArtists, ariaPlaylists, ariaQueue, nowPlaying } from '../ariaMockData'
 
 export function AriaListenHome({
   onPlay,
+  onOpenAlbum,
+  onOpenArtist,
+  onOpenPlaylist,
+  onOpenTrack,
   onNavigateToExplore,
   onShowToast,
 }: {
   onPlay: () => void
+  onOpenAlbum: (album: AriaAlbum) => void
+  onOpenArtist: (artist: AriaArtist) => void
+  onOpenPlaylist: (playlist: AriaPlaylist) => void
+  onOpenTrack: (track: AriaTrack) => void
   onNavigateToExplore: () => void
   onShowToast: (message: string) => void
 }) {
   const recentAdditions = [
-    { id: 'ra-1', title: 'Midnight Horizons', artist: 'Ólafur Arnalds', type: 'Album', art: 'aria-art aria-art-tiny aria-art-mist' },
-    { id: 'ra-2', title: 'Sunday Morning', artist: 'Cory', type: 'Album', art: 'aria-art aria-art-tiny aria-art-tree' },
-    { id: 'ra-3', title: 'Late Ambient', artist: 'Nils Frahm', type: 'Album', art: 'aria-art aria-art-tiny aria-art-violet' },
-    { id: 'ra-4', title: 'A Place', artist: 'Nils Frahm', type: 'Single', art: 'aria-art aria-art-tiny aria-art-mountain' },
+    { id: 'ra-1', title: 'Midnight Horizons', artist: 'Ólafur Arnalds', type: 'Album', art: 'aria-art aria-art-tiny aria-art-mist', onOpen: () => onOpenAlbum(ariaAlbums[3]) },
+    { id: 'ra-2', title: 'Sunday Morning', artist: 'Cory', type: 'Track', art: 'aria-art aria-art-tiny aria-art-tree', onOpen: () => onOpenTrack(ariaQueue[3]) },
+    { id: 'ra-3', title: 'Late Ambient', artist: 'Nils Frahm', type: 'Track', art: 'aria-art aria-art-tiny aria-art-violet', onOpen: () => onOpenTrack(ariaQueue[4]) },
+    { id: 'ra-4', title: 'A Place', artist: 'Nils Frahm', type: 'Single', art: 'aria-art aria-art-tiny aria-art-mountain', onOpen: () => onOpenTrack(ariaQueue[5]) },
   ]
 
   return (
@@ -62,7 +71,7 @@ export function AriaListenHome({
       <div className="mt-3 grid grid-cols-2 gap-2.5">
         <button
           className="rounded-[20px] border border-[rgba(240,161,61,0.16)] bg-[linear-gradient(145deg,rgba(58,36,18,0.56),rgba(255,255,255,0.03))] p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.04]"
-          onClick={() => onShowToast('Your Playlists (mock)')}
+          onClick={() => onOpenPlaylist(ariaPlaylists[0])}
           type="button"
         >
           <ListMusic size={23} className="text-[#f0a13d]" strokeWidth={1.6} />
@@ -71,7 +80,7 @@ export function AriaListenHome({
         </button>
         <button
           className="rounded-[20px] border border-white/[0.08] bg-[linear-gradient(145deg,rgba(15,29,39,0.62),rgba(255,255,255,0.025))] p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.04]"
-          onClick={() => onShowToast('Artists (mock)')}
+          onClick={() => onOpenArtist(ariaArtists[0])}
           type="button"
         >
           <Mic2 size={23} className="text-[#f0a13d]" strokeWidth={1.6} />
@@ -105,7 +114,7 @@ export function AriaListenHome({
             <button
               className="flex w-full min-w-0 items-center gap-3 rounded-2xl px-1 py-1.5 text-left transition hover:bg-white/[0.035]"
               key={item.id}
-              onClick={() => onShowToast(`${item.title} (mock)`)}
+              onClick={item.onOpen}
               type="button"
             >
               <div className={`${item.art} shrink-0`} />
