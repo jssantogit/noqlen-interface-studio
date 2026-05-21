@@ -1,76 +1,122 @@
-import { ChevronRight, Search } from 'lucide-react'
-import { ariaAlbums } from '../ariaMockData'
+import { ChevronRight, Disc3, Folder, Gem, ListMusic, Music2, Search, Tags, UsersRound } from 'lucide-react'
+import { ariaAlbums, ariaPlaylists } from '../ariaMockData'
+
+const categories = [
+  { id: 'songs', label: 'Songs', count: '1,200', icon: Music2 },
+  { id: 'albums', label: 'Albums', count: '245', icon: Disc3 },
+  { id: 'artists', label: 'Artists', count: '168', icon: UsersRound },
+  { id: 'genres', label: 'Genres', count: '32', icon: Tags },
+  { id: 'folders', label: 'Folders', count: '48', icon: Folder },
+  { id: 'compilations', label: 'Compilations', count: '12', icon: Gem },
+]
+
+const playlistArt = ['aria-art-blue', 'aria-art-dune', 'aria-art-record']
+const recentArt = ['aria-art-tree', 'aria-art-violet', 'aria-art-mountain']
 
 export function AriaLibrary({ onShowToast }: { onShowToast: (message: string) => void }) {
   return (
-    <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
-      <h1 className="font-serif text-[30px] leading-[1.05] text-[#fff3e4]">Library</h1>
-
-      {/* Search affordance */}
-      <button
-        className="mt-4 flex h-9 w-full items-center gap-2 rounded-xl border border-white/[0.075] bg-white/[0.035] px-3 text-left text-[11px] text-[#b9b1a7] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition hover:bg-white/[0.045]"
-        onClick={() => onShowToast('Library search (mock)')}
-        type="button"
-      >
-        <Search size={14} className="shrink-0 text-[#b9b1a7]" />
-        Search your library…
-      </button>
-
-      {/* Category chips */}
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-1 anchor-scrollbar-none">
-        {['Albums', 'Artists', 'Songs', 'Genres', 'Folders'].map((cat, index) => (
+    <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-6 text-[#f5ecdf]">
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="font-serif text-[46px] leading-[0.95] text-[#fff3e4]">Library</h1>
+          <p className="mt-2 text-[19px] text-[#f3b073]">Local library</p>
+        </div>
+        <div className="flex items-center gap-4 pt-1 text-[#f0a13d]">
           <button
-            className={`shrink-0 rounded-full px-3.5 py-1.5 text-[10px] font-medium transition ${
-              index === 0
-                ? 'border border-[rgba(240,161,61,0.5)] bg-[rgba(240,161,61,0.08)] text-[#f0a13d]'
-                : 'border border-white/[0.075] bg-white/[0.035] text-[#b9b1a7] hover:bg-white/[0.05]'
-            }`}
-            key={cat}
-            onClick={() => onShowToast(`${cat} (mock)`)}
+            aria-label="Library queue tools"
+            className="grid h-10 w-10 place-items-center rounded-full text-[#ffd28b] transition hover:bg-white/[0.04]"
+            onClick={() => onShowToast('Library tools (mock)')}
             type="button"
           >
-            {cat}
+            <ListMusic size={28} strokeWidth={1.5} />
           </button>
-        ))}
+          <button
+            aria-label="Library search"
+            className="grid h-10 w-10 place-items-center rounded-full transition hover:bg-white/[0.04]"
+            onClick={() => onShowToast('Library search (mock)')}
+            type="button"
+          >
+            <Search size={30} strokeWidth={1.6} />
+          </button>
+        </div>
       </div>
 
-      {/* Albums list */}
-      <section className="mt-4">
-        <div className="flex items-center justify-between py-1 text-xs">
-          <strong className="text-[#f0a13d]">Albums</strong>
+      <section className="mt-7 space-y-3">
+        {categories.map((cat) => {
+          const Icon = cat.icon
+          return (
+            <button
+              className="group flex w-full items-center gap-5 rounded-[18px] px-1 py-2.5 text-left transition hover:bg-white/[0.035]"
+              key={cat.id}
+              onClick={() => onShowToast(`${cat.label} (mock)`)}
+              type="button"
+            >
+              <span className="grid h-9 w-9 shrink-0 place-items-center text-[#ffad26]">
+                <Icon size={28} strokeWidth={1.55} />
+              </span>
+              <span className="flex-1 text-[22px] leading-none text-[#fff3e4]">{cat.label}</span>
+              <span className="text-[20px] tabular-nums text-[#b5aa9d]">{cat.count}</span>
+              <ChevronRight size={26} className="text-[#ffb05d] transition group-hover:translate-x-0.5" strokeWidth={1.7} />
+            </button>
+          )
+        })}
+      </section>
+
+      <section className="mt-8">
+        <div className="flex items-center justify-between">
+          <h2 className="font-serif text-[27px] leading-none text-[#fff3e4]">My Playlists</h2>
           <button
-            className="text-[10px] text-[#f0a13d] transition hover:text-[#ffb958]"
-            onClick={() => onShowToast('See all albums (mock)')}
+            className="text-[21px] text-[#f0a13d] transition hover:text-[#ffb958]"
+            onClick={() => onShowToast('See all playlists (mock)')}
             type="button"
           >
             See all
           </button>
         </div>
-        <div className="space-y-0">
-          {ariaAlbums.map((album) => (
+        <div className="mt-5 grid grid-cols-3 gap-4">
+          {ariaPlaylists.map((playlist, index) => (
             <button
-              className="flex w-full min-w-0 items-center gap-2 border-b border-white/[0.045] py-2.5 text-left transition hover:bg-white/[0.02]"
-              key={album.id}
-              onClick={() => onShowToast(`${album.title} (mock)`)}
+              className="overflow-hidden rounded-[14px] border border-white/[0.075] bg-white/[0.035] text-left shadow-[0_12px_24px_rgba(0,0,0,0.22)] transition hover:bg-white/[0.055]"
+              key={playlist.id}
+              onClick={() => onShowToast(`${playlist.title} (mock)`)}
               type="button"
             >
-              <div className="aria-art aria-art-micro shrink-0" />
-              <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold text-[#f5ecdf]">{album.title}</p>
-                <p className="text-[10px] leading-[1.3] text-[#b9b1a7]">
-                  {album.artist} · {album.year}
-                </p>
+              <div className={`aria-art aria-art-card ${playlistArt[index % playlistArt.length]}`} />
+              <div className="p-3">
+                <h3 className="truncate text-[15px] font-medium leading-tight text-[#fff3e4]">{playlist.title}</h3>
+                <p className="mt-1 text-[13px] text-[#b9b1a7]">{playlist.trackCount} Tracks</p>
               </div>
-              <span className="shrink-0 rounded-full border border-white/[0.075] bg-white/[0.035] px-2 py-0.5 text-[9px] text-[#bbb2a7]">
-                {album.format} · {album.source}
-              </span>
-              <ChevronRight className="shrink-0 text-[#777d82]" size={14} />
             </button>
           ))}
         </div>
       </section>
 
-      <div className="h-4" />
+      <section className="mt-8">
+        <div className="flex items-center justify-between">
+          <h2 className="font-serif text-[27px] leading-none text-[#fff3e4]">Recently Added</h2>
+          <button
+            className="text-[21px] text-[#f0a13d] transition hover:text-[#ffb958]"
+            onClick={() => onShowToast('See all recent additions (mock)')}
+            type="button"
+          >
+            See all
+          </button>
+        </div>
+        <div className="mt-5 grid grid-cols-3 gap-4">
+          {ariaAlbums.slice(0, 3).map((album, index) => (
+            <button
+              className="overflow-hidden rounded-[14px] text-left transition hover:opacity-90"
+              key={album.id}
+              onClick={() => onShowToast(`${album.title} (mock)`)}
+              type="button"
+            >
+              <div className={`aria-art aria-art-poster ${recentArt[index % recentArt.length]}`} />
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <div className="h-8" />
     </div>
   )
 }
