@@ -73,53 +73,53 @@ export const ariaInteractions: AriaInteraction[] = [
   { id: 'GL-11', name: 'Toast', screen: 'global', status: 'implemented', batch: 1, mockOnly: true },
   { id: 'GL-12', name: 'Confirm Dialog', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
   { id: 'GL-13', name: 'Bottom Sheet', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'GL-14', name: 'Back Navigation', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
+  { id: 'GL-14', name: 'Back Navigation', screen: 'global', status: 'implemented', batch: 2, mockOnly: true, notes: 'Local detail-screen back navigation returns to the previous top-level tab' },
 
   // Listen (Home)
-  { id: 'LS-1', name: 'Recent Listen Shelf', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Horizontal scroll shelf with static mock albums' },
-  { id: 'LS-2', name: 'Featured Playlist Card', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Static featured playlist grid' },
-  { id: 'LS-3', name: 'Quick Resume Row', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Static quick resume rows' },
+  { id: 'LS-1', name: 'Recent Listen Shelf', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Recent additions list with static mock tracks' },
+  { id: 'LS-2', name: 'Featured Playlist Card', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Dominant current listening card and shortcut cards' },
+  { id: 'LS-3', name: 'Quick Resume Row', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Static recent listening rows/cards' },
   { id: 'LS-4', name: 'Home Search Affordance', screen: 'listen', status: 'implemented', batch: 1, mockOnly: true, notes: 'Tapping search navigates to Explore tab' },
 
   // Library
-  { id: 'LB-1', name: 'Category Tabs', screen: 'library', status: 'not_implemented', batch: 3, mockOnly: true },
-  { id: 'LB-2', name: 'Album Row Tap', screen: 'library', status: 'not_implemented', batch: 4, mockOnly: true },
-  { id: 'LB-3', name: 'Artist Row Tap', screen: 'library', status: 'not_implemented', batch: 4, mockOnly: true },
-  { id: 'LB-4', name: 'Song Row Tap', screen: 'library', status: 'not_implemented', batch: 2, mockOnly: true },
+  { id: 'LB-1', name: 'Category Tabs', screen: 'library', status: 'partial', batch: 3, mockOnly: true, notes: 'Library category rows exist; deeper category views remain future work' },
+  { id: 'LB-2', name: 'Album Row Tap', screen: 'library', status: 'implemented', batch: 4, mockOnly: true, notes: 'Opens Album Detail using local mock state' },
+  { id: 'LB-3', name: 'Artist Row Tap', screen: 'library', status: 'implemented', batch: 4, mockOnly: true, notes: 'Opens Artist Detail using local mock state' },
+  { id: 'LB-4', name: 'Song Row Tap', screen: 'library', status: 'implemented', batch: 2, mockOnly: true, notes: 'Opens Track Details using local mock state' },
   { id: 'LB-5', name: 'Library Search', screen: 'library', status: 'not_implemented', batch: 3, mockOnly: true },
-  { id: 'LB-6', name: 'Library Sort / Filter', screen: 'library', status: 'not_implemented', batch: 3, mockOnly: true },
+  { id: 'LB-6', name: 'Library Sort / Filter', screen: 'library', status: 'partial', batch: 3, mockOnly: true, notes: 'Sort/filter affordance exists as mock UI feedback only' },
 
   // Playlists
-  { id: 'PL-1', name: 'Playlist Row Tap', screen: 'playlists', status: 'not_implemented', batch: 4, mockOnly: true },
-  { id: 'PL-2', name: 'Create Playlist', screen: 'playlists', status: 'not_implemented', batch: 4, mockOnly: true },
-  { id: 'PL-3', name: 'Playlist Detail Play', screen: 'playlistDetail', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'PL-4', name: 'Playlist Detail Shuffle', screen: 'playlistDetail', status: 'not_implemented', batch: 2, mockOnly: true },
+  { id: 'PL-1', name: 'Playlist Row Tap', screen: 'playlists', status: 'implemented', batch: 4, mockOnly: true, notes: 'Opens Playlist Detail using local mock state' },
+  { id: 'PL-2', name: 'Create Playlist', screen: 'playlists', status: 'implemented', batch: 4, mockOnly: true, notes: 'Mock action only; no real playlist creation' },
+  { id: 'PL-3', name: 'Playlist Detail Play', screen: 'playlistDetail', status: 'implemented', batch: 2, mockOnly: true, notes: 'Toast/local visual feedback only; no real audio' },
+  { id: 'PL-4', name: 'Playlist Detail Shuffle', screen: 'playlistDetail', status: 'implemented', batch: 2, mockOnly: true, notes: 'Toast/local visual feedback only; no real queue mutation' },
 
   // Explore (Search)
-  { id: 'EX-1', name: 'Search Input', screen: 'explore', status: 'not_implemented', batch: 6, mockOnly: true },
+  { id: 'EX-1', name: 'Search Input', screen: 'explore', status: 'partial', batch: 6, mockOnly: true, notes: 'Search affordance exists; full local search behavior remains future work' },
   { id: 'EX-2', name: 'Search Filter Chips', screen: 'explore', status: 'not_implemented', batch: 6, mockOnly: true },
-  { id: 'EX-3', name: 'Search Result Tap', screen: 'explore', status: 'not_implemented', batch: 6, mockOnly: true },
+  { id: 'EX-3', name: 'Search Result Tap', screen: 'explore', status: 'partial', batch: 6, mockOnly: true, notes: 'Discovery/category taps can open mock detail screens; full search results remain future work' },
   { id: 'EX-4', name: 'Recent Searches', screen: 'explore', status: 'not_implemented', batch: 6, mockOnly: true },
 
   // Album Detail
-  { id: 'AD-1', name: 'Play Album', screen: 'albumDetail', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'AD-2', name: 'Shuffle Album', screen: 'albumDetail', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'AD-3', name: 'More Menu on Album', screen: 'albumDetail', status: 'not_implemented', batch: 4, mockOnly: true },
-  { id: 'AD-4', name: 'Track Row Tap in Album', screen: 'albumDetail', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'AD-5', name: 'Track More Menu in Album', screen: 'albumDetail', status: 'not_implemented', batch: 4, mockOnly: true },
+  { id: 'AD-1', name: 'Play Album', screen: 'albumDetail', status: 'implemented', batch: 2, mockOnly: true, notes: 'Mock toast/local state only; no real audio' },
+  { id: 'AD-2', name: 'Shuffle Album', screen: 'albumDetail', status: 'implemented', batch: 2, mockOnly: true, notes: 'Mock toast/local state only' },
+  { id: 'AD-3', name: 'More Menu on Album', screen: 'albumDetail', status: 'implemented', batch: 4, mockOnly: true, notes: 'Mock toast feedback only' },
+  { id: 'AD-4', name: 'Track Row Tap in Album', screen: 'albumDetail', status: 'implemented', batch: 2, mockOnly: true, notes: 'Opens Track Details using local mock state' },
+  { id: 'AD-5', name: 'Track More Menu in Album', screen: 'albumDetail', status: 'implemented', batch: 4, mockOnly: true, notes: 'Mock toast feedback only' },
 
   // Artist Detail
-  { id: 'AR-1', name: 'Play Top Tracks', screen: 'artistDetail', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'AR-2', name: 'Album Tap in Discography', screen: 'artistDetail', status: 'not_implemented', batch: 4, mockOnly: true },
-  { id: 'AR-3', name: 'More Menu on Artist', screen: 'artistDetail', status: 'not_implemented', batch: 4, mockOnly: true },
+  { id: 'AR-1', name: 'Play Top Tracks', screen: 'artistDetail', status: 'implemented', batch: 2, mockOnly: true, notes: 'Mock toast/local state only; no real audio' },
+  { id: 'AR-2', name: 'Album Tap in Discography', screen: 'artistDetail', status: 'implemented', batch: 4, mockOnly: true, notes: 'Opens Album Detail or mock discography feedback using local state' },
+  { id: 'AR-3', name: 'More Menu on Artist', screen: 'artistDetail', status: 'implemented', batch: 4, mockOnly: true, notes: 'Mock toast feedback only' },
 
   // Track Details
-  { id: 'TD-1', name: 'Favorite Action', screen: 'trackDetails', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'TD-2', name: 'Add to Playlist', screen: 'trackDetails', status: 'not_implemented', batch: 4, mockOnly: true },
-  { id: 'TD-3', name: 'Add to Queue', screen: 'trackDetails', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'TD-4', name: 'Show in Folder', screen: 'trackDetails', status: 'not_implemented', batch: 4, mockOnly: true },
-  { id: 'TD-5', name: 'Edit Metadata', screen: 'trackDetails', status: 'not_implemented', batch: 4, mockOnly: true, notes: 'Deferred to later batch if needed' },
-  { id: 'TD-6', name: 'Metadata Row Info', screen: 'trackDetails', status: 'not_implemented', batch: 4, mockOnly: true },
+  { id: 'TD-1', name: 'Favorite Action', screen: 'trackDetails', status: 'implemented', batch: 2, mockOnly: true, notes: 'Mock toast/action feedback only' },
+  { id: 'TD-2', name: 'Add to Playlist', screen: 'trackDetails', status: 'implemented', batch: 4, mockOnly: true, notes: 'Mock toast/action feedback only; no real playlist mutation' },
+  { id: 'TD-3', name: 'Add to Queue', screen: 'trackDetails', status: 'implemented', batch: 2, mockOnly: true, notes: 'Mock toast/action feedback only; no real queue mutation' },
+  { id: 'TD-4', name: 'Show in Folder', screen: 'trackDetails', status: 'implemented', batch: 4, mockOnly: true, notes: 'Mock toast/action feedback only; no filesystem access' },
+  { id: 'TD-5', name: 'Edit Metadata', screen: 'trackDetails', status: 'deferred', batch: 4, mockOnly: true, notes: 'Not part of the current Track Details UI' },
+  { id: 'TD-6', name: 'Metadata Row Info', screen: 'trackDetails', status: 'implemented', batch: 4, mockOnly: true, notes: 'Static fictional metadata rows only' },
 
   // Queue / Now Playing
   { id: 'QP-1', name: 'Reorder Queue', screen: 'nowPlaying', status: 'not_implemented', batch: 5, mockOnly: true, notes: 'Visual affordance first; full drag optional' },
@@ -139,8 +139,8 @@ export const ariaInteractions: AriaInteraction[] = [
   { id: 'MR-3', name: 'Review Fixes CTA', screen: 'metadataReview', status: 'not_implemented', batch: 7, mockOnly: true },
 
   // Mini Player
-  { id: 'MP-1', name: 'Mini Player Play/Pause', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
-  { id: 'MP-2', name: 'Mini Player Next/Previous', screen: 'global', status: 'not_implemented', batch: 2, mockOnly: true },
+  { id: 'MP-1', name: 'Mini Player Play/Pause', screen: 'global', status: 'implemented', batch: 2, mockOnly: true, notes: 'Visual toggle only; no real audio' },
+  { id: 'MP-2', name: 'Mini Player Next/Previous', screen: 'global', status: 'partial', batch: 2, mockOnly: true, notes: 'Visible controls with mock toast; no queue cycling yet' },
 ]
 
 export const ariaBatchLabels: Record<number, string> = {
