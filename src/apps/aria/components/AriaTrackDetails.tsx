@@ -35,7 +35,7 @@ export function AriaTrackDetails({
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
       <AriaDetailHeader label="Track" onBack={onBack} onMore={() => onShowToast('Track options (mock)')} />
 
-      <section className="mt-5 rounded-[24px] border border-[rgba(240,161,61,0.14)] bg-[linear-gradient(145deg,rgba(58,36,18,0.36),rgba(255,255,255,0.03))] p-4 shadow-[0_18px_40px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.05)]">
+      <section className="mt-5 rounded-[24px] border border-[rgba(240,161,61,0.14)] bg-[linear-gradient(145deg,rgba(58,36,18,0.34),rgba(255,255,255,0.03))] p-3.5 shadow-[0_18px_40px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.05)]">
         <div className="flex items-center gap-4">
           <div className="aria-art aria-art-feature-sm aria-art-architecture shrink-0" />
           <div className="min-w-0 flex-1">
@@ -43,9 +43,6 @@ export function AriaTrackDetails({
             <h1 className="mt-2 font-serif text-[30px] leading-[0.98] text-[#fff3e4]">{track.title}</h1>
             <p className="mt-2 truncate text-[15px] text-[#cfc4b8]">{track.artist}</p>
           </div>
-        </div>
-        <div className="mt-5 h-1.5 rounded-full bg-white/[0.08]">
-          <div className="h-full w-[42%] rounded-full bg-gradient-to-r from-[#f09a35] to-[#ffbd63]" />
         </div>
       </section>
 
