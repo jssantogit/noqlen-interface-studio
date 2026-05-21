@@ -58,24 +58,24 @@ export function AriaNowPlaying({
       </header>
 
       {/* Artwork */}
-      <div className="flex shrink-0 flex-col items-center px-7 pt-8">
-        <div className="aria-art aria-art-square h-[313px] w-full max-w-[313px] rounded-[27px] shadow-[0_1.4rem_3.4rem_rgba(0,0,0,0.48),0_0_3.8rem_rgba(240,161,61,0.11)]" />
+      <div className="flex shrink-0 flex-col items-center px-7 pt-6">
+        <div className="aria-art aria-art-square h-[258px] w-[258px] max-w-full rounded-[25px] shadow-[0_1.25rem_3rem_rgba(0,0,0,0.48),0_0_3.2rem_rgba(240,161,61,0.12)]" />
       </div>
 
       {/* Track info */}
-      <div className="px-7 pb-2 pt-7">
+      <div className="px-7 pb-1 pt-5">
         <div className="flex min-w-0 items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h2 className="truncate font-serif text-[30px] leading-[1.05] text-[#fff3e4]">
+            <h2 className="truncate font-serif text-[30px] leading-[1.03] text-[#fff3e4]">
               {nowPlaying.title}
             </h2>
-            <p className="mt-2 truncate font-serif text-[20px] text-[#f0a13d]">
+            <p className="mt-1.5 truncate font-serif text-[19px] text-[#f0a13d]">
               {nowPlaying.artist}
             </p>
           </div>
           <button
             aria-label={isFavorite ? 'Unfavorite' : 'Favorite'}
-            className={`mt-4 grid h-10 w-10 shrink-0 place-items-center rounded-full transition ${isFavorite ? 'text-[#f0a13d]' : 'text-[#f0a13d] hover:bg-white/[0.07]'}`}
+            className={`mt-3 grid h-10 w-10 shrink-0 place-items-center rounded-full transition ${isFavorite ? 'text-[#f0a13d]' : 'text-[#f0a13d] hover:bg-white/[0.07]'}`}
             onClick={onToggleFavorite}
             type="button"
           >
@@ -85,7 +85,7 @@ export function AriaNowPlaying({
       </div>
 
       {/* Progress bar */}
-      <div className="px-7 py-4">
+      <div className="px-7 py-2.5">
         <button
           aria-label="Seek through track"
           className="group relative block h-5 w-full rounded-full"
@@ -99,14 +99,14 @@ export function AriaNowPlaying({
         <div className="mt-1 flex items-start justify-between text-[13px] text-[#c9bdae]">
           <span>1:37</span>
           <span className="text-center text-xs leading-5 text-[#c9bdae]">
-            {nowPlaying.album}<br />FLAC · Local
+            Hi-Res Audio<br />FLAC · Local
           </span>
           <span>{nowPlaying.duration}</span>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-5 px-6 pt-4">
+      <div className="flex items-center justify-center gap-5 px-6 pt-2.5">
         <button
           aria-label={isShuffled ? 'Shuffle on' : 'Shuffle off'}
           className={`grid h-10 w-10 place-items-center rounded-full transition ${isShuffled ? 'text-[#f0a13d]' : 'text-[#eadac4] hover:bg-white/[0.07]'}`}
@@ -125,7 +125,7 @@ export function AriaNowPlaying({
         </button>
         <button
           aria-label={isPlaying ? 'Pause' : 'Play'}
-          className="grid h-[74px] w-[74px] place-items-center rounded-full text-[#fff3df] shadow-[0_18px_34px_rgba(240,161,61,0.18)] transition active:scale-[0.97]"
+            className="grid h-[72px] w-[72px] place-items-center rounded-full text-[#fff3df] shadow-[0_18px_34px_rgba(240,161,61,0.18)] transition active:scale-[0.97]"
           onClick={onPlayPause}
           style={{ background: 'radial-gradient(circle, rgba(240,161,61,0.93), rgba(68,43,18,0.88))' }}
           type="button"
@@ -151,7 +151,7 @@ export function AriaNowPlaying({
       </div>
 
       {/* Secondary controls */}
-      <div className="mt-auto grid grid-cols-[2.5rem_2.5rem_1fr_2.5rem] items-center gap-3 px-7 pb-[max(1.6rem,env(safe-area-inset-bottom))] pt-7">
+      <div className="mt-auto grid grid-cols-[2.75rem_1fr_2.75rem] items-center gap-4 px-7 pb-[max(1.6rem,env(safe-area-inset-bottom))] pt-5">
         <button
           aria-label="Open lyrics"
           className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
@@ -161,21 +161,14 @@ export function AriaNowPlaying({
           <WholeWord size={21} />
         </button>
         <button
-          aria-label="Volume controls"
-          className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
-          onClick={() => onShowToast('Volume control is visual only')}
-          type="button"
-        >
-          <Volume2 size={21} />
-        </button>
-        <button
           aria-label="Adjust audio settings"
-          className="relative h-[3px] rounded-full bg-white/[0.14] text-[#f0a13d]"
+          className="flex h-11 min-w-0 items-center justify-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.045] px-3 text-[#eadac4] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition hover:bg-white/[0.07] hover:text-white"
           onClick={() => onShowToast('Audio settings preview (mock)')}
           type="button"
         >
-          <span className="absolute left-0 top-0 h-full w-[42%] rounded-full bg-[#f0a13d]" />
-          <span className="absolute left-[42%] top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ffad45]" />
+          <Volume2 className="shrink-0 text-[#f0a13d]" size={18} />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#f0a13d] shadow-[0_0_12px_rgba(240,161,61,0.55)]" />
+          <span className="truncate text-xs font-medium tracking-[0.02em]">Hi-Res</span>
         </button>
         <button
           aria-label="Open queue"

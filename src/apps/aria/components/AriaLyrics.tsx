@@ -65,7 +65,7 @@ export function AriaLyrics({
       <main className="min-h-0 flex-1 overflow-hidden px-9 pt-16">
         <div className="space-y-6 font-serif">
           {lyricLines.map((line, index) => {
-            const active = index >= 3 && index <= 6
+            const active = index === 3
             const past = index < 3
 
             return (

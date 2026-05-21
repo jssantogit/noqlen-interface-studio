@@ -46,20 +46,33 @@ export function AriaQueue({
       </header>
 
       <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-5 pb-5 pt-6">
-        <section className="rounded-[24px] border border-white/[0.07] bg-white/[0.045] p-4 shadow-[0_16px_34px_rgba(0,0,0,0.28)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#777d82]">Now Playing</p>
+        <section className="rounded-[26px] border border-white/[0.08] bg-[linear-gradient(135deg,rgba(255,255,255,0.07),rgba(240,161,61,0.075)_48%,rgba(255,255,255,0.035))] p-4 shadow-[0_18px_40px_rgba(0,0,0,0.32)]">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#8b8178]">Now Playing</p>
+            <span className="rounded-full bg-[#f0a13d]/15 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#ffbd65]">Live</span>
+          </div>
           <button
             aria-label="Show current track feedback"
-            className="mt-3 flex w-full min-w-0 items-center gap-3 rounded-[18px] text-left transition hover:bg-white/[0.04]"
+            className="mt-3 grid w-full min-w-0 grid-cols-[4rem_1fr] items-center gap-3 rounded-[20px] text-left transition hover:bg-white/[0.04]"
             onClick={() => onShowToast('Current track is playing (mock)')}
             type="button"
           >
-            <div className="aria-art aria-art-small shrink-0 shadow-[0_10px_24px_rgba(0,0,0,0.28)]" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-serif text-xl text-[#fff3e4]">{nowPlaying.title}</p>
-              <p className="mt-1 truncate text-sm text-[#f0a13d]">{nowPlaying.artist}</p>
+            <div className="aria-art aria-art-small h-16 w-16 shrink-0 rounded-[18px] shadow-[0_12px_26px_rgba(0,0,0,0.34)]" />
+            <div className="min-w-0">
+              <div className="flex min-w-0 items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate font-serif text-[21px] leading-tight text-[#fff3e4]">{nowPlaying.title}</p>
+                  <p className="mt-1 truncate text-sm text-[#f0a13d]">{nowPlaying.artist}</p>
+                </div>
+                <span className="mt-1 shrink-0 rounded-full border border-white/[0.07] bg-black/20 px-2 py-1 text-[11px] text-[#d8cbbd]">{nowPlaying.duration}</span>
+              </div>
+              <div className="mt-3 flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#f0a13d] shadow-[0_0_12px_rgba(240,161,61,0.65)]" />
+                <span className="h-[3px] min-w-0 flex-1 overflow-hidden rounded-full bg-white/[0.12]">
+                  <span className="block h-full w-[38%] rounded-full bg-[#f0a13d]" />
+                </span>
+              </div>
             </div>
-            <span className="shrink-0 text-xs text-[#9c9186]">{nowPlaying.duration}</span>
           </button>
         </section>
 
