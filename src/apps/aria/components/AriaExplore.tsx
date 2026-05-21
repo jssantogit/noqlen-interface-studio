@@ -36,7 +36,7 @@ export function AriaExplore({ onShowToast }: { onShowToast: (message: string) =>
       </div>
 
       <button
-        className="mt-7 flex h-14 w-full items-center gap-3 rounded-[24px] border border-white/[0.085] bg-white/[0.04] px-5 text-left text-[17px] text-[#b9b1a7] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.055]"
+        className="mt-5 flex h-12 w-full items-center gap-3 rounded-[22px] border border-white/[0.085] bg-white/[0.04] px-5 text-left text-[16px] text-[#b9b1a7] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.055]"
         onClick={() => onShowToast('Explore search (mock)')}
         type="button"
       >
@@ -44,13 +44,13 @@ export function AriaExplore({ onShowToast }: { onShowToast: (message: string) =>
         Search artists, albums, genres...
       </button>
 
-      <section className="mt-6 grid grid-cols-2 gap-4">
+      <section className="mt-4 grid grid-cols-2 gap-3">
         {categories.map((cat) => {
           const Icon = cat.icon
           return (
             <button
               key={cat.id}
-              className="aria-discovery-card group relative h-[137px] overflow-hidden rounded-[20px] border border-white/[0.08] bg-white/[0.035] p-4 text-left shadow-[0_14px_28px_rgba(0,0,0,0.28)] transition hover:border-white/[0.14]"
+              className="aria-discovery-card group relative h-[110px] overflow-hidden rounded-[20px] border border-white/[0.08] bg-white/[0.035] p-4 text-left shadow-[0_14px_28px_rgba(0,0,0,0.28)] transition hover:border-white/[0.14]"
               onClick={() => onShowToast(`${cat.label} (mock)`)}
               type="button"
             >
@@ -65,7 +65,7 @@ export function AriaExplore({ onShowToast }: { onShowToast: (message: string) =>
         })}
       </section>
 
-      <section className="mt-7">
+      <section className="mt-4">
         <div className="flex items-center justify-between">
           <h2 className="text-[19px] font-semibold text-[#f0a13d]">Recently Explored</h2>
           <button
@@ -76,10 +76,10 @@ export function AriaExplore({ onShowToast }: { onShowToast: (message: string) =>
             See all
           </button>
         </div>
-        <div className="mt-4 grid grid-cols-4 gap-2">
+        <div className="mt-2.5 grid grid-cols-4 gap-2">
           {recentlyExplored.map((item) => (
             <button
-              className="flex min-h-[58px] items-center gap-2 rounded-[15px] border border-white/[0.075] bg-white/[0.035] px-2 text-left transition hover:bg-white/[0.055]"
+              className="flex min-h-[52px] items-center gap-2 rounded-[15px] border border-white/[0.075] bg-white/[0.035] px-2 text-left transition hover:bg-white/[0.055]"
               key={item.id}
               onClick={() => onShowToast(`${item.label} (mock)`)}
               type="button"

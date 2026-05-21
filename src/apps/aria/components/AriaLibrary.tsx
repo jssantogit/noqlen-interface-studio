@@ -41,39 +41,39 @@ export function AriaLibrary({ onShowToast }: { onShowToast: (message: string) =>
         </div>
       </div>
 
-      <section className="mt-7 space-y-3">
+      <section className="mt-5 space-y-1.5">
         {categories.map((cat) => {
           const Icon = cat.icon
           return (
             <button
-              className="group flex w-full items-center gap-5 rounded-[18px] px-1 py-2.5 text-left transition hover:bg-white/[0.035]"
+              className="group flex w-full items-center gap-4 rounded-[16px] px-1 py-1 text-left transition hover:bg-white/[0.035]"
               key={cat.id}
               onClick={() => onShowToast(`${cat.label} (mock)`)}
               type="button"
             >
-              <span className="grid h-9 w-9 shrink-0 place-items-center text-[#ffad26]">
-                <Icon size={28} strokeWidth={1.55} />
+              <span className="grid h-8 w-8 shrink-0 place-items-center text-[#ffad26]">
+                <Icon size={25} strokeWidth={1.55} />
               </span>
-              <span className="flex-1 text-[22px] leading-none text-[#fff3e4]">{cat.label}</span>
-              <span className="text-[20px] tabular-nums text-[#b5aa9d]">{cat.count}</span>
-              <ChevronRight size={26} className="text-[#ffb05d] transition group-hover:translate-x-0.5" strokeWidth={1.7} />
+              <span className="flex-1 text-[19px] leading-none text-[#fff3e4]">{cat.label}</span>
+              <span className="text-[17px] tabular-nums text-[#b5aa9d]">{cat.count}</span>
+              <ChevronRight size={24} className="text-[#ffb05d] transition group-hover:translate-x-0.5" strokeWidth={1.7} />
             </button>
           )
         })}
       </section>
 
-      <section className="mt-8">
+      <section className="mt-5">
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-[27px] leading-none text-[#fff3e4]">My Playlists</h2>
           <button
-            className="text-[21px] text-[#f0a13d] transition hover:text-[#ffb958]"
+            className="text-[19px] text-[#f0a13d] transition hover:text-[#ffb958]"
             onClick={() => onShowToast('See all playlists (mock)')}
             type="button"
           >
             See all
           </button>
         </div>
-        <div className="mt-5 grid grid-cols-3 gap-4">
+        <div className="mt-3.5 grid grid-cols-3 gap-3.5">
           {ariaPlaylists.map((playlist, index) => (
             <button
               className="overflow-hidden rounded-[14px] border border-white/[0.075] bg-white/[0.035] text-left shadow-[0_12px_24px_rgba(0,0,0,0.22)] transition hover:bg-white/[0.055]"
@@ -82,27 +82,27 @@ export function AriaLibrary({ onShowToast }: { onShowToast: (message: string) =>
               type="button"
             >
               <div className={`aria-art aria-art-card ${playlistArt[index % playlistArt.length]}`} />
-              <div className="p-3">
-                <h3 className="truncate text-[15px] font-medium leading-tight text-[#fff3e4]">{playlist.title}</h3>
-                <p className="mt-1 text-[13px] text-[#b9b1a7]">{playlist.trackCount} Tracks</p>
+                <div className="p-2.5">
+                  <h3 className="truncate text-[15px] font-medium leading-tight text-[#fff3e4]">{playlist.title}</h3>
+                  <p className="mt-1 text-[13px] text-[#b9b1a7]">{playlist.trackCount} Tracks</p>
               </div>
             </button>
           ))}
         </div>
       </section>
 
-      <section className="mt-8">
+      <section className="mt-5">
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-[27px] leading-none text-[#fff3e4]">Recently Added</h2>
           <button
-            className="text-[21px] text-[#f0a13d] transition hover:text-[#ffb958]"
+            className="text-[19px] text-[#f0a13d] transition hover:text-[#ffb958]"
             onClick={() => onShowToast('See all recent additions (mock)')}
             type="button"
           >
             See all
           </button>
         </div>
-        <div className="mt-5 grid grid-cols-3 gap-4">
+        <div className="mt-3.5 grid grid-cols-3 gap-3.5">
           {ariaAlbums.slice(0, 3).map((album, index) => (
             <button
               className="overflow-hidden rounded-[14px] text-left transition hover:opacity-90"

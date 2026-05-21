@@ -134,8 +134,8 @@ a {
 }
 
 .aria-art-feature {
-  width: 168px;
-  height: 168px;
+  width: 154px;
+  height: 154px;
   border-radius: 14px;
 }
 .aria-art-feature-sm {
@@ -145,12 +145,12 @@ a {
 }
 .aria-art-card {
   width: 100%;
-  height: 96px;
+  height: 80px;
   border-radius: 13px 13px 0 0;
 }
 .aria-art-poster {
   width: 100%;
-  height: 118px;
+  height: 96px;
   border-radius: 13px;
 }
 .aria-art-tile {
