@@ -11,6 +11,21 @@ export function AriaDetailHeader({
 }) {
   const moreLabel = label ? `${label} more actions` : 'More actions'
 
+  if (!label && !onMore) {
+    return (
+      <div className="flex pt-1">
+        <button
+          aria-label="Back"
+          className="grid h-9 w-9 place-items-center rounded-full border border-white/[0.08] bg-white/[0.045] text-[#fff3e4] backdrop-blur transition hover:bg-white/[0.07]"
+          onClick={onBack}
+          type="button"
+        >
+          <ChevronLeft size={25} strokeWidth={1.8} />
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="flex items-center justify-between pt-1">
       <button

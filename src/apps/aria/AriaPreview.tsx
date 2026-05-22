@@ -9,8 +9,7 @@ import { AriaArtistDetail } from './components/AriaArtistDetail'
 import { AriaBottomSheet } from './components/AriaBottomSheet'
 import { AriaBottomNav } from './components/AriaBottomNav'
 import { AriaExplore } from './components/AriaExplore'
-import { AriaLibrary } from './components/AriaLibrary'
-import { AriaLibraryCategoryPage, type AriaLibraryPageCategoryId } from './components/AriaLibraryCategoryPage'
+import { AriaLibrary, type AriaLibraryCategoryId } from './components/AriaLibrary'
 import { AriaListenHome } from './components/AriaListenHome'
 import { AriaLyrics } from './components/AriaLyrics'
 import { AriaMiniPlayer } from './components/AriaMiniPlayer'
@@ -25,7 +24,6 @@ type AriaDetailScreen =
   | { type: 'artist'; artist: AriaArtist }
   | { type: 'track'; track: AriaTrack }
   | { type: 'playlist'; playlist: AriaPlaylist }
-  | { type: 'libraryCategory'; category: AriaLibraryPageCategoryId }
 
 type AriaPlaybackOverlay = 'nowPlaying' | 'lyrics' | 'queue'
 type ExploreMode = 'search' | 'genres' | 'albums' | 'artists' | 'radios' | 'songs' | 'playlists' | 'recent'
@@ -33,6 +31,7 @@ type AriaSheet =
   | { type: 'source' }
   | { type: 'settings' }
   | { type: 'librarySearch' }
+  | { type: 'libraryCategory'; category: AriaLibraryCategoryId }
   | { type: 'exploreMode'; mode: ExploreMode }
   | { type: 'albumOptions'; album: AriaAlbum }
   | { type: 'artistOptions'; artist: AriaArtist }
@@ -58,6 +57,17 @@ const activeSource: ActiveSource = {
 }
 const mockGenres = ['Ambient', 'Classical', 'Progressive Metal', 'Electronic', 'Jazz']
 const mockRadios = ['Local Mix Radio', 'Focus Radio', 'Discovery Radio']
+const mockFolders = ['Local Library', 'Imported Archive', 'Focus Collections']
+const mockCompilations = ['Piano Sketches', 'Late Night Edits', 'Collected Singles']
+const libraryCategoryTitles: Record<AriaLibraryCategoryId, string> = {
+  songs: 'Songs',
+  albums: 'Albums',
+  artists: 'Artists',
+  genres: 'Genres',
+  folders: 'Folders',
+  compilations: 'Compilations',
+  recent: 'Recently Added',
+}
 
 export function AriaPreview() {
   const [activeTab, setActiveTab] = useState<AriaTabId>('listen')
@@ -156,10 +166,8 @@ export function AriaPreview() {
     setActiveSheet({ type: 'source' })
   }, [])
 
-  const handleOpenLibraryCategoryPage = useCallback((category: AriaLibraryPageCategoryId) => {
-    setActiveSheet(null)
-    setPlaybackOverlay(null)
-    setDetailStack((stack) => [...stack, { type: 'libraryCategory', category }])
+  const handleOpenLibraryCategory = useCallback((category: AriaLibraryCategoryId) => {
+    setActiveSheet({ type: 'libraryCategory', category })
   }, [])
 
   const handleOpenLibrarySearch = useCallback(() => {
@@ -317,7 +325,7 @@ export function AriaPreview() {
         onShowToast={showToast}
       />
     ),
-    library: <AriaLibrary onNavigateToPlaylists={handleNavigateToPlaylists} onOpenAlbum={handleOpenAlbum} onOpenLibraryCategory={handleOpenLibraryCategoryPage} onOpenLibrarySearch={handleOpenLibrarySearch} onOpenPlaylist={handleOpenPlaylist} onOpenSettings={handleOpenSettings} onShowToast={showToast} />,
+    library: <AriaLibrary onNavigateToPlaylists={handleNavigateToPlaylists} onOpenAlbum={handleOpenAlbum} onOpenLibraryCategory={handleOpenLibraryCategory} onOpenLibrarySearch={handleOpenLibrarySearch} onOpenPlaylist={handleOpenPlaylist} onOpenSettings={handleOpenSettings} onShowToast={showToast} />,
     playlists: <AriaPlaylists onOpenPlaylist={handleOpenPlaylist} onShowToast={showToast} />,
     explore: <AriaExplore onOpenExploreMode={handleOpenExploreMode} onShowToast={showToast} />,
   }
@@ -330,9 +338,7 @@ export function AriaPreview() {
         ? <AriaTrackDetails track={detailScreen.track} onAddTrackToQueue={handleAddTrackToQueue} onBack={handleBackFromDetail} onOpenAddTrackToPlaylist={handleOpenAddTrackToPlaylist} onOpenTrackOptions={handleOpenTrackOptions} onShowToast={showToast} />
         : detailScreen?.type === 'playlist'
           ? <AriaPlaylistDetail playlist={detailScreen.playlist} onBack={handleBackFromDetail} onOpenPlaylistOptions={handleOpenPlaylistOptions} onOpenTrack={handleOpenTrack} onOpenTrackOptions={handleOpenTrackOptions} onShowToast={showToast} />
-          : detailScreen?.type === 'libraryCategory'
-            ? <AriaLibraryCategoryPage category={detailScreen.category} onBack={handleBackFromDetail} onOpenAlbum={handleOpenAlbum} onOpenArtist={handleOpenArtist} onOpenPlaylist={handleOpenPlaylist} onOpenTrack={handleOpenTrack} onShowToast={showToast} />
-            : null
+          : null
 
   const renderSheetContent = () => {
     const SourceIcon = activeSource.type === 'local' ? HardDrive : Server
@@ -404,6 +410,35 @@ export function AriaPreview() {
           <SheetList>
             {ariaQueue.slice(0, 4).map((track) => <SheetRow key={track.id} title={track.title} subtitle={`${track.artist} · ${track.album}`} trailing={track.duration} onClick={() => openTrackFromSheet(track)} />)}
           </SheetList>
+        </AriaBottomSheet>
+      )
+    }
+
+    if (activeSheet?.type === 'libraryCategory') {
+      const category = activeSheet.category
+      const title = libraryCategoryTitles[category]
+
+      return (
+        <AriaBottomSheet onClose={handleCloseSheet} title={title}>
+          {category === 'songs' ? (
+            <SheetList>{ariaQueue.map((track) => <SheetRow key={track.id} title={track.title} subtitle={`${track.artist} · ${track.album}`} trailing={track.duration} onClick={() => openTrackFromSheet(track)} />)}</SheetList>
+          ) : category === 'albums' ? (
+            <SheetList>{ariaAlbums.map((album) => <SheetRow key={album.id} title={album.title} subtitle={`${album.artist} · ${album.year} · ${album.format}`} trailing={album.duration} onClick={() => openAlbumFromSheet(album)} />)}</SheetList>
+          ) : category === 'artists' ? (
+            <SheetList>{ariaArtists.map((artist) => <SheetRow key={artist.id} title={artist.name} subtitle={artist.genre} trailing={artist.location} onClick={() => openArtistFromSheet(artist)} />)}</SheetList>
+          ) : category === 'genres' ? (
+            <SheetGrid>{mockGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre (mock)`)} />)}</SheetGrid>
+          ) : category === 'folders' ? (
+            <SheetList>{mockFolders.map((folder) => <SheetRow key={folder} title={folder} subtitle="Mock-only category - no filesystem access" onClick={() => showToast(`${folder} folder preview (mock - no filesystem access)`)} variant="action" />)}</SheetList>
+          ) : category === 'compilations' ? (
+            <SheetList>{mockCompilations.map((compilation) => <SheetRow key={compilation} title={compilation} subtitle="Collection preview" onClick={() => showToast(`${compilation} compilation (mock)`)} variant="action" />)}</SheetList>
+          ) : (
+            <div className="space-y-3">
+              <SheetGroup title="Albums">{ariaAlbums.slice(0, 3).map((album) => <SheetRow key={album.id} title={album.title} subtitle={`${album.artist} · ${album.year}`} onClick={() => openAlbumFromSheet(album)} />)}</SheetGroup>
+              <SheetGroup title="Playlists">{ariaPlaylists.slice(0, 2).map((playlist) => <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks`} onClick={() => openPlaylistFromSheet(playlist)} />)}</SheetGroup>
+              <SheetGroup title="Tracks">{ariaQueue.slice(0, 2).map((track) => <SheetRow key={track.id} title={track.title} subtitle={track.artist} trailing={track.duration} onClick={() => openTrackFromSheet(track)} />)}</SheetGroup>
+            </div>
+          )}
         </AriaBottomSheet>
       )
     }

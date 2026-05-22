@@ -70,7 +70,8 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7C.3 — Ajustar copy/status da fonte do Aria
 [x] Bloco 7D — Completar interações das telas detail do Aria
 [x] Bloco 7D.1S — Definir contrato visual de Library categories e Detail headers
-[ ] Bloco 7D.1I — Implementar contrato aprovado de Library/detail cleanup
+[x] Bloco 7D.1I-A — Reconciliar Library navigation e corrigir header/hero das Details
+[ ] Bloco 7D.1I-B — Implementar Library category treatments aprovados, sem página genérica
 [ ] Bloco 7D.2 — Redesign dedicado do Aria Settings
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
@@ -165,7 +166,17 @@ Unknown / browser-check needed: 0
 - [x] Document sheet usage rules for Aria browsing, actions and selectors.
 - [x] Set acceptance criteria for the next implementation block.
 
-### Bloco 7D.1I — Approved Library/detail cleanup implementation
+### Bloco 7D.1I-A — Library navigation reconciliation and detail hero header cleanup
+
+- [x] Remove/deactivate failed generic Library category page implementation.
+- [x] Restore Library category actions to lightweight mock behavior until final treatment.
+- [x] Remove large empty header bars from Album/Artist/Playlist details.
+- [x] Keep one contextual ellipsis menu per Album/Artist/Playlist detail.
+- [x] Preserve Track Details with at most one contextual menu.
+- [x] Keep Settings redesign deferred.
+- [x] Keep playback overlays untouched.
+
+### Bloco 7D.1I-B — Approved Library category treatment implementation
 
 - [ ] Implement only the approved category treatments from the visual contract.
 - [ ] Do not create one generic page component for every Library category.

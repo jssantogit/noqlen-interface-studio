@@ -3,9 +3,9 @@ import type { AriaAlbum, AriaPlaylist } from '../ariaMockData'
 import { ariaAlbums, ariaPlaylists } from '../ariaMockData'
 
 type LibraryCategoryId = 'songs' | 'albums' | 'artists' | 'genres' | 'folders' | 'compilations' | 'playlists' | 'recent' | 'search'
-type LibraryPageCategoryId = Exclude<LibraryCategoryId, 'playlists' | 'search'>
+export type AriaLibraryCategoryId = Exclude<LibraryCategoryId, 'playlists' | 'search'>
 
-const categories: { id: LibraryPageCategoryId; label: string; count: string; icon: typeof Music2 }[] = [
+const categories: { id: AriaLibraryCategoryId; label: string; count: string; icon: typeof Music2 }[] = [
   { id: 'songs', label: 'Songs', count: '1,200', icon: Music2 },
   { id: 'albums', label: 'Albums', count: '245', icon: Disc3 },
   { id: 'artists', label: 'Artists', count: '168', icon: UsersRound },
@@ -29,7 +29,7 @@ export function AriaLibrary({
   onOpenAlbum: (album: AriaAlbum) => void
   onOpenPlaylist: (playlist: AriaPlaylist) => void
   onOpenSettings: () => void
-  onOpenLibraryCategory: (category: LibraryPageCategoryId) => void
+  onOpenLibraryCategory: (category: AriaLibraryCategoryId) => void
   onOpenLibrarySearch: () => void
   onNavigateToPlaylists: () => void
   onShowToast: (message: string) => void

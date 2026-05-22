@@ -25,7 +25,7 @@ export function AriaPlaylistDetail({
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
       <AriaDetailHeader onBack={onBack} />
 
-      <section className="mt-4 overflow-hidden rounded-[26px] border border-white/[0.08] bg-white/[0.035] shadow-[0_22px_48px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.05)]">
+      <section className="mt-2 overflow-hidden rounded-[26px] border border-white/[0.08] bg-white/[0.035] shadow-[0_22px_48px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.05)]">
         <div className="aria-art aria-art-hero aria-art-waves" />
         <div className="p-4">
           <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[#f0a13d]">{playlist.trackCount} tracks</p>

@@ -85,6 +85,8 @@ Sheets are not appropriate for:
 
 ## 7D.1I Implementation Constraints
 
+- Bloco 7D.1I-A restores safe lightweight category sheets/behavior and removes the failed generic category-page route. This is recovery/stabilization, not the final Library redesign.
+- Bloco 7D.1I-B must implement final category treatments without one generic page template.
 - Implement only category treatments approved by this contract.
 - Do not create one generic page component for every Library category.
 - Preserve the current Aria visual identity: large serif titles, warm amber controls, dark music-player surfaces, artwork-first content where appropriate and calm row density.

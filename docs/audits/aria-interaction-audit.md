@@ -259,6 +259,16 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Settings redesign remains deferred to Bloco 7D.2.
 - Playback overlays remain deferred to Bloco 7E.
 
+## Bloco 7D.1I-A Resolution Notes
+
+- The failed generic Library category page implementation was removed/deactivated in code, including the rejected page route/component model.
+- Library category rows now use temporary lightweight mock sheets/behavior until Bloco 7D.1I-B implements the final approved category treatments.
+- Library Search remains a sheet, Library Settings remains a sheet, and My Playlists `See all` still navigates to the Playlists tab.
+- Album, Artist and Playlist detail headers were tightened so Back no longer sits in a large empty header bar above the hero/artwork.
+- Duplicate detail menus remain avoided: Album, Artist and Playlist details keep one visible contextual ellipsis menu each, while Track Details keeps at most one.
+- Settings redesign remains deferred to Bloco 7D.2.
+- Playback overlays remain deferred to Bloco 7E.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.

@@ -55,6 +55,7 @@ Aria detail screens must feel like music-player surfaces led by artwork, title a
 
 ## Acceptance Criteria For 7D.1I
 
+- Bloco 7D.1I-A applies the compact Back/hero spacing cleanup. Later detail work should preserve this tighter header behavior unless a new approved visual reference replaces it.
 - Detail screens have no large empty header bar.
 - Back is compact, readable and secondary to the hero.
 - Album, Artist and Playlist details expose exactly one visible contextual menu each.

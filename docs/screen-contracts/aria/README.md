@@ -110,6 +110,8 @@ Must preserve:
 
 Category cleanup rules:
 
+- Bloco 7D.1I-A is a stabilization block only: it removes the failed generic category-page model and restores safe lightweight mock sheets/behavior until final category treatments are implemented.
+- Bloco 7D.1I-B remains responsible for the final approved Library category treatments. The dedicated category and detail-header contracts remain the source of truth.
 - Songs should be a dense track index/list, not generic cards.
 - Albums should be an artwork-led shelf/grid, not Settings rows.
 - Artists should be a compact artist index, not an admin list.
@@ -158,6 +160,7 @@ docs/screen-contracts/aria/detail-header-contract.md
 
 Summary rules:
 
+- Bloco 7D.1I-A applies compact Back/header cleanup as stabilization, not a full detail redesign.
 - Detail screens must not use a large empty top header row after removing redundant type labels.
 - Back should be compact and lightweight, either floating/overlay or inline with minimal vertical footprint.
 - Back should not compete with album artwork, artist hero or playlist artwork.

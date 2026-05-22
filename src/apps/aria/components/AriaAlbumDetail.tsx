@@ -32,7 +32,7 @@ export function AriaAlbumDetail({
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
       <AriaDetailHeader onBack={onBack} />
 
-      <section className="mt-4 text-center">
+      <section className="mt-2 text-center">
         <div className="mx-auto w-[245px] rounded-[24px] bg-[radial-gradient(circle_at_50%_0%,rgba(240,161,61,0.18),transparent_58%)] p-2 shadow-[0_22px_50px_rgba(0,0,0,0.38)]">
           <div className="aria-art aria-art-square aria-art-architecture" />
         </div>
