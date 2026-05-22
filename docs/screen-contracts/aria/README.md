@@ -10,7 +10,7 @@ Aria provides a high-fidelity mock-only music playback UI, library browsing, pla
 
 - **Persistent shell:** implemented.
 - **Bottom navigation:** implemented.
-- **Mini player:** implemented, including a mock context chip for playback quality, active output, source and queue position.
+- **Mini player:** implemented.
 - **Top-level tabs:** implemented and visually aligned in Bloco 4 / Bloco 4.1.
 - **Detail screens:** implemented and visually aligned in Bloco 5 / Bloco 5.1.
 - **Now Playing:** existing baseline, pending visual alignment in Bloco 6.
@@ -48,7 +48,6 @@ Track Details
 Queue / Up Next
 Search
 Bottom Nav isolated widget
-Mini player context chip
 ```
 
 ## Home rule
@@ -130,42 +129,6 @@ Your Playlists
 ```
 
 The Playlists tab must not include a fake featured/music card unless a future reference explicitly adds one.
-
-## Playback surfaces
-
-### Mini Player
-
-Implemented.
-
-Must preserve:
-
-- compact floating player above the bottom navigation;
-- artwork, track title, artist, previous, play/pause and next controls;
-- amber progress underline;
-- clear spacing from the bottom nav;
-- tap on the player expands Now Playing.
-
-The mini player includes a compact context chip. The chip is mock-only and can cycle through static playback context states by tap, horizontal swipe or arrow keys:
-
-```txt
-FLAC 24/96
-BTR11 · LDAC
-Local library
-Queue · 3 of 18
-```
-
-Context chip status-dot rule:
-
-- Use a dot only for a live/active state, such as active output device or active server.
-- Do not use a dot for static metadata such as format, quality, local file/source or queue position.
-- `Local library` is a source label, not a connection status.
-- `FLAC 24/96` is technical quality metadata, not a connection status.
-
-Future server examples may use a dot only when the server is the active playback source:
-
-```txt
-● Navidrome · LAN
-```
 
 ## Detail screens
 
