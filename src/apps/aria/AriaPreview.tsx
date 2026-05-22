@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronRight, Server } from 'lucide-react'
+import { ChevronRight, HardDrive, Server } from 'lucide-react'
 import type { AriaTabId } from './ariaInteractionMap'
 import type { AriaAlbum, AriaArtist, AriaPlaylist, AriaTrack } from './ariaMockData'
 import { ariaAlbums, ariaArtists, ariaPlaylists, ariaQueue, nowPlaying } from './ariaMockData'
@@ -256,6 +256,8 @@ export function AriaPreview() {
           : null
 
   const renderSheetContent = () => {
+    const SourceIcon = activeSource.type === 'local' ? HardDrive : Server
+
     if (activeSheet?.type === 'source') {
       return (
         <AriaBottomSheet onClose={handleCloseSheet} subtitle="Currently active library source." title="Source">
@@ -263,7 +265,7 @@ export function AriaPreview() {
             <div className="rounded-[18px] border border-white/[0.075] bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.025))] p-3">
               <div className="flex items-start gap-3">
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#f0a13d]/15 text-[#f0a13d]">
-                  <Server size={20} strokeWidth={1.6} />
+                  <SourceIcon size={20} strokeWidth={1.6} />
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[16px] font-semibold text-[#fff3e4]">{activeSource.name}</p>
@@ -277,14 +279,14 @@ export function AriaPreview() {
                   onClick={() => showToast(activeSource.type === 'server' ? 'Server sync started (mock)' : 'Local library refreshed (mock)')}
                   type="button"
                 >
-                  {activeSource.type === 'server' ? 'Sincronizar' : 'Atualizar'}
+                  {activeSource.type === 'server' ? 'Sync' : 'Refresh'}
                 </button>
                 <button
                   className="rounded-full border border-white/[0.1] bg-white/[0.04] px-3 py-2 text-[13px] font-semibold text-[#f0a13d] transition hover:bg-white/[0.07]"
                   onClick={() => setActiveSheet({ type: 'settings' })}
                   type="button"
                 >
-                  Configurações
+                  Settings
                 </button>
               </div>
             </div>

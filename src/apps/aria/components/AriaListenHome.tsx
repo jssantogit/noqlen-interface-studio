@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ListMusic, Mic2, Play, Search, Server } from 'lucide-react'
+import { HardDrive, ListMusic, Mic2, Play, Search } from 'lucide-react'
 import type { AriaAlbum, AriaTrack } from '../ariaMockData'
 import { ariaAlbums, ariaQueue, nowPlaying } from '../ariaMockData'
 
@@ -50,8 +50,7 @@ export function AriaListenHome({
           onClick={onOpenSourceSheet}
           type="button"
         >
-          <Server size={19} strokeWidth={1.65} />
-          <span className="absolute bottom-1 right-1 h-2 w-2 rounded-full bg-[#65e985] shadow-[0_0_0_2px_#071017]" />
+          <HardDrive size={19} strokeWidth={1.65} />
         </button>
       </div>
 

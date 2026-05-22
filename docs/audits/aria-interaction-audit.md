@@ -234,6 +234,12 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Opening a concrete album, artist, playlist or track from a sheet closes the sheet before opening the detail screen, preserving the Bloco 7B detail stack behavior.
 - Sheet titles now avoid unnecessary debug wording such as `Preview`; mock-only constraints remain in row copy/toasts where relevant. No real sync, search, filesystem, server or persistence behavior was added.
 
+## Bloco 7C.3 Resolution Notes
+
+- Source sheet action copy is now English: local sources show `Refresh` and `Settings`; future server sources show `Sync` and `Settings`.
+- The local Home source control no longer shows a green online dot. Green status remains reserved for future active server/online source states.
+- The default Local library source now uses local-device iconography while preserving the mock-only server-source branch. No sync, server connection, filesystem access or persistence was added.
+
 ## Notes
 
 - Duplicated handlers: `AriaDetailHeader` and screen-level `More` buttons often produce similar toast-only responses; album, artist and playlist detail screens each have header more plus primary action-row more.

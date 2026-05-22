@@ -67,6 +67,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7C — Completar interações das telas principais do Aria
 [x] Bloco 7C.1 — Ajustar controles de fonte e configurações do Aria
 [x] Bloco 7C.2 — Converter submenus do Aria para sheets/popups
+[x] Bloco 7C.3 — Ajustar copy/status da fonte do Aria
 [ ] Bloco 7D — Completar interações das telas detail do Aria
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
@@ -133,6 +134,13 @@ Unknown / browser-check needed: 0
 - [x] Ensure opening concrete detail rows from sheets closes the sheet first.
 - [x] Keep sheet titles app-like and avoid unnecessary `Preview` debug wording.
 - [x] Preserve mock-only behavior with no real sync, search, server, filesystem or persistence behavior.
+
+### Bloco 7C.3 — Source copy and status semantics
+
+- [x] Translate Source actions to English: `Refresh`, `Settings` and future server `Sync`.
+- [x] Keep Source refresh/sync toasts in English and mock-only.
+- [x] Remove green online status dot from the local Home source control.
+- [x] Use local-source iconography for the default Local library source while preserving future server-source support.
 
 ### Bloco 7D — Detail screen interactions
 
