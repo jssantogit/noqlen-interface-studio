@@ -116,6 +116,16 @@ export function AriaPreview() {
     setDetailStack([])
   }, [])
 
+  const handleNavigateToLibrary = useCallback(() => {
+    setActiveTab('library')
+    setDetailStack([])
+  }, [])
+
+  const handleNavigateToPlaylists = useCallback(() => {
+    setActiveTab('playlists')
+    setDetailStack([])
+  }, [])
+
   const handlePlay = useCallback(() => {
     setIsPlaying(true)
     showToast('Playback started (mock)')
@@ -150,15 +160,15 @@ export function AriaPreview() {
     listen: (
       <AriaListenHome
         onOpenAlbum={handleOpenAlbum}
-        onOpenArtist={handleOpenArtist}
-        onOpenPlaylist={handleOpenPlaylist}
+        onNavigateToLibrary={handleNavigateToLibrary}
         onOpenTrack={handleOpenTrack}
         onNavigateToExplore={handleNavigateToExplore}
+        onNavigateToPlaylists={handleNavigateToPlaylists}
         onPlay={handlePlay}
         onShowToast={showToast}
       />
     ),
-    library: <AriaLibrary onOpenAlbum={handleOpenAlbum} onOpenArtist={handleOpenArtist} onOpenPlaylist={handleOpenPlaylist} onShowToast={showToast} />,
+    library: <AriaLibrary onNavigateToPlaylists={handleNavigateToPlaylists} onOpenAlbum={handleOpenAlbum} onOpenArtist={handleOpenArtist} onOpenPlaylist={handleOpenPlaylist} onOpenTrack={handleOpenTrack} onShowToast={showToast} />,
     playlists: <AriaPlaylists onOpenPlaylist={handleOpenPlaylist} onShowToast={showToast} />,
     explore: <AriaExplore onOpenAlbum={handleOpenAlbum} onOpenArtist={handleOpenArtist} onOpenPlaylist={handleOpenPlaylist} onOpenTrack={handleOpenTrack} onShowToast={showToast} />,
   }

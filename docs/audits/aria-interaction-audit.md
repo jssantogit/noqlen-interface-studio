@@ -3,9 +3,9 @@
 ## Summary
 
 - Total controls audited: 201
-- Working: 111
-- Dead: 10
-- Partial: 68
+- Working: 140
+- Dead: 6
+- Partial: 43
 - Should not be clickable: 12
 - Unknown / browser-check needed: 0
 - Console errors: 0 runtime errors observed in Playwright. Browser console showed React DevTools info messages and one Vite reconnect/polling log while the dev server was restarted during audit.
@@ -208,6 +208,14 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Bottom navigation is intentionally hidden while Now Playing, Lyrics or Queue overlays are open, then restored after overlay collapse.
 - Mini player Previous / Next now rotate through the static mock playback queue in local React state, wrap at queue ends and update mini-player title/artist text without changing its visual styling.
 - Full propagation of current-track state into the full playback overlays remains deferred to the playback overlay interaction block because those components were outside the Bloco 7B allowed file list.
+
+## Bloco 7C Resolution Notes
+
+- Listen Home broad shortcut cards no longer open arbitrary representative details: `Your Playlists` navigates to the Playlists tab, `Artists` navigates to Library with a mock artist-index toast, and search still navigates to Explore. Recent Additions `•••` glyphs are now independent option buttons with item-specific mock toasts, and `See all` toggles an expanded local recent list.
+- Library category rows now open local category/list preview states instead of opening first album/artist details or generic toasts. Albums, Artists, Songs, Genres, Folders, Compilations, Playlists, Recent and Search previews all respond locally; concrete album, artist, playlist and track rows still open valid detail screens. Library tools now toggle a compact local mock tools panel.
+- Playlists filter chips now own local selected state and change displayed mock content. Folder rows select a mock folder state, Sort cycles local sort modes and order, Import/Export copy and toasts explicitly stay preview-only with no file or download behavior, and playlist more buttons are item-specific.
+- Explore search and category cards now open local preview modes instead of arbitrary first-item details. Genres, Albums, Artists, Radio, Songs, Playlists, Search and Recently Explored all expose local mock lists; concrete result rows open valid detail screens where appropriate.
+- Deferred to Bloco 7D/7E: detail-screen menu/options completeness, detail track-row playback semantics, playback overlay progress/queue/reorder behavior and full no-dead-control re-audit across non-top-level surfaces.
 
 ## Notes
 

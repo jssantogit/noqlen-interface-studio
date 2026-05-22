@@ -64,7 +64,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 6 — Implementar/alinhar Now Playing, Lyrics e Queue
 [x] Bloco 7A — Auditar interações do Aria
 [x] Bloco 7B — Completar interações globais/navigation do Aria
-[ ] Bloco 7C — Completar interações das telas principais do Aria
+[x] Bloco 7C — Completar interações das telas principais do Aria
 [ ] Bloco 7D — Completar interações das telas detail do Aria
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
@@ -88,9 +88,9 @@ Current audit summary:
 
 ```txt
 Total controls audited: 201
-Working: 111
-Dead: 10
-Partial: 68
+Working: 140
+Dead: 6
+Partial: 43
 Should not be clickable: 12
 Unknown / browser-check needed: 0
 ```
@@ -106,13 +106,13 @@ Unknown / browser-check needed: 0
 
 ### Bloco 7C — Top-level screen interactions
 
-- [ ] Resolve Listen Home recent-row `•••` affordances.
-- [ ] Resolve Listen shortcut destinations that are too broad for specific details.
-- [ ] Add real local state for playlist filter chips or make them passive.
-- [ ] Resolve Library category rows that imply lists but open arbitrary items/toasts.
-- [ ] Resolve Explore category cards that imply category browsing.
-- [ ] Resolve Search / See all / Sort affordances with local mock behavior or passive styling.
-- [ ] Keep import/export strictly mock-only and avoid real file/download implication.
+- [x] Resolve Listen Home recent-row `•••` affordances.
+- [x] Resolve Listen shortcut destinations that are too broad for specific details.
+- [x] Add real local state for playlist filter chips or make them passive.
+- [x] Resolve Library category rows that imply lists but open arbitrary items/toasts.
+- [x] Resolve Explore category cards that imply category browsing.
+- [x] Resolve Search / See all / Sort affordances with local mock behavior or passive styling.
+- [x] Keep import/export strictly mock-only and avoid real file/download implication.
 
 ### Bloco 7D — Detail screen interactions
 

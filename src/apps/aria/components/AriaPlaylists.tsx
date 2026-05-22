@@ -1,12 +1,16 @@
+import { useState } from 'react'
 import { Download, FolderPlus, MoreHorizontal, Plus, Share, SlidersHorizontal } from 'lucide-react'
 import type { AriaPlaylist } from '../ariaMockData'
 import { ariaPlaylists } from '../ariaMockData'
 
+type PlaylistFilter = 'All' | 'Folders' | 'Created' | 'Imported' | 'Favorites'
+type SortMode = 'Recent' | 'A-Z' | 'Most tracks'
+
 const actions = [
   { id: 'create', title: 'Create Playlist', subtitle: 'Start a new collection', icon: Plus, active: true },
   { id: 'folder', title: 'New Folder', subtitle: 'Group your playlists', icon: FolderPlus },
-  { id: 'import', title: 'Import Playlist', subtitle: 'Bring playlists from file', icon: Download },
-  { id: 'export', title: 'Export Playlist', subtitle: 'Save or share your lists', icon: Share },
+  { id: 'import', title: 'Import Playlist', subtitle: 'Mock import preview', icon: Download },
+  { id: 'export', title: 'Export Playlist', subtitle: 'Preview export flow', icon: Share },
 ]
 
 const folders = [
@@ -22,6 +26,20 @@ const playlistRows = [
 ]
 
 const rowArt = ['aria-art-waves', 'aria-art-architecture', 'aria-art-mountain', 'aria-art-hall', 'aria-art-violet']
+const filters: PlaylistFilter[] = ['All', 'Folders', 'Created', 'Imported', 'Favorites']
+const sortModes: SortMode[] = ['Recent', 'A-Z', 'Most tracks']
+
+function getPlaylistKind(index: number): Exclude<PlaylistFilter, 'All' | 'Folders'> {
+  if (index === 1) return 'Imported'
+  if (index === 2) return 'Favorites'
+  return 'Created'
+}
+
+function getActionToast(actionId: string, title: string) {
+  if (actionId === 'import') return 'Import preview only - no file access (mock)'
+  if (actionId === 'export') return 'Export preview only - no file created (mock)'
+  return `${title} (mock)`
+}
 
 export function AriaPlaylists({
   onOpenPlaylist,
@@ -30,6 +48,28 @@ export function AriaPlaylists({
   onOpenPlaylist: (playlist: AriaPlaylist) => void
   onShowToast: (message: string) => void
 }) {
+  const [selectedFilter, setSelectedFilter] = useState<PlaylistFilter>('All')
+  const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
+  const [sortMode, setSortMode] = useState<SortMode>('Recent')
+
+  const rowsWithMeta = playlistRows.map((playlist, index) => ({ playlist, index, kind: getPlaylistKind(index) }))
+  const filteredRows = rowsWithMeta.filter((row) => {
+    if (selectedFilter === 'All') return true
+    if (selectedFilter === 'Folders') return selectedFolder ? row.index % folders.length === folders.findIndex((folder) => folder.title === selectedFolder) : false
+    return row.kind === selectedFilter
+  })
+  const sortedRows = [...filteredRows].sort((a, b) => {
+    if (sortMode === 'A-Z') return a.playlist.title.localeCompare(b.playlist.title)
+    if (sortMode === 'Most tracks') return b.playlist.trackCount - a.playlist.trackCount
+    return a.index - b.index
+  })
+
+  const cycleSortMode = () => {
+    const next = sortModes[(sortModes.indexOf(sortMode) + 1) % sortModes.length]
+    setSortMode(next)
+    onShowToast(`Sort: ${next} (mock)`)
+  }
+
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-6 text-[#f5ecdf]">
       <div>
@@ -48,7 +88,7 @@ export function AriaPlaylists({
                   : 'border-white/[0.075] bg-white/[0.035] text-[#d8cdc1]'
               }`}
               key={action.id}
-              onClick={() => onShowToast(`${action.title} (mock)`)}
+              onClick={() => onShowToast(getActionToast(action.id, action.title))}
               type="button"
             >
               <Icon size={23} strokeWidth={1.5} />
@@ -60,15 +100,19 @@ export function AriaPlaylists({
       </section>
 
       <div className="mt-3 flex gap-2.5 overflow-x-auto pb-1 anchor-scrollbar-none">
-        {['All', 'Folders', 'Created', 'Imported', 'Favorites'].map((filter, index) => (
+        {filters.map((filter) => (
           <button
             className={`shrink-0 rounded-full px-4 py-1.5 text-[13px] transition ${
-              index === 0
+              selectedFilter === filter
                 ? 'bg-gradient-to-b from-[#ffbd63] to-[#f09a35] text-[#1a1008] shadow-[0_8px_18px_rgba(240,161,61,0.18)]'
                 : 'border border-white/[0.08] bg-white/[0.035] text-[#c8bdb1] hover:bg-white/[0.055]'
             }`}
             key={filter}
-            onClick={() => onShowToast(`${filter} filter (mock)`)}
+            onClick={() => {
+              setSelectedFilter(filter)
+              if (filter !== 'Folders') setSelectedFolder(null)
+              onShowToast(`${filter} playlists (mock)`)
+            }}
             type="button"
           >
             {filter}
@@ -83,7 +127,11 @@ export function AriaPlaylists({
             <button
               className="flex w-full items-center gap-3 border-b border-white/[0.055] px-4 py-1.5 text-left last:border-b-0 transition hover:bg-white/[0.035]"
               key={folder.id}
-              onClick={() => onShowToast(`${folder.title} (mock)`)}
+              onClick={() => {
+                setSelectedFilter('Folders')
+                setSelectedFolder(folder.title)
+                onShowToast(`Opened ${folder.title} folder (mock)`)
+              }}
               type="button"
             >
               <FolderPlus size={23} className="shrink-0 text-[#f0a13d]" strokeWidth={1.5} />
@@ -95,6 +143,11 @@ export function AriaPlaylists({
             </button>
           ))}
         </div>
+        {selectedFilter === 'Folders' && selectedFolder && (
+          <p className="mt-2 rounded-2xl border border-white/[0.075] bg-white/[0.035] px-3 py-2 text-[12px] text-[#c9beb1]">
+            Showing mock contents for {selectedFolder}. No folder access is performed.
+          </p>
+        )}
       </section>
 
       <section className="mt-3">
@@ -102,14 +155,14 @@ export function AriaPlaylists({
           <h2 className="font-serif text-[24px] leading-none text-[#fff3e4]">Your Playlists</h2>
           <button
             className="flex items-center gap-2 text-[15px] text-[#f0a13d] transition hover:text-[#ffb958]"
-            onClick={() => onShowToast('Sort playlists (mock)')}
+            onClick={cycleSortMode}
             type="button"
           >
-            Sort <SlidersHorizontal size={16} />
+            Sort: {sortMode} <SlidersHorizontal size={16} />
           </button>
         </div>
         <div className="mt-3 overflow-hidden rounded-[16px] border border-white/[0.08] bg-white/[0.035] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-          {playlistRows.map((playlist, index) => (
+          {sortedRows.map(({ playlist, index, kind }) => (
             <div
               className="flex min-w-0 items-center gap-3 border-b border-white/[0.055] p-2 last:border-b-0"
               key={playlist.id}
@@ -127,19 +180,22 @@ export function AriaPlaylists({
               >
                 <h3 className="truncate font-serif text-[17px] leading-tight text-[#fff3e4]">{playlist.title}</h3>
                 <p className="mt-1 truncate text-[12px] text-[#b9b1a7]">
-                  {playlist.trackCount} tracks <span className="px-2 text-[#777d82]">•</span> {index === 1 ? 'Imported' : index === 2 ? 'Favorite' : 'Created'}
+                  {playlist.trackCount} tracks <span className="px-2 text-[#777d82]">•</span> {kind === 'Favorites' ? 'Favorite' : kind}
                 </p>
               </button>
               <button
                 aria-label={`More options for ${playlist.title}`}
                 className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[#d8cec3] transition hover:bg-white/[0.06]"
-                onClick={() => onShowToast('More options (mock)')}
+                onClick={() => onShowToast(`Options for ${playlist.title} (mock)`)}
                 type="button"
               >
                 <MoreHorizontal size={18} />
               </button>
             </div>
           ))}
+          {sortedRows.length === 0 && (
+            <div className="px-4 py-3 text-[13px] text-[#b9b1a7]">Select a folder or another filter to show mock playlists.</div>
+          )}
         </div>
       </section>
 

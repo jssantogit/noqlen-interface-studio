@@ -299,6 +299,8 @@ Must provide:
 
 - Four-tab bottom navigation remains persistent for top-level screens.
 - Detail screens use stack-style local navigation inside Aria: opening a nested Album, Artist, Playlist or Track detail pushes a new detail entry, and Back returns to the previous detail before returning to the active top-level tab.
+- Top-level category rows/cards open local mock category/list states. Broad shortcuts navigate to the relevant tab/category state instead of opening arbitrary representative details.
+- Playlist Import/Export controls are preview-only and must never open files, create downloads or call share/filesystem APIs.
 - Detail screens need a visible back control.
 - Bottom nav tab changes close any open detail screen.
 - Mini player remains visible on detail screens unless the active screen intentionally uses a full overlay.
