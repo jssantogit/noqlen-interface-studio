@@ -306,6 +306,11 @@ Must provide:
 - Sheet titles should use app-facing labels such as `Search`, `Albums`, `Source` and `Aria Settings`; avoid unnecessary debug wording like `Preview` unless the copy is specifically warning about mock-only behavior.
 - Playlist Import/Export controls are preview-only and must never open files, create downloads or call share/filesystem APIs.
 - Detail screens need a visible back control.
+- Detail-screen more/actions must open Aria bottom sheets, not generic toasts.
+- Album artist links should open matching Artist Detail screens when mock data exists, with clear unavailable mock-data feedback otherwise.
+- Artist discography rows with chevrons should navigate to/open mock release detail rather than only toast.
+- Track Details actions are local/mock-only and must never access files or persist playlist/queue changes.
+- Track-row playback semantics are finalized in Bloco 7E; until then, detail track rows may continue opening Track Details.
 - Bottom nav tab changes close any open detail screen.
 - Mini player remains visible on detail screens unless the active screen intentionally uses a full overlay.
 - Now Playing remains an overlay expanded from the mini player.

@@ -68,7 +68,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7C.1 — Ajustar controles de fonte e configurações do Aria
 [x] Bloco 7C.2 — Converter submenus do Aria para sheets/popups
 [x] Bloco 7C.3 — Ajustar copy/status da fonte do Aria
-[ ] Bloco 7D — Completar interações das telas detail do Aria
+[x] Bloco 7D — Completar interações das telas detail do Aria
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
@@ -91,9 +91,9 @@ Current audit summary:
 
 ```txt
 Total controls audited: 201
-Working: 140
+Working: 169
 Dead: 6
-Partial: 43
+Partial: 14
 Should not be clickable: 12
 Unknown / browser-check needed: 0
 ```
@@ -144,14 +144,14 @@ Unknown / browser-check needed: 0
 
 ### Bloco 7D — Detail screen interactions
 
-- [ ] Resolve Album Detail more/options buttons.
-- [ ] Resolve Album artist link behavior.
-- [ ] Resolve Artist Detail more/options buttons.
-- [ ] Resolve Artist EPs & Singles rows with chevrons.
-- [ ] Resolve Playlist Detail more/options buttons.
-- [ ] Resolve Track Details favorite visible state.
-- [ ] Resolve Add to Queue behavior or clarify as toast-only.
-- [ ] Decide consistent track-row rule: play/open Now Playing vs Track Details.
+- [x] Resolve Album Detail more/options buttons.
+- [x] Resolve Album artist link behavior.
+- [x] Resolve Artist Detail more/options buttons.
+- [x] Resolve Artist EPs & Singles rows with chevrons.
+- [x] Resolve Playlist Detail more/options buttons.
+- [x] Resolve Track Details favorite visible state.
+- [x] Resolve Add to Queue behavior or clarify as toast-only/local state.
+- [x] Decide consistent track-row rule: defer playback normalization to Bloco 7E while keeping detail rows functional.
 
 ### Bloco 7E — Playback overlay interactions
 

@@ -9,17 +9,21 @@ const art = ['aria-art-waves', 'aria-art-mountain', 'aria-art-violet', 'aria-art
 export function AriaPlaylistDetail({
   playlist,
   onBack,
+  onOpenPlaylistOptions,
   onOpenTrack,
+  onOpenTrackOptions,
   onShowToast,
 }: {
   playlist: AriaPlaylist
   onBack: () => void
+  onOpenPlaylistOptions: (playlist: AriaPlaylist) => void
   onOpenTrack: (track: AriaTrack) => void
+  onOpenTrackOptions: (track: AriaTrack) => void
   onShowToast: (message: string) => void
 }) {
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
-      <AriaDetailHeader label="Playlist" onBack={onBack} onMore={() => onShowToast('Playlist options (mock)')} />
+      <AriaDetailHeader label="Playlist" onBack={onBack} onMore={() => onOpenPlaylistOptions(playlist)} />
 
       <section className="mt-4 overflow-hidden rounded-[26px] border border-white/[0.08] bg-white/[0.035] shadow-[0_22px_48px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.05)]">
         <div className="aria-art aria-art-hero aria-art-waves" />
@@ -38,14 +42,14 @@ export function AriaPlaylistDetail({
         <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.045] text-[15px] font-semibold text-[#fff3e4]" onClick={() => onShowToast('Shuffle playlist (mock)')} type="button">
           <Shuffle size={17} /> Shuffle
         </button>
-        <button aria-label="More playlist actions" className="grid h-11 w-11 place-items-center rounded-full border border-white/[0.08] bg-white/[0.04] text-[#f5ecdf]" onClick={() => onShowToast('Playlist more actions (mock)')} type="button">
+        <button aria-label="More playlist actions" className="grid h-11 w-11 place-items-center rounded-full border border-white/[0.08] bg-white/[0.04] text-[#f5ecdf]" onClick={() => onOpenPlaylistOptions(playlist)} type="button">
           <MoreHorizontal size={21} />
         </button>
       </div>
 
       <section className="mt-5 overflow-hidden rounded-[20px] border border-white/[0.075] bg-white/[0.03] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
         {ariaPlaylistTracks.map((track, index) => (
-          <AriaTrackRow key={track.id} track={track} index={index} artClass={art[index % art.length]} showArtwork onOpen={onOpenTrack} onMore={(item) => onShowToast(`${item.title} options (mock)`)} />
+          <AriaTrackRow key={track.id} track={track} index={index} artClass={art[index % art.length]} showArtwork onOpen={onOpenTrack} onMore={onOpenTrackOptions} />
         ))}
       </section>
 

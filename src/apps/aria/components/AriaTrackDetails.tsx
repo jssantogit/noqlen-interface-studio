@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { FolderOpen, Heart, ListPlus, Music2, Plus } from 'lucide-react'
 import type { AriaTrack } from '../ariaMockData'
 import { AriaDetailHeader } from './AriaDetailHeader'
@@ -12,12 +13,20 @@ const actions = [
 export function AriaTrackDetails({
   track,
   onBack,
+  onAddTrackToQueue,
+  onOpenAddTrackToPlaylist,
+  onOpenTrackOptions,
   onShowToast,
 }: {
   track: AriaTrack
   onBack: () => void
+  onAddTrackToQueue: (track: AriaTrack) => void
+  onOpenAddTrackToPlaylist: (track: AriaTrack) => void
+  onOpenTrackOptions: (track: AriaTrack) => void
   onShowToast: (message: string) => void
 }) {
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [isQueued, setIsQueued] = useState(false)
   const metadata = [
     ['Album', track.album],
     ['Artist', track.artist],
@@ -33,7 +42,7 @@ export function AriaTrackDetails({
 
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
-      <AriaDetailHeader label="Track" onBack={onBack} onMore={() => onShowToast('Track options (mock)')} />
+      <AriaDetailHeader label="Track" onBack={onBack} onMore={() => onOpenTrackOptions(track)} />
 
       <section className="mt-5 rounded-[24px] border border-[rgba(240,161,61,0.14)] bg-[linear-gradient(145deg,rgba(58,36,18,0.34),rgba(255,255,255,0.03))] p-3.5 shadow-[0_18px_40px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.05)]">
         <div className="flex items-center gap-4">
@@ -60,10 +69,34 @@ export function AriaTrackDetails({
         <div className="mt-2 grid grid-cols-2 gap-2.5">
           {actions.map((action) => {
             const Icon = action.icon
+            const active = (action.id === 'favorite' && isFavorite) || (action.id === 'queue' && isQueued)
+            const label = action.id === 'favorite' && isFavorite ? 'Favorited' : action.id === 'queue' && isQueued ? 'Queued' : action.label
+            const handleClick = () => {
+              if (action.id === 'favorite') {
+                const next = !isFavorite
+                setIsFavorite(next)
+                onShowToast(next ? `Added ${track.title} to favorites (mock)` : `Removed ${track.title} from favorites (mock)`)
+                return
+              }
+
+              if (action.id === 'playlist') {
+                onOpenAddTrackToPlaylist(track)
+                return
+              }
+
+              if (action.id === 'queue') {
+                setIsQueued(true)
+                onAddTrackToQueue(track)
+                return
+              }
+
+              onShowToast(`Showing folder location preview for ${track.title} (mock - no file access)`)
+            }
+
             return (
-              <button className="flex min-h-[72px] items-center gap-3 rounded-[17px] border border-white/[0.075] bg-white/[0.035] p-3 text-left text-[#fff3e4] transition hover:bg-white/[0.055]" key={action.id} onClick={() => onShowToast(`${action.label} (mock)`)} type="button">
-                <Icon className="shrink-0 text-[#f0a13d]" size={20} strokeWidth={1.7} />
-                <span className="text-[14px] leading-tight">{action.label}</span>
+              <button className={`flex min-h-[72px] items-center gap-3 rounded-[17px] border p-3 text-left transition hover:bg-white/[0.055] ${active ? 'border-[#f0a13d]/40 bg-[#f0a13d]/12 text-[#fff3e4]' : 'border-white/[0.075] bg-white/[0.035] text-[#fff3e4]'}`} key={action.id} onClick={handleClick} type="button">
+                <Icon className="shrink-0 text-[#f0a13d]" fill={action.id === 'favorite' && isFavorite ? 'currentColor' : 'none'} size={20} strokeWidth={1.7} />
+                <span className="text-[14px] leading-tight">{label}</span>
               </button>
             )
           })}

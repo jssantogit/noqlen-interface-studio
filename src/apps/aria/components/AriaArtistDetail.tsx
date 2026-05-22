@@ -1,5 +1,5 @@
 import { ChevronRight, MoreHorizontal, Play } from 'lucide-react'
-import type { AriaAlbum, AriaArtist, AriaTrack } from '../ariaMockData'
+import type { AriaAlbum, AriaArtist, AriaDiscographyItem, AriaTrack } from '../ariaMockData'
 import { ariaAlbums, ariaArtistTopSongs, ariaDiscography } from '../ariaMockData'
 import { AriaDetailHeader } from './AriaDetailHeader'
 import { AriaTrackRow } from './AriaTrackRow'
@@ -8,16 +8,22 @@ export function AriaArtistDetail({
   artist,
   onBack,
   onOpenAlbum,
+  onOpenArtistOptions,
+  onOpenArtistTopSongs,
   onOpenTrack,
+  onOpenTrackOptions,
   onShowToast,
 }: {
   artist: AriaArtist
   onBack: () => void
   onOpenAlbum: (album: AriaAlbum) => void
+  onOpenArtistOptions: (artist: AriaArtist) => void
+  onOpenArtistTopSongs: (artist: AriaArtist) => void
   onOpenTrack: (track: AriaTrack) => void
+  onOpenTrackOptions: (track: AriaTrack) => void
   onShowToast: (message: string) => void
 }) {
-  const latest = ariaAlbums[0]
+  const latest = ariaAlbums.find((album) => album.artist === artist.name) ?? ariaAlbums[0]
 
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
@@ -52,7 +58,7 @@ export function AriaArtistDetail({
           </svg>
         </div>
         <div className="relative z-10">
-          <AriaDetailHeader label="Artist" onBack={onBack} onMore={() => onShowToast('Artist options (mock)')} />
+          <AriaDetailHeader label="Artist" onBack={onBack} onMore={() => onOpenArtistOptions(artist)} />
           <div className="h-[256px]" />
           <h1 className="font-serif text-[47px] leading-[0.92] text-[#f0a13d] drop-shadow-[0_4px_16px_rgba(0,0,0,0.55)]">{artist.name}</h1>
           <p className="mt-3 text-[17px] text-[#c8bdb1]">{artist.location ?? 'Berlin, Germany'}</p>
@@ -65,7 +71,7 @@ export function AriaArtistDetail({
             <button className="flex h-12 w-[150px] items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] text-[17px] font-bold text-[#1a1008] shadow-[0_12px_24px_rgba(240,161,61,0.24)]" onClick={() => onShowToast('Play artist top songs (mock)')} type="button">
               <Play size={18} fill="currentColor" /> Play
             </button>
-            <button aria-label="More artist actions" className="grid h-12 w-12 place-items-center rounded-full bg-white/[0.06] text-[#fff3e4]" onClick={() => onShowToast('Artist more actions (mock)')} type="button">
+            <button aria-label="More artist actions" className="grid h-12 w-12 place-items-center rounded-full bg-white/[0.06] text-[#fff3e4]" onClick={() => onOpenArtistOptions(artist)} type="button">
               <MoreHorizontal size={24} />
             </button>
           </div>
@@ -87,11 +93,11 @@ export function AriaArtistDetail({
       <section className="mt-5">
         <div className="flex items-center justify-between">
           <h2 className="font-serif text-[25px] text-[#fff3e4]">Top Songs</h2>
-          <button className="text-[16px] text-[#f0a13d]" onClick={() => onShowToast('See all top songs (mock)')} type="button">See all</button>
+          <button className="text-[16px] text-[#f0a13d]" onClick={() => onOpenArtistTopSongs(artist)} type="button">See all</button>
         </div>
         <div className="mt-1">
           {ariaArtistTopSongs.map((track, index) => (
-            <AriaTrackRow key={track.id} track={track} index={index} onOpen={onOpenTrack} onMore={(item) => onShowToast(`${item.title} options (mock)`)} />
+            <AriaTrackRow key={track.id} track={track} index={index} onOpen={onOpenTrack} onMore={onOpenTrackOptions} />
           ))}
         </div>
       </section>
@@ -100,7 +106,7 @@ export function AriaArtistDetail({
         <h2 className="font-serif text-[25px] text-[#fff3e4]">EPs & Singles</h2>
         <div className="mt-2 space-y-2">
           {ariaDiscography.map((item) => (
-            <button className="flex w-full items-center gap-3 rounded-[17px] border border-white/[0.07] bg-white/[0.032] p-3 text-left" key={item.id} onClick={() => onShowToast(`${item.title} (mock)`)} type="button">
+            <button className="flex w-full items-center gap-3 rounded-[17px] border border-white/[0.07] bg-white/[0.032] p-3 text-left" key={item.id} onClick={() => onOpenAlbum(discographyItemToAlbum(item, artist))} type="button">
               <span className={`aria-art aria-art-thumb ${item.art}`} />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-[16px] text-[#fff3e4]">{item.title}</span>
@@ -115,4 +121,21 @@ export function AriaArtistDetail({
       <div className="h-8" />
     </div>
   )
+}
+
+function discographyItemToAlbum(item: AriaDiscographyItem, artist: AriaArtist): AriaAlbum {
+  const year = Number(item.subtitle.match(/\d{4}/)?.[0]) || 2014
+  const isEp = item.subtitle.includes('EP')
+
+  return {
+    id: `discography-${item.id}`,
+    title: item.title,
+    artist: artist.name,
+    year,
+    trackCount: isEp ? 5 : 10,
+    duration: isEp ? '22m' : '48m',
+    accent: item.accent,
+    format: 'FLAC',
+    source: 'Local',
+  }
 }
