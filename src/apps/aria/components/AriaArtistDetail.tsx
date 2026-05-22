@@ -58,7 +58,7 @@ export function AriaArtistDetail({
           </svg>
         </div>
         <div className="relative z-10">
-          <AriaDetailHeader label="Artist" onBack={onBack} onMore={() => onOpenArtistOptions(artist)} />
+          <AriaDetailHeader onBack={onBack} />
           <div className="h-[256px]" />
           <h1 className="font-serif text-[47px] leading-[0.92] text-[#f0a13d] drop-shadow-[0_4px_16px_rgba(0,0,0,0.55)]">{artist.name}</h1>
           <p className="mt-3 text-[17px] text-[#c8bdb1]">{artist.location ?? 'Berlin, Germany'}</p>

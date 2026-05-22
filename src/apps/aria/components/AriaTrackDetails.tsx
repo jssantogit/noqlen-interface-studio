@@ -42,7 +42,7 @@ export function AriaTrackDetails({
 
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
-      <AriaDetailHeader label="Track" onBack={onBack} onMore={() => onOpenTrackOptions(track)} />
+      <AriaDetailHeader onBack={onBack} onMore={() => onOpenTrackOptions(track)} />
 
       <section className="mt-5 rounded-[24px] border border-[rgba(240,161,61,0.14)] bg-[linear-gradient(145deg,rgba(58,36,18,0.34),rgba(255,255,255,0.03))] p-3.5 shadow-[0_18px_40px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.05)]">
         <div className="flex items-center gap-4">

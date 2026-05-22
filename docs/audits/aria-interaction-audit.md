@@ -2,10 +2,10 @@
 
 ## Summary
 
-- Total controls audited: 201
-- Working: 169
+- Total controls audited: 198
+- Working: 174
 - Dead: 6
-- Partial: 14
+- Partial: 6
 - Should not be clickable: 12
 - Unknown / browser-check needed: 0
 - Console errors: 0 runtime errors observed in Playwright. Browser console showed React DevTools info messages and one Vite reconnect/polling log while the dev server was restarted during audit.
@@ -77,15 +77,15 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Listen Home | Recent addition row `•••` glyphs, 4 instances | Dots are not independent controls; row click opens detail. | DEAD | Add real row options or remove/passivate the dots. | Aria final no-dead-control sweep |
 | Library | Library queue tools icon | Shows `Library tools (mock)` toast. | PARTIAL | Open local library tools/options sheet or clarify as toast-only. | Aria top-level screen interactions |
 | Library | Library search icon | Shows `Library search (mock)` toast. | PARTIAL | Open local search/filter state or route to Explore. | Aria top-level screen interactions |
-| Library | Songs category row | Shows `Songs (mock)` toast. | PARTIAL | Open a local songs category/list or restyle as passive. | Aria top-level screen interactions |
-| Library | Albums category row | Opens Album Detail. | WORKING | Open albums category or representative album detail. | Aria top-level screen interactions |
-| Library | Artists category row | Opens Artist Detail. | WORKING | Open artists category or representative artist detail. | Aria top-level screen interactions |
-| Library | Genres category row | Shows `Genres (mock)` toast. | PARTIAL | Open local genres category/list or restyle as passive. | Aria top-level screen interactions |
-| Library | Folders category row | Shows `Folders (mock)` toast. | PARTIAL | Mock folder category without filesystem access or restyle as passive. | Aria top-level screen interactions |
-| Library | Compilations category row | Shows `Compilations (mock)` toast. | PARTIAL | Open local category/list or restyle as passive. | Aria top-level screen interactions |
-| Library | My Playlists See all | Shows `See all playlists (mock)` toast. | PARTIAL | Navigate to Playlists tab or open local playlist list. | Aria top-level screen interactions |
+| Library | Songs category row | Opens dedicated Songs page. | WORKING | Open a local songs category/list or restyle as passive. | Aria top-level screen interactions |
+| Library | Albums category row | Opens dedicated Albums page. | WORKING | Open albums category or representative album detail. | Aria top-level screen interactions |
+| Library | Artists category row | Opens dedicated Artists page. | WORKING | Open artists category or representative artist detail. | Aria top-level screen interactions |
+| Library | Genres category row | Opens dedicated Genres page. | WORKING | Open local genres category/list or restyle as passive. | Aria top-level screen interactions |
+| Library | Folders category row | Opens dedicated Folders page with no-file-access folder preview rows. | WORKING | Mock folder category without filesystem access or restyle as passive. | Aria top-level screen interactions |
+| Library | Compilations category row | Opens dedicated Compilations page. | WORKING | Open local category/list or restyle as passive. | Aria top-level screen interactions |
+| Library | My Playlists See all | Navigates to the Playlists tab. | WORKING | Navigate to Playlists tab or open local playlist list. | Aria top-level screen interactions |
 | Library | My Playlists cards, 3 instances | Open Playlist Detail. | WORKING | Open playlist detail. | Aria top-level screen interactions |
-| Library | Recently Added See all | Shows `See all recent additions (mock)` toast. | PARTIAL | Open local recently-added list or clarify as toast-only. | Aria top-level screen interactions |
+| Library | Recently Added See all | Opens dedicated Recently Added page. | WORKING | Open local recently-added list or clarify as toast-only. | Aria top-level screen interactions |
 | Library | Recently Added album poster buttons, 3 instances | Open Album Detail. | WORKING | Open album detail. | Aria top-level screen interactions |
 | Playlists | Create Playlist card | Shows `Create Playlist (mock)` toast. | WORKING | Toast-only mock creation is acceptable if no creation flow exists. | Aria top-level screen interactions |
 | Playlists | New Folder card | Shows `New Folder (mock)` toast. | WORKING | Toast-only mock folder action is acceptable. | Aria top-level screen interactions |
@@ -111,7 +111,7 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Explore | Recently Explored Albums | Opens Album Detail. | WORKING | Open album detail. | Aria top-level screen interactions |
 | Explore | Recently Explored Recently Added | Shows `Recently Added (mock)` toast. | PARTIAL | Open local list or restyle as passive. | Aria top-level screen interactions |
 | Album Detail | Back | Returns to active top-level tab. | WORKING | Return from detail to previous top-level tab. | Aria detail screen interactions |
-| Album Detail | Header more actions | Opens Album Options bottom sheet. | WORKING | Open local album options menu/sheet. | Aria detail screen interactions |
+| Album Detail | Header more actions | Removed; header is navigation-only. | SHOULD_NOT_BE_CLICKABLE | Keep one album contextual menu entry point. | Aria detail screen interactions |
 | Album Detail | Artist link | Opens matching Artist Detail when mock artist data exists; otherwise shows unavailable mock-data toast. | WORKING | Open Artist Detail or restyle as passive metadata. | Aria detail screen interactions |
 | Album Detail | Play | Shows `Play album (mock)` toast. | WORKING | Mock-only playback feedback is acceptable. | Aria detail screen interactions |
 | Album Detail | Shuffle | Shows `Shuffle album (mock)` toast. | WORKING | Mock-only shuffle feedback is acceptable. | Aria detail screen interactions |
@@ -120,7 +120,7 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Album Detail | Track title rows, 6 instances | Open Track Details. | WORKING | Open track detail. | Aria detail screen interactions |
 | Album Detail | Track more buttons, 6 instances | Open Track Options bottom sheet. | WORKING | Open local track options menu/sheet. | Aria detail screen interactions |
 | Artist Detail | Back | Returns to active top-level tab. | WORKING | Return from detail to previous top-level tab. | Aria detail screen interactions |
-| Artist Detail | Header more actions | Opens Artist Options bottom sheet. | WORKING | Open local artist options menu/sheet. | Aria detail screen interactions |
+| Artist Detail | Header more actions | Removed; header is navigation-only. | SHOULD_NOT_BE_CLICKABLE | Keep one artist contextual menu entry point. | Aria detail screen interactions |
 | Artist Detail | Tags: Electronic, Classical, Ambient | Tags are visually chip-like text but not buttons. | SHOULD_NOT_BE_CLICKABLE | Keep passive or style less like filters. | Aria detail screen interactions |
 | Artist Detail | Play | Shows `Play artist top songs (mock)` toast. | WORKING | Mock-only playback feedback is acceptable. | Aria detail screen interactions |
 | Artist Detail | More artist actions | Opens Artist Options bottom sheet. | WORKING | Open local artist options menu/sheet. | Aria detail screen interactions |
@@ -131,7 +131,7 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Artist Detail | Top song more buttons, 5 instances | Open Track Options bottom sheet. | WORKING | Open local track options menu/sheet. | Aria detail screen interactions |
 | Artist Detail | EPs & Singles rows, 2 instances | Open mock release Album Detail objects. | WORKING | Open album/release detail or remove chevron/action styling. | Aria detail screen interactions |
 | Playlist Detail | Back | Returns to active top-level tab. | WORKING | Return from detail to previous top-level tab. | Aria detail screen interactions |
-| Playlist Detail | Header more actions | Opens Playlist Options bottom sheet. | WORKING | Open local playlist options menu/sheet. | Aria detail screen interactions |
+| Playlist Detail | Header more actions | Removed; header is navigation-only. | SHOULD_NOT_BE_CLICKABLE | Keep one playlist contextual menu entry point. | Aria detail screen interactions |
 | Playlist Detail | Play | Shows `Play playlist (mock)` toast. | WORKING | Mock-only playback feedback is acceptable. | Aria detail screen interactions |
 | Playlist Detail | Shuffle | Shows `Shuffle playlist (mock)` toast. | WORKING | Mock-only shuffle feedback is acceptable. | Aria detail screen interactions |
 | Playlist Detail | More action button | Opens Playlist Options bottom sheet. | WORKING | Open local options menu/sheet. | Aria detail screen interactions |
@@ -250,9 +250,19 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Track-row tap playback normalization remains deferred to Bloco 7E; in Bloco 7D, detail track rows continue opening Track Details.
 - No real playback, queue persistence, playlist persistence, filesystem access or network behavior was added.
 
+## Bloco 7D.1 Resolution Notes
+
+- Library category rows now open dedicated in-app pages rather than bottom sheets for Songs, Albums, Artists, Genres, Folders, Compilations and Recently Added.
+- Bottom sheets are reserved for contextual/auxiliary flows, not major Library navigation. Library Search and Aria Settings intentionally remain sheets for now.
+- Album, Artist and Playlist Detail screens now have one contextual menu entry point instead of duplicated header and action-row ellipsis buttons.
+- Redundant detail type labels were removed from detail headers where the page content already communicates the object type.
+- Sheet action rows no longer all present as navigation rows; direct actions avoid misleading chevrons, while navigation/picker rows keep them.
+- Settings redesign remains deferred to Bloco 7D.2.
+- Playback overlays remain deferred to Bloco 7E.
+
 ## Notes
 
-- Duplicated handlers: `AriaDetailHeader` and screen-level `More` buttons often produce similar toast-only responses; album, artist and playlist detail screens each have header more plus primary action-row more.
+- Duplicated detail menu handlers from Bloco 7D were resolved in Bloco 7D.1: album, artist and playlist details now keep one action-row contextual menu and use navigation-only headers.
 - Duplicated navigation handlers: `AriaTrackRow` number/artwork and title buttons both open the same track detail. This works, but creates multiple focusable controls per row.
 - Visual affordances that should probably become passive if not implemented: mini player progress underline, artist tags, static metadata rows, lyric lines, and possibly queue drag handles if local reorder is not planned.
 - Interactions that can remain toast-only: mock create playlist, new folder, save queue as playlist, show in folder, static status buttons, and current-track feedback, provided copy stays clearly mock-only and does not imply real filesystem/download behavior.

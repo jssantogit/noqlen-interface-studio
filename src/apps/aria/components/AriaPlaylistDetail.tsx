@@ -23,7 +23,7 @@ export function AriaPlaylistDetail({
 }) {
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-4 text-[#f5ecdf]">
-      <AriaDetailHeader label="Playlist" onBack={onBack} onMore={() => onOpenPlaylistOptions(playlist)} />
+      <AriaDetailHeader onBack={onBack} />
 
       <section className="mt-4 overflow-hidden rounded-[26px] border border-white/[0.08] bg-white/[0.035] shadow-[0_22px_48px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(255,255,255,0.05)]">
         <div className="aria-art aria-art-hero aria-art-waves" />

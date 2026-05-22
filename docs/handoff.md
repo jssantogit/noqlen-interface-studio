@@ -69,6 +69,8 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7C.2 — Converter submenus do Aria para sheets/popups
 [x] Bloco 7C.3 — Ajustar copy/status da fonte do Aria
 [x] Bloco 7D — Completar interações das telas detail do Aria
+[x] Bloco 7D.1 — Corrigir Library pages e redundância de menus nas details
+[ ] Bloco 7D.2 — Redesign dedicado do Aria Settings
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
@@ -90,10 +92,10 @@ docs/audits/aria-interaction-audit.md
 Current audit summary:
 
 ```txt
-Total controls audited: 201
-Working: 169
+Total controls audited: 198
+Working: 174
 Dead: 6
-Partial: 14
+Partial: 6
 Should not be clickable: 12
 Unknown / browser-check needed: 0
 ```
@@ -152,6 +154,20 @@ Unknown / browser-check needed: 0
 - [x] Resolve Track Details favorite visible state.
 - [x] Resolve Add to Queue behavior or clarify as toast-only/local state.
 - [x] Decide consistent track-row rule: defer playback normalization to Bloco 7E while keeping detail rows functional.
+
+### Bloco 7D.1 — Library pages and detail action cleanup
+
+- [x] Convert Library category sheets to dedicated pages.
+- [x] Keep Library Search/Settings as sheets for now.
+- [x] Remove redundant detail type labels where they are visual noise.
+- [x] Remove duplicate Album/Artist/Playlist menu entry points.
+- [x] Preserve one contextual menu per detail screen.
+- [x] Adjust sheet row semantics so direct actions do not look like navigation.
+
+### Bloco 7D.2 — Aria Settings redesign
+
+- [ ] Redesign Aria Settings as a dedicated later block.
+- [ ] Keep settings mock-only and local-state-only.
 
 ### Bloco 7E — Playback overlay interactions
 

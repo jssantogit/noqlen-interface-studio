@@ -3,8 +3,9 @@ import type { AriaAlbum, AriaPlaylist } from '../ariaMockData'
 import { ariaAlbums, ariaPlaylists } from '../ariaMockData'
 
 type LibraryCategoryId = 'songs' | 'albums' | 'artists' | 'genres' | 'folders' | 'compilations' | 'playlists' | 'recent' | 'search'
+type LibraryPageCategoryId = Exclude<LibraryCategoryId, 'playlists' | 'search'>
 
-const categories: { id: LibraryCategoryId; label: string; count: string; icon: typeof Music2 }[] = [
+const categories: { id: LibraryPageCategoryId; label: string; count: string; icon: typeof Music2 }[] = [
   { id: 'songs', label: 'Songs', count: '1,200', icon: Music2 },
   { id: 'albums', label: 'Albums', count: '245', icon: Disc3 },
   { id: 'artists', label: 'Artists', count: '168', icon: UsersRound },
@@ -21,13 +22,15 @@ export function AriaLibrary({
   onOpenPlaylist,
   onOpenSettings,
   onOpenLibraryCategory,
+  onOpenLibrarySearch,
   onNavigateToPlaylists,
   onShowToast,
 }: {
   onOpenAlbum: (album: AriaAlbum) => void
   onOpenPlaylist: (playlist: AriaPlaylist) => void
   onOpenSettings: () => void
-  onOpenLibraryCategory: (category: LibraryCategoryId) => void
+  onOpenLibraryCategory: (category: LibraryPageCategoryId) => void
+  onOpenLibrarySearch: () => void
   onNavigateToPlaylists: () => void
   onShowToast: (message: string) => void
 }) {
@@ -51,7 +54,7 @@ export function AriaLibrary({
             aria-label="Library search"
             className="grid h-10 w-10 place-items-center rounded-full transition hover:bg-white/[0.04]"
             onClick={() => {
-              onOpenLibraryCategory('search')
+              onOpenLibrarySearch()
               onShowToast('Library search preview (mock)')
             }}
             type="button"
