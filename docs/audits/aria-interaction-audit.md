@@ -1,0 +1,216 @@
+# Aria Interaction Audit
+
+## Summary
+
+- Total controls audited: 201
+- Working: 108
+- Dead: 10
+- Partial: 71
+- Should not be clickable: 12
+- Unknown / browser-check needed: 0
+- Console errors: 0 runtime errors observed in Playwright. Browser console showed React DevTools info messages and one Vite reconnect/polling log while the dev server was restarted during audit.
+
+Static inspection used `src/apps/aria/AriaPreview.tsx`, `ariaInteractionMap.ts`, `ariaMockData.ts`, all Aria component files, and the Aria screen contract/handoff docs. Browser inspection used the local app at `http://127.0.0.1:5173`, selected Aria, visited every top-level tab, opened Album Detail, Artist Detail, Playlist Detail, Track Details, Now Playing, Lyrics and Queue, and clicked the visible controls represented below. Chrome DevTools MCP could not start in this environment because the browser backend reported a missing X server, so console validation was performed with Playwright MCP.
+
+## High-risk dead controls
+
+- Listen Home recent addition `•••` glyphs look like row-level more buttons, but they are only text inside the row button; clicking the row opens the detail instead of opening options. Status: DEAD.
+- Bottom nav remains visibly clickable under full playback overlays, but the overlay intercepts pointer events. A direct browser click on Explore while Queue was open timed out because an overlay row intercepted the pointer. Status: PARTIAL.
+- Queue reorder handles are explicit grip buttons, but they only show a toast saying the handle is visual only. Status: PARTIAL, bordering on should-be-passive unless drag/reorder is added.
+- Detail navigation is not a real stack. Opening Track Details from Album/Artist/Playlist replaces the current detail; Back returns to the top-level tab instead of the previous detail screen. Status: PARTIAL.
+- Many `More` / options buttons display menu affordances but only show toast feedback. They are not dead, but they are incomplete for the visual affordance. Status: PARTIAL.
+- Playlist import/export cards use file/share language but only show mock toasts. They should either be clarified as mock-only/toast-only or restyled away from real file actions. Status: PARTIAL.
+
+## Unexpected Screen Destinations
+
+These are not necessarily dead controls. They are cases where the control responds, but the destination may be the wrong screen for the moment or interaction intent.
+
+| Source | Element | Current destination | Concern | Likely expected destination/behavior | Status | Suggested fix block |
+|---|---|---|---|---|---|---|
+| Listen Home | Track recent addition rows: Sunday Morning, Late Ambient, A Place | Track Details | A music-player home row tap may be expected to start/open playback, not open metadata inspection. | Open Now Playing or set current mock track and open Now Playing; reserve Track Details for explicit info/more action. | PARTIAL | Aria top-level screen interactions |
+| Explore | Songs category card | Track Details | Category card implies browsing Songs, not inspecting one arbitrary track. | Open local Songs category/list or a search result set. | PARTIAL | Aria top-level screen interactions |
+| Album Detail | Track number/title rows | Track Details | In an album playback context, tapping a track commonly plays/selects it and opens Now Playing; current behavior opens metadata details. | Start/select local mock track and open Now Playing, or add a separate info affordance for Track Details. | PARTIAL | Aria detail screen interactions |
+| Artist Detail | Top song number/title rows | Track Details | Top songs list reads as playback content; row tap likely should play/open Now Playing rather than metadata. | Start/select local mock track and open Now Playing; keep more/info for Track Details if needed. | PARTIAL | Aria detail screen interactions |
+| Playlist Detail | Track artwork/title rows | Track Details | Playlist tracks usually play/select track; current behavior opens Track Details. | Start/select local mock track and open Now Playing. | PARTIAL | Aria detail screen interactions |
+| Queue | Queue item rows | Toast only | Queue row responds but does not open Now Playing, change current item, or show Track Details. | Select local queue item and open/update Now Playing, or show row detail intentionally. | PARTIAL | Aria playback overlay interactions |
+| Library | Albums category row | Album Detail | A category row with chevron implies browsing the Albums collection, but it opens one representative album. | Open local Albums category/list first, then album detail from an album row. | PARTIAL | Aria top-level screen interactions |
+| Library | Artists category row | Artist Detail | A category row with chevron implies browsing the Artists collection, but it opens one representative artist. | Open local Artists category/list first, then artist detail from an artist row. | PARTIAL | Aria top-level screen interactions |
+| Library | My Playlists shelf card | Playlist Detail | Shelf cards can reasonably open detail, but if treated as a shelf/category entry, they may be expected to open the Playlists collection. | Keep as detail if card is a concrete playlist; otherwise navigate to Playlists. | PARTIAL | Aria top-level screen interactions |
+| Listen Home | Your Playlists shortcut card | Playlist Detail | Shortcut label is broad (`Your Playlists`) but opens one specific playlist. | Navigate to Playlists tab or label/card should represent the specific playlist. | PARTIAL | Aria top-level screen interactions |
+| Listen Home | Artists shortcut card | Artist Detail | Shortcut label is broad (`Artists`) but opens one specific artist. | Navigate to Library/Artists category or label/card should represent the specific artist. | PARTIAL | Aria top-level screen interactions |
+| Artist Detail | EPs & Singles rows | Toast only | Rows have chevrons and release artwork, but do not open release/album detail. | Open Album/Release detail using mock data, or remove chevron/action styling. | PARTIAL | Aria detail screen interactions |
+
+Decision needed before implementation: define the primary row-tap rule for Aria music content. A consistent rule would avoid accidental metadata screens:
+
+- Track row tap: play/select track and open Now Playing.
+- Track row more/info button: open Track Details or options sheet.
+- Album/artist/playlist concrete row/card tap: open detail.
+- Category row/card tap: open category/list, not an arbitrary representative item.
+
+## Interaction Map By Screen
+
+| Screen | Element | Current behavior | Status | Expected mock behavior | Suggested fix block |
+|---|---|---|---|---|---|
+| Global / AriaPreview | Toast behavior | Local toast appears and clears after timeout. | WORKING | Keep local display-only toast feedback. | Aria global/navigation interactions |
+| Global / AriaPreview | Overlay transitions | Now Playing, Lyrics and Queue mount as local animated overlays. | WORKING | Keep local overlay transitions. | Aria global/navigation interactions |
+| Global / AriaPreview | Detail navigation stack | Details open locally, but nested detail navigation replaces the current detail; Back clears to the active tab. | PARTIAL | Preserve previous detail when opening a nested detail, or visually avoid implying stack behavior. | Aria global/navigation interactions |
+| Bottom Nav | Listen tab | Changes active tab and closes open detail/overlay when reachable. | WORKING | Navigate locally to Listen. | Aria global/navigation interactions |
+| Bottom Nav | Library tab | Changes active tab and closes open detail/overlay when reachable. | WORKING | Navigate locally to Library. | Aria global/navigation interactions |
+| Bottom Nav | Playlists tab | Changes active tab and closes open detail/overlay when reachable. | WORKING | Navigate locally to Playlists. | Aria global/navigation interactions |
+| Bottom Nav | Explore tab | Changes active tab and closes open detail/overlay when reachable. | WORKING | Navigate locally to Explore. | Aria global/navigation interactions |
+| Bottom Nav | Visible nav behind full overlays | Nav remains visible behind overlay but cannot be clicked; overlay intercepts pointer events. | PARTIAL | Hide/disable nav under overlays or make overlay tab change behavior intentional. | Aria global/navigation interactions |
+| Mini Player | Mini player body | Opens Now Playing overlay by click or keyboard Enter/Space. | WORKING | Expand Now Playing overlay. | Aria global/navigation interactions |
+| Mini Player | Previous | Shows `Previous track (mock)` toast; no queue cycling. | PARTIAL | Either cycle local mock queue or keep toast but label as preview-only. | Aria playback overlay interactions |
+| Mini Player | Play/Pause | Toggles local playing visual state. | WORKING | Toggle local mock playback state. | Aria playback overlay interactions |
+| Mini Player | Next | Shows `Next track (mock)` toast; no queue cycling. | PARTIAL | Either cycle local mock queue or keep toast but label as preview-only. | Aria playback overlay interactions |
+| Mini Player | Progress underline | Looks like progress but has `pointer-events-none` and no handler. | SHOULD_NOT_BE_CLICKABLE | Keep passive or make it an actual seek affordance. | Aria playback overlay interactions |
+| Listen Home | Queue status icon button | Shows `Queue status (mock)` toast. | WORKING | Toast-only status is acceptable if this remains a status indicator. | Aria top-level screen interactions |
+| Listen Home | Main Play CTA | Calls local play handler, sets playing true, shows playback toast. | WORKING | Start local mock playback state. | Aria top-level screen interactions |
+| Listen Home | Your Playlists shortcut card | Opens Playlist Detail for the first mock playlist. | WORKING | Open playlist detail. | Aria top-level screen interactions |
+| Listen Home | Artists shortcut card | Opens Artist Detail for the first mock artist. | WORKING | Open artist detail. | Aria top-level screen interactions |
+| Listen Home | Search affordance | Navigates locally to Explore. | WORKING | Open Explore/search hub. | Aria top-level screen interactions |
+| Listen Home | Recent additions See all | Shows `See all (mock)` toast. | PARTIAL | Open a local list view or clearly keep as toast-only. | Aria top-level screen interactions |
+| Listen Home | Recent addition row: Midnight Horizons | Opens Album Detail. | WORKING | Open album detail. | Aria top-level screen interactions |
+| Listen Home | Recent addition row: Sunday Morning | Opens Track Details. | WORKING | Open track detail. | Aria top-level screen interactions |
+| Listen Home | Recent addition row: Late Ambient | Opens Track Details. | WORKING | Open track detail. | Aria top-level screen interactions |
+| Listen Home | Recent addition row: A Place | Opens Track Details. | WORKING | Open track detail. | Aria top-level screen interactions |
+| Listen Home | Recent addition row `•••` glyphs, 4 instances | Dots are not independent controls; row click opens detail. | DEAD | Add real row options or remove/passivate the dots. | Aria final no-dead-control sweep |
+| Library | Library queue tools icon | Shows `Library tools (mock)` toast. | PARTIAL | Open local library tools/options sheet or clarify as toast-only. | Aria top-level screen interactions |
+| Library | Library search icon | Shows `Library search (mock)` toast. | PARTIAL | Open local search/filter state or route to Explore. | Aria top-level screen interactions |
+| Library | Songs category row | Shows `Songs (mock)` toast. | PARTIAL | Open a local songs category/list or restyle as passive. | Aria top-level screen interactions |
+| Library | Albums category row | Opens Album Detail. | WORKING | Open albums category or representative album detail. | Aria top-level screen interactions |
+| Library | Artists category row | Opens Artist Detail. | WORKING | Open artists category or representative artist detail. | Aria top-level screen interactions |
+| Library | Genres category row | Shows `Genres (mock)` toast. | PARTIAL | Open local genres category/list or restyle as passive. | Aria top-level screen interactions |
+| Library | Folders category row | Shows `Folders (mock)` toast. | PARTIAL | Mock folder category without filesystem access or restyle as passive. | Aria top-level screen interactions |
+| Library | Compilations category row | Shows `Compilations (mock)` toast. | PARTIAL | Open local category/list or restyle as passive. | Aria top-level screen interactions |
+| Library | My Playlists See all | Shows `See all playlists (mock)` toast. | PARTIAL | Navigate to Playlists tab or open local playlist list. | Aria top-level screen interactions |
+| Library | My Playlists cards, 3 instances | Open Playlist Detail. | WORKING | Open playlist detail. | Aria top-level screen interactions |
+| Library | Recently Added See all | Shows `See all recent additions (mock)` toast. | PARTIAL | Open local recently-added list or clarify as toast-only. | Aria top-level screen interactions |
+| Library | Recently Added album poster buttons, 3 instances | Open Album Detail. | WORKING | Open album detail. | Aria top-level screen interactions |
+| Playlists | Create Playlist card | Shows `Create Playlist (mock)` toast. | WORKING | Toast-only mock creation is acceptable if no creation flow exists. | Aria top-level screen interactions |
+| Playlists | New Folder card | Shows `New Folder (mock)` toast. | WORKING | Toast-only mock folder action is acceptable. | Aria top-level screen interactions |
+| Playlists | Import Playlist card | Shows `Import Playlist (mock)` toast; wording implies file import. | PARTIAL | Keep mock-only and avoid real file implication, or show local mock modal. | Aria top-level screen interactions |
+| Playlists | Export Playlist card | Shows `Export Playlist (mock)` toast; wording implies download/share. | PARTIAL | Keep mock-only and avoid real export/download implication, or show local mock modal. | Aria top-level screen interactions |
+| Playlists | Filter chips: All, Folders, Created, Imported, Favorites | Each shows a toast; selected visual state does not change. | PARTIAL | Toggle local filter state and active chip, or restyle as passive chips. | Aria top-level screen interactions |
+| Playlists | Folder rows, 3 instances | Each shows folder-specific toast. | PARTIAL | Open local folder contents or restyle row chevrons away. | Aria top-level screen interactions |
+| Playlists | Sort control | Shows `Sort playlists (mock)` toast. | PARTIAL | Toggle local sort state or open local sort menu. | Aria top-level screen interactions |
+| Playlists | Playlist artwork buttons, 5 instances | Open Playlist Detail. | WORKING | Open playlist detail. | Aria top-level screen interactions |
+| Playlists | Playlist title rows, 5 instances | Open Playlist Detail. | WORKING | Open playlist detail. | Aria top-level screen interactions |
+| Playlists | Playlist more buttons, 5 instances | Show `More options (mock)` toast. | PARTIAL | Open local options sheet/menu or clearly use toast-only affordance. | Aria top-level screen interactions |
+| Explore | Explore queue/status icon | Shows `Explore status (mock)` toast. | WORKING | Toast-only status is acceptable if it remains status feedback. | Aria top-level screen interactions |
+| Explore | Search affordance | Shows `Explore search (mock)` toast. | PARTIAL | Enter local search mode/filter state or clearly mark as preview-only. | Aria top-level screen interactions |
+| Explore | Genres category card | Shows `Genres (mock)` toast. | PARTIAL | Open local genre category view or restyle as non-action preview. | Aria top-level screen interactions |
+| Explore | Albums category card | Opens Album Detail. | WORKING | Open album detail or albums category. | Aria top-level screen interactions |
+| Explore | Artists category card | Opens Artist Detail. | WORKING | Open artist detail or artists category. | Aria top-level screen interactions |
+| Explore | Radio category card | Shows `Radio (mock)` toast. | PARTIAL | Open local radio preview/detail or restyle as passive. | Aria top-level screen interactions |
+| Explore | Songs category card | Opens Track Details. | WORKING | Open track detail or songs category. | Aria top-level screen interactions |
+| Explore | Playlists category card | Opens Playlist Detail. | WORKING | Open playlist detail or playlists category. | Aria top-level screen interactions |
+| Explore | Recently Explored See all | Shows `See all explored (mock)` toast. | PARTIAL | Open local recent exploration list or clarify as toast-only. | Aria top-level screen interactions |
+| Explore | Recently Explored Genres | Shows `Genres (mock)` toast. | PARTIAL | Open local genre view or restyle as passive. | Aria top-level screen interactions |
+| Explore | Recently Explored Artist | Opens Artist Detail. | WORKING | Open artist detail. | Aria top-level screen interactions |
+| Explore | Recently Explored Albums | Opens Album Detail. | WORKING | Open album detail. | Aria top-level screen interactions |
+| Explore | Recently Explored Recently Added | Shows `Recently Added (mock)` toast. | PARTIAL | Open local list or restyle as passive. | Aria top-level screen interactions |
+| Album Detail | Back | Returns to active top-level tab. | WORKING | Return from detail to previous top-level tab. | Aria detail screen interactions |
+| Album Detail | Header more actions | Shows `Album options (mock)` toast. | PARTIAL | Open local album options menu/sheet. | Aria detail screen interactions |
+| Album Detail | Artist link | Shows `Nils Frahm (mock)` toast instead of opening Artist Detail. | PARTIAL | Open Artist Detail or restyle as passive metadata. | Aria detail screen interactions |
+| Album Detail | Play | Shows `Play album (mock)` toast. | WORKING | Mock-only playback feedback is acceptable. | Aria detail screen interactions |
+| Album Detail | Shuffle | Shows `Shuffle album (mock)` toast. | WORKING | Mock-only shuffle feedback is acceptable. | Aria detail screen interactions |
+| Album Detail | More action button | Shows `Album more actions (mock)` toast. | PARTIAL | Open local options menu/sheet. | Aria detail screen interactions |
+| Album Detail | Track number buttons, 6 instances | Open Track Details. | WORKING | Open track detail. | Aria detail screen interactions |
+| Album Detail | Track title rows, 6 instances | Open Track Details. | WORKING | Open track detail. | Aria detail screen interactions |
+| Album Detail | Track more buttons, 6 instances | Show track-specific options toast. | PARTIAL | Open local track options menu/sheet. | Aria detail screen interactions |
+| Artist Detail | Back | Returns to active top-level tab. | WORKING | Return from detail to previous top-level tab. | Aria detail screen interactions |
+| Artist Detail | Header more actions | Shows `Artist options (mock)` toast. | PARTIAL | Open local artist options menu/sheet. | Aria detail screen interactions |
+| Artist Detail | Tags: Electronic, Classical, Ambient | Tags are visually chip-like text but not buttons. | SHOULD_NOT_BE_CLICKABLE | Keep passive or style less like filters. | Aria detail screen interactions |
+| Artist Detail | Play | Shows `Play artist top songs (mock)` toast. | WORKING | Mock-only playback feedback is acceptable. | Aria detail screen interactions |
+| Artist Detail | More artist actions | Shows `Artist more actions (mock)` toast. | PARTIAL | Open local artist options menu/sheet. | Aria detail screen interactions |
+| Artist Detail | Latest Release row | Opens Album Detail. | WORKING | Open album detail. | Aria detail screen interactions |
+| Artist Detail | Top Songs See all | Shows `See all top songs (mock)` toast. | PARTIAL | Open local top-songs list or clarify as toast-only. | Aria detail screen interactions |
+| Artist Detail | Top song number buttons, 5 instances | Open Track Details. | WORKING | Open track detail. | Aria detail screen interactions |
+| Artist Detail | Top song title rows, 5 instances | Open Track Details. | WORKING | Open track detail. | Aria detail screen interactions |
+| Artist Detail | Top song more buttons, 5 instances | Show track-specific options toast. | PARTIAL | Open local track options menu/sheet. | Aria detail screen interactions |
+| Artist Detail | EPs & Singles rows, 2 instances | Show release-specific toast despite chevron. | PARTIAL | Open album/release detail or remove chevron/action styling. | Aria detail screen interactions |
+| Playlist Detail | Back | Returns to active top-level tab. | WORKING | Return from detail to previous top-level tab. | Aria detail screen interactions |
+| Playlist Detail | Header more actions | Shows `Playlist options (mock)` toast. | PARTIAL | Open local playlist options menu/sheet. | Aria detail screen interactions |
+| Playlist Detail | Play | Shows `Play playlist (mock)` toast. | WORKING | Mock-only playback feedback is acceptable. | Aria detail screen interactions |
+| Playlist Detail | Shuffle | Shows `Shuffle playlist (mock)` toast. | WORKING | Mock-only shuffle feedback is acceptable. | Aria detail screen interactions |
+| Playlist Detail | More action button | Shows `Playlist more actions (mock)` toast. | PARTIAL | Open local options menu/sheet. | Aria detail screen interactions |
+| Playlist Detail | Track artwork buttons, 4 instances | Open Track Details. | WORKING | Open track detail. | Aria detail screen interactions |
+| Playlist Detail | Track title rows, 4 instances | Open Track Details. | WORKING | Open track detail. | Aria detail screen interactions |
+| Playlist Detail | Track more buttons, 4 instances | Show track-specific options toast. | PARTIAL | Open local track options menu/sheet. | Aria detail screen interactions |
+| Track Details | Back | Returns to active top-level tab; if reached from a detail, previous detail is not restored. | PARTIAL | Return to previous detail when opened from a detail, or document top-level return. | Aria detail screen interactions |
+| Track Details | Header more actions | Shows `Track options (mock)` toast. | PARTIAL | Open local track options menu/sheet. | Aria detail screen interactions |
+| Track Details | Metadata rows | Static text only; not interactive. | SHOULD_NOT_BE_CLICKABLE | Keep passive. | Aria detail screen interactions |
+| Track Details | Favorite action | Shows `Favorite (mock)` toast; does not toggle visible local state. | PARTIAL | Toggle local favorite state or clarify as toast-only. | Aria detail screen interactions |
+| Track Details | Add to playlist action | Shows `Add to playlist (mock)` toast. | WORKING | Toast-only mock action is acceptable. | Aria detail screen interactions |
+| Track Details | Add to queue action | Shows `Add to queue (mock)` toast; queue contents do not change. | PARTIAL | Mutate local mock queue or clarify as toast-only. | Aria detail screen interactions |
+| Track Details | Show in folder action | Shows `Show in folder (mock)` toast; no filesystem access. | WORKING | Toast-only mock feedback is acceptable and must remain no-file-access. | Aria detail screen interactions |
+| Now Playing | Collapse | Closes overlay back to mini player. | WORKING | Collapse overlay. | Aria playback overlay interactions |
+| Now Playing | More player options | Shows `Player options (mock)` toast. | PARTIAL | Open local options menu/sheet. | Aria playback overlay interactions |
+| Now Playing | Favorite | Toggles local favorite visual state and toast. | WORKING | Toggle local mock favorite. | Aria playback overlay interactions |
+| Now Playing | Seek/progress | Shows `Seek preview only (mock)` toast; no local position change. | PARTIAL | Set local progress preview/seek state or make it visually passive. | Aria playback overlay interactions |
+| Now Playing | Shuffle | Toggles local shuffle state and toast. | WORKING | Toggle local shuffle. | Aria playback overlay interactions |
+| Now Playing | Previous | Shows previous-track toast; no queue cycling. | PARTIAL | Cycle local mock queue or keep preview-only. | Aria playback overlay interactions |
+| Now Playing | Play/Pause | Toggles local playing visual state. | WORKING | Toggle local mock playback. | Aria playback overlay interactions |
+| Now Playing | Next | Shows next-track toast; no queue cycling. | PARTIAL | Cycle local mock queue or keep preview-only. | Aria playback overlay interactions |
+| Now Playing | Repeat | Cycles local repeat state off/all/one and toast. | WORKING | Toggle local repeat. | Aria playback overlay interactions |
+| Now Playing | Lyrics button | Opens Lyrics overlay. | WORKING | Open Lyrics overlay. | Aria playback overlay interactions |
+| Now Playing | Queue button | Opens Queue overlay. | WORKING | Open Queue overlay. | Aria playback overlay interactions |
+| Now Playing | Context pill tap | Shows active context toast. | WORKING | Show local context feedback. | Aria playback overlay interactions |
+| Now Playing | Context pill keyboard | ArrowLeft/ArrowRight and Enter/Space rotate context label. | WORKING | Keep keyboard context cycling. | Aria playback overlay interactions |
+| Now Playing | Context pill swipe | Pointer drag threshold rotates context item. | WORKING | Keep local swipe cycling. | Aria playback overlay interactions |
+| Lyrics | Collapse lyrics | Closes overlay to mini player. | WORKING | Collapse overlay. | Aria playback overlay interactions |
+| Lyrics | Header title/back to Now Playing | Returns to Now Playing overlay. | WORKING | Return to Now Playing. | Aria playback overlay interactions |
+| Lyrics | Lyrics options | Shows `Lyrics options (mock)` toast. | PARTIAL | Open local lyrics options menu/sheet. | Aria playback overlay interactions |
+| Lyrics | Lyric lines | Static text, no row handlers. | SHOULD_NOT_BE_CLICKABLE | Keep passive unless lyric line seek is added. | Aria playback overlay interactions |
+| Lyrics | Timeline/progress | Shows `Lyric timeline preview only (mock)` toast; no local position change. | PARTIAL | Set local progress preview/seek state or make it visually passive. | Aria playback overlay interactions |
+| Lyrics | Footer return/list button | Returns to Now Playing overlay. | WORKING | Return to Now Playing. | Aria playback overlay interactions |
+| Lyrics | Previous | Shows previous-track toast; no queue cycling. | PARTIAL | Cycle local mock queue or keep preview-only. | Aria playback overlay interactions |
+| Lyrics | Play/Pause | Toggles local playing visual state. | WORKING | Toggle local mock playback. | Aria playback overlay interactions |
+| Lyrics | Next | Shows next-track toast; no queue cycling. | PARTIAL | Cycle local mock queue or keep preview-only. | Aria playback overlay interactions |
+| Lyrics | Queue | Opens Queue overlay. | WORKING | Open Queue overlay. | Aria playback overlay interactions |
+| Queue | Return to Now Playing | Returns to Now Playing overlay. | WORKING | Return to Now Playing. | Aria playback overlay interactions |
+| Queue | Close queue overlay | Collapses to base screen/mini player. | WORKING | Close overlay. | Aria playback overlay interactions |
+| Queue | Current track card | Shows `Current track is playing (mock)` toast. | WORKING | Toast-only current-track feedback is acceptable. | Aria playback overlay interactions |
+| Queue | Shuffle | Toggles local shuffle state and toast. | WORKING | Toggle local shuffle. | Aria playback overlay interactions |
+| Queue | Repeat | Cycles local repeat state off/all/one and toast. | WORKING | Toggle local repeat. | Aria playback overlay interactions |
+| Queue | Save as playlist | Shows `Save queue as playlist (mock)` toast. | WORKING | Toast-only save mock is acceptable if no mutation is expected. | Aria playback overlay interactions |
+| Queue | Clear | Shows `Clear queue confirmation (mock)` toast; no confirm dialog appears. | PARTIAL | Open local mock confirmation or relabel as preview-only. | Aria playback overlay interactions |
+| Queue | Reorder handles, 6 instances | Show `Reorder handle is visual only`; no drag/reorder. | PARTIAL | Implement local reorder or remove/passivate drag affordance. | Aria playback overlay interactions |
+| Queue | Queue rows, 6 instances | Show selected-track toast; do not open details or change now playing. | PARTIAL | Open track detail, set local current queue item, or restyle as passive. | Aria playback overlay interactions |
+| Queue | Row more buttons, 6 instances | Show track action toast. | PARTIAL | Open local row options menu/sheet. | Aria playback overlay interactions |
+
+## Suggested Implementation Blocks
+
+1. Aria global/navigation interactions
+
+Address detail-stack behavior, overlay/bottom-nav visibility or clickability, and any intended overlay-close-on-tab-change rule. Keep changes local-state-only.
+
+2. Aria top-level screen interactions
+
+Resolve top-level category rows, search affordances, See all buttons, playlist filters, sort controls, and misleading import/export labels. Prefer local mock state where useful; otherwise make visual affordances passive.
+
+3. Aria detail screen interactions
+
+Resolve menu affordances, artist/release links, track row option buttons, Track Details action toggles, and nested detail back behavior.
+
+4. Aria playback overlay interactions
+
+Resolve progress/seek behavior, previous/next queue cycling expectations, lyrics timeline, queue clear confirmation, queue row behavior, and reorder handles.
+
+5. Aria final no-dead-control sweep
+
+Remove or implement remaining fake option glyphs, especially Listen Home recent-row `•••`, and re-audit all repeated rows/buttons after fixes.
+
+## Notes
+
+- Duplicated handlers: `AriaDetailHeader` and screen-level `More` buttons often produce similar toast-only responses; album, artist and playlist detail screens each have header more plus primary action-row more.
+- Duplicated navigation handlers: `AriaTrackRow` number/artwork and title buttons both open the same track detail. This works, but creates multiple focusable controls per row.
+- Visual affordances that should probably become passive if not implemented: mini player progress underline, artist tags, static metadata rows, lyric lines, and possibly queue drag handles if local reorder is not planned.
+- Interactions that can remain toast-only: mock create playlist, new folder, save queue as playlist, show in folder, static status buttons, and current-track feedback, provided copy stays clearly mock-only and does not imply real filesystem/download behavior.
+- Interactions that should open detail: album cards/rows, artist cards/rows, playlist cards/rows, track rows, album artist link if it remains visually link-like, and artist discography rows with chevrons.
+- Interactions that should toggle local state: playlist filter chips, sort selection if visible, favorite in Track Details, shuffle/repeat, play/pause, and possibly local queue item selection/current track.
+- Interactions that should open overlay or sheet: global mini player, lyrics, queue, and all menu/more/options buttons if their ellipsis affordance remains.
+- Behavior needing mock data/state: local search/filter results, category list screens for Songs/Genres/Folders/Compilations/Radio, playlist folders, local sort state, local queue mutation/reorder, local clear confirmation, local progress position, and nested detail history.
+- Browser-observed behavior: opening a track from Album Detail opens Track Details, but Back returns to the Library tab instead of the Album Detail screen. This contradicts the screen contract's stack-style navigation wording.
+- Browser-observed behavior: Playwright could not click bottom nav while Queue was open because the full overlay intercepted pointer events, even though the nav remained visible underneath.
