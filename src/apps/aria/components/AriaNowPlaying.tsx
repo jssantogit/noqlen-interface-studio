@@ -81,8 +81,8 @@ export function AriaNowPlaying({
       </header>
 
       {/* Artwork */}
-      <div className="flex shrink-0 flex-col items-center px-7 pt-8">
-        <div className="aria-art aria-art-architecture h-[256px] w-[256px] max-w-full rounded-[25px] shadow-[0_1.25rem_3rem_rgba(0,0,0,0.48),0_0_3.2rem_rgba(240,161,61,0.12)]" />
+      <div className="flex shrink-0 flex-col items-center px-7 pt-10">
+        <div className="aria-art aria-art-architecture h-[288px] w-[288px] max-w-full rounded-[25px] shadow-[0_1.25rem_3rem_rgba(0,0,0,0.48),0_0_3.2rem_rgba(240,161,61,0.12)]" />
       </div>
 
       {/* Track info */}
@@ -108,7 +108,7 @@ export function AriaNowPlaying({
       </div>
 
       {/* Progress bar */}
-      <div className="px-7 pt-5">
+      <div className="px-7 pt-6">
         <button
           aria-label="Seek through track"
           className="group relative block h-5 w-full rounded-full"
@@ -125,112 +125,110 @@ export function AriaNowPlaying({
         </div>
       </div>
 
-      {/* Lower controls */}
-      <div className="mt-auto px-6 pt-4 pb-[max(2.2rem,calc(env(safe-area-inset-bottom)+1.6rem))]">
-        <div className="flex items-center justify-center gap-5">
-          <button
-            aria-label={isShuffled ? 'Shuffle on' : 'Shuffle off'}
-            className={`grid h-10 w-10 place-items-center rounded-full transition ${isShuffled ? 'text-[#f0a13d]' : 'text-[#eadac4] hover:bg-white/[0.07]'}`}
-            onClick={onToggleShuffle}
-            type="button"
-          >
-            <Shuffle size={22} />
-          </button>
-          <button
-            aria-label="Previous track"
-            className="grid h-12 w-12 place-items-center rounded-full text-[#fff3e4] transition hover:bg-white/[0.07]"
-            onClick={onPrevious}
-            type="button"
-          >
-            <SkipBack size={29} fill="currentColor" />
-          </button>
-          <button
-            aria-label={isPlaying ? 'Pause' : 'Play'}
-            className="grid h-[72px] w-[72px] place-items-center rounded-full text-[#fff3df] shadow-[0_18px_34px_rgba(240,161,61,0.18)] transition active:scale-[0.97]"
-            onClick={onPlayPause}
-            style={{ background: 'radial-gradient(circle, rgba(240,161,61,0.93), rgba(68,43,18,0.88))' }}
-            type="button"
-          >
-            {isPlaying ? <Pause size={34} fill="currentColor" /> : <Play size={34} fill="currentColor" className="ml-1" />}
-          </button>
-          <button
-            aria-label="Next track"
-            className="grid h-12 w-12 place-items-center rounded-full text-[#fff3e4] transition hover:bg-white/[0.07]"
-            onClick={onNext}
-            type="button"
-          >
-            <SkipForward size={29} fill="currentColor" />
-          </button>
-          <button
-            aria-label={repeatLabel}
-            className={`grid h-10 w-10 place-items-center rounded-full transition ${repeatMode !== 'off' ? 'text-[#f0a13d]' : 'text-[#eadac4] hover:bg-white/[0.07]'}`}
-            onClick={onToggleRepeat}
-            type="button"
-          >
-            <Repeat size={22} />
-          </button>
-        </div>
+      {/* Controls */}
+      <div className="flex items-center justify-center gap-5 px-6 pt-8">
+        <button
+          aria-label={isShuffled ? 'Shuffle on' : 'Shuffle off'}
+          className={`grid h-10 w-10 place-items-center rounded-full transition ${isShuffled ? 'text-[#f0a13d]' : 'text-[#eadac4] hover:bg-white/[0.07]'}`}
+          onClick={onToggleShuffle}
+          type="button"
+        >
+          <Shuffle size={22} />
+        </button>
+        <button
+          aria-label="Previous track"
+          className="grid h-12 w-12 place-items-center rounded-full text-[#fff3e4] transition hover:bg-white/[0.07]"
+          onClick={onPrevious}
+          type="button"
+        >
+          <SkipBack size={29} fill="currentColor" />
+        </button>
+        <button
+          aria-label={isPlaying ? 'Pause' : 'Play'}
+          className="grid h-[72px] w-[72px] place-items-center rounded-full text-[#fff3df] shadow-[0_18px_34px_rgba(240,161,61,0.18)] transition active:scale-[0.97]"
+          onClick={onPlayPause}
+          style={{ background: 'radial-gradient(circle, rgba(240,161,61,0.93), rgba(68,43,18,0.88))' }}
+          type="button"
+        >
+          {isPlaying ? <Pause size={34} fill="currentColor" /> : <Play size={34} fill="currentColor" className="ml-1" />}
+        </button>
+        <button
+          aria-label="Next track"
+          className="grid h-12 w-12 place-items-center rounded-full text-[#fff3e4] transition hover:bg-white/[0.07]"
+          onClick={onNext}
+          type="button"
+        >
+          <SkipForward size={29} fill="currentColor" />
+        </button>
+        <button
+          aria-label={repeatLabel}
+          className={`grid h-10 w-10 place-items-center rounded-full transition ${repeatMode !== 'off' ? 'text-[#f0a13d]' : 'text-[#eadac4] hover:bg-white/[0.07]'}`}
+          onClick={onToggleRepeat}
+          type="button"
+        >
+          <Repeat size={22} />
+        </button>
+      </div>
 
-        {/* Secondary controls */}
-        <div className="mt-5 flex items-center justify-between gap-4 px-3">
-          <button
-            aria-label="Open lyrics"
-            className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
-            onClick={onOpenLyrics}
-            type="button"
-          >
-            <WholeWord size={21} />
-          </button>
-          <button
-            aria-label={`${activeContext.description}: ${activeContext.label}. Swipe or use arrow keys to change playback context.`}
-            className="flex h-9 min-w-[132px] touch-pan-y items-center justify-center gap-2 rounded-full border border-white/[0.11] bg-white/[0.055] px-4 text-[12px] font-medium tracking-[0.03em] text-[#d8cbbb] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.075] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-[#f0a13d]/55"
-            onClick={() => {
-              if (contextWasSwiped.current) {
-                contextWasSwiped.current = false
-                return
-              }
-              onShowToast(`${activeContext.description}: ${activeContext.label} (mock)`)
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'ArrowLeft') {
-                event.preventDefault()
-                shiftContext(-1)
-              }
-              if (event.key === 'ArrowRight') {
-                event.preventDefault()
-                shiftContext(1)
-              }
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault()
-                shiftContext(1)
-              }
-            }}
-            onPointerDown={(event) => {
-              contextPointerStartX.current = event.clientX
+      {/* Secondary controls */}
+      <div className="mt-6 flex items-center justify-between gap-4 px-9 pb-[max(1.25rem,calc(env(safe-area-inset-bottom)+0.8rem))]">
+        <button
+          aria-label="Open lyrics"
+          className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
+          onClick={onOpenLyrics}
+          type="button"
+        >
+          <WholeWord size={21} />
+        </button>
+        <button
+          aria-label={`${activeContext.description}: ${activeContext.label}. Swipe or use arrow keys to change playback context.`}
+          className="flex h-9 min-w-[132px] touch-pan-y items-center justify-center gap-2 rounded-full border border-white/[0.11] bg-white/[0.055] px-4 text-[12px] font-medium tracking-[0.03em] text-[#d8cbbb] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.075] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-[#f0a13d]/55"
+          onClick={() => {
+            if (contextWasSwiped.current) {
               contextWasSwiped.current = false
-            }}
-            onPointerUp={(event) => {
-              if (contextPointerStartX.current === null) return
-              const distance = event.clientX - contextPointerStartX.current
-              contextPointerStartX.current = null
-              if (Math.abs(distance) < 24) return
-              contextWasSwiped.current = true
-              shiftContext(distance < 0 ? 1 : -1)
-            }}
-            type="button"
-          >
-            {activeContext.active ? <span className="h-1.5 w-1.5 rounded-full bg-[#6edb8f] shadow-[0_0_8px_rgba(110,219,143,0.42)]" aria-hidden="true" /> : null}
-            <span className="whitespace-nowrap">{activeContext.label}</span>
-          </button>
-          <button
-            aria-label="Open queue"
-            className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
-            onClick={onOpenQueue}
-            type="button"
-          >
-            <SlidersHorizontal size={21} />
-          </button>
-        </div>
+              return
+            }
+            onShowToast(`${activeContext.description}: ${activeContext.label} (mock)`)
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'ArrowLeft') {
+              event.preventDefault()
+              shiftContext(-1)
+            }
+            if (event.key === 'ArrowRight') {
+              event.preventDefault()
+              shiftContext(1)
+            }
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              shiftContext(1)
+            }
+          }}
+          onPointerDown={(event) => {
+            contextPointerStartX.current = event.clientX
+            contextWasSwiped.current = false
+          }}
+          onPointerUp={(event) => {
+            if (contextPointerStartX.current === null) return
+            const distance = event.clientX - contextPointerStartX.current
+            contextPointerStartX.current = null
+            if (Math.abs(distance) < 24) return
+            contextWasSwiped.current = true
+            shiftContext(distance < 0 ? 1 : -1)
+          }}
+          type="button"
+        >
+          {activeContext.active ? <span className="h-1.5 w-1.5 rounded-full bg-[#6edb8f] shadow-[0_0_8px_rgba(110,219,143,0.42)]" aria-hidden="true" /> : null}
+          <span className="whitespace-nowrap">{activeContext.label}</span>
+        </button>
+        <button
+          aria-label="Open queue"
+          className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
+          onClick={onOpenQueue}
+          type="button"
+        >
+          <SlidersHorizontal size={21} />
+        </button>
       </div>
     </div>
   )
