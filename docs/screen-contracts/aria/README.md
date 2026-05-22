@@ -298,11 +298,12 @@ Must provide:
 ## Navigation model
 
 - Four-tab bottom navigation remains persistent for top-level screens.
-- Detail screens use stack-style local navigation inside Aria.
+- Detail screens use stack-style local navigation inside Aria: opening a nested Album, Artist, Playlist or Track detail pushes a new detail entry, and Back returns to the previous detail before returning to the active top-level tab.
 - Detail screens need a visible back control.
 - Bottom nav tab changes close any open detail screen.
 - Mini player remains visible on detail screens unless the active screen intentionally uses a full overlay.
 - Now Playing remains an overlay expanded from the mini player.
+- Full playback overlays own the screen: Now Playing, Lyrics and Queue hide bottom navigation while open, and bottom navigation returns after the overlay closes.
 
 ## Shared components to prefer
 

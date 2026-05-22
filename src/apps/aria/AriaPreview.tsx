@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { AriaTabId } from './ariaInteractionMap'
 import type { AriaAlbum, AriaArtist, AriaPlaylist, AriaTrack } from './ariaMockData'
-import { ariaAlbums, ariaArtists, ariaPlaylists, nowPlaying } from './ariaMockData'
+import { ariaAlbums, ariaArtists, ariaPlaylists, ariaQueue, nowPlaying } from './ariaMockData'
 import { AriaAlbumDetail } from './components/AriaAlbumDetail'
 import { AriaArtistDetail } from './components/AriaArtistDetail'
 import { AriaBottomNav } from './components/AriaBottomNav'
@@ -25,6 +25,8 @@ type AriaDetailScreen =
 
 type AriaPlaybackOverlay = 'nowPlaying' | 'lyrics' | 'queue'
 
+const playbackQueue = [nowPlaying, ...ariaQueue]
+
 export function AriaPreview() {
   const [activeTab, setActiveTab] = useState<AriaTabId>('listen')
   const [playbackOverlay, setPlaybackOverlay] = useState<AriaPlaybackOverlay | null>(null)
@@ -32,8 +34,12 @@ export function AriaPreview() {
   const [isShuffled, setIsShuffled] = useState(false)
   const [repeatMode, setRepeatMode] = useState<'off' | 'all' | 'one'>('off')
   const [isFavorite, setIsFavorite] = useState(false)
-  const [detailScreen, setDetailScreen] = useState<AriaDetailScreen | null>(null)
+  const [detailStack, setDetailStack] = useState<AriaDetailScreen[]>([])
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
   const [toast, setToast] = useState<{ message: string } | null>(null)
+
+  const detailScreen = detailStack.at(-1) ?? null
+  const currentTrack = playbackQueue[currentTrackIndex] ?? nowPlaying
 
   const showToast = useCallback((message: string) => {
     setToast({ message })
@@ -45,11 +51,19 @@ export function AriaPreview() {
   }, [])
 
   const handleNext = useCallback(() => {
-    showToast('Next track (mock)')
+    setCurrentTrackIndex((currentIndex) => {
+      const nextIndex = (currentIndex + 1) % playbackQueue.length
+      showToast(`Playing next: ${playbackQueue[nextIndex].title} (mock)`)
+      return nextIndex
+    })
   }, [showToast])
 
   const handlePrevious = useCallback(() => {
-    showToast('Previous track (mock)')
+    setCurrentTrackIndex((currentIndex) => {
+      const nextIndex = (currentIndex - 1 + playbackQueue.length) % playbackQueue.length
+      showToast(`Playing previous: ${playbackQueue[nextIndex].title} (mock)`)
+      return nextIndex
+    })
   }, [showToast])
 
   const handleToggleShuffle = useCallback(() => {
@@ -74,7 +88,7 @@ export function AriaPreview() {
   const handleTabChange = useCallback((tab: AriaTabId) => {
     setActiveTab(tab)
     setPlaybackOverlay(null)
-    setDetailScreen(null)
+    setDetailStack([])
   }, [])
 
   const handleExpandPlayer = useCallback(() => {
@@ -99,7 +113,7 @@ export function AriaPreview() {
 
   const handleNavigateToExplore = useCallback(() => {
     setActiveTab('explore')
-    setDetailScreen(null)
+    setDetailStack([])
   }, [])
 
   const handlePlay = useCallback(() => {
@@ -107,28 +121,29 @@ export function AriaPreview() {
     showToast('Playback started (mock)')
   }, [showToast])
 
-  const handleOpenAlbum = useCallback((album: AriaAlbum = ariaAlbums[0]) => {
+  const pushDetail = useCallback((screen: AriaDetailScreen) => {
     setPlaybackOverlay(null)
-    setDetailScreen({ type: 'album', album })
+    setDetailStack((stack) => [...stack, screen])
   }, [])
+
+  const handleOpenAlbum = useCallback((album: AriaAlbum = ariaAlbums[0]) => {
+    pushDetail({ type: 'album', album })
+  }, [pushDetail])
 
   const handleOpenArtist = useCallback((artist: AriaArtist = ariaArtists[0]) => {
-    setPlaybackOverlay(null)
-    setDetailScreen({ type: 'artist', artist })
-  }, [])
+    pushDetail({ type: 'artist', artist })
+  }, [pushDetail])
 
-  const handleOpenTrack = useCallback((track: AriaTrack = nowPlaying) => {
-    setPlaybackOverlay(null)
-    setDetailScreen({ type: 'track', track })
-  }, [])
+  const handleOpenTrack = useCallback((track: AriaTrack = currentTrack) => {
+    pushDetail({ type: 'track', track })
+  }, [currentTrack, pushDetail])
 
   const handleOpenPlaylist = useCallback((playlist: AriaPlaylist = ariaPlaylists[0]) => {
-    setPlaybackOverlay(null)
-    setDetailScreen({ type: 'playlist', playlist })
-  }, [])
+    pushDetail({ type: 'playlist', playlist })
+  }, [pushDetail])
 
   const handleBackFromDetail = useCallback(() => {
-    setDetailScreen(null)
+    setDetailStack((stack) => stack.length > 1 ? stack.slice(0, -1) : [])
   }, [])
 
   const screens: Record<AriaTabId, React.ReactNode> = {
@@ -173,7 +188,7 @@ export function AriaPreview() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             initial={{ opacity: 0, y: 12 }}
-            key={detailScreen ? `${activeTab}-${detailScreen.type}` : activeTab}
+            key={detailScreen ? `${activeTab}-${detailStack.length}-${detailScreen.type}` : activeTab}
             transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             {detailContent ?? screens[activeTab]}
@@ -184,6 +199,7 @@ export function AriaPreview() {
       {/* Mini player */}
       {showMiniPlayer && (
         <AriaMiniPlayer
+          currentTrack={currentTrack}
           isPlaying={isPlaying}
           onExpand={handleExpandPlayer}
           onNext={handleNext}
@@ -193,7 +209,7 @@ export function AriaPreview() {
       )}
 
       {/* Bottom navigation */}
-      <AriaBottomNav activeTab={activeTab} onTabChange={handleTabChange} />
+      {playbackOverlay === null && <AriaBottomNav activeTab={activeTab} onTabChange={handleTabChange} />}
 
       {/* Playback overlay */}
       <AnimatePresence>

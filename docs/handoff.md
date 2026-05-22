@@ -63,7 +63,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 5 — Implementar/alinhar telas detail: Album, Artist, Track, Playlist
 [x] Bloco 6 — Implementar/alinhar Now Playing, Lyrics e Queue
 [x] Bloco 7A — Auditar interações do Aria
-[ ] Bloco 7B — Completar interações globais/navigation do Aria
+[x] Bloco 7B — Completar interações globais/navigation do Aria
 [ ] Bloco 7C — Completar interações das telas principais do Aria
 [ ] Bloco 7D — Completar interações das telas detail do Aria
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
@@ -88,21 +88,21 @@ Current audit summary:
 
 ```txt
 Total controls audited: 201
-Working: 108
+Working: 111
 Dead: 10
-Partial: 71
+Partial: 68
 Should not be clickable: 12
 Unknown / browser-check needed: 0
 ```
 
 ### Bloco 7B — Global/navigation interactions
 
-- [ ] Fix or clarify detail-stack behavior.
-- [ ] Decide whether bottom nav should be hidden/disabled under full playback overlays.
-- [ ] Preserve tab changes closing detail/overlay when intended.
-- [ ] Keep mini player visual unchanged.
-- [ ] Decide whether previous/next remain toast-only or cycle local mock queue.
-- [ ] Keep all behavior local-state-only.
+- [x] Fix or clarify detail-stack behavior.
+- [x] Decide whether bottom nav should be hidden/disabled under full playback overlays.
+- [x] Preserve tab changes closing detail/overlay when intended.
+- [x] Keep mini player visual unchanged.
+- [x] Decide whether previous/next remain toast-only or cycle local mock queue.
+- [x] Keep all behavior local-state-only.
 
 ### Bloco 7C — Top-level screen interactions
 

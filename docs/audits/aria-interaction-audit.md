@@ -3,9 +3,9 @@
 ## Summary
 
 - Total controls audited: 201
-- Working: 108
+- Working: 111
 - Dead: 10
-- Partial: 71
+- Partial: 68
 - Should not be clickable: 12
 - Unknown / browser-check needed: 0
 - Console errors: 0 runtime errors observed in Playwright. Browser console showed React DevTools info messages and one Vite reconnect/polling log while the dev server was restarted during audit.
@@ -15,9 +15,9 @@ Static inspection used `src/apps/aria/AriaPreview.tsx`, `ariaInteractionMap.ts`,
 ## High-risk dead controls
 
 - Listen Home recent addition `•••` glyphs look like row-level more buttons, but they are only text inside the row button; clicking the row opens the detail instead of opening options. Status: DEAD.
-- Bottom nav remains visibly clickable under full playback overlays, but the overlay intercepts pointer events. A direct browser click on Explore while Queue was open timed out because an overlay row intercepted the pointer. Status: PARTIAL.
+- Bottom nav visibility under full playback overlays was resolved in Bloco 7B. Full playback overlays now own the screen and bottom nav is not rendered while an overlay is open. Status: WORKING.
 - Queue reorder handles are explicit grip buttons, but they only show a toast saying the handle is visual only. Status: PARTIAL, bordering on should-be-passive unless drag/reorder is added.
-- Detail navigation is not a real stack. Opening Track Details from Album/Artist/Playlist replaces the current detail; Back returns to the top-level tab instead of the previous detail screen. Status: PARTIAL.
+- Detail navigation was resolved in Bloco 7B. Nested details now use a local stack, so Back returns to the previous detail before returning to the active top-level tab. Status: WORKING.
 - Many `More` / options buttons display menu affordances but only show toast feedback. They are not dead, but they are incomplete for the visual affordance. Status: PARTIAL.
 - Playlist import/export cards use file/share language but only show mock toasts. They should either be clarified as mock-only/toast-only or restyled away from real file actions. Status: PARTIAL.
 
@@ -53,16 +53,16 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 |---|---|---|---|---|---|
 | Global / AriaPreview | Toast behavior | Local toast appears and clears after timeout. | WORKING | Keep local display-only toast feedback. | Aria global/navigation interactions |
 | Global / AriaPreview | Overlay transitions | Now Playing, Lyrics and Queue mount as local animated overlays. | WORKING | Keep local overlay transitions. | Aria global/navigation interactions |
-| Global / AriaPreview | Detail navigation stack | Details open locally, but nested detail navigation replaces the current detail; Back clears to the active tab. | PARTIAL | Preserve previous detail when opening a nested detail, or visually avoid implying stack behavior. | Aria global/navigation interactions |
+| Global / AriaPreview | Detail navigation stack | Details open locally with stack-style history; Back pops to the previous detail, then clears to the active tab from the first detail. | WORKING | Preserve previous detail when opening a nested detail. | Aria global/navigation interactions |
 | Bottom Nav | Listen tab | Changes active tab and closes open detail/overlay when reachable. | WORKING | Navigate locally to Listen. | Aria global/navigation interactions |
 | Bottom Nav | Library tab | Changes active tab and closes open detail/overlay when reachable. | WORKING | Navigate locally to Library. | Aria global/navigation interactions |
 | Bottom Nav | Playlists tab | Changes active tab and closes open detail/overlay when reachable. | WORKING | Navigate locally to Playlists. | Aria global/navigation interactions |
 | Bottom Nav | Explore tab | Changes active tab and closes open detail/overlay when reachable. | WORKING | Navigate locally to Explore. | Aria global/navigation interactions |
-| Bottom Nav | Visible nav behind full overlays | Nav remains visible behind overlay but cannot be clicked; overlay intercepts pointer events. | PARTIAL | Hide/disable nav under overlays or make overlay tab change behavior intentional. | Aria global/navigation interactions |
+| Bottom Nav | Visible nav behind full overlays | Nav is not rendered while Now Playing, Lyrics or Queue overlays are open, and returns when the overlay closes. | WORKING | Hide nav under overlays so full playback surfaces own the screen. | Aria global/navigation interactions |
 | Mini Player | Mini player body | Opens Now Playing overlay by click or keyboard Enter/Space. | WORKING | Expand Now Playing overlay. | Aria global/navigation interactions |
-| Mini Player | Previous | Shows `Previous track (mock)` toast; no queue cycling. | PARTIAL | Either cycle local mock queue or keep toast but label as preview-only. | Aria playback overlay interactions |
+| Mini Player | Previous | Cycles the local static mock playback queue backward, wraps at the beginning, updates the mini player track copy and shows `Playing previous: <title> (mock)`. | WORKING | Cycle local mock queue only; no real playback. | Aria global/navigation interactions |
 | Mini Player | Play/Pause | Toggles local playing visual state. | WORKING | Toggle local mock playback state. | Aria playback overlay interactions |
-| Mini Player | Next | Shows `Next track (mock)` toast; no queue cycling. | PARTIAL | Either cycle local mock queue or keep toast but label as preview-only. | Aria playback overlay interactions |
+| Mini Player | Next | Cycles the local static mock playback queue forward, wraps at the end, updates the mini player track copy and shows `Playing next: <title> (mock)`. | WORKING | Cycle local mock queue only; no real playback. | Aria global/navigation interactions |
 | Mini Player | Progress underline | Looks like progress but has `pointer-events-none` and no handler. | SHOULD_NOT_BE_CLICKABLE | Keep passive or make it an actual seek affordance. | Aria playback overlay interactions |
 | Listen Home | Queue status icon button | Shows `Queue status (mock)` toast. | WORKING | Toast-only status is acceptable if this remains a status indicator. | Aria top-level screen interactions |
 | Listen Home | Main Play CTA | Calls local play handler, sets playing true, shows playback toast. | WORKING | Start local mock playback state. | Aria top-level screen interactions |
@@ -202,6 +202,13 @@ Resolve progress/seek behavior, previous/next queue cycling expectations, lyrics
 
 Remove or implement remaining fake option glyphs, especially Listen Home recent-row `•••`, and re-audit all repeated rows/buttons after fixes.
 
+## Bloco 7B Resolution Notes
+
+- Detail navigation now uses a local stack in `AriaPreview`: nested Album, Artist, Playlist and Track details preserve the previous detail and Back pops one level at a time.
+- Bottom navigation is intentionally hidden while Now Playing, Lyrics or Queue overlays are open, then restored after overlay collapse.
+- Mini player Previous / Next now rotate through the static mock playback queue in local React state, wrap at queue ends and update mini-player title/artist text without changing its visual styling.
+- Full propagation of current-track state into the full playback overlays remains deferred to the playback overlay interaction block because those components were outside the Bloco 7B allowed file list.
+
 ## Notes
 
 - Duplicated handlers: `AriaDetailHeader` and screen-level `More` buttons often produce similar toast-only responses; album, artist and playlist detail screens each have header more plus primary action-row more.
@@ -212,5 +219,5 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Interactions that should toggle local state: playlist filter chips, sort selection if visible, favorite in Track Details, shuffle/repeat, play/pause, and possibly local queue item selection/current track.
 - Interactions that should open overlay or sheet: global mini player, lyrics, queue, and all menu/more/options buttons if their ellipsis affordance remains.
 - Behavior needing mock data/state: local search/filter results, category list screens for Songs/Genres/Folders/Compilations/Radio, playlist folders, local sort state, local queue mutation/reorder, local clear confirmation, local progress position, and nested detail history.
-- Browser-observed behavior: opening a track from Album Detail opens Track Details, but Back returns to the Library tab instead of the Album Detail screen. This contradicts the screen contract's stack-style navigation wording.
-- Browser-observed behavior: Playwright could not click bottom nav while Queue was open because the full overlay intercepted pointer events, even though the nav remained visible underneath.
+- Browser-observed behavior from Bloco 7A resolved in Bloco 7B: opening a track from Album Detail opens Track Details, and Back now returns to Album Detail before returning to the active top-level tab.
+- Browser-observed behavior from Bloco 7A resolved in Bloco 7B: bottom nav is no longer visible behind Queue, Now Playing or Lyrics overlays.

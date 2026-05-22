@@ -1,13 +1,15 @@
 import { Pause, Play, SkipBack, SkipForward } from 'lucide-react'
-import { nowPlaying } from '../ariaMockData'
+import type { AriaTrack } from '../ariaMockData'
 
 export function AriaMiniPlayer({
+  currentTrack,
   isPlaying,
   onPlayPause,
   onExpand,
   onNext,
   onPrevious,
 }: {
+  currentTrack: AriaTrack
   isPlaying: boolean
   onPlayPause: () => void
   onExpand: () => void
@@ -30,10 +32,10 @@ export function AriaMiniPlayer({
       {/* Info */}
       <div className="min-w-0">
         <p className="truncate text-[11px] font-semibold tracking-[-0.01em] text-[#fff3e4]">
-          {nowPlaying.title}
+          {currentTrack.title}
         </p>
         <p className="truncate text-[10px] leading-[1.3] text-[#b9b1a7]">
-          {nowPlaying.artist}
+          {currentTrack.artist}
         </p>
       </div>
 
