@@ -1,4 +1,4 @@
-import { ChevronDown, Heart, MoreHorizontal, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, SlidersHorizontal, Volume2, WholeWord } from 'lucide-react'
+import { ChevronDown, Heart, MoreHorizontal, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, SlidersHorizontal, WholeWord } from 'lucide-react'
 import { nowPlaying } from '../ariaMockData'
 
 export function AriaNowPlaying({
@@ -96,11 +96,8 @@ export function AriaNowPlaying({
           <span className="absolute left-0 top-1/2 h-[3px] w-[37%] -translate-y-1/2 rounded-full bg-[#f0a13d]" />
           <span className="absolute left-[37%] top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ffad45] shadow-[0_0_0_4px_rgba(240,161,61,0.10)] transition group-active:scale-110" />
         </button>
-        <div className="mt-2 flex items-start justify-between text-[13px] text-[#c9bdae]">
+        <div className="mt-2 flex items-center justify-between text-[13px] text-[#c9bdae]">
           <span>1:37</span>
-          <span className="text-center text-xs leading-5 text-[#c9bdae]">
-            Hi-Res Audio<br />FLAC · Local
-          </span>
           <span>{nowPlaying.duration}</span>
         </div>
       </div>
@@ -161,17 +158,13 @@ export function AriaNowPlaying({
           <WholeWord size={21} />
         </button>
         <button
-          aria-label="Adjust volume"
-          className="flex min-w-0 flex-1 items-center justify-center gap-3 rounded-full px-2 py-2 text-[#eadac4] transition hover:bg-white/[0.06] hover:text-white"
-          onClick={() => onShowToast('Volume preview only (mock)')}
+          aria-label="Track source metadata"
+          className="flex h-9 min-w-[132px] items-center justify-center gap-2 rounded-full border border-white/[0.11] bg-white/[0.055] px-4 text-[12px] font-medium tracking-[0.03em] text-[#d8cbbb] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.075]"
+          onClick={() => onShowToast('FLAC · Local source (mock)')}
           type="button"
         >
-          <Volume2 size={21} className="shrink-0" />
-          <span className="relative h-4 w-full max-w-[118px] rounded-full" aria-hidden="true">
-            <span className="absolute left-0 right-0 top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-white/[0.16]" />
-            <span className="absolute left-0 top-1/2 h-[2px] w-[46%] -translate-y-1/2 rounded-full bg-[#f0a13d]" />
-            <span className="absolute left-[46%] top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ffad45] shadow-[0_0_0_4px_rgba(240,161,61,0.08)]" />
-          </span>
+          <span className="h-1.5 w-1.5 rounded-full bg-[#f0a13d]/80" aria-hidden="true" />
+          <span>FLAC · Local</span>
         </button>
         <button
           aria-label="Open queue"
