@@ -1,5 +1,20 @@
+import { useRef, useState } from 'react'
 import { ChevronDown, Heart, MoreHorizontal, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, SlidersHorizontal, WholeWord } from 'lucide-react'
 import { nowPlaying } from '../ariaMockData'
+
+type PlaybackContextItem = {
+  id: 'quality' | 'output' | 'source' | 'queue'
+  label: string
+  description: string
+  active?: boolean
+}
+
+const nowPlayingContextItems: PlaybackContextItem[] = [
+  { id: 'quality', label: 'FLAC 24/96', description: 'Track quality' },
+  { id: 'output', label: 'BTR11 · LDAC', description: 'Active output device', active: true },
+  { id: 'source', label: 'Local library', description: 'Playback source' },
+  { id: 'queue', label: 'Queue · 3 of 18', description: 'Queue position' },
+]
 
 export function AriaNowPlaying({
   isPlaying,
@@ -33,6 +48,14 @@ export function AriaNowPlaying({
   isFavorite: boolean
 }) {
   const repeatLabel = repeatMode === 'off' ? 'Repeat off' : repeatMode === 'all' ? 'Repeat all' : 'Repeat one'
+  const [contextIndex, setContextIndex] = useState(0)
+  const contextPointerStartX = useRef<number | null>(null)
+  const contextWasSwiped = useRef(false)
+  const activeContext = nowPlayingContextItems[contextIndex]
+
+  const shiftContext = (direction: 1 | -1) => {
+    setContextIndex((currentIndex) => (currentIndex + direction + nowPlayingContextItems.length) % nowPlayingContextItems.length)
+  }
 
   return (
     <div className="absolute inset-0 z-40 flex min-w-0 flex-col overflow-hidden bg-[radial-gradient(circle_at_50%_54%,rgba(239,149,45,0.18),transparent_38%),radial-gradient(circle_at_80%_18%,rgba(211,121,34,0.11),transparent_28%),linear-gradient(180deg,#071018_0%,#05090f_45%,#030609_100%)] text-[#f5ecdf]">
@@ -158,13 +181,45 @@ export function AriaNowPlaying({
           <WholeWord size={21} />
         </button>
         <button
-          aria-label="Track source metadata"
-          className="flex h-9 min-w-[132px] items-center justify-center gap-2 rounded-full border border-white/[0.11] bg-white/[0.055] px-4 text-[12px] font-medium tracking-[0.03em] text-[#d8cbbb] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.075]"
-          onClick={() => onShowToast('FLAC · Local source (mock)')}
+          aria-label={`${activeContext.description}: ${activeContext.label}. Swipe or use arrow keys to change playback context.`}
+          className="flex h-9 min-w-[132px] touch-pan-y items-center justify-center gap-2 rounded-full border border-white/[0.11] bg-white/[0.055] px-4 text-[12px] font-medium tracking-[0.03em] text-[#d8cbbb] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.075] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-[#f0a13d]/55"
+          onClick={() => {
+            if (contextWasSwiped.current) {
+              contextWasSwiped.current = false
+              return
+            }
+            onShowToast(`${activeContext.description}: ${activeContext.label} (mock)`)
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'ArrowLeft') {
+              event.preventDefault()
+              shiftContext(-1)
+            }
+            if (event.key === 'ArrowRight') {
+              event.preventDefault()
+              shiftContext(1)
+            }
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              shiftContext(1)
+            }
+          }}
+          onPointerDown={(event) => {
+            contextPointerStartX.current = event.clientX
+            contextWasSwiped.current = false
+          }}
+          onPointerUp={(event) => {
+            if (contextPointerStartX.current === null) return
+            const distance = event.clientX - contextPointerStartX.current
+            contextPointerStartX.current = null
+            if (Math.abs(distance) < 24) return
+            contextWasSwiped.current = true
+            shiftContext(distance < 0 ? 1 : -1)
+          }}
           type="button"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-[#f0a13d]/80" aria-hidden="true" />
-          <span>FLAC · Local</span>
+          {activeContext.active ? <span className="h-1.5 w-1.5 rounded-full bg-[#6edb8f] shadow-[0_0_8px_rgba(110,219,143,0.42)]" aria-hidden="true" /> : null}
+          <span className="whitespace-nowrap">{activeContext.label}</span>
         </button>
         <button
           aria-label="Open queue"
