@@ -171,7 +171,7 @@ export function AriaNowPlaying({
       </div>
 
       {/* Secondary controls */}
-      <div className="mt-12 flex items-center justify-between gap-4 px-9 pb-[max(1.65rem,env(safe-area-inset-bottom))]">
+      <div className="mt-auto flex items-center justify-between gap-4 px-9 pt-6 pb-[max(2.2rem,calc(env(safe-area-inset-bottom)+1.6rem))]">
         <button
           aria-label="Open lyrics"
           className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
