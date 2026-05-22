@@ -226,6 +226,14 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Library top-right tools/ListMusic control was replaced by an app settings icon and now opens shared Aria Settings. Library search remains unchanged and still opens the local Library Search Preview.
 - The shared settings panel is display-only/local-state-only with specific mock responses for every row. No settings persistence, backend calls, server calls, auth or network behavior was added.
 
+## Bloco 7C.2 Resolution Notes
+
+- Source and Aria Settings now render as Aria bottom-sheet overlays instead of inline/debug-like panels. The Source sheet remains active-source-only and Settings keeps the same mock-only rows.
+- Library category and search previews now open in bottom sheets, so Songs, Albums, Artists, Genres, Folders, Compilations, Search and Recently Added no longer push Library content down.
+- Explore search/category/recent previews now open in bottom sheets, preserving the discovery layout while keeping the same mock-only category/result behavior.
+- Opening a concrete album, artist, playlist or track from a sheet closes the sheet before opening the detail screen, preserving the Bloco 7B detail stack behavior.
+- Sheet titles now avoid unnecessary debug wording such as `Preview`; mock-only constraints remain in row copy/toasts where relevant. No real sync, search, filesystem, server or persistence behavior was added.
+
 ## Notes
 
 - Duplicated handlers: `AriaDetailHeader` and screen-level `More` buttons often produce similar toast-only responses; album, artist and playlist detail screens each have header more plus primary action-row more.

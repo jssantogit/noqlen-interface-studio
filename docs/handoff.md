@@ -66,6 +66,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7B — Completar interações globais/navigation do Aria
 [x] Bloco 7C — Completar interações das telas principais do Aria
 [x] Bloco 7C.1 — Ajustar controles de fonte e configurações do Aria
+[x] Bloco 7C.2 — Converter submenus do Aria para sheets/popups
 [ ] Bloco 7D — Completar interações das telas detail do Aria
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
@@ -123,6 +124,15 @@ Unknown / browser-check needed: 0
 - [x] Replace Library header tools icon with Aria app settings.
 - [x] Preserve Library search preview behavior.
 - [x] Keep source/settings behavior local-state-only with no sync, server, filesystem or persistence behavior.
+
+### Bloco 7C.2 — Submenu sheet cleanup
+
+- [x] Move Source and Settings out of inline screen flow into bottom-sheet overlays.
+- [x] Move Library category/search previews into bottom-sheet overlays.
+- [x] Move Explore category/search previews into bottom-sheet overlays.
+- [x] Ensure opening concrete detail rows from sheets closes the sheet first.
+- [x] Keep sheet titles app-like and avoid unnecessary `Preview` debug wording.
+- [x] Preserve mock-only behavior with no real sync, search, server, filesystem or persistence behavior.
 
 ### Bloco 7D — Detail screen interactions
 

@@ -302,6 +302,8 @@ Must provide:
 - Top-level category rows/cards open local mock category/list states. Broad shortcuts navigate to the relevant tab/category state instead of opening arbitrary representative details.
 - Listen/Home top source control opens a mock active-source panel. Source panels must only display configured active sources; local sources expose `Atualizar` and `Configurações`, while server sources expose `Sincronizar` and `Configurações`.
 - Library top settings control opens Aria app settings. The bottom navigation Library tab icon remains a Library tab and must not be repurposed as Settings.
+- Top-level submenus open as Aria bottom-sheet/pop overlays, not inline debug panels. Source, Settings, Library category/search and Explore category/search sheets follow an Aria-styled bottom-sheet pattern inspired by Anchor, with backdrop, handle, close button and internal scrolling.
+- Sheet titles should use app-facing labels such as `Search`, `Albums`, `Source` and `Aria Settings`; avoid unnecessary debug wording like `Preview` unless the copy is specifically warning about mock-only behavior.
 - Playlist Import/Export controls are preview-only and must never open files, create downloads or call share/filesystem APIs.
 - Detail screens need a visible back control.
 - Bottom nav tab changes close any open detail screen.

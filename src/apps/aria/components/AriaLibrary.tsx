@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { ChevronRight, Disc3, Folder, Gem, Music2, Search, Settings, Tags, UsersRound } from 'lucide-react'
-import type { AriaAlbum, AriaArtist, AriaPlaylist, AriaTrack } from '../ariaMockData'
-import { ariaAlbums, ariaArtists, ariaPlaylists, ariaQueue } from '../ariaMockData'
+import type { AriaAlbum, AriaPlaylist } from '../ariaMockData'
+import { ariaAlbums, ariaPlaylists } from '../ariaMockData'
 
 type LibraryCategoryId = 'songs' | 'albums' | 'artists' | 'genres' | 'folders' | 'compilations' | 'playlists' | 'recent' | 'search'
 
@@ -16,116 +15,22 @@ const categories: { id: LibraryCategoryId; label: string; count: string; icon: t
 
 const playlistArt = ['aria-art-blue', 'aria-art-dune', 'aria-art-record']
 const recentArt = ['aria-art-tree', 'aria-art-violet', 'aria-art-mountain']
-const mockGenres = ['Ambient', 'Classical', 'Progressive Metal', 'Electronic', 'Jazz']
-const mockFolders = ['Local Library Preview', 'Imported Archive', 'Focus Collections']
-const mockCompilations = ['Piano Sketches', 'Late Night Edits', 'Collected Singles']
 
 export function AriaLibrary({
   onOpenAlbum,
-  onOpenArtist,
   onOpenPlaylist,
   onOpenSettings,
-  onOpenTrack,
+  onOpenLibraryCategory,
   onNavigateToPlaylists,
   onShowToast,
 }: {
   onOpenAlbum: (album: AriaAlbum) => void
-  onOpenArtist: (artist: AriaArtist) => void
   onOpenPlaylist: (playlist: AriaPlaylist) => void
   onOpenSettings: () => void
-  onOpenTrack: (track: AriaTrack) => void
+  onOpenLibraryCategory: (category: LibraryCategoryId) => void
   onNavigateToPlaylists: () => void
   onShowToast: (message: string) => void
 }) {
-  const [activeCategory, setActiveCategory] = useState<LibraryCategoryId | null>(null)
-
-  const openCategory = (category: LibraryCategoryId) => {
-    setActiveCategory(category)
-    onShowToast(`${category === 'recent' ? 'Recently Added' : category[0].toUpperCase() + category.slice(1)} list (mock)`)
-  }
-
-  const renderCategoryPreview = () => {
-    if (!activeCategory) return null
-
-    const title = activeCategory === 'recent'
-      ? 'Recently Added'
-      : activeCategory === 'search'
-        ? 'Library Search Preview'
-        : `${activeCategory[0].toUpperCase()}${activeCategory.slice(1)} Preview`
-
-    return (
-      <section className="mt-4 rounded-[18px] border border-white/[0.08] bg-white/[0.035] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
-        <div className="flex items-center justify-between">
-          <h2 className="font-serif text-[23px] leading-none text-[#fff3e4]">{title}</h2>
-          <button
-            className="text-[13px] text-[#f0a13d] transition hover:text-[#ffb958]"
-            onClick={() => setActiveCategory(null)}
-            type="button"
-          >
-            Close
-          </button>
-        </div>
-
-        {activeCategory === 'albums' || activeCategory === 'recent' ? (
-          <div className="mt-3 space-y-1">
-            {ariaAlbums.map((album) => (
-              <button className="flex w-full items-center gap-3 rounded-2xl px-2 py-2 text-left transition hover:bg-white/[0.045]" key={album.id} onClick={() => onOpenAlbum(album)} type="button">
-                <span className="aria-art aria-art-tiny aria-art-stack shrink-0" />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[15px] font-semibold text-[#f5ecdf]">{album.title}</span>
-                  <span className="mt-0.5 block truncate text-[12px] text-[#b9b1a7]">{album.artist} · {album.year}</span>
-                </span>
-                <ChevronRight size={18} className="text-[#ffb05d]" />
-              </button>
-            ))}
-          </div>
-        ) : activeCategory === 'artists' ? (
-          <div className="mt-3 space-y-1">
-            {ariaArtists.map((artist) => (
-              <button className="flex w-full items-center gap-3 rounded-2xl px-2 py-2 text-left transition hover:bg-white/[0.045]" key={artist.id} onClick={() => onOpenArtist(artist)} type="button">
-                <span className="aria-art aria-art-tiny aria-art-portrait shrink-0" />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[15px] font-semibold text-[#f5ecdf]">{artist.name}</span>
-                  <span className="mt-0.5 block truncate text-[12px] text-[#b9b1a7]">{artist.genre}</span>
-                </span>
-                <ChevronRight size={18} className="text-[#ffb05d]" />
-              </button>
-            ))}
-          </div>
-        ) : activeCategory === 'songs' || activeCategory === 'search' ? (
-          <div className="mt-3 space-y-1">
-            {(activeCategory === 'search' ? ariaQueue.slice(0, 4) : ariaQueue).map((track) => (
-              <button className="flex w-full items-center gap-3 rounded-2xl px-2 py-2 text-left transition hover:bg-white/[0.045]" key={track.id} onClick={() => onOpenTrack(track)} type="button">
-                <span className="aria-art aria-art-tiny aria-art-lines shrink-0" />
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[15px] font-semibold text-[#f5ecdf]">{track.title}</span>
-                  <span className="mt-0.5 block truncate text-[12px] text-[#b9b1a7]">{track.artist} · {track.album}</span>
-                </span>
-                <span className="text-[12px] text-[#b9b1a7]">{track.duration}</span>
-              </button>
-            ))}
-          </div>
-        ) : activeCategory === 'genres' ? (
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            {mockGenres.map((genre) => <button className="rounded-2xl border border-white/[0.075] bg-white/[0.035] px-3 py-2 text-left text-[14px] text-[#f5ecdf] transition hover:bg-white/[0.055]" key={genre} onClick={() => onShowToast(`Open ${genre} genre (mock)`)} type="button">{genre}</button>)}
-          </div>
-        ) : activeCategory === 'folders' ? (
-          <div className="mt-3 space-y-1">
-            {mockFolders.map((folder) => <button className="flex w-full items-center justify-between rounded-2xl px-3 py-2 text-left text-[14px] text-[#f5ecdf] transition hover:bg-white/[0.045]" key={folder} onClick={() => onShowToast(`Open ${folder} folder (mock - no filesystem access)`)} type="button"><span>{folder}</span><ChevronRight size={17} className="text-[#ffb05d]" /></button>)}
-          </div>
-        ) : activeCategory === 'compilations' ? (
-          <div className="mt-3 space-y-1">
-            {mockCompilations.map((compilation) => <button className="flex w-full items-center justify-between rounded-2xl px-3 py-2 text-left text-[14px] text-[#f5ecdf] transition hover:bg-white/[0.045]" key={compilation} onClick={() => onShowToast(`Open ${compilation} compilation (mock)`)} type="button"><span>{compilation}</span><ChevronRight size={17} className="text-[#ffb05d]" /></button>)}
-          </div>
-        ) : (
-          <div className="mt-3 space-y-1">
-            {ariaPlaylists.map((playlist) => <button className="flex w-full items-center justify-between rounded-2xl px-3 py-2 text-left text-[14px] text-[#f5ecdf] transition hover:bg-white/[0.045]" key={playlist.id} onClick={() => onOpenPlaylist(playlist)} type="button"><span>{playlist.title}</span><ChevronRight size={17} className="text-[#ffb05d]" /></button>)}
-          </div>
-        )}
-      </section>
-    )
-  }
-
   return (
     <div className="min-h-full min-w-0 overflow-x-hidden px-4 pt-6 text-[#f5ecdf]">
       <div className="flex items-start justify-between">
@@ -146,7 +51,7 @@ export function AriaLibrary({
             aria-label="Library search"
             className="grid h-10 w-10 place-items-center rounded-full transition hover:bg-white/[0.04]"
             onClick={() => {
-              setActiveCategory('search')
+              onOpenLibraryCategory('search')
               onShowToast('Library search preview (mock)')
             }}
             type="button"
@@ -163,7 +68,7 @@ export function AriaLibrary({
             <button
               className="group flex w-full items-center gap-4 rounded-[16px] px-1 py-1 text-left transition hover:bg-white/[0.035]"
               key={cat.id}
-              onClick={() => openCategory(cat.id)}
+              onClick={() => onOpenLibraryCategory(cat.id)}
               type="button"
             >
               <span className="grid h-8 w-8 shrink-0 place-items-center text-[#ffad26]">
@@ -176,8 +81,6 @@ export function AriaLibrary({
           )
         })}
       </section>
-
-      {renderCategoryPreview()}
 
       <section className="mt-5">
         <div className="flex items-center justify-between">
@@ -213,7 +116,7 @@ export function AriaLibrary({
           <h2 className="font-serif text-[27px] leading-none text-[#fff3e4]">Recently Added</h2>
           <button
             className="text-[19px] text-[#f0a13d] transition hover:text-[#ffb958]"
-            onClick={() => openCategory('recent')}
+            onClick={() => onOpenLibraryCategory('recent')}
             type="button"
           >
             See all
