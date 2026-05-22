@@ -81,18 +81,18 @@ export function AriaNowPlaying({
       </header>
 
       {/* Artwork */}
-      <div className="flex shrink-0 flex-col items-center px-7 pt-12">
-        <div className="aria-art aria-art-architecture h-[272px] w-[272px] max-w-full rounded-[25px] shadow-[0_1.25rem_3rem_rgba(0,0,0,0.48),0_0_3.2rem_rgba(240,161,61,0.12)]" />
+      <div className="flex shrink-0 flex-col items-center px-7 pt-8">
+        <div className="aria-art aria-art-architecture h-[280px] w-[280px] max-w-full rounded-[25px] shadow-[0_1.25rem_3rem_rgba(0,0,0,0.48),0_0_3.2rem_rgba(240,161,61,0.12)]" />
       </div>
 
       {/* Track info */}
-      <div className="px-7 pt-7">
+      <div className="px-7 pt-6">
         <div className="flex min-w-0 items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h2 className="truncate font-serif text-[32px] leading-[1.03] text-[#fff3e4]">
+            <h2 className="truncate font-serif text-[26px] leading-[1.03] text-[#fff3e4]">
               {nowPlaying.title}
             </h2>
-            <p className="mt-1.5 truncate font-serif text-[19px] text-[#f0a13d]">
+            <p className="mt-1.5 truncate font-serif text-[17px] text-[#f0a13d]">
               {nowPlaying.artist}
             </p>
           </div>
@@ -126,7 +126,7 @@ export function AriaNowPlaying({
       </div>
 
       {/* Controls */}
-      <div className="flex items-center justify-center gap-5 px-6 pt-6">
+      <div className="flex items-center justify-center gap-5 px-6 pt-3">
         <button
           aria-label={isShuffled ? 'Shuffle on' : 'Shuffle off'}
           className={`grid h-10 w-10 place-items-center rounded-full transition ${isShuffled ? 'text-[#f0a13d]' : 'text-[#eadac4] hover:bg-white/[0.07]'}`}
@@ -171,7 +171,7 @@ export function AriaNowPlaying({
       </div>
 
       {/* Secondary controls */}
-      <div className="mt-5 flex items-center justify-between gap-4 px-9 pb-[max(1.25rem,calc(env(safe-area-inset-bottom)+0.8rem))]">
+      <div className="mt-8 flex items-center justify-between gap-4 px-9 pb-[max(1.25rem,calc(env(safe-area-inset-bottom)+0.8rem))]">
         <button
           aria-label="Open lyrics"
           className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
