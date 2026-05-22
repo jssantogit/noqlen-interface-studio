@@ -69,7 +69,8 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7C.2 — Converter submenus do Aria para sheets/popups
 [x] Bloco 7C.3 — Ajustar copy/status da fonte do Aria
 [x] Bloco 7D — Completar interações das telas detail do Aria
-[x] Bloco 7D.1 — Corrigir Library pages e redundância de menus nas details
+[x] Bloco 7D.1S — Definir contrato visual de Library categories e Detail headers
+[ ] Bloco 7D.1I — Implementar contrato aprovado de Library/detail cleanup
 [ ] Bloco 7D.2 — Redesign dedicado do Aria Settings
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
@@ -155,14 +156,22 @@ Unknown / browser-check needed: 0
 - [x] Resolve Add to Queue behavior or clarify as toast-only/local state.
 - [x] Decide consistent track-row rule: defer playback normalization to Bloco 7E while keeping detail rows functional.
 
-### Bloco 7D.1 — Library pages and detail action cleanup
+### Bloco 7D.1S — Library/detail visual contract
 
-- [x] Convert Library category sheets to dedicated pages.
-- [x] Keep Library Search/Settings as sheets for now.
-- [x] Remove redundant detail type labels where they are visual noise.
-- [x] Remove duplicate Album/Artist/Playlist menu entry points.
-- [x] Preserve one contextual menu per detail screen.
-- [x] Adjust sheet row semantics so direct actions do not look like navigation.
+- [x] Reverted the failed Bloco 7D.1 implementation that promoted all Library categories to generic pages.
+- [x] Document the Detail Header/Hero contract before another cleanup implementation.
+- [x] Document per-category Library visual treatments instead of forcing one page-row template.
+- [x] Define which Library destinations should become full views versus sheets/lightweight auxiliary flows.
+- [x] Document sheet usage rules for Aria browsing, actions and selectors.
+- [x] Set acceptance criteria for the next implementation block.
+
+### Bloco 7D.1I — Approved Library/detail cleanup implementation
+
+- [ ] Implement only the approved category treatments from the visual contract.
+- [ ] Do not create one generic page component for every Library category.
+- [ ] Preserve Aria's current music-player identity and approved visual references.
+- [ ] Keep implementation local-state-only, mock-only and reversible.
+- [ ] Update docs and commit/push the implementation separately.
 
 ### Bloco 7D.2 — Aria Settings redesign
 

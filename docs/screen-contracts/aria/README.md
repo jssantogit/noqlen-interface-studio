@@ -93,6 +93,12 @@ Must preserve:
 
 Implemented in Bloco 4.
 
+Bloco 7D.1S added a dedicated category contract in:
+
+```txt
+docs/screen-contracts/aria/library-category-contract.md
+```
+
 Must preserve:
 
 - large serif title;
@@ -101,6 +107,16 @@ Must preserve:
 - My Playlists shelf;
 - Recently Added shelf;
 - music-library feeling, not file-manager styling.
+
+Category cleanup rules:
+
+- Songs should be a dense track index/list, not generic cards.
+- Albums should be an artwork-led shelf/grid, not Settings rows.
+- Artists should be a compact artist index, not an admin list.
+- Genres can stay lightweight as chips/cards, sheet or compact view.
+- Folders must stay low-emphasis, mock-only and not file-manager-like.
+- Compilations should feel like collections/shelves if promoted beyond a sheet.
+- Recently Added should feel like a recent music feed/shelf.
 
 ### Explore
 
@@ -133,6 +149,21 @@ The Playlists tab must not include a fake featured/music card unless a future re
 ## Detail screens
 
 Implemented in Bloco 5 / Bloco 5.1.
+
+Bloco 7D.1S added a stricter detail header/hero contract in:
+
+```txt
+docs/screen-contracts/aria/detail-header-contract.md
+```
+
+Summary rules:
+
+- Detail screens must not use a large empty top header row after removing redundant type labels.
+- Back should be compact and lightweight, either floating/overlay or inline with minimal vertical footprint.
+- Back should not compete with album artwork, artist hero or playlist artwork.
+- Album, Artist and Playlist details should expose one contextual menu only.
+- Album, Artist and Playlist details should not reintroduce object-type labels as decorative filler.
+- Track Details may keep one contextual menu if no duplicate menu exists.
 
 ### Album Detail
 
@@ -299,10 +330,12 @@ Must provide:
 
 - Four-tab bottom navigation remains persistent for top-level screens.
 - Detail screens use stack-style local navigation inside Aria: opening a nested Album, Artist, Playlist or Track detail pushes a new detail entry, and Back returns to the previous detail before returning to the active top-level tab.
-- Top-level category rows/cards open local mock category/list states. Library categories are full in-app pages, not sheets. Broad shortcuts navigate to the relevant tab/category state instead of opening arbitrary representative details.
+- Top-level category rows/cards open local mock category/list states. Broad shortcuts navigate to the relevant tab/category state instead of opening arbitrary representative details.
+- Library category destinations must follow the dedicated visual contract in `docs/screen-contracts/aria/library-category-contract.md`. Songs, Albums and Artists are recommended as pages/views; Recently Added can become a page/view or expanded shelf; Genres and Folders should remain sheets or lightweight views unless later justified; Compilations should become a page/view only if designed as collections.
+- Do not force every Library category into the same page model. The failed generic Library-pages approach was reverted and must not be repeated.
 - Listen/Home top source control opens a mock active-source panel. Source panels must only display configured active sources; local sources expose `Refresh` and `Settings`, while server sources expose `Sync` and `Settings`. Green online status indicators are server/online-only and must not be shown for the default Local library source.
 - Library top settings control opens Aria app settings. The bottom navigation Library tab icon remains a Library tab and must not be repurposed as Settings.
-- Sheets are for context menus, quick actions, lightweight selectors and temporary auxiliary flows. They must not replace major Library pages.
+- Sheets are for context menus, quick actions, selectors, temporary auxiliary flows, search preview and settings/source until redesigned. They must not replace major Library browsing sections that need full visual identity.
 - Top-level submenus open as Aria bottom-sheet/pop overlays, not inline debug panels. Source, Settings, Library Search and Explore category/search sheets follow an Aria-styled bottom-sheet pattern inspired by Anchor, with backdrop, handle, close button and internal scrolling.
 - Detail headers should stay navigation-first: avoid redundant object-type labels and duplicate header/action-row ellipsis menus when one contextual menu is enough.
 - Sheet titles should use app-facing labels such as `Search`, `Albums`, `Source` and `Aria Settings`; avoid unnecessary debug wording like `Preview` unless the copy is specifically warning about mock-only behavior.

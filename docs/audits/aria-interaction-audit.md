@@ -250,19 +250,18 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Track-row tap playback normalization remains deferred to Bloco 7E; in Bloco 7D, detail track rows continue opening Track Details.
 - No real playback, queue persistence, playlist persistence, filesystem access or network behavior was added.
 
-## Bloco 7D.1 Resolution Notes
+## Bloco 7D.1S Contract Notes
 
-- Library category rows now open dedicated in-app pages rather than bottom sheets for Songs, Albums, Artists, Genres, Folders, Compilations and Recently Added.
-- Bottom sheets are reserved for contextual/auxiliary flows, not major Library navigation. Library Search and Aria Settings intentionally remain sheets for now.
-- Album, Artist and Playlist Detail screens now have one contextual menu entry point instead of duplicated header and action-row ellipsis buttons.
-- Redundant detail type labels were removed from detail headers where the page content already communicates the object type.
-- Sheet action rows no longer all present as navigation rows; direct actions avoid misleading chevrons, while navigation/picker rows keep them.
+- The failed generic Library-pages approach from Bloco 7D.1 was reverted. It promoted all Library categories to a single broad page model, created generic list surfaces, and caused detail headers to gain empty top space where Back competed with the hero/card.
+- The next implementation block must follow the visual contracts in `docs/screen-contracts/aria/library-category-contract.md` and `docs/screen-contracts/aria/detail-header-contract.md`.
+- Songs, Albums, Artists and Recently Added need category-specific music-player treatments; Genres, Folders and Compilations should stay lightweight unless designed with their own visual identity.
+- Detail cleanup must avoid large empty header bars, duplicate ellipsis menus and decorative Album/Artist/Playlist labels.
 - Settings redesign remains deferred to Bloco 7D.2.
 - Playback overlays remain deferred to Bloco 7E.
 
 ## Notes
 
-- Duplicated detail menu handlers from Bloco 7D were resolved in Bloco 7D.1: album, artist and playlist details now keep one action-row contextual menu and use navigation-only headers.
+- Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.
 - Duplicated navigation handlers: `AriaTrackRow` number/artwork and title buttons both open the same track detail. This works, but creates multiple focusable controls per row.
 - Visual affordances that should probably become passive if not implemented: mini player progress underline, artist tags, static metadata rows, lyric lines, and possibly queue drag handles if local reorder is not planned.
 - Interactions that can remain toast-only: mock create playlist, new folder, save queue as playlist, show in folder, static status buttons, and current-track feedback, provided copy stays clearly mock-only and does not imply real filesystem/download behavior.
