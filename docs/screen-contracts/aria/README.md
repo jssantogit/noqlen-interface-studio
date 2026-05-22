@@ -300,6 +300,8 @@ Must provide:
 - Four-tab bottom navigation remains persistent for top-level screens.
 - Detail screens use stack-style local navigation inside Aria: opening a nested Album, Artist, Playlist or Track detail pushes a new detail entry, and Back returns to the previous detail before returning to the active top-level tab.
 - Top-level category rows/cards open local mock category/list states. Broad shortcuts navigate to the relevant tab/category state instead of opening arbitrary representative details.
+- Listen/Home top source control opens a mock active-source panel. Source panels must only display configured active sources; local sources expose `Atualizar` and `Configurações`, while server sources expose `Sincronizar` and `Configurações`.
+- Library top settings control opens Aria app settings. The bottom navigation Library tab icon remains a Library tab and must not be repurposed as Settings.
 - Playlist Import/Export controls are preview-only and must never open files, create downloads or call share/filesystem APIs.
 - Detail screens need a visible back control.
 - Bottom nav tab changes close any open detail screen.
@@ -342,6 +344,7 @@ Aria must never:
 - call a backend;
 - call Navidrome;
 - call Forge Core;
+- perform real sync or source/server connection behavior;
 - use `fetch`/`axios` for app behavior;
 - use `FileReader`;
 - use `fs`;

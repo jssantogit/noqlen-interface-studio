@@ -217,6 +217,15 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Explore search and category cards now open local preview modes instead of arbitrary first-item details. Genres, Albums, Artists, Radio, Songs, Playlists, Search and Recently Explored all expose local mock lists; concrete result rows open valid detail screens where appropriate.
 - Deferred to Bloco 7D/7E: detail-screen menu/options completeness, detail track-row playback semantics, playback overlay progress/queue/reorder behavior and full no-dead-control re-audit across non-top-level surfaces.
 
+## Bloco 7C.1 Resolution Notes
+
+- Listen Home top-right control is now a source/server status control instead of a queue/status glyph. It uses a server-style icon and opens an inline Source panel.
+- The Source panel shows only the active configured source. The default active source is `Local library`, marked active, with `Device storage preview` detail.
+- Local source actions are `Atualizar` and `Configurações`; `Atualizar` shows a specific mock refresh toast and `Configurações` opens the shared Aria Settings panel.
+- The source model supports a server source path mock-only: server sources would show `Sincronizar` and route sync feedback to a mock toast. No real sync, server connection, filesystem scan or persistence was added.
+- Library top-right tools/ListMusic control was replaced by an app settings icon and now opens shared Aria Settings. Library search remains unchanged and still opens the local Library Search Preview.
+- The shared settings panel is display-only/local-state-only with specific mock responses for every row. No settings persistence, backend calls, server calls, auth or network behavior was added.
+
 ## Notes
 
 - Duplicated handlers: `AriaDetailHeader` and screen-level `More` buttons often produce similar toast-only responses; album, artist and playlist detail screens each have header more plus primary action-row more.

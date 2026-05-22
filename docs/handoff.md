@@ -65,6 +65,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7A — Auditar interações do Aria
 [x] Bloco 7B — Completar interações globais/navigation do Aria
 [x] Bloco 7C — Completar interações das telas principais do Aria
+[x] Bloco 7C.1 — Ajustar controles de fonte e configurações do Aria
 [ ] Bloco 7D — Completar interações das telas detail do Aria
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
@@ -113,6 +114,15 @@ Unknown / browser-check needed: 0
 - [x] Resolve Explore category cards that imply category browsing.
 - [x] Resolve Search / See all / Sort affordances with local mock behavior or passive styling.
 - [x] Keep import/export strictly mock-only and avoid real file/download implication.
+
+### Bloco 7C.1 — Source and settings top controls
+
+- [x] Replace Listen Home queue/status glyph with source/server status control.
+- [x] Add active-source panel showing only the configured active source.
+- [x] Keep local source actions as `Atualizar` and `Configurações` with mock-only behavior.
+- [x] Replace Library header tools icon with Aria app settings.
+- [x] Preserve Library search preview behavior.
+- [x] Keep source/settings behavior local-state-only with no sync, server, filesystem or persistence behavior.
 
 ### Bloco 7D — Detail screen interactions
 

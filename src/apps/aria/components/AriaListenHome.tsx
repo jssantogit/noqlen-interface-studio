@@ -1,7 +1,21 @@
 import { useState } from 'react'
-import { ListMusic, Mic2, Play, Search } from 'lucide-react'
+import { ListMusic, Mic2, Play, Search, Server } from 'lucide-react'
 import type { AriaAlbum, AriaTrack } from '../ariaMockData'
 import { ariaAlbums, ariaQueue, nowPlaying } from '../ariaMockData'
+
+type ActiveSource = {
+  type: 'local' | 'server'
+  name: string
+  status: string
+  detail: string
+}
+
+const activeSource: ActiveSource = {
+  type: 'local',
+  name: 'Local library',
+  status: 'Active local source',
+  detail: 'Device storage preview',
+}
 
 export function AriaListenHome({
   onPlay,
@@ -10,6 +24,7 @@ export function AriaListenHome({
   onNavigateToLibrary,
   onNavigateToExplore,
   onNavigateToPlaylists,
+  onOpenSettings,
   onShowToast,
 }: {
   onPlay: () => void
@@ -18,9 +33,11 @@ export function AriaListenHome({
   onNavigateToLibrary: () => void
   onNavigateToExplore: () => void
   onNavigateToPlaylists: () => void
+  onOpenSettings: () => void
   onShowToast: (message: string) => void
 }) {
   const [showAllRecent, setShowAllRecent] = useState(false)
+  const [sourcePanelOpen, setSourcePanelOpen] = useState(false)
   const recentAdditions = [
     { id: 'ra-1', title: 'Midnight Horizons', artist: 'Ólafur Arnalds', type: 'Album', art: 'aria-art aria-art-tiny aria-art-mist', onOpen: () => onOpenAlbum(ariaAlbums[3]) },
     { id: 'ra-2', title: 'Sunday Morning', artist: 'Cory', type: 'Track', art: 'aria-art aria-art-tiny aria-art-tree', onOpen: () => onOpenTrack(ariaQueue[3]) },
@@ -43,15 +60,59 @@ export function AriaListenHome({
           </h1>
         </div>
         <button
-          aria-label="Queue status"
+          aria-label="Library source status"
           className="relative mt-2 grid h-9 w-9 place-items-center rounded-xl border border-white/[0.18] bg-white/[0.035] text-[#f3e7d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
-          onClick={() => onShowToast('Queue status (mock)')}
+          onClick={() => setSourcePanelOpen((current) => !current)}
           type="button"
         >
-          <span className="text-lg leading-none">▤</span>
+          <Server size={19} strokeWidth={1.65} />
           <span className="absolute bottom-1 right-1 h-2 w-2 rounded-full bg-[#65e985] shadow-[0_0_0_2px_#071017]" />
         </button>
       </div>
+
+      {sourcePanelOpen && (
+        <section className="mt-4 rounded-[18px] border border-white/[0.08] bg-white/[0.035] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+          <div className="flex items-center justify-between">
+            <h2 className="font-serif text-[22px] leading-none text-[#fff3e4]">Source</h2>
+            <button
+              aria-label="Close source panel"
+              className="text-[13px] text-[#f0a13d] transition hover:text-[#ffb958]"
+              onClick={() => setSourcePanelOpen(false)}
+              type="button"
+            >
+              Close
+            </button>
+          </div>
+          <div className="mt-3 rounded-[16px] border border-white/[0.075] bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.025))] p-3">
+            <div className="flex items-start gap-3">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#f0a13d]/15 text-[#f0a13d]">
+                <Server size={19} strokeWidth={1.6} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[15px] font-semibold text-[#fff3e4]">{activeSource.name}</p>
+                <p className="mt-1 text-[12px] text-[#65e985]">{activeSource.status}</p>
+                <p className="mt-1 text-[12px] text-[#b9b1a7]">{activeSource.detail}</p>
+              </div>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <button
+                className="rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] px-3 py-2 text-[13px] font-bold text-[#1a1008] transition active:scale-[0.98]"
+                onClick={() => onShowToast(activeSource.type === 'server' ? 'Server sync started (mock)' : 'Local library refreshed (mock)')}
+                type="button"
+              >
+                {activeSource.type === 'server' ? 'Sincronizar' : 'Atualizar'}
+              </button>
+              <button
+                className="rounded-full border border-white/[0.1] bg-white/[0.04] px-3 py-2 text-[13px] font-semibold text-[#f0a13d] transition hover:bg-white/[0.07]"
+                onClick={onOpenSettings}
+                type="button"
+              >
+                Configurações
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="mt-5 overflow-hidden rounded-[22px] border border-white/[0.08] bg-[linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-3 shadow-[0_18px_40px_rgba(0,0,0,0.26),inset_0_1px_0_rgba(255,255,255,0.06)]">
         <div className="flex gap-3.5">

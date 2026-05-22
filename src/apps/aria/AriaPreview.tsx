@@ -36,6 +36,7 @@ export function AriaPreview() {
   const [isFavorite, setIsFavorite] = useState(false)
   const [detailStack, setDetailStack] = useState<AriaDetailScreen[]>([])
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
+  const [settingsPanelOpen, setSettingsPanelOpen] = useState(false)
   const [toast, setToast] = useState<{ message: string } | null>(null)
 
   const detailScreen = detailStack.at(-1) ?? null
@@ -111,6 +112,14 @@ export function AriaPreview() {
     setPlaybackOverlay('queue')
   }, [])
 
+  const handleOpenSettings = useCallback(() => {
+    setSettingsPanelOpen(true)
+  }, [])
+
+  const handleCloseSettings = useCallback(() => {
+    setSettingsPanelOpen(false)
+  }, [])
+
   const handleNavigateToExplore = useCallback(() => {
     setActiveTab('explore')
     setDetailStack([])
@@ -164,11 +173,12 @@ export function AriaPreview() {
         onOpenTrack={handleOpenTrack}
         onNavigateToExplore={handleNavigateToExplore}
         onNavigateToPlaylists={handleNavigateToPlaylists}
+        onOpenSettings={handleOpenSettings}
         onPlay={handlePlay}
         onShowToast={showToast}
       />
     ),
-    library: <AriaLibrary onNavigateToPlaylists={handleNavigateToPlaylists} onOpenAlbum={handleOpenAlbum} onOpenArtist={handleOpenArtist} onOpenPlaylist={handleOpenPlaylist} onOpenTrack={handleOpenTrack} onShowToast={showToast} />,
+    library: <AriaLibrary onNavigateToPlaylists={handleNavigateToPlaylists} onOpenAlbum={handleOpenAlbum} onOpenArtist={handleOpenArtist} onOpenPlaylist={handleOpenPlaylist} onOpenSettings={handleOpenSettings} onOpenTrack={handleOpenTrack} onShowToast={showToast} />,
     playlists: <AriaPlaylists onOpenPlaylist={handleOpenPlaylist} onShowToast={showToast} />,
     explore: <AriaExplore onOpenAlbum={handleOpenAlbum} onOpenArtist={handleOpenArtist} onOpenPlaylist={handleOpenPlaylist} onOpenTrack={handleOpenTrack} onShowToast={showToast} />,
   }
@@ -274,6 +284,63 @@ export function AriaPreview() {
         )}
       </AnimatePresence>
 
+      {/* Aria settings */}
+      <AnimatePresence>
+        {settingsPanelOpen && (
+          <motion.div
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 z-[45] flex items-end bg-black/35 px-3 pb-[6.25rem]"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            onClick={handleCloseSettings}
+            transition={{ duration: 0.18 }}
+          >
+            <motion.section
+              animate={{ y: 0 }}
+              aria-label="Aria settings panel"
+              className="w-full rounded-[24px] border border-white/[0.11] bg-[#101820]/95 p-4 text-[#f5ecdf] shadow-[0_24px_60px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.07)] backdrop-blur-xl"
+              exit={{ y: 20 }}
+              initial={{ y: 26 }}
+              onClick={(event) => event.stopPropagation()}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#f0a13d]">Settings</p>
+                  <h2 className="mt-1 font-serif text-[27px] leading-none text-[#fff3e4]">Aria Settings</h2>
+                </div>
+                <button
+                  aria-label="Close Aria settings"
+                  className="rounded-full border border-white/[0.1] bg-white/[0.04] px-3 py-1.5 text-[12px] text-[#f0a13d] transition hover:bg-white/[0.07]"
+                  onClick={handleCloseSettings}
+                  type="button"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="mt-4 space-y-3">
+                <SettingsSection title="Library Source">
+                  <SettingsRow label="Active source" value="Local library" onClick={() => showToast('Source settings preview (mock)')} />
+                  <SettingsRow label="Mode" value="Local preview" onClick={() => showToast('Local source mode preview (mock)')} />
+                </SettingsSection>
+                <SettingsSection title="Playback">
+                  <SettingsRow label="Gapless playback" value="Preview only" onClick={() => showToast('Gapless playback preview only (mock)')} />
+                  <SettingsRow label="Loudness normalization" value="Preview only" onClick={() => showToast('Loudness normalization preview only (mock)')} />
+                </SettingsSection>
+                <SettingsSection title="Interface">
+                  <SettingsRow label="Compact player" value="Preview only" onClick={() => showToast('Compact player preference preview (mock)')} />
+                  <SettingsRow label="Visual-only mode" value="Enabled" onClick={() => showToast('Visual-only mode enabled (mock)')} />
+                </SettingsSection>
+                <SettingsSection title="About">
+                  <SettingsRow label="Mock-only simulator" value="No backend connected" onClick={() => showToast('Aria is mock-only - no backend connected')} />
+                </SettingsSection>
+              </div>
+            </motion.section>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Toast */}
       <AnimatePresence>
         {toast && (
@@ -291,5 +358,29 @@ export function AriaPreview() {
         )}
       </AnimatePresence>
     </div>
+  )
+}
+
+function SettingsSection({ children, title }: { children: React.ReactNode; title: string }) {
+  return (
+    <div>
+      <h3 className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#f0a13d]">{title}</h3>
+      <div className="mt-1 overflow-hidden rounded-[15px] border border-white/[0.075] bg-white/[0.035]">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function SettingsRow({ label, onClick, value }: { label: string; onClick: () => void; value: string }) {
+  return (
+    <button
+      className="flex w-full items-center justify-between gap-3 border-b border-white/[0.055] px-3 py-2 text-left last:border-b-0 transition hover:bg-white/[0.045]"
+      onClick={onClick}
+      type="button"
+    >
+      <span className="text-[13px] font-semibold text-[#f5ecdf]">{label}</span>
+      <span className="text-right text-[12px] text-[#b9b1a7]">{value}</span>
+    </button>
   )
 }

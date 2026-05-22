@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronRight, Disc3, Folder, Gem, ListMusic, Music2, Search, Tags, UsersRound } from 'lucide-react'
+import { ChevronRight, Disc3, Folder, Gem, Music2, Search, Settings, Tags, UsersRound } from 'lucide-react'
 import type { AriaAlbum, AriaArtist, AriaPlaylist, AriaTrack } from '../ariaMockData'
 import { ariaAlbums, ariaArtists, ariaPlaylists, ariaQueue } from '../ariaMockData'
 
@@ -24,6 +24,7 @@ export function AriaLibrary({
   onOpenAlbum,
   onOpenArtist,
   onOpenPlaylist,
+  onOpenSettings,
   onOpenTrack,
   onNavigateToPlaylists,
   onShowToast,
@@ -31,12 +32,12 @@ export function AriaLibrary({
   onOpenAlbum: (album: AriaAlbum) => void
   onOpenArtist: (artist: AriaArtist) => void
   onOpenPlaylist: (playlist: AriaPlaylist) => void
+  onOpenSettings: () => void
   onOpenTrack: (track: AriaTrack) => void
   onNavigateToPlaylists: () => void
   onShowToast: (message: string) => void
 }) {
   const [activeCategory, setActiveCategory] = useState<LibraryCategoryId | null>(null)
-  const [toolsOpen, setToolsOpen] = useState(false)
 
   const openCategory = (category: LibraryCategoryId) => {
     setActiveCategory(category)
@@ -134,15 +135,12 @@ export function AriaLibrary({
         </div>
         <div className="flex items-center gap-4 pt-1 text-[#f0a13d]">
           <button
-            aria-label="Library queue tools"
+            aria-label="Aria settings"
             className="grid h-10 w-10 place-items-center rounded-full text-[#ffd28b] transition hover:bg-white/[0.04]"
-            onClick={() => {
-              setToolsOpen((current) => !current)
-              onShowToast('Library tools preview (mock)')
-            }}
+            onClick={onOpenSettings}
             type="button"
           >
-            <ListMusic size={28} strokeWidth={1.5} />
+            <Settings size={28} strokeWidth={1.5} />
           </button>
           <button
             aria-label="Library search"
@@ -157,19 +155,6 @@ export function AriaLibrary({
           </button>
         </div>
       </div>
-
-      {toolsOpen && (
-        <section className="mt-4 rounded-[18px] border border-white/[0.08] bg-white/[0.035] p-3">
-          <h2 className="font-serif text-[21px] leading-none text-[#fff3e4]">Library Tools</h2>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {['Rescan preview', 'Sort library', 'View filters'].map((tool) => (
-              <button className="rounded-2xl border border-white/[0.075] bg-white/[0.035] px-2 py-2 text-[12px] text-[#d8cdc1] transition hover:bg-white/[0.055]" key={tool} onClick={() => onShowToast(`${tool} (mock)`)} type="button">
-                {tool}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
 
       <section className="mt-5 space-y-1.5">
         {categories.map((cat) => {
