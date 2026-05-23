@@ -73,6 +73,13 @@ Bottom navigation has four tabs:
 3. **Playlists** — playlist actions, folders and user playlist collection.
 4. **Explore** — library discovery hub, not a plain Search page.
 
+## Settings
+
+- Bloco 7D.2 implements Aria Settings as a dedicated bottom-sheet settings surface with cards, toggles and segmented selectors.
+- Settings must not be represented as generic navigation rows when the option is a toggle or selector.
+- Settings remain English-only, mock-only and non-persistent until real app integration exists.
+- Source management from Settings opens the existing Source sheet; it must not add real server connection, sync, persistence or filesystem behavior.
+
 ## Top-level screens
 
 ### Listen / Home

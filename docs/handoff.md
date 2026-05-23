@@ -72,7 +72,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D.1S — Definir contrato visual de Library categories e Detail headers
 [x] Bloco 7D.1I-A — Reconciliar Library navigation e corrigir header/hero das Details
 [x] Bloco 7D.1I-B — Implementar Library category treatments aprovados, sem página genérica
-[ ] Bloco 7D.2 — Redesign dedicado do Aria Settings
+[x] Bloco 7D.2 — Redesign dedicado do Aria Settings
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
@@ -192,8 +192,14 @@ Unknown / browser-check needed: 0
 
 ### Bloco 7D.2 — Aria Settings redesign
 
-- [ ] Redesign Aria Settings as a dedicated later block.
-- [ ] Keep settings mock-only and local-state-only.
+- [x] Replace generic settings rows with dedicated Settings sheet component.
+- [x] Add source status card.
+- [x] Add Library section with toggles/selector.
+- [x] Add Playback section with toggles/selector.
+- [x] Add Interface section with toggles/selector.
+- [x] Add About info card.
+- [x] Keep all settings mock-only and non-persistent.
+- [x] Keep Source sheet, Library views and playback overlays untouched.
 
 ### Bloco 7E — Playback overlay interactions
 

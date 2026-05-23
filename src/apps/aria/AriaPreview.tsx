@@ -21,6 +21,7 @@ import { AriaNowPlaying } from './components/AriaNowPlaying'
 import { AriaPlaylistDetail } from './components/AriaPlaylistDetail'
 import { AriaPlaylists } from './components/AriaPlaylists'
 import { AriaQueue } from './components/AriaQueue'
+import { AriaSettingsSheet } from './components/AriaSettingsSheet'
 import { AriaTrackDetails } from './components/AriaTrackDetails'
 
 type AriaDetailScreen =
@@ -406,25 +407,7 @@ export function AriaPreview() {
 
     if (activeSheet?.type === 'settings') {
       return (
-        <AriaBottomSheet onClose={handleCloseSheet} subtitle="Display-only preferences for the Aria mock." title="Aria Settings">
-          <div className="space-y-3">
-            <SettingsSection title="Library Source">
-              <SettingsRow label="Active source" value="Local library" onClick={() => showToast('Source settings preview (mock)')} />
-              <SettingsRow label="Mode" value="Local preview" onClick={() => showToast('Local source mode preview (mock)')} />
-            </SettingsSection>
-            <SettingsSection title="Playback">
-              <SettingsRow label="Gapless playback" value="Preview only" onClick={() => showToast('Gapless playback preview only (mock)')} />
-              <SettingsRow label="Loudness normalization" value="Preview only" onClick={() => showToast('Loudness normalization preview only (mock)')} />
-            </SettingsSection>
-            <SettingsSection title="Interface">
-              <SettingsRow label="Compact player" value="Preview only" onClick={() => showToast('Compact player preference preview (mock)')} />
-              <SettingsRow label="Visual-only mode" value="Enabled" onClick={() => showToast('Visual-only mode enabled (mock)')} />
-            </SettingsSection>
-            <SettingsSection title="About">
-              <SettingsRow label="Mock-only simulator" value="No backend connected" onClick={() => showToast('Aria is mock-only - no backend connected')} />
-            </SettingsSection>
-          </div>
-        </AriaBottomSheet>
+        <AriaSettingsSheet activeSource={activeSource} onClose={handleCloseSheet} onOpenSource={handleOpenSourceSheet} onShowToast={showToast} />
       )
     }
 
@@ -695,30 +678,6 @@ export function AriaPreview() {
         )}
       </AnimatePresence>
     </div>
-  )
-}
-
-function SettingsSection({ children, title }: { children: React.ReactNode; title: string }) {
-  return (
-    <div>
-      <h3 className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#f0a13d]">{title}</h3>
-      <div className="mt-1 overflow-hidden rounded-[15px] border border-white/[0.075] bg-white/[0.035]">
-        {children}
-      </div>
-    </div>
-  )
-}
-
-function SettingsRow({ label, onClick, value }: { label: string; onClick: () => void; value: string }) {
-  return (
-    <button
-      className="flex w-full items-center justify-between gap-3 border-b border-white/[0.055] px-3 py-2 text-left last:border-b-0 transition hover:bg-white/[0.045]"
-      onClick={onClick}
-      type="button"
-    >
-      <span className="text-[13px] font-semibold text-[#f5ecdf]">{label}</span>
-      <span className="text-right text-[12px] text-[#b9b1a7]">{value}</span>
-    </button>
   )
 }
 

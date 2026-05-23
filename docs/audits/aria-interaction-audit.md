@@ -277,6 +277,14 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Track-row playback behavior remains deferred to Bloco 7E; track rows in the new views open Track Details for now.
 - No real playback, search or filesystem behavior was added.
 
+## Bloco 7D.2 Resolution Notes
+
+- Aria Settings was redesigned as a dedicated bottom-sheet settings surface.
+- Generic settings rows were replaced with cards, toggles and segmented controls.
+- Settings remain mock-only, local-state-only and non-persistent.
+- Source management opens the existing Source sheet instead of stacking another panel.
+- Playback overlays remain deferred to Bloco 7E.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.
