@@ -1,0 +1,246 @@
+# Aria Settings Visual Guide
+
+## Purpose
+
+This guide defines how Aria Settings should look and behave visually. It complements `settings-core-mapping.md`.
+
+Core mapping defines what appears in Settings. This visual guide defines how those approved categories and controls are presented. Implementation must follow both documents.
+
+## Visual principles
+
+- Settings is a structured control center, not a generic menu.
+- Root is a category hub, not a long toggle list.
+- Important player-facing areas get stronger visual weight.
+- Planned/mock areas must look secondary, not equally functional.
+- Controls must match semantics: toggles for boolean preferences, segmented controls for mode choices, info cards for status, action buttons for actions.
+- No Portuguese copy.
+- No `Preview` as a primary visible label.
+- No generic rows everywhere.
+
+## Root Settings hub layout
+
+Root order:
+
+Header:
+
+- Title: `Aria Settings`
+- Subtitle: `Core-mapped visual player preferences`
+- Compact status strip/card:
+- Active source
+- Visual mock
+- Local state
+
+Primary group:
+
+- Interface
+- Sources & Providers
+- Library
+- Playback
+- Audio Output & Quality
+
+Secondary group:
+
+- Streaming & Network
+- Offline, Cache & Storage
+- Smart Playlists
+- Profiles & Backup
+
+System / Lab group:
+
+- Android & External Control
+- Advanced
+- About
+
+Important:
+
+- Root should not show all toggles.
+- Root should show categories only.
+- Each category card opens an internal settings page.
+
+## Category card visual rules
+
+- Category cards are buttons.
+- Left: icon badge.
+- Center: title and one-line useful subtitle.
+- Right: compact status chip, not large text.
+- Cards must not all look equally urgent.
+- Primary cards can use slightly stronger border/accent.
+- Secondary cards use calmer surfaces.
+- Planned/mock cards use muted status chips: `Mock`, `Planned`, `Local` or `Visual`.
+- Avoid chevrons if the whole card already reads as navigation, or use subtle chevron only.
+- No giant cards.
+
+## Category weights
+
+Primary / active:
+
+- Interface
+- Sources & Providers
+- Library
+- Playback
+- Audio Output & Quality
+
+Secondary / policy:
+
+- Streaming & Network
+- Offline, Cache & Storage
+- Smart Playlists
+- Profiles & Backup
+
+System / planned:
+
+- Android & External Control
+- Advanced
+- About
+
+## Internal category page structure
+
+Each internal page should have:
+
+- compact internal back button;
+- page title;
+- one-line subtitle;
+- optional status card;
+- grouped controls;
+- no giant vertical wall;
+- no more than 2-3 groups per category in current mock.
+
+Internal back returns to Settings root. Sheet close closes Settings entirely.
+
+## Control semantics
+
+Toggle:
+
+- boolean preference.
+- no chevron.
+- visible switch state.
+
+Segmented control:
+
+- mode selection.
+- 2-4 options.
+- active state warm amber.
+
+Info card:
+
+- status/readiness/limitations.
+- not clickable unless it has explicit action.
+
+Action button:
+
+- opens another sheet or triggers mock action.
+- examples: `Manage Source`, `Reset visual preferences mock`, `Preview backup plan mock`.
+
+Danger/blocked state:
+
+- use restrained warning style.
+- never imply destructive action is real.
+
+## Category-specific visual notes
+
+Interface:
+
+- active and simple.
+- visual preferences.
+- should feel immediate.
+
+Sources & Providers:
+
+- status card first.
+- active source visible.
+- provider readiness as display only.
+- `Manage Source` action.
+
+Library:
+
+- display/browsing preferences only.
+- must not include Favorites as setting.
+- must not include Recently Added as category setting.
+- Recently Added tracks-only decision appears as info, not editable mode.
+
+Playback:
+
+- behavior defaults.
+- queue/repeat/shuffle/seek/resume.
+- no current queue state.
+
+Audio Output & Quality:
+
+- audiophile-oriented.
+- bit-perfect/USB DAC/exclusive output must be desired/mock policies, not real claims.
+- format/sample rate controls are mock policy controls.
+
+Streaming & Network:
+
+- quality/network/transcoding policies.
+- show as planned/mock if no streaming feature exists.
+
+Offline, Cache & Storage:
+
+- policy/confirmation controls.
+- no file manager look.
+- no real storage path.
+- no delete/download implication.
+
+Smart Playlists:
+
+- rules/defaults only.
+- not preview results.
+
+Profiles & Backup:
+
+- profile scope and backup policy only.
+- backup/restore as preview-only action.
+
+Android & External Control:
+
+- planned/mock category.
+- should look secondary.
+- no real Android integration claim.
+
+Advanced:
+
+- diagnostics/lab.
+- should not dominate normal Settings.
+
+About:
+
+- info-only.
+- limitations and status.
+
+## Forbidden visual patterns
+
+Explicitly forbidden:
+
+- one generic `SettingsRow` for every item;
+- one giant scroll of toggles on root;
+- every Core model as a category;
+- Favorites as Settings category;
+- Recently Added as Settings category;
+- Queue as top-level Settings category;
+- Now Playing as top-level Settings category;
+- Radio as top-level Settings category for now;
+- cards so large that only two categories fit;
+- repeated `mock-only` text in every row;
+- planned features styled as active working features;
+- settings that imply real playback/streaming/cache/provider behavior.
+
+## Implementation target for next block
+
+Bloco 7D.2.2-I must implement:
+
+- root category hub;
+- internal pages;
+- filtered categories from `settings-core-mapping.md`;
+- visual hierarchy from `settings-visual-guide.md`;
+- existing source/settings behavior preserved;
+- local state only;
+- no persistence.
+
+It must not:
+
+- touch playback overlays;
+- touch Library views;
+- touch details;
+- touch mini player/nav;
+- add real integration.

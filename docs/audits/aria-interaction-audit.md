@@ -293,6 +293,13 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Approved Settings categories were documented in `docs/screen-contracts/aria/settings-core-mapping.md`.
 - UI implementation remains deferred to Bloco 7D.2.2.
 
+## Bloco 7D.2.2-V Resolution Notes
+
+- Settings visual guide created.
+- Root Settings must be category hub, not toggle wall.
+- Category hierarchy, visual weights, internal page rules and forbidden patterns documented.
+- Implementation deferred to 7D.2.2-I.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.

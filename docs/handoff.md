@@ -74,7 +74,8 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D.1I-B — Implementar Library category treatments aprovados, sem página genérica
 [x] Bloco 7D.2 — Redesign dedicado do Aria Settings
 [x] Bloco 7D.2.1 — Mapear Settings com base no Aria Core
-[ ] Bloco 7D.2.2 — Reorganizar Settings UI com categorias filtradas do Core
+[x] Bloco 7D.2.2-V — Criar guia visual do Aria Settings
+[ ] Bloco 7D.2.2-I — Implementar Settings UI com categorias filtradas do Core
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
@@ -212,6 +213,15 @@ Unknown / browser-check needed: 0
 - [x] Clarify that Favorites is a Library feature/view, not a Setting.
 - [x] Clarify that Recently Added remains tracks-only by current product decision.
 - [x] Prepare Bloco 7D.2.2 to reorganize the Settings UI without implementing it in this docs-only block.
+
+### Bloco 7D.2.2-V — Aria Settings visual guide
+
+- [x] Define Settings as a category hub rather than a root toggle wall.
+- [x] Define primary, secondary and system/lab category weights.
+- [x] Define category-card visual hierarchy and status chip treatment.
+- [x] Define internal category page structure and control semantics.
+- [x] Forbid generic row/toggle patterns, fake top-level categories and active styling for planned/mock features.
+- [x] Prepare Bloco 7D.2.2-I to implement the filtered Settings UI without changing other Aria surfaces.
 
 ### Bloco 7E — Playback overlay interactions
 
