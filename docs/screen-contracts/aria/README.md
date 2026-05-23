@@ -76,6 +76,11 @@ Bottom navigation has four tabs:
 ## Settings
 
 - Bloco 7D.2 implements Aria Settings as a dedicated bottom-sheet settings surface with cards, toggles and segmented selectors.
+- Settings categories must follow `settings-core-mapping.md`.
+- Do not invent Settings categories unsupported by Core.
+- Do not expose Core state/result objects as user settings.
+- Favorites is a Library feature, not a Setting.
+- Recently Added is tracks-only by current product decision.
 - Settings must not be represented as generic navigation rows when the option is a toggle or selector.
 - Settings remain English-only, mock-only and non-persistent until real app integration exists.
 - Source management from Settings opens the existing Source sheet; it must not add real server connection, sync, persistence or filesystem behavior.
@@ -125,7 +130,7 @@ Category cleanup rules:
 - Genres can stay lightweight as chips/cards, sheet or compact view.
 - Folders must stay low-emphasis, mock-only and not file-manager-like.
 - Compilations should feel like collections/shelves if promoted beyond a sheet.
-- Recently Added should feel like a recent music feed/shelf.
+- Recently Added should feel like a recent tracks feed/shelf and remains tracks-only by current product decision.
 
 ### Explore
 

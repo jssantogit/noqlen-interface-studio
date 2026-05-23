@@ -285,6 +285,14 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Source management opens the existing Source sheet instead of stacking another panel.
 - Playback overlays remain deferred to Bloco 7E.
 
+## Bloco 7D.2.1 Resolution Notes
+
+- Aria Core was reviewed to filter what should actually become Settings rather than copying every Core model into the Settings UI.
+- Core support alone does not make a concept a setting; Settings are limited to user preferences, policy choices, default behavior, display options, safe mock controls, integration-readiness visibility and profile/preference scope.
+- Favorites, Recently Added, Recently Played, health/readiness badges, current queue state and now-playing state are not settings.
+- Approved Settings categories were documented in `docs/screen-contracts/aria/settings-core-mapping.md`.
+- UI implementation remains deferred to Bloco 7D.2.2.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.
