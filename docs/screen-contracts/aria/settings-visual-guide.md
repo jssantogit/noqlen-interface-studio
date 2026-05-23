@@ -42,7 +42,6 @@ Secondary group:
 
 - Streaming & Network
 - Offline, Cache & Storage
-- Smart Playlists
 - Profiles & Backup
 
 System / Lab group:
@@ -84,7 +83,6 @@ Secondary / policy:
 
 - Streaming & Network
 - Offline, Cache & Storage
-- Smart Playlists
 - Profiles & Backup
 
 System / planned:
@@ -184,8 +182,8 @@ Offline, Cache & Storage:
 
 Smart Playlists:
 
-- rules/defaults only.
-- not preview results.
+- retired from the Settings tab set in Bloco 7D.2.2-I.
+- if reintroduced later, it must remain rules/defaults only and not preview results.
 
 Profiles & Backup:
 
@@ -226,6 +224,8 @@ Explicitly forbidden:
 - settings that imply real playback/streaming/cache/provider behavior.
 
 ## Implementation target for next block
+
+Implementation note: Root hub and internal pages were implemented in Bloco 7D.2.2-I. Smart Playlists was retired from the Settings tab set. Internal controls were tightened toward Core policy/preference terms, and the generic root toggle wall was avoided.
 
 Bloco 7D.2.2-I must implement:
 

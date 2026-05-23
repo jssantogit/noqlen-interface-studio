@@ -300,6 +300,17 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Category hierarchy, visual weights, internal page rules and forbidden patterns documented.
 - Implementation deferred to 7D.2.2-I.
 
+## Bloco 7D.2.2-I Resolution Notes
+
+- Settings root is now a category hub instead of a direct toggle wall.
+- Internal Settings pages implement filtered Core-mapped categories for Interface, Sources & Providers, Library, Playback, Audio Output & Quality, Streaming & Network, Offline, Cache & Storage, Profiles & Backup, Android & External Control, Advanced and About.
+- Smart Playlists was retired from the Settings tab set during implementation.
+- Internal options were tightened toward Core terms: unavailable media handling, fade behavior, bit-depth handling, bitrate limit, quality fallback, mock flow visibility and provider boundary warnings are represented as local policy controls.
+- Favorites, Recently Added, Recently Played, Queue, Now Playing and Radio were not added as top-level Settings categories.
+- Recently Added remains tracks-only as a product decision and appears only as Library info, not as an editable selector.
+- All controls remain local-state-only and non-persistent.
+- Playback overlays remain deferred to Bloco 7E.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.

@@ -47,7 +47,6 @@ Final approved Settings categories:
 - Audio Output & Quality
 - Streaming & Network
 - Offline, Cache & Storage
-- Smart Playlists
 - Profiles & Backup
 - Android & External Control
 - Advanced
@@ -72,7 +71,7 @@ Planned or mock-only for later UI blocks:
 - Audio Output & Quality: planned mock policies only.
 - Streaming & Network: planned mock policies only.
 - Offline, Cache & Storage: planned mock policies only.
-- Smart Playlists: planned mock policies only.
+- Smart Playlists: retired from Settings UI in Bloco 7D.2.2-I.
 - Profiles & Backup: planned mock policies only.
 - Android & External Control: planned mock policies only.
 - Advanced: planned diagnostics/developer policy area only.
@@ -274,7 +273,7 @@ Not settings:
 - storage pressure state as editable setting;
 - actual download/delete.
 
-## Category: Smart Playlists
+## Retired Category: Smart Playlists
 
 Core basis:
 
@@ -400,6 +399,8 @@ Should show:
 
 Define the next implementation block target.
 
+Implementation note: Bloco 7D.2.2-I implemented the filtered category hub. Smart Playlists was retired from the Settings tab set. Recently Added remains tracks-only info, Favorites remains excluded from Settings controls, and internal controls use Core policy/preference terms rather than generic UI options.
+
 Settings root hub should show:
 
 Settings:
@@ -414,7 +415,6 @@ Settings:
 
 Advanced:
 
-- Smart Playlists
 - Profiles & Backup
 - Android & External Control
 - Advanced

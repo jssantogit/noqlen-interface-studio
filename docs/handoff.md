@@ -75,7 +75,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D.2 — Redesign dedicado do Aria Settings
 [x] Bloco 7D.2.1 — Mapear Settings com base no Aria Core
 [x] Bloco 7D.2.2-V — Criar guia visual do Aria Settings
-[ ] Bloco 7D.2.2-I — Implementar Settings UI com categorias filtradas do Core
+[x] Bloco 7D.2.2-I — Implementar Settings UI com categorias filtradas do Core
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
@@ -222,6 +222,26 @@ Unknown / browser-check needed: 0
 - [x] Define internal category page structure and control semantics.
 - [x] Forbid generic row/toggle patterns, fake top-level categories and active styling for planned/mock features.
 - [x] Prepare Bloco 7D.2.2-I to implement the filtered Settings UI without changing other Aria surfaces.
+
+### Bloco 7D.2.2-I — Settings UI with Core-filtered categories
+
+- [x] Root Settings changed to category hub.
+- [x] Internal pages added for approved categories.
+- [x] Interface page added.
+- [x] Sources & Providers page added.
+- [x] Library page added without Favorites/Recently Added as settings.
+- [x] Playback page added without current queue/now-playing state.
+- [x] Audio Output & Quality page added as desired/mock policies.
+- [x] Streaming & Network page added as mock policies.
+- [x] Offline, Cache & Storage page added without file-manager behavior.
+- [x] Smart Playlists tab retired from Settings at implementation request.
+- [x] Profiles & Backup page added without real backup/restore.
+- [x] Android & External Control page added as planned/mock.
+- [x] Advanced page added for lab/diagnostic controls.
+- [x] About page added as info-only.
+- [x] Internal options aligned more closely with Core policy/preference terms.
+- [x] Source sheet integration preserved.
+- [x] No real integration or persistence added.
 
 ### Bloco 7E — Playback overlay interactions
 
