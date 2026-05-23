@@ -2,8 +2,9 @@ import { ChevronRight, Disc3, Folder, Gem, Music2, Search, Settings, Tags, Users
 import type { AriaAlbum, AriaPlaylist } from '../ariaMockData'
 import { ariaAlbums, ariaPlaylists } from '../ariaMockData'
 
-type LibraryCategoryId = 'songs' | 'albums' | 'artists' | 'genres' | 'folders' | 'compilations' | 'playlists' | 'recent' | 'search'
-export type AriaLibraryCategoryId = Exclude<LibraryCategoryId, 'playlists' | 'search'>
+export type AriaLibraryViewCategoryId = 'songs' | 'albums' | 'artists' | 'recent'
+export type AriaLibrarySheetCategoryId = 'genres' | 'folders' | 'compilations'
+type AriaLibraryCategoryId = AriaLibraryViewCategoryId | AriaLibrarySheetCategoryId
 
 const categories: { id: AriaLibraryCategoryId; label: string; count: string; icon: typeof Music2 }[] = [
   { id: 'songs', label: 'Songs', count: '1,200', icon: Music2 },
@@ -21,7 +22,8 @@ export function AriaLibrary({
   onOpenAlbum,
   onOpenPlaylist,
   onOpenSettings,
-  onOpenLibraryCategory,
+  onOpenLibrarySheetCategory,
+  onOpenLibraryView,
   onOpenLibrarySearch,
   onNavigateToPlaylists,
   onShowToast,
@@ -29,7 +31,8 @@ export function AriaLibrary({
   onOpenAlbum: (album: AriaAlbum) => void
   onOpenPlaylist: (playlist: AriaPlaylist) => void
   onOpenSettings: () => void
-  onOpenLibraryCategory: (category: AriaLibraryCategoryId) => void
+  onOpenLibrarySheetCategory: (category: AriaLibrarySheetCategoryId) => void
+  onOpenLibraryView: (category: AriaLibraryViewCategoryId) => void
   onOpenLibrarySearch: () => void
   onNavigateToPlaylists: () => void
   onShowToast: (message: string) => void
@@ -71,7 +74,14 @@ export function AriaLibrary({
             <button
               className="group flex w-full items-center gap-4 rounded-[16px] px-1 py-1 text-left transition hover:bg-white/[0.035]"
               key={cat.id}
-              onClick={() => onOpenLibraryCategory(cat.id)}
+              onClick={() => {
+                if (cat.id === 'genres' || cat.id === 'folders' || cat.id === 'compilations') {
+                  onOpenLibrarySheetCategory(cat.id)
+                  return
+                }
+
+                onOpenLibraryView(cat.id)
+              }}
               type="button"
             >
               <span className="grid h-8 w-8 shrink-0 place-items-center text-[#ffad26]">
@@ -119,7 +129,7 @@ export function AriaLibrary({
           <h2 className="font-serif text-[27px] leading-none text-[#fff3e4]">Recently Added</h2>
           <button
             className="text-[19px] text-[#f0a13d] transition hover:text-[#ffb958]"
-            onClick={() => onOpenLibraryCategory('recent')}
+            onClick={() => onOpenLibraryView('recent')}
             type="button"
           >
             See all

@@ -71,7 +71,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D — Completar interações das telas detail do Aria
 [x] Bloco 7D.1S — Definir contrato visual de Library categories e Detail headers
 [x] Bloco 7D.1I-A — Reconciliar Library navigation e corrigir header/hero das Details
-[ ] Bloco 7D.1I-B — Implementar Library category treatments aprovados, sem página genérica
+[x] Bloco 7D.1I-B — Implementar Library category treatments aprovados, sem página genérica
 [ ] Bloco 7D.2 — Redesign dedicado do Aria Settings
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
@@ -178,11 +178,17 @@ Unknown / browser-check needed: 0
 
 ### Bloco 7D.1I-B — Approved Library category treatment implementation
 
-- [ ] Implement only the approved category treatments from the visual contract.
-- [ ] Do not create one generic page component for every Library category.
-- [ ] Preserve Aria's current music-player identity and approved visual references.
-- [ ] Keep implementation local-state-only, mock-only and reversible.
-- [ ] Update docs and commit/push the implementation separately.
+- [x] Songs implemented as dense track index view.
+- [x] Albums implemented as artwork-led album shelf/grid.
+- [x] Artists implemented as compact artist index.
+- [x] Recently Added implemented as focused recent tracks view.
+- [x] Genres remain lightweight sheet.
+- [x] Folders remain lightweight no-filesystem sheet.
+- [x] Compilations remain lightweight sheet.
+- [x] No generic category page component introduced.
+- [x] Back stack works from Library views into details and back.
+- [x] Preserve Aria's current music-player identity and approved visual references.
+- [x] Keep implementation local-state-only, mock-only and reversible.
 
 ### Bloco 7D.2 — Aria Settings redesign
 

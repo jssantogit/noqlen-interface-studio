@@ -94,3 +94,11 @@ Sheets are not appropriate for:
 - Make the change reversible: limit scope, keep data static and avoid broad refactors.
 - Update docs and commit/push the implementation separately.
 - Do not touch playback overlays, Anchor, Forge, Flux, Studio shell or phone simulator files.
+
+## 7D.1I-B Implementation Note
+
+- Approved category treatments are implemented with dedicated views for Songs, Albums, Artists and Recently Added.
+- The rejected generic page model was avoided; no universal Library category page component was introduced.
+- Recently Added is implemented as a focused recent-tracks view after visual review found the mixed album/playlist/track feed too confusing for this block.
+- Genres, Folders and Compilations remain lightweight sheets.
+- Folders remain no-filesystem mock previews and do not show real paths, scanning or file access behavior.

@@ -80,9 +80,9 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Library | Songs category row | Opens dedicated Songs page. | WORKING | Open a local songs category/list or restyle as passive. | Aria top-level screen interactions |
 | Library | Albums category row | Opens dedicated Albums page. | WORKING | Open albums category or representative album detail. | Aria top-level screen interactions |
 | Library | Artists category row | Opens dedicated Artists page. | WORKING | Open artists category or representative artist detail. | Aria top-level screen interactions |
-| Library | Genres category row | Opens dedicated Genres page. | WORKING | Open local genres category/list or restyle as passive. | Aria top-level screen interactions |
-| Library | Folders category row | Opens dedicated Folders page with no-file-access folder preview rows. | WORKING | Mock folder category without filesystem access or restyle as passive. | Aria top-level screen interactions |
-| Library | Compilations category row | Opens dedicated Compilations page. | WORKING | Open local category/list or restyle as passive. | Aria top-level screen interactions |
+| Library | Genres category row | Opens lightweight Genres bottom sheet. | WORKING | Keep local genres sheet/chips until a stronger reference exists. | Aria top-level screen interactions |
+| Library | Folders category row | Opens lightweight Folders bottom sheet with no-filesystem copy. | WORKING | Mock folder category without filesystem access or file-manager styling. | Aria top-level screen interactions |
+| Library | Compilations category row | Opens lightweight Compilations bottom sheet. | WORKING | Keep local collection preview sheet unless a future contract promotes it. | Aria top-level screen interactions |
 | Library | My Playlists See all | Navigates to the Playlists tab. | WORKING | Navigate to Playlists tab or open local playlist list. | Aria top-level screen interactions |
 | Library | My Playlists cards, 3 instances | Open Playlist Detail. | WORKING | Open playlist detail. | Aria top-level screen interactions |
 | Library | Recently Added See all | Opens dedicated Recently Added page. | WORKING | Open local recently-added list or clarify as toast-only. | Aria top-level screen interactions |
@@ -268,6 +268,14 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Duplicate detail menus remain avoided: Album, Artist and Playlist details keep one visible contextual ellipsis menu each, while Track Details keeps at most one.
 - Settings redesign remains deferred to Bloco 7D.2.
 - Playback overlays remain deferred to Bloco 7E.
+
+## Bloco 7D.1I-B Resolution Notes
+
+- Songs, Albums, Artists and Recently Added now use approved dedicated music-library views; Recently Added is intentionally focused on tracks only after visual review.
+- Genres, Folders and Compilations intentionally remain lightweight sheets.
+- The failed single generic category page model was not reintroduced.
+- Track-row playback behavior remains deferred to Bloco 7E; track rows in the new views open Track Details for now.
+- No real playback, search or filesystem behavior was added.
 
 ## Notes
 
