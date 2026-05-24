@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This guide defines how Aria Settings should look and behave visually. It complements `settings-core-mapping.md`.
+This guide defines how Aria Settings should look and behave visually. It complements `settings-app-structure.md` and `settings-core-mapping.md`.
 
-Core mapping defines what appears in Settings. This visual guide defines how those approved categories and controls are presented. Implementation must follow both documents.
+`settings-app-structure.md` defines the visible Settings root and category structure. `settings-core-mapping.md` remains internal grounding only. This visual guide defines how the approved app-like categories and controls are presented.
 
 ## Visual principles
 
@@ -16,6 +16,8 @@ Core mapping defines what appears in Settings. This visual guide defines how tho
 - No Portuguese copy.
 - No `Preview` as a primary visible label.
 - No generic rows everywhere.
+- Visible Settings root now follows `settings-app-structure.md`.
+- App-like structure supersedes Core-driven categories where they conflict.
 
 ## Root Settings hub layout
 
@@ -33,20 +35,17 @@ Header:
 Primary group:
 
 - Interface
-- Sources & Providers
 - Library
 - Playback
-- Audio Output & Quality
+- Offline & Cache
+- Media Sources
 
-Secondary group:
+Tools group:
 
-- Streaming & Network
-- Offline, Cache & Storage
-- Profiles & Backup
+- Backup & Restore
 
-System / Lab group:
+System group:
 
-- Android & External Control
 - Advanced
 - About
 
@@ -74,20 +73,17 @@ Important:
 Primary / active:
 
 - Interface
-- Sources & Providers
 - Library
 - Playback
-- Audio Output & Quality
+- Offline & Cache
+- Media Sources
 
-Secondary / policy:
+Tools:
 
-- Streaming & Network
-- Offline, Cache & Storage
-- Profiles & Backup
+- Backup & Restore
 
-System / planned:
+System:
 
-- Android & External Control
 - Advanced
 - About
 
@@ -142,11 +138,10 @@ Interface:
 - visual preferences.
 - should feel immediate.
 
-Sources & Providers:
+Media Sources:
 
 - status card first.
 - active source visible.
-- provider readiness as display only.
 - `Manage Source` action.
 
 Library:
@@ -164,16 +159,18 @@ Playback:
 
 Audio Output & Quality:
 
-- audiophile-oriented.
-- bit-perfect/USB DAC/exclusive output must be desired policies, not active device claims.
-- format/sample rate controls are policy controls.
+- no longer a root category.
+- output and quality controls belong inside Playback.
+- USB DAC/exclusive output must be desired policies, not active device claims.
 
 Streaming & Network:
 
-- quality/network/transcoding policies.
-- show as limited if no streaming feature exists.
+- no longer a root category.
+- cache/download policies belong in Offline & Cache.
+- decoding/transcoding policy belongs in Playback if exposed.
+- metered network controls belong in Advanced.
 
-Offline, Cache & Storage:
+Offline & Cache:
 
 - policy/confirmation controls.
 - no file manager look.
@@ -185,26 +182,25 @@ Smart Playlists:
 - retired from the Settings tab set in Bloco 7D.2.2-I.
 - if reintroduced later, it must remain rules/defaults only and not preview results.
 
-Profiles & Backup:
+Backup & Restore:
 
-- profile scope and backup policy only.
-- backup/restore as review action.
+- action-first page with Create backup and Restore from backup.
+- included data appears only inside the chosen flow.
 
 Android & External Control:
 
-- limited category.
-- should look secondary.
-- no Android integration claim.
+- no longer a root category.
+- possible future media-button controls belong under Playback if they are designed as normal app settings.
 
 Advanced:
 
-- diagnostics/lab.
+- practical system tools.
 - should not dominate normal Settings.
 
 About:
 
 - info-only.
-- limitations and status.
+- app details, licenses and credits.
 
 ## Forbidden visual patterns
 
@@ -213,11 +209,18 @@ Explicitly forbidden:
 - one generic `SettingsRow` for every item;
 - one giant scroll of toggles on root;
 - every Core model as a category;
+- Core-driven roots when they conflict with `settings-app-structure.md`;
 - Favorites as Settings category;
 - Recently Added as Settings category;
 - Queue as top-level Settings category;
 - Now Playing as top-level Settings category;
 - Radio as top-level Settings category for now;
+- Audio Output & Quality as top-level Settings category;
+- Streaming & Network as top-level Settings category;
+- Sources & Providers as top-level Settings category;
+- Profiles & Backup as top-level Settings category;
+- Android & External Control as top-level Settings category;
+- Visual Lab as top-level Settings category;
 - cards so large that only two categories fit;
 - repeated limitation text in every row;
 - planned features styled as active working features;
@@ -225,16 +228,15 @@ Explicitly forbidden:
 
 ## Implementation target for next block
 
-Implementation note: Root hub and internal pages were implemented in Bloco 7D.2.2-I. Smart Playlists was retired from the Settings tab set. Internal controls were tightened toward Core policy/preference terms, and the generic root toggle wall was avoided.
+Implementation note: Root hub and internal pages were implemented in Bloco 7D.2.2-I. Bloco 7D.2.3-S supersedes the Core-driven root with the app-like structure in `settings-app-structure.md`. Smart Playlists remains retired from the Settings tab set, and the generic root toggle wall remains forbidden.
 
-Bloco 7D.2.2-I must implement:
+Bloco 7D.2.3-I must implement:
 
 - root category hub;
 - internal pages;
-- filtered categories from `settings-core-mapping.md`;
+- app-like categories from `settings-app-structure.md`;
 - visual hierarchy from `settings-visual-guide.md`;
 - existing source/settings behavior preserved;
-- local state only;
 - local state only.
 
 It must not:

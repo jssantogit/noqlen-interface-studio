@@ -311,6 +311,16 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - All controls remain local-state-only and non-persistent.
 - Playback overlays remain deferred to Bloco 7E.
 
+## Bloco 7D.2.3-S Resolution Notes
+
+- Settings app-like structure contract was created in `docs/screen-contracts/aria/settings-app-structure.md`.
+- Settings must now be user-facing first and Core-mapped internally.
+- Current Core-driven root categories are marked for removal, merge or rename before Bloco 7D.2.3-I.
+- Interface will gain Theme settings for appearance, accent color and dynamic color.
+- Playback will gain Shuffle style with Standard, Fresh and Deep modes.
+- Backup & Restore will become a flow instead of showing Included data as static root content.
+- Advanced loses Visual Lab/development controls and stays practical/app-like.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.

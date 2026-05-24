@@ -2,7 +2,11 @@
 
 ## Purpose
 
-Aria Settings must be based on Aria Core-supported capabilities, policies and preference-like concepts. Settings should not expose arbitrary UI ideas that do not map to Core.
+Aria Settings must be grounded in Aria Core-supported capabilities, policies and preference-like concepts. Settings should not expose arbitrary UI ideas that do not map to Core.
+
+This contract is internal grounding only. It is not visible UI copy and it is not the current source of truth for visible Settings root categories.
+
+`settings-app-structure.md` is the current visible UI source of truth for Settings names, root categories, category structure and removal/merge rules. When this mapping and the app-structure contract conflict, the app-structure contract wins for visible UI.
 
 Settings controls may represent desired behavior, display policy or safe interface visibility, but they must not imply playback, streaming, provider auth, filesystem/cache mutation, Android shell behavior or persistence.
 
@@ -15,8 +19,8 @@ A Core concept may become a setting only if it represents:
 - default behavior;
 - policy mode;
 - safe local control;
-- integration readiness visibility toggle;
-- profile/preference scope.
+- app-like backup/restore flow choice;
+- practical advanced preference.
 
 ## Rule: What does not become a setting
 
@@ -37,48 +41,57 @@ Do not turn these into Settings controls:
 - snapshot diffs;
 - fake flow results.
 
-## Approved Settings categories
+## Approved visible Settings categories
 
-Final approved Settings categories:
+Final approved visible Settings categories are defined by `settings-app-structure.md`:
 
-- Sources & Providers
+- Interface
 - Library
 - Playback
-- Audio Output & Quality
-- Streaming & Network
-- Offline, Cache & Storage
-- Profiles & Backup
-- Android & External Control
+- Offline & Cache
+- Media Sources
+- Backup & Restore
 - Advanced
 - About
 
-Do not include Radio as a top-level Settings category for now.
+Do not include Radio, Smart Playlists, Queue, Now Playing, Favorites, Recently Added or Recently Played as top-level Settings categories for now.
 
-Reason: Radio is a content/player feature. Settings may later include radio metadata, artwork or favorite preferences only if UI gains a Radio feature.
+Reason: these are content/player/library features or current state, not app settings.
+
+## Legacy Core bucket mapping
+
+Core analysis from Bloco 7D.2.1 used several technical buckets. They remain useful internally, but they no longer define visible root categories:
+
+- Sources & Providers -> Media Sources.
+- Audio Output & Quality -> Playback > Output and Playback > Audio Quality.
+- Streaming & Network -> Offline & Cache, Playback > Decoding & Transcoding, and Advanced > Network.
+- Offline, Cache & Storage -> Offline & Cache.
+- Profiles & Backup -> Backup & Restore.
+- Android & External Control -> not a root category; possible future media-button controls belong under Playback.
+- Advanced diagnostics/lab concepts -> practical Advanced only.
 
 ## Current UI category status
 
 Active in current UI:
 
 - Interface: active controls.
-- Sources & Providers: partial active source card and source sheet entry point.
+- Media Sources: currently implemented under the older Sources & Providers name.
 - Library: partial controls.
 - Playback: partial controls.
+- Offline & Cache: currently implemented under the older Offline, Cache & Storage name.
+- Backup & Restore: currently implemented under the older Profiles & Backup name.
 - About: partial status card.
 
-Later UI blocks:
+Next UI block:
 
-- Audio Output & Quality: policy controls.
-- Streaming & Network: policy controls.
-- Offline, Cache & Storage: policy controls.
-- Smart Playlists: retired from Settings UI in Bloco 7D.2.2-I.
-- Profiles & Backup: policy controls.
-- Android & External Control: policy controls.
-- Advanced: planned diagnostics/developer policy area only.
+- Bloco 7D.2.3-I must refactor visible Settings to the app-like root and structure in `settings-app-structure.md`.
+- Old Core-driven roots must be removed, merged or renamed.
+- Smart Playlists remains retired from Settings UI.
+- Advanced must stay practical and app-like.
 
-Current active categories may be reorganized in Bloco 7D.2.2, but they must not expand into unsupported integration behavior.
+Current active categories may be reorganized in Bloco 7D.2.3-I, but they must not expand into unsupported integration behavior.
 
-## Category: Sources & Providers
+## Internal bucket: Sources & Providers -> Media Sources
 
 Core basis:
 
@@ -94,14 +107,16 @@ Allowed settings:
 - active source display;
 - preferred source behavior;
 - show source badges;
-- show provider readiness;
-- provider compatibility display;
-- source capability visibility.
+- show source labels;
+- source management entry point;
+- sync status when supported by the local source flow.
 
 Not settings:
 
 - provider discovery result;
 - source availability itself;
+- provider readiness as visible Settings content;
+- source capabilities as visible Settings content;
 - login/auth;
 - add server;
 - network discovery;
@@ -177,7 +192,7 @@ Not settings:
 - playback intent result;
 - queue operation result.
 
-## Category: Audio Output & Quality
+## Internal bucket: Audio Output & Quality -> Playback
 
 Core basis:
 
@@ -203,7 +218,6 @@ Allowed settings:
 - prefer USB DAC when available;
 - prefer exclusive output;
 - sample-rate handling;
-- bit-depth handling;
 - format preference.
 
 Not settings:
@@ -215,7 +229,7 @@ Not settings:
 
 Important: These are desired policies until playback/audio output exists.
 
-## Category: Streaming & Network
+## Internal bucket: Streaming & Network -> Offline & Cache / Playback / Advanced
 
 Core basis:
 
@@ -244,7 +258,7 @@ Not settings:
 - quality decision result;
 - transcoding decision result.
 
-## Category: Offline, Cache & Storage
+## Internal bucket: Offline, Cache & Storage -> Offline & Cache
 
 Core basis:
 
@@ -299,7 +313,7 @@ Not settings:
 - evaluation result;
 - matched items.
 
-## Category: Profiles & Backup
+## Internal bucket: Profiles & Backup -> Backup & Restore
 
 Core basis:
 
@@ -312,20 +326,22 @@ Core basis:
 
 Allowed settings:
 
-- active profile;
-- profile-specific preferences;
-- backup scope;
-- restore conflict behavior;
-- backup safety confirmation.
+- create backup entry point;
+- restore from backup entry point;
+- include/restore choices inside the relevant flow;
+- restore conflict behavior inside restore flow if later needed.
 
 Not settings:
 
 - backup result;
 - restore result;
 - restore conflict object itself;
+- static Included data root content;
+- active profile;
+- profile scope;
 - filesystem backup/restore.
 
-## Category: Android & External Control
+## Internal bucket: Android & External Control -> removed as root
 
 Core basis:
 
@@ -340,19 +356,16 @@ Core basis:
 
 Allowed settings:
 
-- Android Auto visibility;
-- MediaSession controls;
-- notification controls;
-- lock-screen controls;
-- headset/Bluetooth controls;
-- foreground service behavior.
+- no visible root category for now;
+- possible future headset/notification controls only under Playback > Media Buttons if designed as normal app settings.
 
 Not settings:
 
 - Android SDK integration;
 - MediaSession implementation;
 - Android Auto implementation;
-- notification implementation.
+- notification implementation;
+- foreground service controls as visible Settings content.
 
 Status: Limited.
 
@@ -369,58 +382,63 @@ Core basis:
 
 Allowed settings:
 
-- show diagnostics;
-- strict local mode;
-- snapshot redaction policy;
-- fake flow visibility;
-- automation safety level;
-- developer overlay.
+- debug mode;
+- rebuild library index;
+- compact local index;
+- treat Wi-Fi as metered;
+- treat VPN as metered.
 
 Not settings:
 
 - fake flow result;
 - snapshot diff output;
 - raw debug dumps in normal UI.
+- Visual Lab;
+- Core diagnostics;
+- provider boundary warnings;
+- snapshot redaction;
+- automation safety;
+- strict mock mode;
+- mock flow visibility.
 
 ## Category: About
 
 Should show:
 
-- Aria Core status;
-- interface status;
-- playback status;
-- streaming status;
-- provider auth status;
-- filesystem/cache status;
-- Android shell status;
-- persistence status.
+- Aria;
+- version;
+- library engine;
+- licenses;
+- credits.
+
+Should not show app limitations as user-facing copy.
 
 ## Current UI implementation target
 
-Define the next implementation block target.
+Define the next implementation block target from the internal Core mapping.
 
-Implementation note: Bloco 7D.2.2-I implemented the filtered category hub. Smart Playlists was retired from the Settings tab set. Recently Added remains tracks-only info, Favorites remains excluded from Settings controls, and internal controls use Core policy/preference terms rather than generic UI options.
+Implementation note: Bloco 7D.2.2-I implemented a filtered Core-mapped category hub. Bloco 7D.2.3-S supersedes that visible root with the app-like structure in `settings-app-structure.md`. Smart Playlists remains retired from the Settings tab set. Recently Added remains tracks-only info, Favorites remains excluded from Settings controls, and internal controls should be translated into app-facing settings names.
 
 Settings root hub should show:
 
-Settings:
+Main:
 
 - Interface
-- Sources & Providers
 - Library
 - Playback
-- Audio Output & Quality
-- Streaming & Network
-- Offline, Cache & Storage
+- Offline & Cache
+- Media Sources
 
-Advanced:
+Tools:
 
-- Profiles & Backup
-- Android & External Control
+- Backup & Restore
+
+System:
+
 - Advanced
 - About
 
-Controls may be limited.
+Controls may be limited, but visible copy must remain app-facing.
 
 ## Explicit exclusions for next UI block
 
@@ -437,4 +455,4 @@ Do not add as Settings category:
 - Snapshots
 - Fake Flows
 
-Some of these can appear inside Advanced/About as info or diagnostics, not primary settings.
+Some internal concepts can inform practical Advanced controls, but they must not appear as visible Core or diagnostics language.
