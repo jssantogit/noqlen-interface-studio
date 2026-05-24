@@ -68,7 +68,7 @@ export function AriaArtistDetail({
             ))}
           </p>
           <div className="mt-6 flex items-center gap-3">
-            <button className="flex h-12 w-[150px] items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] text-[17px] font-bold text-[#1a1008] shadow-[0_12px_24px_rgba(240,161,61,0.24)]" onClick={() => onShowToast('Play artist top songs (mock)')} type="button">
+            <button className="flex h-12 w-[150px] items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] text-[17px] font-bold text-[#1a1008] shadow-[0_12px_24px_rgba(240,161,61,0.24)]" onClick={() => onShowToast('Play artist top songs')} type="button">
               <Play size={18} fill="currentColor" /> Play
             </button>
             <button aria-label="More artist actions" className="grid h-12 w-12 place-items-center rounded-full bg-white/[0.06] text-[#fff3e4]" onClick={() => onOpenArtistOptions(artist)} type="button">

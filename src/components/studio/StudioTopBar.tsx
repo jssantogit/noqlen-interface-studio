@@ -6,11 +6,8 @@ export function StudioTopBar() {
           Noqlen Interface Studio
         </p>
         <h1 className="mt-1 truncate text-base font-medium tracking-[-0.02em] text-white sm:text-lg">
-          Mobile simulator lab
+          Mobile interface studio
         </h1>
-      </div>
-      <div className="shrink-0 rounded-full border border-amber-200/15 bg-amber-200/[0.06] px-2.5 py-1 text-xs text-amber-100/75 sm:px-3">
-        Visual only
       </div>
     </header>
   )

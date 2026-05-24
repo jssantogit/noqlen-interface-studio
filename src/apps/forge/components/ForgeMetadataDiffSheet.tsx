@@ -75,11 +75,6 @@ export function ForgeMetadataDiffSheet({
           ))}
         </div>
 
-        {/* Mock-only note */}
-        <p className="text-center text-[11px] leading-4 text-white/35">
-          This is a mock preview. No real metadata will be changed.
-        </p>
-
         {/* Actions */}
         <div className="grid grid-cols-2 gap-2.5 pt-1">
           <button

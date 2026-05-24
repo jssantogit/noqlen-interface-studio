@@ -62,7 +62,7 @@ const activeSource: ActiveSource = {
   type: 'local',
   name: 'Local library',
   status: 'Active local source',
-  detail: 'Device storage preview',
+  detail: 'Device storage',
 }
 const mockGenres = ['Ambient', 'Classical', 'Progressive Metal', 'Electronic', 'Jazz']
 const mockRadios = ['Local Mix Radio', 'Focus Radio', 'Discovery Radio']
@@ -101,7 +101,7 @@ export function AriaPreview() {
   const handleNext = useCallback(() => {
     setCurrentTrackIndex((currentIndex) => {
       const nextIndex = (currentIndex + 1) % playbackQueue.length
-      showToast(`Playing next: ${playbackQueue[nextIndex].title} (mock)`)
+      showToast(`Playing next: ${playbackQueue[nextIndex].title}`)
       return nextIndex
     })
   }, [showToast])
@@ -109,7 +109,7 @@ export function AriaPreview() {
   const handlePrevious = useCallback(() => {
     setCurrentTrackIndex((currentIndex) => {
       const nextIndex = (currentIndex - 1 + playbackQueue.length) % playbackQueue.length
-      showToast(`Playing previous: ${playbackQueue[nextIndex].title} (mock)`)
+      showToast(`Playing previous: ${playbackQueue[nextIndex].title}`)
       return nextIndex
     })
   }, [showToast])
@@ -198,7 +198,7 @@ export function AriaPreview() {
 
   const handleOpenExploreMode = useCallback((mode: ExploreMode, label: string) => {
     setActiveSheet({ type: 'exploreMode', mode })
-    showToast(`${label} preview (mock)`)
+    showToast(label)
   }, [showToast])
 
   const handleNavigateToExplore = useCallback(() => {
@@ -218,7 +218,7 @@ export function AriaPreview() {
 
   const handlePlay = useCallback(() => {
     setIsPlaying(true)
-    showToast('Playback started (mock)')
+    showToast('Playback started')
   }, [showToast])
 
   const handleOpenAlbum = useCallback((album: AriaAlbum = ariaAlbums[0]) => {
@@ -282,14 +282,14 @@ export function AriaPreview() {
   }, [])
 
   const handleAddTrackToQueue = useCallback((track: AriaTrack) => {
-    showToast(`Added ${track.title} to mock queue`)
+    showToast(`Added ${track.title} to queue`)
   }, [showToast])
 
   const handleOpenArtistByName = useCallback((artistName: string) => {
     const artist = ariaArtists.find((item) => item.name === artistName)
 
     if (!artist) {
-      showToast('Artist profile unavailable in mock data')
+      showToast('Artist profile unavailable')
       return
     }
 
@@ -301,7 +301,7 @@ export function AriaPreview() {
 
     if (!artist) {
       setActiveSheet(null)
-      showToast('Artist unavailable in mock data')
+      showToast('Artist unavailable')
       return
     }
 
@@ -313,7 +313,7 @@ export function AriaPreview() {
 
     if (!album) {
       setActiveSheet(null)
-      showToast('Album unavailable in mock data')
+      showToast('Album unavailable')
       return
     }
 
@@ -386,7 +386,7 @@ export function AriaPreview() {
               <div className="mt-3 grid grid-cols-2 gap-2">
                 <button
                   className="rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] px-3 py-2 text-[13px] font-bold text-[#1a1008] transition active:scale-[0.98]"
-                  onClick={() => showToast(activeSource.type === 'server' ? 'Server sync started (mock)' : 'Local library refreshed (mock)')}
+                  onClick={() => showToast(activeSource.type === 'server' ? 'Server sync started' : 'Local library refreshed')}
                   type="button"
                 >
                   {activeSource.type === 'server' ? 'Sync' : 'Refresh'}
@@ -428,11 +428,11 @@ export function AriaPreview() {
       return (
         <AriaBottomSheet onClose={handleCloseSheet} title={title}>
           {category === 'genres' ? (
-            <SheetGrid>{mockGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre (mock)`)} />)}</SheetGrid>
+            <SheetGrid>{mockGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre`)} />)}</SheetGrid>
           ) : category === 'folders' ? (
-            <SheetList>{mockFolders.map((folder) => <SheetRow key={folder} title={folder} subtitle="Mock-only category - no filesystem access" onClick={() => showToast(`${folder} folder preview (mock - no filesystem access)`)} variant="action" />)}</SheetList>
+            <SheetList>{mockFolders.map((folder) => <SheetRow key={folder} title={folder} onClick={() => showToast(`${folder} folder`)} variant="action" />)}</SheetList>
           ) : category === 'compilations' ? (
-            <SheetList>{mockCompilations.map((compilation) => <SheetRow key={compilation} title={compilation} subtitle="Collection preview" onClick={() => showToast(`${compilation} compilation (mock)`)} variant="action" />)}</SheetList>
+            <SheetList>{mockCompilations.map((compilation) => <SheetRow key={compilation} title={compilation} onClick={() => showToast(`${compilation} compilation`)} variant="action" />)}</SheetList>
           ) : null}
         </AriaBottomSheet>
       )
@@ -451,13 +451,13 @@ export function AriaPreview() {
               <SheetGroup title="Playlists">{ariaPlaylists.slice(0, 2).map((playlist) => <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks`} onClick={() => openPlaylistFromSheet(playlist)} />)}</SheetGroup>
             </div>
           ) : mode === 'genres' ? (
-            <SheetGrid>{mockGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre (mock)`)} />)}</SheetGrid>
+            <SheetGrid>{mockGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre`)} />)}</SheetGrid>
           ) : mode === 'albums' || mode === 'recent' ? (
             <SheetList>{ariaAlbums.map((album) => <SheetRow key={album.id} title={album.title} subtitle={`${album.artist} · ${album.year}`} onClick={() => openAlbumFromSheet(album)} />)}</SheetList>
           ) : mode === 'artists' ? (
             <SheetList>{ariaArtists.map((artist) => <SheetRow key={artist.id} title={artist.name} subtitle={artist.genre} onClick={() => openArtistFromSheet(artist)} />)}</SheetList>
           ) : mode === 'radios' ? (
-            <SheetList>{mockRadios.map((radio) => <SheetRow key={radio} title={radio} subtitle="Mock radio station" onClick={() => showToast(`${radio} (mock)`)} variant="action" />)}</SheetList>
+            <SheetList>{mockRadios.map((radio) => <SheetRow key={radio} title={radio} onClick={() => showToast(radio)} variant="action" />)}</SheetList>
           ) : mode === 'songs' ? (
             <SheetList>{ariaQueue.map((track) => <SheetRow key={track.id} title={track.title} subtitle={`${track.artist} · ${track.album}`} onClick={() => openTrackFromSheet(track)} />)}</SheetList>
           ) : (
@@ -473,12 +473,12 @@ export function AriaPreview() {
       return (
         <AriaBottomSheet onClose={handleCloseSheet} subtitle={`Actions for ${album.title}`} title="Album Options">
           <SheetList>
-            <SheetRow title="Play album" subtitle="Start local mock playback feedback" onClick={() => closeSheetWithToast(`Playing ${album.title} (mock)`)} variant="action" />
-            <SheetRow title="Shuffle album" subtitle="Shuffle feedback only" onClick={() => closeSheetWithToast(`Shuffling ${album.title} (mock)`)} variant="action" />
+            <SheetRow title="Play album" onClick={() => closeSheetWithToast(`Playing ${album.title}`)} variant="action" />
+            <SheetRow title="Shuffle album" subtitle="Shuffle feedback only" onClick={() => closeSheetWithToast(`Shuffling ${album.title}`)} variant="action" />
             <SheetRow title="View artist" subtitle={album.artist} onClick={() => openArtistByNameFromSheet(album.artist)} />
-            <SheetRow title="Add album to playlist" subtitle="Playlist picker preview" onClick={() => closeSheetWithToast(`Added ${album.title} to playlist picker (mock)`)} variant="action" />
-            <SheetRow title="Add album to queue" subtitle="Mock queue feedback only" onClick={() => closeSheetWithToast(`Added ${album.title} to mock queue`)} variant="action" />
-            <SheetRow title="Show album source" subtitle="No library connection used" onClick={() => closeSheetWithToast(`Source: ${album.source} (mock)`)} variant="action" />
+            <SheetRow title="Add album to playlist" onClick={() => closeSheetWithToast(`Added ${album.title} to playlist`)} variant="action" />
+            <SheetRow title="Add album to queue" onClick={() => closeSheetWithToast(`Added ${album.title} to queue`)} variant="action" />
+            <SheetRow title="Show album source" onClick={() => closeSheetWithToast(`Source: ${album.source}`)} variant="action" />
           </SheetList>
         </AriaBottomSheet>
       )
@@ -491,12 +491,12 @@ export function AriaPreview() {
       return (
         <AriaBottomSheet onClose={handleCloseSheet} subtitle={artist.name} title="Artist Options">
           <SheetList>
-            <SheetRow title="Play top songs" subtitle="Start local mock playback feedback" onClick={() => closeSheetWithToast(`Playing top songs by ${artist.name} (mock)`)} variant="action" />
-            <SheetRow title="Shuffle artist" subtitle="Shuffle feedback only" onClick={() => closeSheetWithToast(`Shuffling ${artist.name} (mock)`)} variant="action" />
+            <SheetRow title="Play top songs" onClick={() => closeSheetWithToast(`Playing top songs by ${artist.name}`)} variant="action" />
+            <SheetRow title="Shuffle artist" subtitle="Shuffle feedback only" onClick={() => closeSheetWithToast(`Shuffling ${artist.name}`)} variant="action" />
             <SheetRow title="View latest release" subtitle={latest.title} onClick={() => openAlbumFromSheet(latest)} />
-            <SheetRow title="Add artist to favorites" subtitle="Local mock favorite feedback" onClick={() => closeSheetWithToast(`Added ${artist.name} to favorites (mock)`)} variant="action" />
-            <SheetRow title="Start artist radio" subtitle="No real radio started" onClick={() => closeSheetWithToast(`Starting ${artist.name} radio (mock)`)} variant="action" />
-            <SheetRow title="Show artist info" subtitle="Profile information preview" onClick={() => closeSheetWithToast(`${artist.name} profile info (mock)`)} variant="action" />
+            <SheetRow title="Add artist to favorites" onClick={() => closeSheetWithToast(`Added ${artist.name} to favorites`)} variant="action" />
+            <SheetRow title="Start artist radio" onClick={() => closeSheetWithToast(`Starting ${artist.name} radio`)} variant="action" />
+            <SheetRow title="Show artist info" onClick={() => closeSheetWithToast(`${artist.name} profile info`)} variant="action" />
           </SheetList>
         </AriaBottomSheet>
       )
@@ -508,12 +508,12 @@ export function AriaPreview() {
       return (
         <AriaBottomSheet onClose={handleCloseSheet} subtitle={playlist.title} title="Playlist Options">
           <SheetList>
-            <SheetRow title="Play playlist" subtitle="Start local mock playback feedback" onClick={() => closeSheetWithToast(`Playing ${playlist.title} (mock)`)} variant="action" />
-            <SheetRow title="Shuffle playlist" subtitle="Shuffle feedback only" onClick={() => closeSheetWithToast(`Shuffling ${playlist.title} (mock)`)} variant="action" />
-            <SheetRow title="Rename playlist" subtitle="Preview only" onClick={() => closeSheetWithToast(`Rename ${playlist.title} (mock)`)} variant="action" />
-            <SheetRow title="Duplicate playlist" subtitle="No playlist is created" onClick={() => closeSheetWithToast(`Duplicated ${playlist.title} (mock)`)} variant="action" />
-            <SheetRow title="Export preview" subtitle="No file is created" onClick={() => closeSheetWithToast('Export preview only - no file created (mock)')} variant="action" />
-            <SheetRow title="Delete preview" subtitle="No playlist is deleted" onClick={() => closeSheetWithToast(`Delete confirmation preview for ${playlist.title} (mock)`)} variant="danger" />
+            <SheetRow title="Play playlist" onClick={() => closeSheetWithToast(`Playing ${playlist.title}`)} variant="action" />
+            <SheetRow title="Shuffle playlist" subtitle="Shuffle feedback only" onClick={() => closeSheetWithToast(`Shuffling ${playlist.title}`)} variant="action" />
+            <SheetRow title="Rename playlist" onClick={() => closeSheetWithToast(`Rename ${playlist.title}`)} variant="action" />
+            <SheetRow title="Duplicate playlist" onClick={() => closeSheetWithToast(`Duplicated ${playlist.title}`)} variant="action" />
+            <SheetRow title="Export playlist" onClick={() => closeSheetWithToast('Export playlist')} variant="action" />
+            <SheetRow title="Delete playlist" onClick={() => closeSheetWithToast(`Delete confirmation for ${playlist.title}`)} variant="danger" />
           </SheetList>
         </AriaBottomSheet>
       )
@@ -526,10 +526,10 @@ export function AriaPreview() {
         <AriaBottomSheet onClose={handleCloseSheet} subtitle={track.title} title="Track Options">
           <SheetList>
             <SheetRow title="View details" subtitle={`${track.artist} · ${track.album}`} onClick={() => openTrackFromSheet(track)} />
-            <SheetRow title="Add to playlist" subtitle="Choose a mock playlist" onClick={() => setActiveSheet({ type: 'addTrackToPlaylist', track })} />
-            <SheetRow title="Add to queue" subtitle="Mock queue feedback only" onClick={() => closeSheetWithToast(`Added ${track.title} to mock queue`)} variant="action" />
-            <SheetRow title="Favorite" subtitle="Favorite feedback only" onClick={() => closeSheetWithToast(`Added ${track.title} to favorites (mock)`)} variant="action" />
-            <SheetRow title="Show in folder" subtitle="No filesystem access" onClick={() => closeSheetWithToast(`Folder location preview for ${track.title} (mock - no file access)`)} variant="action" />
+            <SheetRow title="Add to playlist" onClick={() => setActiveSheet({ type: 'addTrackToPlaylist', track })} />
+            <SheetRow title="Add to queue" onClick={() => closeSheetWithToast(`Added ${track.title} to queue`)} variant="action" />
+            <SheetRow title="Favorite" onClick={() => closeSheetWithToast(`Added ${track.title} to favorites`)} variant="action" />
+            <SheetRow title="Show in folder" onClick={() => closeSheetWithToast(`Folder location for ${track.title}`)} variant="action" />
             <SheetRow title="Go to album" subtitle={track.album} onClick={() => openAlbumByTitleFromSheet(track.album)} />
             <SheetRow title="Go to artist" subtitle={track.artist} onClick={() => openArtistByNameFromSheet(track.artist)} />
           </SheetList>
@@ -558,7 +558,7 @@ export function AriaPreview() {
         <AriaBottomSheet onClose={handleCloseSheet} subtitle={track.title} title="Add to Playlist">
           <SheetList>
             {ariaPlaylists.map((playlist) => (
-              <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks · ${playlist.duration}`} onClick={() => closeSheetWithToast(`Added ${track.title} to ${playlist.title} (mock)`)} variant="action" />
+              <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks · ${playlist.duration}`} onClick={() => closeSheetWithToast(`Added ${track.title} to ${playlist.title}`)} variant="action" />
             ))}
           </SheetList>
         </AriaBottomSheet>

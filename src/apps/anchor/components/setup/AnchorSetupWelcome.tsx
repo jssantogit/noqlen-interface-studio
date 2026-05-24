@@ -54,8 +54,8 @@ export function AnchorSetupWelcome({
               <Sparkles size={20} />
             </span>
             <div className="min-w-0">
-              <span className="block text-sm font-semibold text-white">Mock-safe preview</span>
-              <span className="block text-xs text-slate-300/72">No real files, servers or permissions used</span>
+              <span className="block text-sm font-semibold text-white">Guided setup</span>
+              <span className="block text-xs text-slate-300/72">Server, library and access steps</span>
             </div>
           </div>
         </AnchorCard>
@@ -75,7 +75,7 @@ export function AnchorSetupWelcome({
           type="button"
         >
           <Music size={16} />
-          Preview configured app
+          Open configured app
         </button>
       </div>
     </div>

@@ -9,7 +9,7 @@ const scans = [
 
 export function AnchorScanHistorySheet({ onClose }: { onClose: () => void }) {
   return (
-    <AnchorBottomSheet onClose={onClose} subtitle="Recent mock scans for this Studio preview." title="Scan history">
+    <AnchorBottomSheet onClose={onClose} title="Scan history">
       <div className="space-y-4">
         <div className="space-y-2">
           {scans.map((scan) => {

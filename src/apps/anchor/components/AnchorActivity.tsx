@@ -89,7 +89,7 @@ export function AnchorActivity({
         <div className="mb-4 rounded-2xl border border-white/[0.06] bg-white/[0.035] px-3.5 py-3">
           <p className="text-sm font-semibold text-white">No activity yet</p>
           <p className="mt-1 text-xs leading-5 text-slate-300/76">
-            This mock state clears the event stream without reading real logs.
+            No activity has been recorded yet.
           </p>
         </div>
       ) : activityState === 'errorsOnly' ? (
@@ -103,7 +103,7 @@ export function AnchorActivity({
         <div className="mb-4 rounded-2xl border border-amber-300/16 bg-amber-300/[0.055] px-3.5 py-3">
           <p className="text-sm font-semibold text-amber-100">Filtered no-results</p>
           <p className="mt-1 text-xs leading-5 text-amber-50/76">
-            The selected mock filter intentionally returns no local events.
+            The selected filter returns no local events.
           </p>
         </div>
       ) : null}

@@ -28,11 +28,11 @@ export function AnchorSetupFolderPicker({
   const handleUseCustom = () => {
     const trimmed = customPath.trim()
     if (!trimmed) {
-      setCustomError('Enter a mock path')
+      setCustomError('Enter a path')
       return
     }
     if (!trimmed.startsWith('/')) {
-      setCustomError('Mock Android paths should start with /')
+      setCustomError('Android paths should start with /')
       return
     }
     setCustomError('')
@@ -51,7 +51,6 @@ export function AnchorSetupFolderPicker({
   return (
     <AnchorBottomSheet
       onClose={onCancel}
-      subtitle="This is a mock folder picker. Studio does not access real storage."
       title="Choose music folder"
     >
       <div className="space-y-3">
@@ -98,7 +97,7 @@ export function AnchorSetupFolderPicker({
           <div className="space-y-2 rounded-2xl border border-white/[0.065] bg-white/[0.035] p-3.5">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-slate-300/82">
               <Keyboard size={14} />
-              Enter mock path
+              Enter path
             </div>
             <input
               autoFocus

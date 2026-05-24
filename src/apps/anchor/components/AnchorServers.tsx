@@ -66,10 +66,7 @@ export function AnchorServers({
 
       {serverListState === 'addingServer' ? (
         <AnchorCard className="mb-3.5 border-amber-300/16 bg-amber-300/[0.045] p-4">
-          <p className="text-sm font-semibold text-amber-100">Adding mock server</p>
-          <p className="mt-1 text-xs leading-5 text-amber-50/78">
-            The Add Server sheet is open with local-only validation. No discovery or connection is attempted.
-          </p>
+          <p className="text-sm font-semibold text-amber-100">Adding server</p>
         </AnchorCard>
       ) : null}
 
@@ -121,7 +118,7 @@ export function AnchorServers({
               {[
                 ['Address', serverState === 'offline' ? 'Unavailable while offline' : navidrome.address],
                 ['Version', navidrome.version],
-                ['Uptime', isDisabled ? 'Disabled in preview' : serverState === 'offline' ? 'Offline in preview' : navidrome.uptime],
+                ['Uptime', isDisabled ? 'Disabled' : serverState === 'offline' ? 'Offline' : navidrome.uptime],
               ].map(([label, value]) => (
                 <div className="grid min-w-0 grid-cols-1 gap-1 rounded-xl border border-white/[0.045] bg-black/10 px-3 py-2" key={label}>
                   <dt className="text-[0.64rem] font-semibold uppercase tracking-[0.13em] text-slate-300/74">{label}</dt>
@@ -151,30 +148,27 @@ export function AnchorServers({
         </AnchorCard>
       ) : serverListState === 'comingSoonOnly' ? (
         <AnchorCard className="p-5 text-center">
-          <p className="font-serif text-xl tracking-[-0.04em] text-white">Planned servers only</p>
-          <p className="mt-2 text-xs leading-5 text-slate-300/78">
-            Navidrome is hidden so only Jellyfin and Emby coming-soon cards are visible.
-          </p>
+          <p className="font-serif text-xl tracking-[-0.04em] text-white">Choose a server</p>
         </AnchorCard>
       ) : (
         <AnchorCard className="p-5 text-center">
           <p className="font-serif text-xl tracking-[-0.04em] text-white">No servers configured</p>
           <p className="mt-2 text-xs leading-5 text-slate-300/78">
-            Add a mock server profile to preview server management.
+            Add a server profile.
           </p>
           <button
             className="mt-4 h-10 w-full rounded-xl bg-amber-400 text-sm font-semibold text-[#211508] transition hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-100/70"
             onClick={onAddServer}
             type="button"
           >
-            Add mock server
+            Add server
           </button>
           <button
             className="mt-2 h-10 w-full rounded-xl border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
             onClick={onRestoreServer}
             type="button"
           >
-            Restore baseline preview
+            Restore server
           </button>
         </AnchorCard>
       )}

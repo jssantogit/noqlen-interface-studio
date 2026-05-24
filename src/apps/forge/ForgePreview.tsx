@@ -63,65 +63,65 @@ function getProgressConfig(item: ForgeReviewQueueItem | null): {
     case 'Apply artwork':
       return {
         title: 'Applying artwork',
-        steps: ['Preparing artwork update', 'Replacing mock artwork'],
+        steps: ['Preparing artwork update', 'Replacing artwork'],
         source: 'Discogs',
-        message: 'Artwork updated in mock preview',
+        message: 'Artwork updated',
       }
     case 'Apply lyrics':
       return {
         title: 'Applying lyrics',
-        steps: ['Preparing lyrics', 'Updating mock lyrics'],
-        source: 'Lyrics provider mock',
-        message: 'Lyrics added in mock preview',
+        steps: ['Preparing lyrics', 'Updating lyrics'],
+        source: 'Lyrics provider',
+        message: 'Lyrics added',
       }
     case 'Apply synced':
       return {
         title: 'Applying synced lyrics',
-        steps: ['Preparing synced lyrics', 'Updating mock LRC'],
-        source: 'LRC mock',
-        message: 'Synced lyrics applied in mock preview',
+        steps: ['Preparing synced lyrics', 'Updating LRC'],
+        source: 'LRC provider',
+        message: 'Synced lyrics applied',
       }
     case 'Apply tags':
       return {
         title: 'Applying tags',
-        steps: ['Preparing tag update', 'Applying mock tags'],
+        steps: ['Preparing tag update', 'Applying tags'],
         source: 'Last.fm',
-        message: 'Tags applied in mock preview',
+        message: 'Tags applied',
       }
     case 'Apply identity':
       return {
         title: 'Applying identity',
-        steps: ['Validating identity choice', 'Applying protected mock identity'],
+        steps: ['Validating identity choice', 'Applying protected identity'],
         source: 'MusicBrainz',
-        message: 'Identity applied in mock preview',
+        message: 'Identity applied',
       }
     case 'Choose match':
       return {
         title: 'Resolving match',
-        steps: ['Resolving mock match'],
+        steps: ['Resolving match'],
         source: 'MusicBrainz',
-        message: 'Match selected in mock preview',
+        message: 'Match selected',
       }
     case 'Apply release data':
       return {
         title: 'Applying release data',
-        steps: ['Preparing release metadata', 'Applying mock release fields'],
+        steps: ['Preparing release metadata', 'Applying release fields'],
         source: 'Discogs',
-        message: 'Release data applied in mock preview',
+        message: 'Release data applied',
       }
     case 'Apply audio data':
       return {
         title: 'Applying audio data',
-        steps: ['Preparing audio analysis', 'Applying mock audio metadata'],
-        source: 'Audio analysis mock',
-        message: 'Audio data applied in mock preview',
+        steps: ['Preparing audio analysis', 'Applying audio metadata'],
+        source: 'Audio analysis',
+        message: 'Audio data applied',
       }
     default:
       return {
         title: 'Applying change',
-        steps: ['Preparing change', 'Applying mock update'],
-        source: 'Forge mock',
-        message: 'Change applied in mock preview',
+        steps: ['Preparing change', 'Applying update'],
+        source: 'Forge',
+        message: 'Change applied',
       }
   }
 }
@@ -143,14 +143,14 @@ function makeActivityEntryFromReviewItem(
   const activityType = typeMap[item.actionLabel || ''] || 'tags'
   const providerMap: Record<string, string> = {
     'Apply artwork': 'Discogs',
-    'Apply lyrics': 'Lyrics mock',
-    'Apply synced': 'LRC mock',
-    'Review lyrics': 'Lyrics mock',
+    'Apply lyrics': 'Lyrics provider',
+    'Apply synced': 'LRC provider',
+    'Review lyrics': 'Lyrics provider',
     'Apply tags': 'Last.fm',
     'Apply identity': 'MusicBrainz',
     'Choose match': 'MusicBrainz',
     'Apply release data': 'Discogs',
-    'Apply audio data': 'Audio analysis mock',
+    'Apply audio data': 'Audio analysis',
   }
   const titleMap: Record<string, string> = {
     'Apply artwork': 'Artwork updated',
@@ -202,7 +202,7 @@ function makeActivityEntryFromReviewItem(
     affectedCount: 1,
     affectedItems: [item.title],
     changedFields: changedFieldsMap[item.actionLabel || ''] || ['Metadata'],
-    provider: providerMap[item.actionLabel || ''] || 'Forge mock',
+    provider: providerMap[item.actionLabel || ''] || 'Forge',
     status: 'completed',
     relatedReviewTarget: relatedMap[item.actionLabel || ''] || 'all',
   }
@@ -231,7 +231,7 @@ export function ForgePreview() {
   } | null>(null)
   const [progressFlow, setProgressFlow] = useState<ForgeProgressFlow | null>(null)
 
-  /* Mutable mock library data */
+  /* Mutable library data */
   const [libraryArtists, setLibraryArtists] = useState<MockArtist[]>([...artistData])
   const [libraryAlbums, setLibraryAlbums] = useState<MockAlbum[]>([...albumData])
   const [librarySongs, setLibrarySongs] = useState<MockSong[]>([...songData])
@@ -255,7 +255,7 @@ export function ForgePreview() {
     setMockState(buildMockState(scenario))
   }, [])
 
-  // Lazy-init activity items from mock data on first render
+  // Lazy-init activity items on first render
   useMemo(() => {
     if (activityItemsState.length === 0) {
       import('./forgeMockData').then((mod) => {
@@ -376,12 +376,12 @@ export function ForgePreview() {
     setSelectedIds(new Set())
     setSessionFixed(0)
     setSessionIgnored(0)
-    showToast('Mock review queue reset', 'info')
+    showToast('Review queue reset', 'info')
   }, [showToast])
 
   const handleSaveSettings = useCallback(() => {
     closeSheet()
-    showToast('Forge settings saved in mock preview')
+    showToast('Forge settings saved')
   }, [closeSheet, showToast])
 
   const showConfirm = useCallback(
@@ -425,8 +425,8 @@ export function ForgePreview() {
         {
           label: selectedReviewItem.type === 'lyrics' ? 'Lyrics' : selectedReviewItem.type === 'covers' ? 'Artwork' : 'Metadata',
           before: 'current' in selectedReviewItem && selectedReviewItem.current ? selectedReviewItem.current : selectedReviewItem.type === 'lyrics' ? 'Missing' : selectedReviewItem.type === 'covers' ? 'Low resolution' : 'Unknown',
-          after: 'suggested' in selectedReviewItem && selectedReviewItem.suggested ? selectedReviewItem.suggested : selectedReviewItem.type === 'lyrics' ? 'Mock lyrics preview' : selectedReviewItem.type === 'covers' ? 'Suggested cover' : (itemGenres[selectedReviewItem.id]?.join(', ') || 'Selected metadata'),
-          source: selectedReviewItem.type === 'lyrics' ? 'Lyrics provider mock' : selectedReviewItem.type === 'covers' ? 'Discogs' : 'Forge mock',
+          after: 'suggested' in selectedReviewItem && selectedReviewItem.suggested ? selectedReviewItem.suggested : selectedReviewItem.type === 'lyrics' ? 'Suggested lyrics' : selectedReviewItem.type === 'covers' ? 'Suggested cover' : (itemGenres[selectedReviewItem.id]?.join(', ') || 'Selected metadata'),
+          source: selectedReviewItem.type === 'lyrics' ? 'Lyrics provider' : selectedReviewItem.type === 'covers' ? 'Discogs' : 'Forge',
         },
       ]
     }
@@ -447,11 +447,11 @@ export function ForgePreview() {
             { label: 'Match option B', before: 'Current match unclear', after: 'All Melody live edition · Nils Frahm · 2019', source, note: 'Conflict: choose a match before applying identity data.' },
           ]
         : [
-            { label: 'Album MBID', before: 'Empty', after: 'mock-mbid-all-melody-2018', source, note: 'Protected identity field.' },
-            { label: 'Artist MBID', before: 'Empty', after: 'mock-mbid-nils-frahm', source, note: 'Protected identity field.' },
-            { label: 'Release Group MBID', before: 'Empty', after: 'mock-rgid-all-melody-2018', source, note: 'Protected identity field.' },
-            { label: 'ISRC', before: 'Empty', after: 'mock-isrc-2018-0001', source, note: 'Protected identity field.' },
-            { label: 'AcoustID', before: 'Empty', after: 'mock-acoustid-all-melody', source, note: 'Protected identity field.' },
+            { label: 'Album MBID', before: 'Empty', after: 'mbid-all-melody-2018', source, note: 'Protected identity field.' },
+            { label: 'Artist MBID', before: 'Empty', after: 'mbid-nils-frahm', source, note: 'Protected identity field.' },
+            { label: 'Release Group MBID', before: 'Empty', after: 'rgid-all-melody-2018', source, note: 'Protected identity field.' },
+            { label: 'ISRC', before: 'Empty', after: 'isrc-2018-0001', source, note: 'Protected identity field.' },
+            { label: 'AcoustID', before: 'Empty', after: 'acoustid-all-melody', source, note: 'Protected identity field.' },
           ]
     }
     if (selectedReviewItem.metadataFilter === 'release') {
@@ -466,11 +466,11 @@ export function ForgePreview() {
     }
     if (selectedReviewItem.metadataFilter === 'audio') {
       return [
-        { label: 'BPM', before: 'Empty', after: '120', source: 'Audio analysis mock' },
-        { label: 'Key', before: 'Empty', after: 'A minor', source: 'Audio analysis mock' },
-        { label: 'ReplayGain', before: 'Empty', after: 'Available', source: 'Audio analysis mock' },
-        { label: 'Energy', before: 'Empty', after: 'Low', source: 'Audio analysis mock' },
-        { label: 'Danceability', before: 'Empty', after: 'Very low', source: 'Audio analysis mock' },
+        { label: 'BPM', before: 'Empty', after: '120', source: 'Audio analysis' },
+        { label: 'Key', before: 'Empty', after: 'A minor', source: 'Audio analysis' },
+        { label: 'ReplayGain', before: 'Empty', after: 'Available', source: 'Audio analysis' },
+        { label: 'Energy', before: 'Empty', after: 'Low', source: 'Audio analysis' },
+        { label: 'Danceability', before: 'Empty', after: 'Very low', source: 'Audio analysis' },
       ]
     }
     return []
@@ -499,10 +499,10 @@ export function ForgePreview() {
     startProgress({
       title: 'Ignoring item',
       steps: ['Marking item ignored'],
-      completeMessage: 'Item ignored in mock preview',
+      completeMessage: 'Item ignored',
       onComplete: () => {
         updateItemStatus(selectedReviewItemId, 'ignored')
-        showToast('Item ignored in mock preview')
+        showToast('Item ignored')
       },
     })
   }, [selectedReviewItemId, closeDetailSheet, startProgress, updateItemStatus, showToast])
@@ -513,10 +513,10 @@ export function ForgePreview() {
     startProgress({
       title: 'Keeping current cover',
       steps: ['Marking item ignored'],
-      completeMessage: 'Current cover kept in mock preview',
+      completeMessage: 'Current cover kept',
       onComplete: () => {
         updateItemStatus(selectedReviewItemId, 'ignored')
-        showToast('Current cover kept in mock preview')
+        showToast('Current cover kept')
       },
     })
   }, [selectedReviewItemId, closeDetailSheet, startProgress, updateItemStatus, showToast])
@@ -528,12 +528,12 @@ export function ForgePreview() {
       closeDetailSheet()
       startProgress({
         title: 'Applying genre',
-        steps: ['Preparing genre update', 'Applying mock genres'],
+        steps: ['Preparing genre update', 'Applying genres'],
         sourceBadge: 'Last.fm',
-        completeMessage: 'Genre applied in mock preview',
+        completeMessage: 'Genre applied',
         onComplete: () => {
           updateItemStatus(selectedReviewItemId, 'fixed')
-          showToast('Genre applied in mock preview')
+          showToast('Genre applied')
         },
       })
     },
@@ -582,9 +582,9 @@ export function ForgePreview() {
     const entityTypeLabel = editorType === 'artist' ? 'artist' : editorType === 'album' ? 'album' : 'track'
     startProgress({
       title: 'Applying changes',
-      steps: ['Preparing changes', 'Applying mock metadata'],
-      sourceBadge: 'Forge mock',
-      completeMessage: 'Metadata updated in mock preview',
+      steps: ['Preparing changes', 'Applying metadata'],
+      sourceBadge: 'Forge',
+      completeMessage: 'Metadata updated',
       onComplete: () => {
         if (editorType === 'artist') {
           setLibraryArtists((prev) => prev.map((a) => (a.id === (updated as MockArtist).id ? (updated as MockArtist) : a)))
@@ -593,7 +593,7 @@ export function ForgePreview() {
         } else {
           setLibrarySongs((prev) => prev.map((s) => (s.id === (updated as MockSong).id ? (updated as MockSong) : s)))
         }
-        showToast('Metadata updated in mock preview')
+        showToast('Metadata updated')
         // Append library edit activity
         const now = new Date()
         const timeStr = `${now.getHours() % 12 || 12}:${now.getMinutes().toString().padStart(2, '0')} ${now.getHours() >= 12 ? 'PM' : 'AM'}`

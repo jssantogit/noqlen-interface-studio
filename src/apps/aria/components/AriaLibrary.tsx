@@ -58,7 +58,7 @@ export function AriaLibrary({
             className="grid h-10 w-10 place-items-center rounded-full transition hover:bg-white/[0.04]"
             onClick={() => {
               onOpenLibrarySearch()
-              onShowToast('Library search preview (mock)')
+              onShowToast('Library search')
             }}
             type="button"
           >

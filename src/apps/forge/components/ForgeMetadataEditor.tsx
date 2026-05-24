@@ -171,14 +171,14 @@ function ForgeImagePickerSheet({
         <div className="forge-scrollbar-soft max-h-[calc(75vh-10rem)] min-w-0 max-w-full overflow-y-auto overflow-x-hidden px-4 pb-6 sm:px-5">
           <div className="grid grid-cols-3 gap-2.5">
             {(mode === 'gallery' ? galleryOptions : filtered).map((opt, idx) => (
-              <button className="flex flex-col items-center gap-1.5 rounded-xl border border-white/[0.06] bg-white/[0.035] p-2 text-center transition hover:bg-white/[0.06]" key={idx} onClick={() => onSelect('gradient' in opt ? opt.gradient : '', mode === 'gallery' ? 'Gallery mock' : (opt as typeof searchResults[0]).provider)} type="button">
+              <button className="flex flex-col items-center gap-1.5 rounded-xl border border-white/[0.06] bg-white/[0.035] p-2 text-center transition hover:bg-white/[0.06]" key={idx} onClick={() => onSelect('gradient' in opt ? opt.gradient : '', mode === 'gallery' ? 'Gallery' : (opt as typeof searchResults[0]).provider)} type="button">
                 <CoverGradient className="aspect-square w-full rounded-lg" gradient={'gradient' in opt ? opt.gradient : ''} />
                 <p className="text-[9px] leading-3 text-white/50">{'label' in opt ? opt.label : ''}</p>
               </button>
             ))}
           </div>
           {mode === 'search' && filtered.length === 0 && (
-            <p className="mt-4 text-center text-xs text-white/40">No mock results</p>
+            <p className="mt-4 text-center text-xs text-white/40">No results</p>
           )}
         </div>
       </section>
@@ -235,7 +235,6 @@ function ForgeSavePreviewSheet({
               </div>
             ))}
           </div>
-          <p className="mt-4 text-center text-[11px] leading-4 text-white/35">This is a mock preview. No real metadata will be changed.</p>
           <div className="grid grid-cols-2 gap-2.5 pt-4">
             <button className="h-10 rounded-lg border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075]" onClick={onClose} type="button">Keep editing</button>
             <button className="h-10 rounded-lg bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3),0_0.5rem_1rem_rgba(234,154,92,0.12)] transition hover:bg-[#efad6c]" onClick={onApply} type="button">Apply changes</button>
@@ -278,7 +277,7 @@ export function ForgeMetadataEditor({
       }
     })
     if (pendingImage) {
-      changes.push({ key: 'image', label: entityType === 'artist' ? 'Artist image' : entityType === 'album' ? 'Album cover' : 'Cover', before: 'Current', after: 'Selected mock image', source: pendingImage.source })
+      changes.push({ key: 'image', label: entityType === 'artist' ? 'Artist image' : entityType === 'album' ? 'Album cover' : 'Cover', before: 'Current', after: 'Selected image', source: pendingImage.source })
     }
     return changes
   }, [draft, original, pendingImage, entityType])
@@ -376,7 +375,7 @@ export function ForgeMetadataEditor({
               { label: 'Retry', onClick: () => setSaveError(false), tone: 'primary' },
               { label: 'Cancel', onClick: () => setSaveError(false), tone: 'secondary' },
             ]}
-            message="Could not save mock changes. No real metadata or files were changed."
+            message="Could not save changes."
             title="Save failed"
             variant="error"
           />
@@ -777,7 +776,7 @@ function ArtistTabContent({
     return (
       <div className="space-y-2.5">
         <EditableField current={entity.mbArtistId ?? ''} label="MusicBrainz Artist ID" note="Protected identity field. Review before applying." onChange={(v) => updateField('mbArtistId', v)} source="MusicBrainz" value={draft.mbArtistId} />
-        <ReadOnlyField label="Provider / Source" value="MusicBrainz mock provider" />
+        <ReadOnlyField label="Provider / Source" value="MusicBrainz" />
         <ReadOnlyField label="ID Confidence" value="96%" />
       </div>
     )

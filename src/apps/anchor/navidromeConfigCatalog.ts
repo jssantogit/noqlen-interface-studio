@@ -47,15 +47,15 @@ export const navidromeSettingCategories: {
   description: string
 }[] = [
   { key: 'basics', label: 'Basics', shortLabel: 'Basics', description: 'Core identity, folders, logs, and privacy.' },
-  { key: 'network', label: 'Network', shortLabel: 'Net', description: 'Mock bind address, proxy, share, and TLS settings.' },
+  { key: 'network', label: 'Network', shortLabel: 'Net', description: 'Bind address, proxy, share, and TLS settings.' },
   { key: 'scanner', label: 'Library Scanner', shortLabel: 'Scanner', description: 'Automatic library scan cadence and behavior.' },
   { key: 'artwork', label: 'Artwork & Metadata', shortLabel: 'Artwork', description: 'Artwork, lyric, sort-tag, and metadata preferences.' },
   { key: 'playback', label: 'Playback & Transcoding', shortLabel: 'Playback', description: 'FFmpeg, transcoding cache, replay gain, and UI playback defaults.' },
   { key: 'features', label: 'Features', shortLabel: 'Features', description: 'Downloads, sharing, ratings, scrobble history, and public defaults.' },
-  { key: 'integrations', label: 'Integrations', shortLabel: 'Integrations', description: 'External metadata agents and mock masked provider credentials.' },
+  { key: 'integrations', label: 'Integrations', shortLabel: 'Integrations', description: 'External metadata agents and masked provider credentials.' },
   { key: 'security', label: 'Security & Auth', shortLabel: 'Security', description: 'Rate limits, session timeout, redaction, external auth, and path exposure.' },
-  { key: 'backup', label: 'Backup & Monitoring', shortLabel: 'Backup', description: 'Backup schedule and Prometheus endpoint mock settings.' },
-  { key: 'advanced', label: 'Advanced', shortLabel: 'Advanced', description: 'Search, TOML preview, environment mapping, dry-run, apply, and reset.' },
+  { key: 'backup', label: 'Backup & Monitoring', shortLabel: 'Backup', description: 'Backup schedule and Prometheus endpoint settings.' },
+  { key: 'advanced', label: 'Advanced', shortLabel: 'Advanced', description: 'Search, TOML review, environment mapping, dry-run, apply, and reset.' },
 ]
 
 const docsBase = 'https://www.navidrome.org/docs/usage/configuration/options/'
@@ -65,7 +65,7 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     key: 'ServerName',
     envVar: null,
     label: 'Server name',
-    description: 'Studio-only display name for this mock Navidrome profile.',
+    description: 'Display name for this Navidrome profile.',
     category: 'basics',
     type: 'text',
     defaultValue: 'Navidrome',
@@ -84,7 +84,7 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     category: 'basics',
     type: 'path',
     defaultValue: './music',
-    mockValue: '<mock-library>/Music/Naqlen',
+    mockValue: '<library>/Music/Naqlen',
     safetyLevel: 'caution',
     restartRequired: true,
     notes: 'Future app must validate through Anchor Core path safety before apply.',
@@ -101,7 +101,7 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     mockValue: '<anchor-workspace>/navidrome/data',
     safetyLevel: 'caution',
     restartRequired: true,
-    notes: 'Mock placeholder only; no filesystem lookup happens in the Studio.',
+    notes: 'Path placeholder.',
     docsUrl: docsBase,
   },
   {
@@ -130,7 +130,7 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     options: ['error', 'warn', 'info', 'debug', 'trace'],
     safetyLevel: 'safe',
     restartRequired: true,
-    notes: 'Trace/debug should be temporary in real deployments.',
+    notes: 'Trace/debug should be temporary.',
     docsUrl: docsBase,
   },
   {
@@ -144,14 +144,14 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     mockValue: false,
     safetyLevel: 'caution',
     restartRequired: true,
-    notes: 'Privacy-sensitive; Studio defaults the mock profile to disabled.',
+    notes: 'Privacy-sensitive; disabled by default.',
     docsUrl: 'https://www.navidrome.org/docs/usage/admin/insights/',
   },
   {
     key: 'Address',
     envVar: 'ND_ADDRESS',
     label: 'Address',
-    description: 'Address the mock server would bind to.',
+    description: 'Address the server would bind to.',
     category: 'network',
     type: 'text',
     defaultValue: '0.0.0.0',
@@ -186,7 +186,7 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     mockValue: '/music',
     safetyLevel: 'safe',
     restartRequired: true,
-    notes: 'Supports relative path or URL in real Navidrome.',
+    notes: 'Supports relative path or URL in Navidrome.',
     docsUrl: docsBase,
   },
   {
@@ -207,16 +207,16 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     key: 'TLSCert', envVar: 'ND_TLSCERT', label: 'TLSCert', description: 'Path to TLS certificate chain.', category: 'network', type: 'path', defaultValue: '', mockValue: '<anchor-workspace>/certs/navidrome.crt', safetyLevel: 'caution', restartRequired: true, notes: 'Future Core must validate certificate paths before apply.', docsUrl: docsBase,
   },
   {
-    key: 'TLSKey', envVar: 'ND_TLSKEY', label: 'TLSKey', description: 'Path to TLS private key.', category: 'network', type: 'secret', defaultValue: '', mockValue: 'mock-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Sensitive values are masked and never stored as real secrets.', docsUrl: docsBase,
+    key: 'TLSKey', envVar: 'ND_TLSKEY', label: 'TLSKey', description: 'Path to TLS private key.', category: 'network', type: 'secret', defaultValue: '', mockValue: 'masked-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Sensitive values are masked.', docsUrl: docsBase,
   },
   {
     key: 'UnixSocketPerm', envVar: 'ND_UNIXSOCKETPERM', label: 'UnixSocketPerm', description: 'File permissions for Unix socket mode.', category: 'network', type: 'text', defaultValue: '0660', mockValue: '0660', safetyLevel: 'advanced', restartRequired: true, notes: 'Relevant only when binding to a Unix socket.', docsUrl: docsBase,
   },
   {
-    key: 'Scanner.Enabled', envVar: 'ND_SCANNER_ENABLED', label: 'Scanner.Enabled', description: 'Enable automatic library scanning.', category: 'scanner', type: 'boolean', defaultValue: true, mockValue: true, safetyLevel: 'safe', restartRequired: true, notes: 'This UI does not trigger scans; it only edits mock draft state.', docsUrl: docsBase,
+    key: 'Scanner.Enabled', envVar: 'ND_SCANNER_ENABLED', label: 'Scanner.Enabled', description: 'Enable automatic library scanning.', category: 'scanner', type: 'boolean', defaultValue: true, mockValue: true, safetyLevel: 'safe', restartRequired: true, notes: 'Scanner setting.', docsUrl: docsBase,
   },
   {
-    key: 'Scanner.Schedule', envVar: 'ND_SCANNER_SCHEDULE', label: 'Scanner.Schedule', description: 'Cron or duration schedule for automatic scans.', category: 'scanner', type: 'duration', defaultValue: '0', mockValue: '@every 24h', safetyLevel: 'safe', restartRequired: true, notes: 'Preview only; no scheduler is started.', docsUrl: docsBase,
+    key: 'Scanner.Schedule', envVar: 'ND_SCANNER_SCHEDULE', label: 'Scanner.Schedule', description: 'Cron or duration schedule for automatic scans.', category: 'scanner', type: 'duration', defaultValue: '0', mockValue: '@every 24h', safetyLevel: 'safe', restartRequired: true, notes: 'Scanner schedule.', docsUrl: docsBase,
   },
   {
     key: 'Scanner.ScanOnStartup', envVar: 'ND_SCANNER_SCANONSTARTUP', label: 'Scanner.ScanOnStartup', description: 'Scan the library when Navidrome starts.', category: 'scanner', type: 'boolean', defaultValue: true, mockValue: true, safetyLevel: 'safe', restartRequired: true, notes: 'Future app should show restart implications.', docsUrl: docsBase,
@@ -237,25 +237,25 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     key: 'PlaylistsPath', envVar: 'ND_PLAYLISTSPATH', label: 'PlaylistsPath', description: 'Relative folders/globs where playlists are imported.', category: 'scanner', type: 'list', defaultValue: '', mockValue: 'Playlists', safetyLevel: 'caution', restartRequired: true, notes: 'Navidrome requires paths relative to MusicFolder.', docsUrl: docsBase,
   },
   {
-    key: 'CoverArtPriority', envVar: 'ND_COVERARTPRIORITY', label: 'CoverArtPriority', description: 'Priority order for album cover sources.', category: 'artwork', type: 'list', defaultValue: 'cover.*, folder.*, front.*, embedded, external', mockValue: 'cover.*, folder.*, front.*, embedded, external', safetyLevel: 'safe', restartRequired: true, notes: 'Curated list input in Studio.', docsUrl: docsBase,
+    key: 'CoverArtPriority', envVar: 'ND_COVERARTPRIORITY', label: 'CoverArtPriority', description: 'Priority order for album cover sources.', category: 'artwork', type: 'list', defaultValue: 'cover.*, folder.*, front.*, embedded, external', mockValue: 'cover.*, folder.*, front.*, embedded, external', safetyLevel: 'safe', restartRequired: true, notes: 'Curated list input.', docsUrl: docsBase,
   },
   {
     key: 'ArtistArtPriority', envVar: 'ND_ARTISTARTPRIORITY', label: 'ArtistArtPriority', description: 'Priority order for artist images.', category: 'artwork', type: 'list', defaultValue: 'artist.*, album/artist.*, external', mockValue: 'artist.*, album/artist.*, external', safetyLevel: 'safe', restartRequired: true, notes: 'External entries depend on integrations.', docsUrl: docsBase,
   },
   {
-    key: 'ArtistImageFolder', envVar: 'ND_ARTISTIMAGEFOLDER', label: 'ArtistImageFolder', description: 'Central folder for artist image lookups.', category: 'artwork', type: 'path', defaultValue: '', mockValue: '<mock-library>/Artists', safetyLevel: 'caution', restartRequired: true, notes: 'Path safety validation required in future Core flow.', docsUrl: docsBase,
+    key: 'ArtistImageFolder', envVar: 'ND_ARTISTIMAGEFOLDER', label: 'ArtistImageFolder', description: 'Central folder for artist image lookups.', category: 'artwork', type: 'path', defaultValue: '', mockValue: '<library>/Artists', safetyLevel: 'caution', restartRequired: true, notes: 'Path safety validation required.', docsUrl: docsBase,
   },
   {
-    key: 'CoverArtQuality', envVar: 'ND_COVERARTQUALITY', label: 'CoverArtQuality', description: 'Quality percentage for resized WebP cover art.', category: 'artwork', type: 'number', defaultValue: 75, mockValue: 82, safetyLevel: 'safe', restartRequired: true, notes: 'Mock number input only.', docsUrl: docsBase,
+    key: 'CoverArtQuality', envVar: 'ND_COVERARTQUALITY', label: 'CoverArtQuality', description: 'Quality percentage for resized WebP cover art.', category: 'artwork', type: 'number', defaultValue: 75, mockValue: 82, safetyLevel: 'safe', restartRequired: true, notes: 'Number input.', docsUrl: docsBase,
   },
   {
-    key: 'EnableArtworkPrecache', envVar: 'ND_ENABLEARTWORKPRECACHE', label: 'EnableArtworkPrecache', description: 'Pre-cache artwork for newly added music.', category: 'artwork', type: 'boolean', defaultValue: true, mockValue: true, safetyLevel: 'safe', restartRequired: true, notes: 'No cache work runs in Studio.', docsUrl: docsBase,
+    key: 'EnableArtworkPrecache', envVar: 'ND_ENABLEARTWORKPRECACHE', label: 'EnableArtworkPrecache', description: 'Pre-cache artwork for newly added music.', category: 'artwork', type: 'boolean', defaultValue: true, mockValue: true, safetyLevel: 'safe', restartRequired: true, notes: 'Artwork cache preference.', docsUrl: docsBase,
   },
   {
     key: 'EnableArtworkUpload', envVar: 'ND_ENABLEARTWORKUPLOAD', label: 'EnableArtworkUpload', description: 'Allow artwork upload in the web UI.', category: 'artwork', type: 'boolean', defaultValue: true, mockValue: true, safetyLevel: 'caution', restartRequired: true, notes: 'Future UI must preserve permissions and upload boundaries.', docsUrl: docsBase,
   },
   {
-    key: 'LyricsPriority', envVar: 'ND_LYRICSPRIORITY', label: 'LyricsPriority', description: 'Order and sources for lyrics lookup.', category: 'artwork', type: 'list', defaultValue: '.lrc,.txt,embedded', mockValue: '.lrc,.txt,embedded', safetyLevel: 'safe', restartRequired: true, notes: 'Static preview only.', docsUrl: docsBase,
+    key: 'LyricsPriority', envVar: 'ND_LYRICSPRIORITY', label: 'LyricsPriority', description: 'Order and sources for lyrics lookup.', category: 'artwork', type: 'list', defaultValue: '.lrc,.txt,embedded', mockValue: '.lrc,.txt,embedded', safetyLevel: 'safe', restartRequired: true, notes: 'Lyrics source order.', docsUrl: docsBase,
   },
   {
     key: 'PreferSortTags', envVar: 'ND_PREFERSORTTAGS', label: 'PreferSortTags', description: 'Use Sort_* tags for UI sorting.', category: 'artwork', type: 'boolean', defaultValue: false, mockValue: true, safetyLevel: 'safe', restartRequired: true, notes: 'Metadata display behavior.', docsUrl: docsBase,
@@ -270,7 +270,7 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     key: 'TranscodingCacheSize', envVar: 'ND_TRANSCODINGCACHESIZE', label: 'TranscodingCacheSize', description: 'Size of the transcoding cache.', category: 'playback', type: 'size', defaultValue: '100MB', mockValue: '150MiB', safetyLevel: 'safe', restartRequired: true, notes: 'Navidrome supports size strings such as 150MiB.', docsUrl: docsBase,
   },
   {
-    key: 'DefaultDownsamplingFormat', envVar: 'ND_DEFAULTDOWNSAMPLINGFORMAT', label: 'DefaultDownsamplingFormat', description: 'Default format for client downsampling requests.', category: 'playback', type: 'select', defaultValue: 'opus', mockValue: 'opus', options: ['opus', 'mp3', 'aac'], safetyLevel: 'safe', restartRequired: true, notes: 'Curated common formats for the mock UI.', docsUrl: docsBase,
+    key: 'DefaultDownsamplingFormat', envVar: 'ND_DEFAULTDOWNSAMPLINGFORMAT', label: 'DefaultDownsamplingFormat', description: 'Default format for client downsampling requests.', category: 'playback', type: 'select', defaultValue: 'opus', mockValue: 'opus', options: ['opus', 'mp3', 'aac'], safetyLevel: 'safe', restartRequired: true, notes: 'Curated common formats.', docsUrl: docsBase,
   },
   {
     key: 'EnableTranscodingConfig', envVar: 'ND_ENABLETRANSCODINGCONFIG', label: 'EnableTranscodingConfig', description: 'Enable transcoding configuration in the UI.', category: 'playback', type: 'boolean', defaultValue: false, mockValue: false, safetyLevel: 'caution', restartRequired: true, notes: 'Can expose advanced server behavior to users.', docsUrl: docsBase,
@@ -321,10 +321,10 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     key: 'LastFM.Enabled', envVar: 'ND_LASTFM_ENABLED', label: 'LastFM.Enabled', description: 'Enable Last.fm integration.', category: 'integrations', type: 'boolean', defaultValue: true, mockValue: false, safetyLevel: 'caution', restartRequired: true, notes: 'External service integration.', docsUrl: docsBase,
   },
   {
-    key: 'LastFM.ApiKey', envVar: 'ND_LASTFM_APIKEY', label: 'LastFM.ApiKey', description: 'Last.fm API key.', category: 'integrations', type: 'secret', defaultValue: '', mockValue: 'mock-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Masked mock field; do not enter real credentials.', docsUrl: docsBase,
+    key: 'LastFM.ApiKey', envVar: 'ND_LASTFM_APIKEY', label: 'LastFM.ApiKey', description: 'Last.fm API key.', category: 'integrations', type: 'secret', defaultValue: '', mockValue: 'masked-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Masked credential field.', docsUrl: docsBase,
   },
   {
-    key: 'LastFM.Secret', envVar: 'ND_LASTFM_SECRET', label: 'LastFM.Secret', description: 'Last.fm API secret.', category: 'integrations', type: 'secret', defaultValue: '', mockValue: 'mock-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Sensitive values are masked in the Studio and are never stored as real secrets.', docsUrl: docsBase,
+    key: 'LastFM.Secret', envVar: 'ND_LASTFM_SECRET', label: 'LastFM.Secret', description: 'Last.fm API secret.', category: 'integrations', type: 'secret', defaultValue: '', mockValue: 'masked-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Sensitive values are masked.', docsUrl: docsBase,
   },
   {
     key: 'LastFM.Language', envVar: 'ND_LASTFM_LANGUAGE', label: 'LastFM.Language', description: 'Two-letter language code for Last.fm biographies.', category: 'integrations', type: 'text', defaultValue: 'en', mockValue: 'en', safetyLevel: 'safe', restartRequired: true, notes: 'Language display value.', docsUrl: docsBase,
@@ -333,7 +333,7 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     key: 'ListenBrainz.Enabled', envVar: 'ND_LISTENBRAINZ_ENABLED', label: 'ListenBrainz.Enabled', description: 'Enable ListenBrainz integration.', category: 'integrations', type: 'boolean', defaultValue: true, mockValue: false, safetyLevel: 'caution', restartRequired: true, notes: 'External service integration.', docsUrl: docsBase,
   },
   {
-    key: 'ListenBrainz.BaseURL', envVar: 'ND_LISTENBRAINZ_BASEURL', label: 'ListenBrainz.BaseURL', description: 'Override ListenBrainz base URL.', category: 'integrations', type: 'text', defaultValue: 'https://api.listenbrainz.org/1/', mockValue: 'https://api.listenbrainz.org/1/', safetyLevel: 'advanced', restartRequired: true, notes: 'No network calls are made by this UI.', docsUrl: docsBase,
+    key: 'ListenBrainz.BaseURL', envVar: 'ND_LISTENBRAINZ_BASEURL', label: 'ListenBrainz.BaseURL', description: 'Override ListenBrainz base URL.', category: 'integrations', type: 'text', defaultValue: 'https://api.listenbrainz.org/1/', mockValue: 'https://api.listenbrainz.org/1/', safetyLevel: 'advanced', restartRequired: true, notes: 'Base URL override.', docsUrl: docsBase,
   },
   {
     key: 'Deezer.Enabled', envVar: 'ND_DEEZER_ENABLED', label: 'Deezer.Enabled', description: 'Enable Deezer integration for artist images.', category: 'integrations', type: 'boolean', defaultValue: true, mockValue: true, safetyLevel: 'caution', restartRequired: true, notes: 'External service integration.', docsUrl: docsBase,
@@ -360,7 +360,7 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     key: 'EnableLogRedacting', envVar: 'ND_ENABLELOGREDACTING', label: 'EnableLogRedacting', description: 'Redact sensitive information from logs.', category: 'security', type: 'boolean', defaultValue: true, mockValue: true, safetyLevel: 'safe', restartRequired: true, notes: 'Should stay enabled; disabling may expose tokens and passwords.', docsUrl: docsBase,
   },
   {
-    key: 'PasswordEncryptionKey', envVar: 'ND_PASSWORDENCRYPTIONKEY', label: 'PasswordEncryptionKey', description: 'Passphrase used to encrypt passwords in the database.', category: 'security', type: 'secret', defaultValue: '', mockValue: 'mock-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Sensitive values are masked in the Studio and are never stored as real secrets.', docsUrl: docsBase,
+    key: 'PasswordEncryptionKey', envVar: 'ND_PASSWORDENCRYPTIONKEY', label: 'PasswordEncryptionKey', description: 'Passphrase used to encrypt passwords in the database.', category: 'security', type: 'secret', defaultValue: '', mockValue: 'masked-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Sensitive values are masked.', docsUrl: docsBase,
   },
   {
     key: 'ExtAuth.TrustedSources', envVar: 'ND_EXTAUTH_TRUSTEDSOURCES', label: 'ExtAuth.TrustedSources', description: 'Allowed CIDRs or socket source for reverse proxy auth.', category: 'security', type: 'list', defaultValue: '', mockValue: '', safetyLevel: 'caution', restartRequired: true, notes: 'Misconfiguration may allow spoofed authenticated users.', docsUrl: docsBase,
@@ -372,25 +372,25 @@ export const navidromeConfigCatalog: NavidromeConfigOption[] = [
     key: 'ExtAuth.LogoutURL', envVar: 'ND_EXTAUTH_LOGOUTURL', label: 'ExtAuth.LogoutURL', description: 'Redirect URL after logout from external auth.', category: 'security', type: 'text', defaultValue: '', mockValue: '', safetyLevel: 'advanced', restartRequired: true, notes: 'No URL is opened by this UI.', docsUrl: docsBase,
   },
   {
-    key: 'Subsonic.DefaultReportRealPath', envVar: 'ND_SUBSONIC_DEFAULTREPORTREALPATH', label: 'Subsonic.DefaultReportRealPath', description: 'Report real music file paths in Subsonic API responses.', category: 'security', type: 'boolean', defaultValue: false, mockValue: false, safetyLevel: 'caution', restartRequired: true, notes: 'May expose real paths; should remain disabled unless explicitly required.', docsUrl: docsBase,
+    key: 'Subsonic.DefaultReportRealPath', envVar: 'ND_SUBSONIC_DEFAULTREPORTREALPATH', label: 'Subsonic.DefaultReportRealPath', description: 'Report music file paths in Subsonic API responses.', category: 'security', type: 'boolean', defaultValue: false, mockValue: false, safetyLevel: 'caution', restartRequired: true, notes: 'May expose paths; should remain disabled unless explicitly required.', docsUrl: docsBase,
   },
   {
     key: 'Backup.Path', envVar: 'ND_BACKUP_PATH', label: 'Backup.Path', description: 'Path used to store automated backups.', category: 'backup', type: 'path', defaultValue: '', mockValue: '<anchor-workspace>/backups/navidrome', safetyLevel: 'caution', restartRequired: true, notes: 'Future Core must validate backup path containment.', docsUrl: docsBase,
   },
   {
-    key: 'Backup.Schedule', envVar: 'ND_BACKUP_SCHEDULE', label: 'Backup.Schedule', description: 'Cron schedule for automatic backups.', category: 'backup', type: 'duration', defaultValue: '', mockValue: '0 3 * * *', safetyLevel: 'safe', restartRequired: true, notes: 'Mock schedule only; no backup jobs are created.', docsUrl: docsBase,
+    key: 'Backup.Schedule', envVar: 'ND_BACKUP_SCHEDULE', label: 'Backup.Schedule', description: 'Cron schedule for automatic backups.', category: 'backup', type: 'duration', defaultValue: '', mockValue: '0 3 * * *', safetyLevel: 'safe', restartRequired: true, notes: 'Backup schedule.', docsUrl: docsBase,
   },
   {
-    key: 'Backup.Count', envVar: 'ND_BACKUP_COUNT', label: 'Backup.Count', description: 'Number of backups to retain.', category: 'backup', type: 'number', defaultValue: 0, mockValue: 7, safetyLevel: 'safe', restartRequired: true, notes: 'No real backup retention is applied in Studio.', docsUrl: docsBase,
+    key: 'Backup.Count', envVar: 'ND_BACKUP_COUNT', label: 'Backup.Count', description: 'Number of backups to retain.', category: 'backup', type: 'number', defaultValue: 0, mockValue: 7, safetyLevel: 'safe', restartRequired: true, notes: 'Backup retention setting.', docsUrl: docsBase,
   },
   {
-    key: 'Prometheus.Enabled', envVar: 'ND_PROMETHEUS_ENABLED', label: 'Prometheus.Enabled', description: 'Enable Prometheus metrics endpoint.', category: 'backup', type: 'boolean', defaultValue: false, mockValue: false, safetyLevel: 'caution', restartRequired: true, notes: 'Metrics endpoints should be protected in real deployments.', docsUrl: docsBase,
+    key: 'Prometheus.Enabled', envVar: 'ND_PROMETHEUS_ENABLED', label: 'Prometheus.Enabled', description: 'Enable Prometheus metrics endpoint.', category: 'backup', type: 'boolean', defaultValue: false, mockValue: false, safetyLevel: 'caution', restartRequired: true, notes: 'Metrics endpoints should be protected.', docsUrl: docsBase,
   },
   {
     key: 'Prometheus.MetricsPath', envVar: 'ND_PROMETHEUS_METRICSPATH', label: 'Prometheus.MetricsPath', description: 'Custom path for metrics endpoint.', category: 'backup', type: 'text', defaultValue: '/metrics', mockValue: '/metrics', safetyLevel: 'advanced', restartRequired: true, notes: 'Display-only path string.', docsUrl: docsBase,
   },
   {
-    key: 'Prometheus.Password', envVar: 'ND_PROMETHEUS_PASSWORD', label: 'Prometheus.Password', description: 'Basic Auth password for Prometheus metrics.', category: 'backup', type: 'secret', defaultValue: '', mockValue: 'mock-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Sensitive values are masked in the Studio and are never stored as real secrets.', docsUrl: docsBase,
+    key: 'Prometheus.Password', envVar: 'ND_PROMETHEUS_PASSWORD', label: 'Prometheus.Password', description: 'Basic Auth password for Prometheus metrics.', category: 'backup', type: 'secret', defaultValue: '', mockValue: 'masked-secret-value', safetyLevel: 'sensitive', restartRequired: true, notes: 'Sensitive values are masked.', docsUrl: docsBase,
   },
 ]
 
@@ -413,7 +413,7 @@ export const getNavidromeChangedOptions = (
 export const renderNavidromeTomlPreview = (draft: NavidromeConfigDraft) => {
   const lines = [
     '# navidrome.toml',
-    '# Studio preview only. Future app changes must go through Anchor Core dry-run/apply flow.',
+    '# Review changes before applying.',
   ]
 
   navidromeSettingCategories
@@ -425,7 +425,7 @@ export const renderNavidromeTomlPreview = (draft: NavidromeConfigDraft) => {
         if (option.key === 'ServerName') return
         const value = draft[option.key]
         if (option.type === 'secret') {
-          lines.push(`${option.key} = '<masked mock value>'`)
+          lines.push(`${option.key} = '<masked value>'`)
           return
         }
         if (typeof value === 'boolean' || typeof value === 'number') {
@@ -445,7 +445,7 @@ export const renderNavidromeEnvPreview = (draft: NavidromeConfigDraft) =>
     .map((option) => ({
       key: option.key,
       envVar: option.envVar as string,
-      value: option.type === 'secret' ? '<masked mock value>' : formatNavidromeValue(draft[option.key]),
+      value: option.type === 'secret' ? '<masked value>' : formatNavidromeValue(draft[option.key]),
       safetyLevel: option.safetyLevel,
     }))
 
@@ -454,7 +454,7 @@ export const renderNavidromeTomlDiff = (
   draft: NavidromeConfigDraft,
 ) => {
   const changed = getNavidromeChangedOptions(saved, draft)
-  if (changed.length === 0) return '# No local mock changes to preview.'
+  if (changed.length === 0) return '# No changes.'
   return changed
     .flatMap((option) => {
       const oldValue = option.type === 'secret' ? '<masked old value>' : formatNavidromeValue(saved[option.key])

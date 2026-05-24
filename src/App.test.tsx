@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import App from './App'
 
 describe('Noqlen Interface Studio shell', () => {
-  it('starts on Anchor inside the simulator and exposes all apps', () => {
+  it('starts on Anchor inside the phone frame and exposes all apps', () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { name: 'Anchor' })).toBeInTheDocument()
@@ -16,11 +16,11 @@ describe('Noqlen Interface Studio shell', () => {
     expect(screen.getByRole('button', { name: /Forge/ })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Aria/ })).toBeInTheDocument()
     expect(
-      screen.getByRole('region', { name: /Anchor phone simulator/ }),
+      screen.getByRole('region', { name: /Anchor phone frame/ }),
     ).toBeInTheDocument()
   })
 
-  it('switches app previews without real integration', async () => {
+  it('switches apps from the shell', async () => {
     const user = userEvent.setup()
     render(<App />)
 

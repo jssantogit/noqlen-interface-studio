@@ -22,7 +22,6 @@ export function AnchorLogViewerSheet({ onClose }: { onClose: () => void }) {
   return (
     <AnchorBottomSheet
       onClose={onClose}
-      subtitle="Mock recent server output"
       title="Navidrome logs"
     >
       <div className="space-y-4">

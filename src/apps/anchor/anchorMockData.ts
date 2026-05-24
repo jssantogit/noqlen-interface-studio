@@ -179,14 +179,14 @@ export const anchorActivity: AnchorActivityEvent[] = [
       port: '4533',
       attempt: 'Start server',
       result: 'Blocked',
-      suggestedSource: 'mock diagnostic event',
+      suggestedSource: 'diagnostic event',
       fixes: [
         'Choose another port',
-        'Stop the conflicting mock service',
-        'Restart Anchor preview',
+        'Stop the conflicting service',
+        'Restart Anchor',
         'Review Navidrome Settings',
       ],
-      note: 'This is a Studio mock diagnostic. No real port was checked.',
+      note: 'Review the conflicting port before restarting.',
     },
   },
   {
@@ -201,8 +201,8 @@ export const anchorActivity: AnchorActivityEvent[] = [
     relatedAction: 'libraryScan',
     details: [
       'Static scan result added 56 songs and 4 albums.',
-      'Preview counters were shown from mock data only.',
-      'No filesystem scan, backend call or metadata read occurred.',
+      'Library counters were updated.',
+      'Metadata summary is ready for review.',
     ],
   },
   {

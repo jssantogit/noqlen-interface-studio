@@ -88,7 +88,7 @@ export function AriaListenHome({
           className="rounded-[20px] border border-white/[0.08] bg-[linear-gradient(145deg,rgba(15,29,39,0.62),rgba(255,255,255,0.025))] p-3.5 text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.04]"
           onClick={() => {
             onNavigateToLibrary()
-            onShowToast('Artists index (mock)')
+            onShowToast('Artists index')
           }}
           type="button"
         >
@@ -102,7 +102,7 @@ export function AriaListenHome({
         className="mt-3 flex h-12 w-full items-center gap-3 rounded-[22px] border border-white/[0.085] bg-white/[0.04] px-5 text-left text-[16px] text-[#b9b1a7] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition hover:bg-white/[0.055]"
         onClick={() => {
           onNavigateToExplore()
-          onShowToast('Search in Explore (mock)')
+          onShowToast('Search in Explore')
         }}
         type="button"
       >
@@ -117,7 +117,7 @@ export function AriaListenHome({
             className="text-[16px] text-[#f0a13d] transition hover:text-[#ffb958]"
             onClick={() => {
               setShowAllRecent((current) => !current)
-              onShowToast(showAllRecent ? 'Recent additions collapsed (mock)' : 'Recently Added list (mock)')
+              onShowToast(showAllRecent ? 'Recent additions collapsed' : 'Recently Added list')
             }}
             type="button"
           >
@@ -147,7 +147,7 @@ export function AriaListenHome({
                 className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[15px] tracking-[0.12em] text-[#a69d94] transition hover:bg-white/[0.06]"
                 onClick={(event) => {
                   event.stopPropagation()
-                  onShowToast(`Options for ${item.title} (mock)`)
+                  onShowToast(`Options for ${item.title}`)
                 }}
                 type="button"
               >

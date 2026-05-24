@@ -31,7 +31,6 @@ export function AnchorActivityDetailSheet({
   return (
     <AnchorBottomSheet
       onClose={onClose}
-      subtitle="Static Studio event details."
       title={event.title}
     >
       <div className="space-y-4">
@@ -60,7 +59,7 @@ export function AnchorActivityDetailSheet({
 
         <section>
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400/80">
-            Mock technical details
+            Technical details
           </h3>
           <div className="space-y-2">
             {event.details.map((detail) => (

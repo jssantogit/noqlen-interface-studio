@@ -31,15 +31,15 @@ export function AriaPlaylistDetail({
           <p className="text-[11px] font-bold uppercase tracking-[0.32em] text-[#f0a13d]">{playlist.trackCount} tracks</p>
           <h1 className="mt-2 font-serif text-[42px] leading-[0.94] text-[#fff3e4]">{playlist.title}</h1>
           <p className="mt-3 max-w-[300px] text-[14px] leading-relaxed text-[#c9beb1]">{playlist.description}</p>
-          <p className="mt-2 text-[13px] text-[#8f8982]">{playlist.duration} <span className="px-2 text-[#f0a13d]">•</span> Local mock playlist</p>
+          <p className="mt-2 text-[13px] text-[#8f8982]">{playlist.duration} <span className="px-2 text-[#f0a13d]">•</span> Local playlist</p>
         </div>
       </section>
 
       <div className="mt-4 flex items-center gap-2.5">
-        <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] text-[15px] font-bold text-[#1a1008] shadow-[0_12px_24px_rgba(240,161,61,0.23)]" onClick={() => onShowToast('Play playlist (mock)')} type="button">
+        <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] text-[15px] font-bold text-[#1a1008] shadow-[0_12px_24px_rgba(240,161,61,0.23)]" onClick={() => onShowToast('Play playlist')} type="button">
           <Play size={17} fill="currentColor" /> Play
         </button>
-        <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.045] text-[15px] font-semibold text-[#fff3e4]" onClick={() => onShowToast('Shuffle playlist (mock)')} type="button">
+        <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.045] text-[15px] font-semibold text-[#fff3e4]" onClick={() => onShowToast('Shuffle playlist')} type="button">
           <Shuffle size={17} /> Shuffle
         </button>
         <button aria-label="More playlist actions" className="grid h-11 w-11 place-items-center rounded-full border border-white/[0.08] bg-white/[0.04] text-[#f5ecdf]" onClick={() => onOpenPlaylistOptions(playlist)} type="button">

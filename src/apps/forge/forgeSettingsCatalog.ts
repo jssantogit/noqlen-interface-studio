@@ -76,7 +76,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       description: 'MBIDs, artist/album/track identity, release identity',
       fields: ['MBIDs', 'Artist identity', 'Album identity', 'Track identity', 'Release identity'],
       hasCredential: false,
-      actions: ['Configure identity behavior', 'Test mock lookup'],
+      actions: ['Configure identity behavior', 'Test lookup'],
     },
     {
       id: 'discogs',
@@ -89,7 +89,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       credentialLabel: 'Discogs token',
       credentialEnv: 'DISCOGS_TOKEN',
       credentialKey: 'discogs_token',
-      actions: ['Configure catalog fields', 'Test mock lookup'],
+      actions: ['Configure catalog fields', 'Test lookup'],
     },
     {
       id: 'acoustid',
@@ -102,7 +102,7 @@ export const defaultForgeSettingsState: ForgeSettingsState = {
       credentialLabel: 'AcoustID API key',
       credentialEnv: 'ACOUSTID_API_KEY',
       credentialKey: 'acoustid_api_key',
-      actions: ['Configure matching', 'Test mock fingerprint'],
+      actions: ['Configure matching', 'Test fingerprint'],
     },
     {
       id: 'deezer',

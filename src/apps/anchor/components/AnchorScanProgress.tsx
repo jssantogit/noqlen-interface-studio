@@ -4,7 +4,7 @@ export type AnchorScanState = 'idle' | 'scanning' | 'complete' | 'failed'
 
 const rows = [
   'Preparing scan',
-  'Reading mock library index',
+  'Reading library index',
   'Checking metadata',
   'Updating summary',
   'Complete',
@@ -46,17 +46,17 @@ export function AnchorScanProgress({
           <div className="min-w-0">
             <p className="text-sm font-semibold text-white">
               {failed
-                ? 'Mock scan failed'
+                ? 'Scan failed'
                 : complete
                   ? 'Library refresh complete'
-                  : 'Scanning library preview'}
+                  : 'Scanning library'}
             </p>
             <p className="mt-1 text-xs leading-4 text-slate-300/75">
               {failed
-                ? 'Failure was simulated locally.'
+                ? 'Refresh failed.'
                 : complete
-                  ? 'Static library summary is up to date.'
-                  : 'No files are opened or scanned.'}
+                  ? 'Library summary is up to date.'
+                  : 'Checking library.'}
             </p>
           </div>
         </div>

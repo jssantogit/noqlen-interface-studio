@@ -55,7 +55,7 @@ export function AriaLyrics({
         <button
           aria-label="Lyrics options"
           className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
-          onClick={() => onShowToast('Lyrics options (mock)')}
+          onClick={() => onShowToast('Lyrics options')}
           type="button"
         >
           <MoreHorizontal size={22} />
@@ -86,7 +86,7 @@ export function AriaLyrics({
           <button
             aria-label="Seek through lyrics timeline"
             className="group relative h-5 rounded-full"
-            onClick={() => onShowToast('Lyric timeline preview only (mock)')}
+            onClick={() => onShowToast('Lyric timeline')}
             type="button"
           >
             <span className="absolute left-0 right-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-white/[0.14]" />

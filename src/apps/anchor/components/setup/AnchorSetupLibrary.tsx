@@ -31,10 +31,6 @@ export function AnchorSetupLibrary({
         </p>
       </header>
 
-      <p className="mb-3 text-xs leading-5 text-amber-50/72">
-        Studio does not access real storage in the preview. Paths are display-only.
-      </p>
-
       {hasSelection ? (
         <div className="mb-4 rounded-2xl border border-emerald-300/14 bg-emerald-300/[0.055] p-3.5">
           <div className="flex items-center gap-2.5 text-sm font-semibold text-emerald-100">
@@ -56,7 +52,7 @@ export function AnchorSetupLibrary({
             <span className="min-w-0 break-words">No folder selected</span>
           </div>
           <p className="mt-1.5 text-xs leading-4 text-slate-400/82">
-            Anchor has not scanned real storage in the Studio preview. Choose a mock folder to continue.
+            Choose a folder to continue.
           </p>
         </div>
       )}

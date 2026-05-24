@@ -1,6 +1,6 @@
 # Handoff
 
-Noqlen Interface Studio is a visual-only React mobile simulator lab for exploring mock interface contracts across the Noqlen ecosystem.
+Noqlen Interface Studio is a React mobile interface studio for exploring Noqlen product directions.
 
 ## Source of truth
 
@@ -11,19 +11,19 @@ Noqlen Interface Studio is a visual-only React mobile simulator lab for explorin
 
 ## Current project state
 
-The initial simulator shell is no longer the only implemented layer. Current state:
+The initial shell is no longer the only implemented layer. Current state:
 
-- **Studio Shell** — stable responsive simulator shell with app selector, phone frame and side inspector.
-- **Anchor** — high-fidelity interactive mock foundation for local media server control.
-- **Forge** — advanced interactive mock preview for library repair, metadata review and activity flows.
-- **Aria** — music player and library mock currently in interaction-completion work after visual alignment.
+- **Studio Shell** — stable responsive shell with app selector, phone frame and side inspector.
+- **Anchor** — high-fidelity interactive foundation for local media server control.
+- **Forge** — advanced interactive interface for library repair, metadata review and activity flows.
+- **Aria** — music player and library experience currently in interaction-completion work after visual alignment.
 - **Flux** — intentionally neutral static placeholder until dedicated concepts are provided.
 
 Anchor remains the default selected app in the Studio switcher.
 
 ## Active priority
 
-The active product priority is completing Aria mock-only interactions before writing Aria tests.
+The active product priority is completing Aria interactions before writing Aria tests.
 
 Approved Aria reference images live in:
 
@@ -46,9 +46,7 @@ Older Aria reference PNGs and the legacy showcase HTML are no longer the visual 
 
 ## Working rule
 
-All work remains mock-only unless a future handoff explicitly changes that rule.
-
-Interactive app previews may use local React state, static mock data, display-only sheets, dialogs, progress states and toasts. They must not call real backends, control real servers, play real audio, read real music libraries, access the filesystem, store secrets or depend on network behavior.
+All app surfaces use local React state, static data, display-only sheets, dialogs, progress states and toasts unless a future handoff explicitly changes that rule.
 
 Before Aria tests, every visible Aria interaction must be audited and completed: no dead buttons, no dead rows, no fake menu affordances without response, and no clickable-looking elements left unexplained.
 
@@ -111,7 +109,7 @@ Unknown / browser-check needed: 0
 - [x] Decide whether bottom nav should be hidden/disabled under full playback overlays.
 - [x] Preserve tab changes closing detail/overlay when intended.
 - [x] Keep mini player visual unchanged.
-- [x] Decide whether previous/next remain toast-only or cycle local mock queue.
+- [x] Decide whether previous/next remain toast-only or cycle the local queue.
 - [x] Keep all behavior local-state-only.
 
 ### Bloco 7C — Top-level screen interactions
@@ -121,14 +119,14 @@ Unknown / browser-check needed: 0
 - [x] Add real local state for playlist filter chips or make them passive.
 - [x] Resolve Library category rows that imply lists but open arbitrary items/toasts.
 - [x] Resolve Explore category cards that imply category browsing.
-- [x] Resolve Search / See all / Sort affordances with local mock behavior or passive styling.
-- [x] Keep import/export strictly mock-only and avoid real file/download implication.
+- [x] Resolve Search / See all / Sort affordances with local behavior or passive styling.
+- [x] Keep import/export away from file/download implication.
 
 ### Bloco 7C.1 — Source and settings top controls
 
 - [x] Replace Listen Home queue/status glyph with source/server status control.
 - [x] Add active-source panel showing only the configured active source.
-- [x] Keep local source actions as `Atualizar` and `Configurações` with mock-only behavior.
+- [x] Keep local source actions as `Atualizar` and `Configurações`.
 - [x] Replace Library header tools icon with Aria app settings.
 - [x] Preserve Library search preview behavior.
 - [x] Keep source/settings behavior local-state-only with no sync, server, filesystem or persistence behavior.
@@ -140,12 +138,12 @@ Unknown / browser-check needed: 0
 - [x] Move Explore category/search previews into bottom-sheet overlays.
 - [x] Ensure opening concrete detail rows from sheets closes the sheet first.
 - [x] Keep sheet titles app-like and avoid unnecessary `Preview` debug wording.
-- [x] Preserve mock-only behavior with no real sync, search, server, filesystem or persistence behavior.
+- [x] Preserve local-state behavior.
 
 ### Bloco 7C.3 — Source copy and status semantics
 
 - [x] Translate Source actions to English: `Refresh`, `Settings` and future server `Sync`.
-- [x] Keep Source refresh/sync toasts in English and mock-only.
+- [x] Keep Source refresh/sync toasts in English.
 - [x] Remove green online status dot from the local Home source control.
 - [x] Use local-source iconography for the default Local library source while preserving future server-source support.
 
@@ -172,7 +170,7 @@ Unknown / browser-check needed: 0
 ### Bloco 7D.1I-A — Library navigation reconciliation and detail hero header cleanup
 
 - [x] Remove/deactivate failed generic Library category page implementation.
-- [x] Restore Library category actions to lightweight mock behavior until final treatment.
+- [x] Restore Library category actions to lightweight behavior until final treatment.
 - [x] Remove large empty header bars from Album/Artist/Playlist details.
 - [x] Keep one contextual ellipsis menu per Album/Artist/Playlist detail.
 - [x] Preserve Track Details with at most one contextual menu.
@@ -191,7 +189,7 @@ Unknown / browser-check needed: 0
 - [x] No generic category page component introduced.
 - [x] Back stack works from Library views into details and back.
 - [x] Preserve Aria's current music-player identity and approved visual references.
-- [x] Keep implementation local-state-only, mock-only and reversible.
+- [x] Keep implementation local-state-only and reversible.
 
 ### Bloco 7D.2 — Aria Settings redesign
 
@@ -201,7 +199,7 @@ Unknown / browser-check needed: 0
 - [x] Add Playback section with toggles/selector.
 - [x] Add Interface section with toggles/selector.
 - [x] Add About info card.
-- [x] Keep all settings mock-only and non-persistent.
+- [x] Keep all settings local-state-only.
 - [x] Keep Source sheet, Library views and playback overlays untouched.
 
 ### Bloco 7D.2.1 — Aria Settings Core mapping
@@ -220,7 +218,7 @@ Unknown / browser-check needed: 0
 - [x] Define primary, secondary and system/lab category weights.
 - [x] Define category-card visual hierarchy and status chip treatment.
 - [x] Define internal category page structure and control semantics.
-- [x] Forbid generic row/toggle patterns, fake top-level categories and active styling for planned/mock features.
+- [x] Forbid generic row/toggle patterns, fake top-level categories and active styling for inactive features.
 - [x] Prepare Bloco 7D.2.2-I to implement the filtered Settings UI without changing other Aria surfaces.
 
 ### Bloco 7D.2.2-I — Settings UI with Core-filtered categories
@@ -231,17 +229,17 @@ Unknown / browser-check needed: 0
 - [x] Sources & Providers page added.
 - [x] Library page added without Favorites/Recently Added as settings.
 - [x] Playback page added without current queue/now-playing state.
-- [x] Audio Output & Quality page added as desired/mock policies.
-- [x] Streaming & Network page added as mock policies.
+- [x] Audio Output & Quality page added as desired policies.
+- [x] Streaming & Network page added as policies.
 - [x] Offline, Cache & Storage page added without file-manager behavior.
 - [x] Smart Playlists tab retired from Settings at implementation request.
-- [x] Profiles & Backup page added without real backup/restore.
-- [x] Android & External Control page added as planned/mock.
+- [x] Profiles & Backup page added without backup/restore actions.
+- [x] Android & External Control page added.
 - [x] Advanced page added for lab/diagnostic controls.
 - [x] About page added as info-only.
 - [x] Internal options aligned more closely with Core policy/preference terms.
 - [x] Source sheet integration preserved.
-- [x] No real integration or persistence added.
+- [x] No integration or persistence added.
 
 ### Bloco 7E — Playback overlay interactions
 
@@ -260,7 +258,7 @@ Unknown / browser-check needed: 0
 - [ ] Re-open Now Playing, Lyrics and Queue.
 - [ ] Verify every visible control responds or is visually passive.
 - [ ] Confirm no new visual regressions.
-- [ ] Confirm no real integration was added.
+- [ ] Confirm no integration was added.
 - [ ] Update `docs/audits/aria-interaction-audit.md` with final status.
 
 ## Row-tap rule to resolve during interaction completion
@@ -268,7 +266,7 @@ Unknown / browser-check needed: 0
 Use this rule unless a later block explicitly changes it:
 
 ```txt
-Track row tap: select/play local mock track and open Now Playing.
+Track row tap: select/play local track and open Now Playing.
 Track more/info button: open Track Details or local options.
 Album concrete row/card tap: open Album Detail.
 Artist concrete row/card tap: open Artist Detail.

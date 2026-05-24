@@ -14,7 +14,7 @@ const sections = [
   },
   {
     title: 'Safety',
-    rows: ['Confirm folder changes', 'Mock-only mode'],
+    rows: ['Confirm folder changes'],
   },
 ]
 
@@ -36,7 +36,6 @@ export function AnchorLibrarySettingsSheet({
   return (
     <AnchorBottomSheet
       onClose={onCancel}
-      subtitle="Tune local visual scan behavior for the Studio mock."
       title="Library settings"
     >
       <div className="space-y-4">

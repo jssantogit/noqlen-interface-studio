@@ -49,7 +49,7 @@ const serverView: Record<
     primaryButton: 'bg-white/[0.07] text-slate-200 hover:bg-white/[0.1]',
     status: 'Server stopped',
     statusClass: 'text-slate-300',
-    uptime: 'Offline in preview',
+    uptime: 'Offline',
     address: 'Unavailable in stopped state',
   },
   restarting: {
@@ -67,7 +67,7 @@ const serverView: Record<
     status: 'Server degraded',
     statusClass: 'text-orange-300',
     uptime: anchorServer.uptime,
-    note: 'Limited availability. Review settings or restart the mock server.',
+    note: 'Limited availability. Review settings or restart the server.',
   },
   offline: {
     actionLabel: 'Start server',
@@ -75,9 +75,9 @@ const serverView: Record<
     primaryButton: 'bg-red-400 text-white hover:bg-red-300',
     status: 'Server offline',
     statusClass: 'text-red-300',
-    uptime: 'Offline in preview',
+    uptime: 'Offline',
     address: 'Unavailable while offline',
-    note: 'Mock network is unavailable. Restart remains visual-only.',
+    note: 'Network unavailable. Restart from the server menu.',
   },
   disabled: {
     actionLabel: 'Start server',
@@ -85,9 +85,9 @@ const serverView: Record<
     primaryButton: 'bg-white/[0.07] text-slate-200 hover:bg-white/[0.1]',
     status: 'Server disabled',
     statusClass: 'text-slate-300',
-    uptime: 'Disabled in preview',
-    address: 'Disabled from mock menu',
-    note: 'Primary controls are disabled until the mock server is re-enabled.',
+    uptime: 'Disabled',
+    address: 'Disabled from server menu',
+    note: 'Primary controls are disabled until the server is re-enabled.',
   },
 }
 
@@ -96,8 +96,8 @@ const libraryStatus: Record<AnchorLibraryState, { label: string; className: stri
   scanning: { label: 'Scanning', className: 'text-amber-200', updated: 'Scan running now' },
   empty: { label: 'Empty', className: 'text-slate-300', updated: 'No music indexed' },
   permissionWarning: { label: 'Permission warning', className: 'text-orange-300', updated: 'Access should be reviewed' },
-  accessDenied: { label: 'Access denied', className: 'text-red-300', updated: 'Folder unavailable in mock state' },
-  scanFailed: { label: 'Scan failed', className: 'text-red-300', updated: 'Retry mock scan available' },
+  accessDenied: { label: 'Access denied', className: 'text-red-300', updated: 'Folder unavailable' },
+  scanFailed: { label: 'Scan failed', className: 'text-red-300', updated: 'Retry scan available' },
 }
 
 export function AnchorHome({

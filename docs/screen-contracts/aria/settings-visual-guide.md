@@ -11,7 +11,7 @@ Core mapping defines what appears in Settings. This visual guide defines how tho
 - Settings is a structured control center, not a generic menu.
 - Root is a category hub, not a long toggle list.
 - Important player-facing areas get stronger visual weight.
-- Planned/mock areas must look secondary, not equally functional.
+- Limited areas must look secondary, not equally prominent.
 - Controls must match semantics: toggles for boolean preferences, segmented controls for mode choices, info cards for status, action buttons for actions.
 - No Portuguese copy.
 - No `Preview` as a primary visible label.
@@ -24,10 +24,10 @@ Root order:
 Header:
 
 - Title: `Aria Settings`
-- Subtitle: `Core-mapped visual player preferences`
+- Subtitle: `Player preferences`
 - Compact status strip/card:
 - Active source
-- Visual mock
+- Interface status
 - Local state
 
 Primary group:
@@ -65,7 +65,7 @@ Important:
 - Cards must not all look equally urgent.
 - Primary cards can use slightly stronger border/accent.
 - Secondary cards use calmer surfaces.
-- Planned/mock cards use muted status chips: `Mock`, `Planned`, `Local` or `Visual`.
+- Limited cards use muted status chips such as `Local`, `Policy` or `Status`.
 - Avoid chevrons if the whole card already reads as navigation, or use subtle chevron only.
 - No giant cards.
 
@@ -101,7 +101,7 @@ Each internal page should have:
 - optional status card;
 - grouped controls;
 - no giant vertical wall;
-- no more than 2-3 groups per category in current mock.
+- no more than 2-3 groups per category.
 
 Internal back returns to Settings root. Sheet close closes Settings entirely.
 
@@ -126,8 +126,8 @@ Info card:
 
 Action button:
 
-- opens another sheet or triggers mock action.
-- examples: `Manage Source`, `Reset visual preferences mock`, `Preview backup plan mock`.
+- opens another sheet or triggers an action.
+- examples: `Manage Source`, `Reset visual preferences`, `Review backup plan`.
 
 Danger/blocked state:
 
@@ -165,19 +165,19 @@ Playback:
 Audio Output & Quality:
 
 - audiophile-oriented.
-- bit-perfect/USB DAC/exclusive output must be desired/mock policies, not real claims.
-- format/sample rate controls are mock policy controls.
+- bit-perfect/USB DAC/exclusive output must be desired policies, not active device claims.
+- format/sample rate controls are policy controls.
 
 Streaming & Network:
 
 - quality/network/transcoding policies.
-- show as planned/mock if no streaming feature exists.
+- show as limited if no streaming feature exists.
 
 Offline, Cache & Storage:
 
 - policy/confirmation controls.
 - no file manager look.
-- no real storage path.
+- no storage path.
 - no delete/download implication.
 
 Smart Playlists:
@@ -188,13 +188,13 @@ Smart Playlists:
 Profiles & Backup:
 
 - profile scope and backup policy only.
-- backup/restore as preview-only action.
+- backup/restore as review action.
 
 Android & External Control:
 
-- planned/mock category.
+- limited category.
 - should look secondary.
-- no real Android integration claim.
+- no Android integration claim.
 
 Advanced:
 
@@ -219,9 +219,9 @@ Explicitly forbidden:
 - Now Playing as top-level Settings category;
 - Radio as top-level Settings category for now;
 - cards so large that only two categories fit;
-- repeated `mock-only` text in every row;
+- repeated limitation text in every row;
 - planned features styled as active working features;
-- settings that imply real playback/streaming/cache/provider behavior.
+- settings that imply playback/streaming/cache/provider behavior.
 
 ## Implementation target for next block
 
@@ -235,7 +235,7 @@ Bloco 7D.2.2-I must implement:
 - visual hierarchy from `settings-visual-guide.md`;
 - existing source/settings behavior preserved;
 - local state only;
-- no persistence.
+- local state only.
 
 It must not:
 
@@ -243,4 +243,4 @@ It must not:
 - touch Library views;
 - touch details;
 - touch mini player/nav;
-- add real integration.
+- add integration.

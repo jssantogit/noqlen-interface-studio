@@ -121,12 +121,12 @@ export const ariaQueue: AriaTrack[] = [
 ]
 
 export const ariaAlbumTracks: AriaTrack[] = [
-  { id: 'whole-universe', title: 'The Whole Universe Wants', artist: 'Nils Frahm', album: 'All Melody', duration: '6:03', accent: 'from-amber-100 via-amber-400 to-slate-900', genre: 'Modern Classical', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local mock library', trackNumber: 1 },
-  { id: 'sunson', title: 'Sunson', artist: 'Nils Frahm', album: 'All Melody', duration: '9:10', accent: 'from-stone-200 via-stone-500 to-slate-900', genre: 'Modern Classical', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local mock library', trackNumber: 2 },
-  { id: 'all-melody-track', title: 'All Melody', artist: 'Nils Frahm', album: 'All Melody', duration: '7:45', accent: 'from-amber-100 via-amber-400 to-slate-900', genre: 'Modern Classical', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local mock library', trackNumber: 3 },
-  { id: 'my-friend-forest', title: 'My Friend the Forest', artist: 'Nils Frahm', album: 'All Melody', duration: '8:20', accent: 'from-emerald-200 via-emerald-500 to-slate-900', genre: 'Piano', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local mock library', trackNumber: 4 },
-  { id: 'human-range', title: 'Human Range', artist: 'Nils Frahm', album: 'All Melody', duration: '6:59', accent: 'from-orange-200 via-orange-500 to-slate-900', genre: 'Ambient', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local mock library', trackNumber: 5 },
-  { id: 'forever-changeless', title: 'Forever Changeless', artist: 'Nils Frahm', album: 'All Melody', duration: '2:47', accent: 'from-violet-200 via-violet-500 to-slate-900', genre: 'Ambient', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local mock library', trackNumber: 6 },
+  { id: 'whole-universe', title: 'The Whole Universe Wants', artist: 'Nils Frahm', album: 'All Melody', duration: '6:03', accent: 'from-amber-100 via-amber-400 to-slate-900', genre: 'Modern Classical', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local library', trackNumber: 1 },
+  { id: 'sunson', title: 'Sunson', artist: 'Nils Frahm', album: 'All Melody', duration: '9:10', accent: 'from-stone-200 via-stone-500 to-slate-900', genre: 'Modern Classical', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local library', trackNumber: 2 },
+  { id: 'all-melody-track', title: 'All Melody', artist: 'Nils Frahm', album: 'All Melody', duration: '7:45', accent: 'from-amber-100 via-amber-400 to-slate-900', genre: 'Modern Classical', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local library', trackNumber: 3 },
+  { id: 'my-friend-forest', title: 'My Friend the Forest', artist: 'Nils Frahm', album: 'All Melody', duration: '8:20', accent: 'from-emerald-200 via-emerald-500 to-slate-900', genre: 'Piano', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local library', trackNumber: 4 },
+  { id: 'human-range', title: 'Human Range', artist: 'Nils Frahm', album: 'All Melody', duration: '6:59', accent: 'from-orange-200 via-orange-500 to-slate-900', genre: 'Ambient', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local library', trackNumber: 5 },
+  { id: 'forever-changeless', title: 'Forever Changeless', artist: 'Nils Frahm', album: 'All Melody', duration: '2:47', accent: 'from-violet-200 via-violet-500 to-slate-900', genre: 'Ambient', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local library', trackNumber: 6 },
 ]
 
 export const ariaAlbums: AriaAlbum[] = [
@@ -197,9 +197,9 @@ export const ariaArtists: AriaArtist[] = [
 export const ariaArtistTopSongs: AriaTrack[] = [
   ariaAlbumTracks[0],
   ariaAlbumTracks[2],
-  { ...ariaQueue[5], trackNumber: 3, genre: 'Modern Classical', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local mock library' },
+  { ...ariaQueue[5], trackNumber: 3, genre: 'Modern Classical', year: 2018, codec: 'FLAC', sampleRate: '96 kHz', bitDepth: '24-bit', source: 'Local library' },
   ariaAlbumTracks[3],
-  { id: 'saysum', title: 'Saysum', artist: 'Nils Frahm', album: 'Screws', duration: '4:56', accent: 'from-stone-200 via-stone-500 to-slate-900', genre: 'Piano', year: 2014, codec: 'AAC', sampleRate: '44.1 kHz', bitDepth: '16-bit', source: 'Local mock library', trackNumber: 5 },
+  { id: 'saysum', title: 'Saysum', artist: 'Nils Frahm', album: 'Screws', duration: '4:56', accent: 'from-stone-200 via-stone-500 to-slate-900', genre: 'Piano', year: 2014, codec: 'AAC', sampleRate: '44.1 kHz', bitDepth: '16-bit', source: 'Local library', trackNumber: 5 },
 ]
 
 export const ariaDiscography: AriaDiscographyItem[] = [
@@ -208,10 +208,10 @@ export const ariaDiscography: AriaDiscographyItem[] = [
 ]
 
 export const ariaPlaylistTracks: AriaTrack[] = [
-  { ...ariaQueue[2], trackNumber: 1, genre: 'Ambient', year: 2019, codec: 'FLAC', sampleRate: '48 kHz', bitDepth: '24-bit', source: 'Local mock playlist' },
+  { ...ariaQueue[2], trackNumber: 1, genre: 'Ambient', year: 2019, codec: 'FLAC', sampleRate: '48 kHz', bitDepth: '24-bit', source: 'Local playlist' },
   { ...ariaAlbumTracks[3], trackNumber: 2 },
-  { ...ariaQueue[4], trackNumber: 3, genre: 'Ambient', year: 2018, codec: 'FLAC', sampleRate: '44.1 kHz', bitDepth: '16-bit', source: 'Local mock playlist' },
-  { ...ariaQueue[0], trackNumber: 4, genre: 'Ambient', year: 2020, codec: 'AAC', sampleRate: '44.1 kHz', bitDepth: '16-bit', source: 'Local mock playlist' },
+  { ...ariaQueue[4], trackNumber: 3, genre: 'Ambient', year: 2018, codec: 'FLAC', sampleRate: '44.1 kHz', bitDepth: '16-bit', source: 'Local playlist' },
+  { ...ariaQueue[0], trackNumber: 4, genre: 'Ambient', year: 2020, codec: 'AAC', sampleRate: '44.1 kHz', bitDepth: '16-bit', source: 'Local playlist' },
 ]
 
 export const ariaPlaylists: AriaPlaylist[] = [

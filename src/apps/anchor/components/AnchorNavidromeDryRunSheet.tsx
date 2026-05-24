@@ -24,10 +24,9 @@ export function AnchorNavidromeDryRunSheet({
         <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-white/18" />
         <header className="flex min-w-0 items-start justify-between gap-3 px-4 pb-3 pt-4 sm:px-5">
           <div className="min-w-0">
-            <h2 className="font-serif text-[1.3rem] leading-7 tracking-[-0.045em] text-white">Dry-run preview</h2>
-            <p className="mt-1 text-xs leading-5 text-slate-300/76">No config files are read or written.</p>
+            <h2 className="font-serif text-[1.3rem] leading-7 tracking-[-0.045em] text-white">Review changes</h2>
           </div>
-          <button className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[0.055] text-slate-200" onClick={onClose} type="button" aria-label="Close dry-run preview">
+          <button className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[0.055] text-slate-200" onClick={onClose} type="button" aria-label="Close review">
             <X size={17} />
           </button>
         </header>
@@ -50,7 +49,7 @@ export function AnchorNavidromeDryRunSheet({
 
           <div className="space-y-2">
             {changed.length === 0 ? (
-              <p className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3 text-xs text-slate-300/82">No local mock changes.</p>
+              <p className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3 text-xs text-slate-300/82">No changes.</p>
             ) : changed.map((option) => (
               <div className="min-w-0 rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3" key={option.key}>
                 <div className="flex min-w-0 items-center justify-between gap-2">
@@ -73,13 +72,9 @@ export function AnchorNavidromeDryRunSheet({
             {renderNavidromeTomlDiff(saved, draft)}
           </pre>
 
-          <p className="rounded-2xl border border-amber-300/12 bg-amber-300/[0.055] px-3.5 py-3 text-xs leading-5 text-amber-50/82">
-            Future real app changes must use Anchor Core validation, dry-run preview, explicit apply, path safety validation, and sanitized logs.
-          </p>
-
           <div className="grid min-w-0 grid-cols-[repeat(2,minmax(0,1fr))] gap-2 pt-1">
             <button className="min-h-10 rounded-xl border border-white/[0.075] bg-white/[0.045] px-2 py-2 text-sm font-medium leading-4 text-white" onClick={onClose} type="button">Close</button>
-            <button className="min-h-10 rounded-xl bg-amber-400 px-2 py-2 text-sm font-semibold leading-4 text-[#211508] shadow-[0_0.8rem_1.5rem_rgba(245,158,11,0.16)]" onClick={onApply} type="button">Apply mock changes</button>
+            <button className="min-h-10 rounded-xl bg-amber-400 px-2 py-2 text-sm font-semibold leading-4 text-[#211508] shadow-[0_0.8rem_1.5rem_rgba(245,158,11,0.16)]" onClick={onApply} type="button">Apply changes</button>
           </div>
         </div>
       </section>

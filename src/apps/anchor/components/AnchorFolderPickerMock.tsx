@@ -2,7 +2,7 @@ import { Check, FolderOpen } from 'lucide-react'
 import { useState } from 'react'
 import { AnchorBottomSheet } from './AnchorBottomSheet'
 
-const mockFolders = [
+const folders = [
   '/storage/emulated/0/Music/Naqlen',
   '/storage/emulated/0/Music/Albums',
   '/storage/emulated/0/Download/Music',
@@ -23,7 +23,6 @@ export function AnchorFolderPickerMock({
   return (
     <AnchorBottomSheet
       onClose={onCancel}
-      subtitle="Select a mock folder for the Studio preview."
       title="Change library folder"
     >
       <div className="space-y-4">
@@ -33,7 +32,7 @@ export function AnchorFolderPickerMock({
         </div>
 
         <div className="space-y-2">
-          {mockFolders.map((path) => {
+          {folders.map((path) => {
             const selected = selectedPath === path
             return (
               <button

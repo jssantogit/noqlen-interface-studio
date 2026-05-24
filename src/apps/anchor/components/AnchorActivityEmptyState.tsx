@@ -22,7 +22,7 @@ export function AnchorActivityEmptyState({
         No events found
       </h2>
       <p className="mx-auto mt-2 max-w-[16rem] text-xs leading-5 text-slate-300/76">
-        Try another filter or check back after more mock activity.
+        Try another filter or check back after more activity.
       </p>
       <button
         className="mt-4 rounded-xl border border-amber-300/25 bg-amber-300/12 px-4 py-2 text-xs font-semibold text-amber-100 transition hover:bg-amber-300/18 focus:outline-none focus:ring-2 focus:ring-amber-300/35"

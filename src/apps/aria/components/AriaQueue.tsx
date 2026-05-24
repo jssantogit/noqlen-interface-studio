@@ -54,7 +54,7 @@ export function AriaQueue({
           <button
             aria-label="Show current track feedback"
             className="mt-3 grid w-full min-w-0 grid-cols-[4rem_1fr] items-center gap-3 rounded-[20px] text-left transition hover:bg-white/[0.04]"
-            onClick={() => onShowToast('Current track is playing (mock)')}
+            onClick={() => onShowToast('Current track is playing')}
             type="button"
           >
             <div className="aria-art aria-art-small h-16 w-16 shrink-0 rounded-[18px] shadow-[0_12px_26px_rgba(0,0,0,0.34)]" />
@@ -79,8 +79,8 @@ export function AriaQueue({
         <section className="mt-5 grid grid-cols-2 gap-3">
           <QueueAction active={isShuffled} icon={<Shuffle size={18} />} label="Shuffle" onClick={onToggleShuffle} />
           <QueueAction active={repeatMode !== 'off'} icon={<Repeat size={18} />} label={repeatLabel} onClick={onToggleRepeat} />
-          <QueueAction icon={<Save size={18} />} label="Save as playlist" onClick={() => onShowToast('Save queue as playlist (mock)')} />
-          <QueueAction icon={<ListX size={18} />} label="Clear" onClick={() => onShowToast('Clear queue confirmation (mock)')} />
+          <QueueAction icon={<Save size={18} />} label="Save as playlist" onClick={() => onShowToast('Save queue as playlist')} />
+          <QueueAction icon={<ListX size={18} />} label="Clear" onClick={() => onShowToast('Clear queue confirmation')} />
         </section>
 
         <section className="mt-6">
@@ -101,7 +101,7 @@ export function AriaQueue({
                 <button
                   aria-label={`Reorder ${track.title}`}
                   className="grid h-8 w-8 place-items-center rounded-full text-[#777d82] transition hover:bg-white/[0.07] hover:text-[#eadac4]"
-                  onClick={() => onShowToast('Reorder handle is visual only')}
+                  onClick={() => onShowToast('Reorder')}
                   type="button"
                 >
                   <GripVertical size={17} />
@@ -110,7 +110,7 @@ export function AriaQueue({
                 <button
                   aria-label={`Queue item ${index + 1}: ${track.title}`}
                   className="min-w-0 text-left"
-                  onClick={() => onShowToast(`${track.title} selected (mock)`)}
+                  onClick={() => onShowToast(`${track.title} selected`)}
                   type="button"
                 >
                   <p className="truncate text-sm font-medium text-[#f5ecdf]">{track.title}</p>
@@ -120,7 +120,7 @@ export function AriaQueue({
                 <button
                   aria-label={`More actions for ${track.title}`}
                   className="grid h-8 w-8 place-items-center rounded-full text-[#9c9186] transition hover:bg-white/[0.07] hover:text-white"
-                  onClick={() => onShowToast(`${track.title} actions (mock)`)}
+                  onClick={() => onShowToast(`${track.title} actions`)}
                   type="button"
                 >
                   <MoreHorizontal size={17} />

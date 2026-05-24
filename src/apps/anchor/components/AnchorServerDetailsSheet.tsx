@@ -47,7 +47,7 @@ export function AnchorServerDetailsSheet({
         </section>
 
         <p className="rounded-2xl border border-amber-300/12 bg-amber-300/[0.055] px-3.5 py-3 text-xs leading-5 text-amber-50/82">
-          This is a Studio preview. No real server is contacted.
+          Server details and status.
         </p>
 
         <div className="grid grid-cols-2 gap-2.5">

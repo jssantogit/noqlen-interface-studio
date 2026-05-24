@@ -85,10 +85,10 @@ export function AnchorMockStateControls({
     <section className="rounded-2xl border border-amber-300/14 bg-amber-300/[0.045] p-3.5">
       <div className="mb-3">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-200/78">
-          Studio mock states
+          Studio states
         </p>
         <p className="mt-1 text-xs leading-5 text-amber-50/78">
-          Local preview controls only. They do not contact servers, files, logs or ports.
+          Local controls for changing visible states.
         </p>
       </div>
 

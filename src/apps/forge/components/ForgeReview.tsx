@@ -226,21 +226,21 @@ function overviewFixesFor(item: ForgeReviewQueueItem) {
     return [
       { group: 'Artwork', title: 'Cover update available', current: '320 x 320', suggested: '1400 x 1400', source: 'Discogs', action: 'Review artwork', targetId: 'artwork-all-melody', type: 'covers' as ReviewItemType, section: 'artwork' as ForgeReviewSection, safe: true },
       { group: 'Metadata / Tags', title: 'Genre + Mood suggestions', current: 'Genre Classical, Mood empty, Style empty', suggested: 'Modern Classical · Ambient · Minimal · Introspective', source: 'Last.fm', action: 'Review tags', targetId: 'metadata-tags-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
-      { group: 'Metadata / Identity', title: 'Album MBID found', current: 'Empty', suggested: 'mock-mbid-all-melody-2018', source: 'MusicBrainz', action: 'Review identity', targetId: 'metadata-identity-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: false },
+      { group: 'Metadata / Identity', title: 'Album MBID found', current: 'Empty', suggested: 'mbid-all-melody-2018', source: 'MusicBrainz', action: 'Review identity', targetId: 'metadata-identity-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: false },
       { group: 'Metadata / Release', title: 'Release data found', current: 'Label, country and catalog empty', suggested: 'Erased Tapes · DE · ERATP106', source: 'Discogs / MusicBrainz', action: 'Review release data', targetId: 'metadata-release-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
-      { group: 'Metadata / Audio', title: 'Audio analysis available', current: 'BPM, key and ReplayGain empty', suggested: 'BPM 120 · A minor · ReplayGain available', source: 'Audio analysis mock', action: 'Review audio data', targetId: 'metadata-audio-says', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
+      { group: 'Metadata / Audio', title: 'Audio analysis available', current: 'BPM, key and ReplayGain empty', suggested: 'BPM 120 · A minor · ReplayGain available', source: 'Audio analysis', action: 'Review audio data', targetId: 'metadata-audio-says', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
     ]
   }
   if (item.id === 'whole-universe-review') {
     return [
-      { group: 'Lyrics', title: 'Plain lyrics available', current: 'No lyrics found', suggested: 'Mock lyrics preview available', source: 'Lyrics provider mock', action: 'Review lyrics', targetId: 'lyrics-whole-universe', type: 'lyrics' as ReviewItemType, section: 'lyrics' as ForgeReviewSection, safe: false },
+      { group: 'Lyrics', title: 'Plain lyrics available', current: 'No lyrics found', suggested: 'Lyrics suggestion available', source: 'Lyrics provider', action: 'Review lyrics', targetId: 'lyrics-whole-universe', type: 'lyrics' as ReviewItemType, section: 'lyrics' as ForgeReviewSection, safe: false },
       { group: 'Metadata / Tags', title: 'Style suggestion', current: 'Style empty', suggested: 'Modern Classical · Minimal', source: 'Last.fm', action: 'Review tags', targetId: 'metadata-tags-a-place', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
     ]
   }
   return [
     { group: 'Metadata / Tags', title: 'Genre + Mood suggestions', current: 'Genre empty, Mood empty', suggested: 'Post-rock · Ambient · Calm · Melancholic', source: 'Last.fm', action: 'Review tags', targetId: 'metadata-tags-a-place', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: true },
     { group: 'Metadata / Identity', title: 'MBID candidate found', current: 'Identity incomplete', suggested: 'MusicBrainz candidate available', source: 'MusicBrainz', action: 'Review identity', targetId: 'metadata-identity-all-melody', type: 'genres' as ReviewItemType, section: 'metadata' as ForgeReviewSection, safe: false },
-    { group: 'Lyrics', title: 'Synced lyrics available', current: 'Unsynced lyrics', suggested: 'Synced LRC available', source: 'Lyrics provider mock', action: 'Review lyrics', targetId: 'lyrics-a-place', type: 'lyrics' as ReviewItemType, section: 'lyrics' as ForgeReviewSection, safe: false },
+    { group: 'Lyrics', title: 'Synced lyrics available', current: 'Unsynced lyrics', suggested: 'Synced LRC available', source: 'Lyrics provider', action: 'Review lyrics', targetId: 'lyrics-a-place', type: 'lyrics' as ReviewItemType, section: 'lyrics' as ForgeReviewSection, safe: false },
   ]
 }
 
@@ -365,7 +365,7 @@ function ReviewRow({
               <p className="mt-2 text-xs leading-4 text-white/62">{item.current}</p>
               <p className="text-xs leading-4 text-white/62">{item.suggested}</p>
               <div className="mt-3 flex items-center justify-between gap-3">
-                {isArtwork ? <span className="text-[10px] text-white/35">Preview before applying</span> : <span className="text-[10px] text-white/35">Mock-only local change</span>}
+                {isArtwork ? <span className="text-[10px] text-white/35">Inspect before applying</span> : <span className="text-[10px] text-white/35">Suggested change</span>}
                 <span className="shrink-0 rounded-lg border border-[#e7a35f]/25 bg-[#e7a35f]/10 px-3 py-1.5 text-[11px] font-semibold text-[#f0b879]">
                   {item.actionLabel}
                 </span>
@@ -488,16 +488,16 @@ export function ForgeReview({
     }
     showConfirm({
       title: 'Review safe fixes?',
-      description: `Forge will apply ${safeFixCount} safe mock fixes in this local Studio preview only. Protected and conflict fields stay untouched.`,
+      description: `Forge will apply ${safeFixCount} safe fixes. Protected and conflict fields stay untouched.`,
       confirmLabel: 'Apply safe fixes',
       onConfirm: () => {
         showProgress({
           title: 'Applying safe fixes',
-          steps: ['Preparing safe fixes', 'Applying local mock updates'],
-          completeMessage: 'Safe fixes applied in mock preview',
+          steps: ['Preparing safe fixes', 'Applying updates'],
+          completeMessage: 'Safe fixes applied',
           onComplete: () => {
             onSetSessionFixed((s) => s + safeFixCount)
-            showToast('Safe fixes applied in mock preview')
+            showToast('Safe fixes applied')
           },
         })
       },
@@ -509,14 +509,14 @@ export function ForgeReview({
     if (idsToFix.length === 0) return
     showConfirm({
       title: 'Apply selected fixes?',
-      description: `Forge will apply ${idsToFix.length} selected mock fixes locally. No files or metadata are changed.`,
+      description: `Forge will apply ${idsToFix.length} selected fixes.`,
       confirmLabel: 'Apply selected',
       onConfirm: () => {
         showProgress({
           title: 'Applying selected fixes',
-          steps: ['Preparing selected fixes', 'Applying mock changes'],
-          completeMessage: 'Selected fixes applied in mock preview',
-          onComplete: () => applyIds(idsToFix, 'Selected fixes applied in mock preview'),
+          steps: ['Preparing selected fixes', 'Applying changes'],
+          completeMessage: 'Selected fixes applied',
+          onComplete: () => applyIds(idsToFix, 'Selected fixes applied'),
         })
       },
     })
@@ -527,7 +527,7 @@ export function ForgeReview({
     showProgress({
       title: 'Ignoring selected items',
       steps: ['Marking items ignored'],
-      completeMessage: 'Selected items ignored in mock preview',
+      completeMessage: 'Selected items ignored',
       onComplete: () => {
         onSetItemStatuses((prev) => {
           const next = { ...prev }
@@ -537,7 +537,7 @@ export function ForgeReview({
         onSetSessionIgnored((s) => s + idsToIgnore.length)
         onSetSelectedIds(new Set())
         setIgnoreSheetOpen(false)
-        showToast('Selected items ignored in mock preview')
+        showToast('Selected items ignored')
       },
     })
   }
@@ -569,17 +569,17 @@ export function ForgeReview({
     const safeCount = overviewFixesFor(overviewItem).filter((fix) => fix.safe).length
     showConfirm({
       title: 'Apply safe fixes?',
-      description: `Forge will apply ${safeCount} safe mock fixes for ${overviewItem.title}. Items needing review stay pending.`,
+      description: `Forge will apply ${safeCount} safe fixes for ${overviewItem.title}. Items needing review stay pending.`,
       confirmLabel: 'Apply safe fixes',
       onConfirm: () => {
         showProgress({
           title: 'Applying safe fixes',
-          steps: ['Preparing safe fixes', 'Applying local mock updates'],
-          completeMessage: 'Safe fixes applied in mock preview',
+          steps: ['Preparing safe fixes', 'Applying updates'],
+          completeMessage: 'Safe fixes applied',
           onComplete: () => {
             onSetSessionFixed((s) => s + safeCount)
             setOverviewItem(null)
-            showToast('Safe fixes applied in mock preview')
+            showToast('Safe fixes applied')
           },
         })
       },
@@ -591,12 +591,12 @@ export function ForgeReview({
     showProgress({
       title: 'Ignoring item',
       steps: ['Marking item ignored'],
-      completeMessage: 'Item ignored in mock preview',
+      completeMessage: 'Item ignored',
       onComplete: () => {
         onSetItemStatuses((prev) => ({ ...prev, [overviewItem.id]: 'ignored' }))
         onSetSessionIgnored((s) => s + 1)
         setOverviewItem(null)
-        showToast('Item ignored in mock preview')
+        showToast('Item ignored')
       },
     })
   }
@@ -632,9 +632,9 @@ export function ForgeReview({
         <ForgeStateNotice
           actions={[
             { label: 'Open Settings', onClick: onOpenSettings || (() => showToast('Navigate to Settings', 'info')), tone: 'secondary' },
-            { label: 'Retry mock check', onClick: () => showToast('Mock provider check retried', 'info'), tone: 'secondary' },
+            { label: 'Retry check', onClick: () => showToast('Provider check retried', 'info'), tone: 'secondary' },
           ]}
-          message="Suggestions cannot be refreshed in this mock state."
+          message="Suggestions cannot be refreshed right now."
           title="Provider unavailable"
           variant="warning"
         />
@@ -643,7 +643,7 @@ export function ForgeReview({
       {mockState.reviewState === 'missingCredentials' && (
         <ForgeStateNotice
           actions={[{ label: 'Open API settings', onClick: onOpenSettings || (() => showToast('Navigate to API settings', 'info')), tone: 'primary' }]}
-          message="Some metadata providers need mock credentials before suggestions can be generated."
+          message="Some metadata providers need credentials before suggestions can be generated."
           title="Provider credentials missing"
           variant="warning"
         />
@@ -665,7 +665,7 @@ export function ForgeReview({
               { label: 'Open Library', onClick: onNavigateToLibrary || (() => {}), tone: 'secondary' },
             ]}
             title="Review complete"
-            message="All visible mock suggestions were applied or ignored."
+            message="All visible suggestions were applied or ignored."
           />
         ) : mockState.reviewState === 'empty' ? (
           <ForgeEmptyState
@@ -693,7 +693,7 @@ export function ForgeReview({
               {onResetQueue && (
                 <button className="flex h-9 items-center gap-1.5 rounded-lg border border-white/[0.065] bg-white/[0.045] px-4 text-xs font-medium text-white transition hover:bg-white/[0.075]" onClick={onResetQueue} type="button">
                   <RotateCcw size={13} />
-                  Reset mock queue
+                  Reset queue
                 </button>
               )}
             </div>
@@ -723,7 +723,7 @@ export function ForgeReview({
       )}
 
       {ignoreSheetOpen && (
-        <ForgeBottomSheet onClose={() => setIgnoreSheetOpen(false)} subtitle="Ignored items will be hidden from the active review queue in this mock preview." title="Ignore selected items?">
+        <ForgeBottomSheet onClose={() => setIgnoreSheetOpen(false)} subtitle="Ignored items will be hidden from the active review queue." title="Ignore selected items?">
           <div className="space-y-4">
             <p className="text-xs text-white/50">Optional reason</p>
             <div className="flex flex-wrap gap-2">

@@ -21,15 +21,15 @@ export function AnchorAddServerSheet({
   const validateAndSave = () => {
     const port = Number(fields.port)
     if (!fields.name.trim()) {
-      setError('Enter a display name for the mock server.')
+      setError('Enter a display name for the server.')
       return
     }
     if (!fields.address.trim()) {
-      setError('Enter a local address for the mock profile.')
+      setError('Enter a local address.')
       return
     }
     if (!Number.isInteger(port) || port < 1 || port > 65535) {
-      setError('Use a visual mock port between 1 and 65535.')
+      setError('Use a port between 1 and 65535.')
       return
     }
     setError(null)
@@ -39,7 +39,6 @@ export function AnchorAddServerSheet({
   return (
     <AnchorBottomSheet
       onClose={onCancel}
-      subtitle="Create a mock local server profile."
       title="Add server"
     >
       <div className="space-y-4">
@@ -95,10 +94,6 @@ export function AnchorAddServerSheet({
           </p>
         ) : null}
 
-        <p className="rounded-2xl border border-amber-300/12 bg-amber-300/[0.055] px-3.5 py-3 text-xs leading-5 text-amber-50/82">
-          This preview does not connect, discover, validate ports or store credentials.
-        </p>
-
         <div className="grid grid-cols-2 gap-2.5">
           <button
             className="h-10 rounded-xl border border-white/[0.075] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
@@ -112,7 +107,7 @@ export function AnchorAddServerSheet({
             onClick={validateAndSave}
             type="button"
           >
-            Add mock server
+            Add server
           </button>
         </div>
       </div>

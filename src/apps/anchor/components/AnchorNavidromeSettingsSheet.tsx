@@ -69,14 +69,9 @@ export function AnchorNavidromeSettingsSheet({
     <>
       <AnchorBottomSheet
         onClose={onClose}
-        subtitle="Configure the mock navidrome.toml profile."
         title="Navidrome Settings"
       >
         <div className="w-full min-w-0 max-w-full space-y-3 pb-1">
-          <p className="rounded-2xl border border-amber-300/12 bg-amber-300/[0.055] px-3.5 py-3 text-xs leading-5 text-amber-50/82">
-            Studio preview only. Future app changes must go through Anchor Core dry-run/apply flow.
-          </p>
-
           <div className="grid min-w-0 grid-cols-[repeat(3,minmax(0,1fr))] gap-1.5 text-center sm:gap-2">
             <div className="min-w-0 rounded-2xl border border-white/[0.06] bg-white/[0.04] p-2 sm:p-2.5">
               <div className="text-base font-semibold text-white">{navidromeConfigCatalog.length}</div>
@@ -119,7 +114,7 @@ export function AnchorNavidromeSettingsSheet({
                   <div className="min-w-0">
                     <h3 className="font-serif text-xl tracking-[-0.045em] text-white">Advanced</h3>
                     <p className="mt-1 text-xs leading-5 text-amber-50/78">
-                      Search all modeled options, inspect generated TOML/env previews, and run a local dry-run.
+                      Search options, inspect generated TOML/env, and review changes.
                     </p>
                   </div>
                 </div>
@@ -150,7 +145,7 @@ export function AnchorNavidromeSettingsSheet({
           <div className="sticky bottom-0 z-10 -mx-4 mt-2 border-t border-white/[0.07] bg-[#071014]/95 px-4 py-3 backdrop-blur-xl sm:-mx-5 sm:px-5">
             <div className="mb-2 flex min-w-0 items-center gap-2 text-[0.68rem] text-slate-300/76">
               <ShieldCheck className="shrink-0 text-emerald-300" size={14} />
-              <span className="min-w-0 break-words leading-4">Mock-only local draft. No backend, files, ports, or secrets.</span>
+              <span className="min-w-0 break-words leading-4">Review changes before applying.</span>
             </div>
             <div className="grid min-w-0 grid-cols-[repeat(2,minmax(0,1fr))] gap-2">
               <button
@@ -166,7 +161,7 @@ export function AnchorNavidromeSettingsSheet({
                 onClick={() => setDryRunOpen(true)}
                 type="button"
               >
-                Preview changes
+                Review changes
               </button>
             </div>
           </div>

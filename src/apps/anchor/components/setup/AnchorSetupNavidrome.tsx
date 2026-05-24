@@ -35,10 +35,6 @@ export function AnchorSetupNavidrome({
         </p>
       </header>
 
-      <p className="mb-3 text-xs leading-5 text-amber-50/72">
-        Studio does not write real config. Values are display-only.
-      </p>
-
       <div className="anchor-scrollbar-soft min-h-0 flex-1 space-y-3 overflow-y-auto overflow-x-hidden pr-1">
         <div className="space-y-3">
           <label className="block min-w-0">

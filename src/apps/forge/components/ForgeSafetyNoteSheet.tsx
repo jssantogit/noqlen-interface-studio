@@ -5,7 +5,7 @@ export function ForgeSafetyNoteSheet({ onClose }: { onClose: () => void }) {
   return (
     <ForgeBottomSheet
       onClose={onClose}
-      subtitle="How Forge handles your library in the Studio preview."
+      subtitle="How Forge handles your library."
       title="Safety first"
     >
       <div className="space-y-3">
@@ -15,17 +15,17 @@ export function ForgeSafetyNoteSheet({ onClose }: { onClose: () => void }) {
             Nothing changes until you confirm
           </div>
           <p className="text-xs leading-5 text-slate-300/76">
-            Forge is a mock preview inside the Studio simulator. It does not edit real music files, metadata, lyrics or artwork on your device.
+            Forge shows each suggested change before it is applied.
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-4">
           <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
             <Eye className="text-orange-300" size={17} />
-            All fixes are previews
+            All fixes are reviewed
           </div>
           <p className="text-xs leading-5 text-slate-300/76">
-            When you review lyrics, covers or genres, Forge shows a suggested result. You choose to apply or ignore it. The real app will follow the same explicit review/apply flow.
+            When you review lyrics, covers or genres, Forge shows a suggested result. You choose to apply or ignore it.
           </p>
         </div>
 
@@ -35,7 +35,7 @@ export function ForgeSafetyNoteSheet({ onClose }: { onClose: () => void }) {
             Dry-run first
           </div>
           <p className="text-xs leading-5 text-slate-300/76">
-            In the real app, any metadata or file change should be presented as a dry-run diff before applying. Forge previews this pattern with mock data only.
+            Metadata changes are presented as a dry-run diff before applying.
           </p>
         </div>
       </div>

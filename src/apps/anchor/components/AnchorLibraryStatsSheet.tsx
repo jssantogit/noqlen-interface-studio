@@ -35,7 +35,7 @@ export function AnchorLibraryStatsSheet({ onClose }: { onClose: () => void }) {
         </div>
 
         <p className="rounded-xl border border-amber-300/16 bg-amber-300/[0.055] px-3 py-2.5 text-xs leading-5 text-amber-100/88">
-          These are static Studio mock values.
+          Library summary.
         </p>
       </div>
     </AnchorBottomSheet>

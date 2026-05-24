@@ -11,7 +11,7 @@ export function PhoneFrame({
 }) {
   return (
     <section
-      aria-label={`${appName} phone simulator`}
+      aria-label={`${appName} phone frame`}
       className="relative h-[var(--phone-frame-height)] w-[var(--phone-frame-width)] shrink-0 rounded-[var(--studio-phone-radius)] bg-[linear-gradient(145deg,#17191d_0%,#030405_42%,#0b0d10_100%)] p-[var(--phone-frame-rim)] shadow-[0_1.2rem_2.4rem_rgba(0,0,0,0.38),0_2.4rem_4rem_rgba(0,0,0,0.32),inset_0_0_0_1px_rgba(255,255,255,0.085),inset_0.14rem_0.1rem_0.28rem_rgba(255,255,255,0.055),inset_-0.18rem_-0.2rem_0.5rem_rgba(0,0,0,0.75)]"
     >
       <div

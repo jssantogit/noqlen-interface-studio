@@ -84,7 +84,7 @@ export function ForgeActivity({
       {mockState.activityState === 'failedItem' && (
         <ForgeStateNotice
           actions={[{ label: 'View Review', onClick: () => onNavigateToReview('all'), tone: 'primary' }]}
-          message="A recent mock operation failed. Check the failed activity card below for details."
+          message="A recent operation failed. Check the failed activity card below for details."
           title="Recent failure"
           variant="error"
         />
@@ -93,7 +93,7 @@ export function ForgeActivity({
       {mockState.activityState === 'warningItem' && (
         <ForgeStateNotice
           actions={[{ label: 'View Review', onClick: () => onNavigateToReview('all'), tone: 'primary' }]}
-          message="Some protected fields were skipped during the last mock run."
+          message="Some protected fields were skipped during the last run."
           title="Protected fields skipped"
           variant="warning"
         />
@@ -174,19 +174,19 @@ function filterItems(items: ActivityItem[], filter: ActivityFilter, mockState: F
     const failedItem: ActivityItem = {
       id: 'mock-failed',
       title: 'Enrich Mode failed',
-      subtitle: 'Mock provider unreachable',
+      subtitle: 'Provider unreachable',
       time: 'Just now',
       icon: 'AlertTriangle',
       accent: 'text-red-300',
       bgAccent: 'bg-red-400/13',
       summary: ['Tags', 'Covers'],
-      detail: 'Mock failure: provider returned an error. No files were changed.',
+      detail: 'Provider returned an error.',
       activityType: 'error',
       dateGroup: 'today',
       affectedCount: 0,
       affectedItems: ['No items changed'],
       changedFields: [],
-      provider: 'Forge mock',
+      provider: 'Forge',
       status: 'failed',
       relatedReviewTarget: 'all',
     }
@@ -203,7 +203,7 @@ function filterItems(items: ActivityItem[], filter: ActivityFilter, mockState: F
       accent: 'text-orange-300',
       bgAccent: 'bg-orange-400/13',
       summary: ['Album MBID', 'Artist MBID'],
-      detail: 'Protected identity fields were skipped during the mock Enrich Mode run. Review these items manually.',
+      detail: 'Protected identity fields were skipped during the Enrich Mode run. Review these items manually.',
       activityType: 'identity',
       dateGroup: 'today',
       affectedCount: 2,

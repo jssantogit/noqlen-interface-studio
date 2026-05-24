@@ -5,8 +5,8 @@ const menuItems = [
   { Icon: Settings, label: 'Configure Navidrome', tone: 'default' },
   { Icon: Edit3, label: 'Rename', tone: 'default' },
   { Icon: Copy, label: 'Duplicate config', tone: 'default' },
-  { Icon: Power, label: 'Disable mock server', tone: 'warning' },
-  { Icon: Trash2, label: 'Remove mock server', tone: 'danger' },
+  { Icon: Power, label: 'Disable server', tone: 'warning' },
+  { Icon: Trash2, label: 'Remove server', tone: 'danger' },
 ] as const
 
 export function AnchorServerMenuSheet({
@@ -20,14 +20,13 @@ export function AnchorServerMenuSheet({
     'Configure Navidrome': 'configure',
     Rename: 'rename',
     'Duplicate config': 'duplicate',
-    'Disable mock server': 'disable',
-    'Remove mock server': 'remove',
+    'Disable server': 'disable',
+    'Remove server': 'remove',
   } as const
 
   return (
     <AnchorBottomSheet
       onClose={onClose}
-      subtitle="Local-only actions for the mock Navidrome profile."
       title="Server menu"
     >
       <div className="space-y-2.5">

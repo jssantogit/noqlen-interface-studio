@@ -37,7 +37,7 @@ export function AriaTrackDetails({
     ['Codec', track.codec ?? 'FLAC'],
     ['Sample rate', track.sampleRate ?? '96 kHz'],
     ['Bit depth', track.bitDepth ?? '24-bit'],
-    ['Source', track.source ?? 'Local mock library'],
+    ['Source', track.source ?? 'Local library'],
   ]
 
   return (
@@ -75,7 +75,7 @@ export function AriaTrackDetails({
               if (action.id === 'favorite') {
                 const next = !isFavorite
                 setIsFavorite(next)
-                onShowToast(next ? `Added ${track.title} to favorites (mock)` : `Removed ${track.title} from favorites (mock)`)
+                onShowToast(next ? `Added ${track.title} to favorites` : `Removed ${track.title} from favorites`)
                 return
               }
 
@@ -90,7 +90,7 @@ export function AriaTrackDetails({
                 return
               }
 
-              onShowToast(`Showing folder location preview for ${track.title} (mock - no file access)`)
+              onShowToast(`Showing folder location for ${track.title}`)
             }
 
             return (
@@ -102,7 +102,7 @@ export function AriaTrackDetails({
           })}
         </div>
         <p className="mt-3 flex items-center gap-2 text-[12px] text-[#8f8982]">
-          <Music2 size={14} /> Mock-only metadata and actions. No file access.
+          <Music2 size={14} /> Metadata and track actions.
         </p>
       </section>
 

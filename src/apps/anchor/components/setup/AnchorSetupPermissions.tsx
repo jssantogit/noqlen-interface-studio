@@ -33,10 +33,6 @@ export function AnchorSetupPermissions({
         </p>
       </header>
 
-      <p className="mb-3 text-xs leading-5 text-amber-50/72">
-        Studio does not request real permissions. This is a mock preview only.
-      </p>
-
       <div className="space-y-2">
         {permissions.map((permission) => {
           const Icon = permissionIcons[permission.id] ?? Lock
@@ -44,7 +40,7 @@ export function AnchorSetupPermissions({
             ? 'Required'
             : permission.id === 'notifications'
               ? 'Optional'
-              : 'Planned'
+              : 'Optional'
           const statusColor = permission.required
             ? 'text-amber-200/82'
             : permission.id === 'notifications'

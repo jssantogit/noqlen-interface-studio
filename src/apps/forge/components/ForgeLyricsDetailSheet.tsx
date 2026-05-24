@@ -2,14 +2,15 @@ import { BadgeCheck, FileText } from 'lucide-react'
 import { ForgeBottomSheet } from './ForgeBottomSheet'
 import { CoverGradient } from './ForgeCard'
 
-const mockLyricsPlaceholder = `Verse preview unavailable in Studio mock.
+const lyricsPlaceholder = `Verse
 
-This is a placeholder to demonstrate the lyrics detail sheet.
-In a real app, this area would show a generated lyrics preview.
+Soft light on the window
+Quiet keys in the room
 
-Chorus preview unavailable in Studio mock.
+Chorus
 
-Bridge preview unavailable in Studio mock.`
+Hold the note a little longer
+Let the silence bloom.`
 
 export function ForgeLyricsDetailSheet({
   item,
@@ -25,7 +26,7 @@ export function ForgeLyricsDetailSheet({
   onClose: () => void
 }) {
   return (
-    <ForgeBottomSheet onClose={onClose} subtitle="Preview the suggested lyrics before applying." title="Missing lyrics">
+    <ForgeBottomSheet onClose={onClose} subtitle="Review the suggested lyrics before applying." title="Missing lyrics">
       <div className="space-y-5">
         {/* Item header */}
         <div className="flex items-center gap-3">
@@ -38,14 +39,14 @@ export function ForgeLyricsDetailSheet({
 
         <div className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[#e7a35f]/18 bg-[#e7a35f]/10 px-3 py-1.5 text-[11px] font-semibold text-[#f0b879]">
           <BadgeCheck size={12} />
-          Source: Lyrics provider mock
+          Source: Lyrics provider
         </div>
 
         {/* Metadata rows */}
         <div className="space-y-2 rounded-xl border border-white/[0.06] bg-white/[0.035] p-3">
           <div className="flex justify-between text-xs">
             <span className="text-white/40">Source</span>
-            <span className="text-white/70">Lyrics provider mock</span>
+            <span className="text-white/70">Lyrics provider</span>
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-white/40">Confidence</span>
@@ -57,25 +58,25 @@ export function ForgeLyricsDetailSheet({
           </div>
         </div>
 
-        {/* Lyrics preview */}
+        {/* Suggested lyrics */}
         <div>
           <div className="mb-2 flex items-center gap-2">
             <FileText className="text-white/50" size={14} />
-            <p className="text-xs font-medium text-white/60">Lyrics preview</p>
+            <p className="text-xs font-medium text-white/60">Suggested lyrics</p>
           </div>
           <div className="rounded-xl border border-white/[0.06] bg-black/30 p-3">
-            <pre className="whitespace-pre-wrap text-xs leading-5 text-white/55">{mockLyricsPlaceholder}</pre>
+            <pre className="whitespace-pre-wrap text-xs leading-5 text-white/55">{lyricsPlaceholder}</pre>
           </div>
         </div>
 
-        {/* Preview changes link */}
+        {/* Review changes link */}
         {onPreviewChanges && (
           <button
             className="w-full rounded-lg border border-white/[0.075] bg-transparent py-2.5 text-xs font-medium text-white/55 transition hover:bg-white/[0.045] hover:text-white/80"
             onClick={onPreviewChanges}
             type="button"
           >
-            Preview changes
+            Review changes
           </button>
         )}
 

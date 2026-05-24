@@ -32,7 +32,6 @@ export function AnchorErrorDetailSheet({
   return (
     <AnchorBottomSheet
       onClose={onClose}
-      subtitle="Display-only Studio diagnostic."
       title={event.title}
     >
       <div className="space-y-4">
@@ -56,7 +55,7 @@ export function AnchorErrorDetailSheet({
 
         <section>
           <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400/80">
-            Suggested mock fixes
+            Suggested fixes
           </h3>
           <div className="space-y-2">
             {diagnostic.fixes.map((fix) => (

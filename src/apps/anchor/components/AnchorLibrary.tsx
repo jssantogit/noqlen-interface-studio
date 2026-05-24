@@ -32,7 +32,7 @@ const libraryStateView: Record<AnchorLibraryState, {
   scanning: {
     detail: 'Scanning',
     footer: 'running now',
-    note: 'Mock scan is in progress. Refresh is already active.',
+    note: 'Scan is in progress. Refresh is already active.',
     stats: anchorLibrary.stats,
     status: 'Scanning',
     statusClass: 'text-amber-200',
@@ -40,7 +40,7 @@ const libraryStateView: Record<AnchorLibraryState, {
   empty: {
     detail: 'No music indexed',
     footer: 'never',
-    note: 'No music indexed. Choose a folder or refresh the library preview.',
+    note: 'No music indexed. Choose a folder or refresh the library.',
     stats: anchorLibrary.stats.map((stat) => ({ ...stat, value: '0' })),
     status: 'Empty',
     statusClass: 'text-slate-300',
@@ -48,7 +48,7 @@ const libraryStateView: Record<AnchorLibraryState, {
   permissionWarning: {
     detail: 'Access warning',
     footer: 'needs review',
-    note: 'Folder permissions should be reviewed in the mock access check.',
+    note: 'Folder permissions should be reviewed.',
     stats: anchorLibrary.stats,
     status: 'Permission warning',
     statusClass: 'text-orange-300',
@@ -56,7 +56,7 @@ const libraryStateView: Record<AnchorLibraryState, {
   accessDenied: {
     detail: 'Access denied',
     footer: 'blocked',
-    note: 'The selected folder cannot be read in this mock state. Change folder or verify access.',
+    note: 'The selected folder cannot be read. Change folder or verify access.',
     stats: anchorLibrary.stats.map((stat) => ({ ...stat, value: '0' })),
     status: 'Access denied',
     statusClass: 'text-red-300',
@@ -64,7 +64,7 @@ const libraryStateView: Record<AnchorLibraryState, {
   scanFailed: {
     detail: 'Scan failed',
     footer: 'failed',
-    note: 'The last mock scan failed. Retry refresh to replay scan progress.',
+    note: 'The last scan failed. Retry refresh.',
     stats: anchorLibrary.stats,
     status: 'Scan failed',
     statusClass: 'text-red-300',

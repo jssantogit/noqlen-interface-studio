@@ -69,8 +69,8 @@ export function ForgeHome({
       {appOffline && (
         <ForgeStateNotice
           actions={[{ label: 'Open Settings', onClick: onOpenSettings, tone: 'secondary' }]}
-          message="Forge is offline in this mock preview. No provider requests are sent."
-          title="Offline preview"
+          message="Forge is offline. Provider suggestions are paused."
+          title="Offline"
           variant="warning"
         />
       )}
@@ -78,7 +78,7 @@ export function ForgeHome({
       {homeState === 'providersUnavailable' && (
         <ForgeStateNotice
           actions={[{ label: 'Open Settings', onClick: onOpenSettings, tone: 'secondary' }]}
-          message="Metadata providers are unavailable in this mock state."
+          message="Metadata providers are unavailable right now."
           title="Providers unavailable"
           variant="warning"
         />
@@ -101,7 +101,7 @@ export function ForgeHome({
             </div>
             <div>
               <p className="text-sm font-semibold text-white">Enrich Mode completed</p>
-              <p className="text-xs text-white/50">Mock preview finished successfully.</p>
+              <p className="text-xs text-white/50">Enrichment finished successfully.</p>
             </div>
           </div>
           <button
@@ -121,7 +121,7 @@ export function ForgeHome({
         </h2>
         <p className="mt-5 max-w-[270px] text-sm leading-5 text-white/58">
           {homeState === 'noIssues'
-            ? 'Everything is up to date in this mock preview.'
+            ? 'Everything is up to date.'
             : "Let's bring everything up to date so your music always feels right."}
         </p>
       </div>

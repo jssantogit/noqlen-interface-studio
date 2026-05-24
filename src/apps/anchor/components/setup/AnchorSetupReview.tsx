@@ -35,7 +35,7 @@ export function AnchorSetupReview({
     { label: 'Server type', value: serverType, ok: true },
     { label: 'Port and address', value: `${serverAddress}:${serverPort}`, ok: true },
     { label: 'Scanner schedule', value: scannerSchedule, ok: true },
-    { label: 'Mock dry-run passed', value: dryRunPassed ? 'Yes' : 'No', ok: dryRunPassed },
+    { label: 'Review passed', value: dryRunPassed ? 'Yes' : 'No', ok: dryRunPassed },
   ]
 
   return (
@@ -48,10 +48,6 @@ export function AnchorSetupReview({
           Ready to start Anchor.
         </p>
       </header>
-
-      <p className="mb-3 text-xs leading-5 text-amber-50/72">
-        No real files will be changed in Studio. Future app will apply through Anchor Core.
-      </p>
 
       <div className="space-y-2">
         {summaryItems.map((item) => (
@@ -90,7 +86,7 @@ export function AnchorSetupReview({
           type="button"
         >
           <FileCode2 size={15} />
-          Preview TOML
+          View TOML
         </button>
         <button
           className="flex h-11 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.065] bg-white/[0.045] text-sm font-medium text-white transition hover:bg-white/[0.075] focus:outline-none focus:ring-2 focus:ring-amber-300/30"
@@ -103,13 +99,10 @@ export function AnchorSetupReview({
       </div>
 
       {showToml ? (
-        <AnchorBottomSheet onClose={() => setShowToml(false)} subtitle="Display-only preview" title="navidrome.toml">
+        <AnchorBottomSheet onClose={() => setShowToml(false)} title="navidrome.toml">
           <pre className="anchor-scrollbar-soft max-h-72 overflow-auto rounded-xl border border-white/[0.075] bg-black/25 p-3 text-[0.72rem] leading-5 text-slate-200/90">
             {tomlPreview}
           </pre>
-          <p className="mt-3 text-xs leading-5 text-amber-50/72">
-            Studio does not write this file. Future app must apply through Anchor Core.
-          </p>
         </AnchorBottomSheet>
       ) : null}
     </div>

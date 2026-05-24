@@ -5,7 +5,7 @@ const sections = [
   { title: 'General', rows: ['Display name', 'Start on launch'] },
   { title: 'Network', rows: ['Host', 'Port', 'Local-only access'] },
   { title: 'Library', rows: ['Watch library changes', 'Rescan on restart'] },
-  { title: 'Safety', rows: ['Confirm stop/restart', 'Keep mock-only mode'] },
+  { title: 'Safety', rows: ['Confirm stop/restart'] },
 ]
 
 export function AnchorServerSettingsSheet({
@@ -17,7 +17,6 @@ export function AnchorServerSettingsSheet({
 }) {
   const [enabledRows, setEnabledRows] = useState<Record<string, boolean>>({
     'Confirm stop/restart': true,
-    'Keep mock-only mode': true,
     'Local-only access': true,
     'Watch library changes': true,
   })
@@ -25,7 +24,6 @@ export function AnchorServerSettingsSheet({
   return (
     <AnchorBottomSheet
       onClose={onCancel}
-      subtitle="Visual server preferences for this preview only."
       title="Server settings"
     >
       <div className="space-y-3">

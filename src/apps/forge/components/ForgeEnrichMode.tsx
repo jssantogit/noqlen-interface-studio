@@ -85,8 +85,8 @@ const enrichCategories: EnrichCategory[] = [
 const providerHints: Record<string, string[]> = {
   tags: ['Last.fm'],
   covers: ['Discogs', 'MusicBrainz'],
-  lyrics: ['Lyrics mock'],
-  advanced: ['MusicBrainz', 'AcoustID', 'Audio analysis mock'],
+  lyrics: ['Lyrics provider'],
+  advanced: ['MusicBrainz', 'AcoustID', 'Audio analysis'],
 }
 
 const minImageSizes = ['600px', '1000px', '1400px']
@@ -214,7 +214,7 @@ function CategoryToggle({
               <p className="mt-0.5 text-[10px] text-white/40">
                 {category.id === 'advanced'
                   ? 'Advanced metadata can rewrite identity, release and audio fields. Protected fields should usually stay unchanged unless the source is verified.'
-                  : 'Existing values will be overwritten in the mock preview.'}
+                  : 'Existing values will be overwritten.'}
               </p>
             </div>
             <button
@@ -560,7 +560,7 @@ function ConfirmationSummary({
         <div>
           <p className="text-xs font-medium text-orange-200/80">This is a force rewrite workflow.</p>
           <p className="mt-0.5 text-[11px] leading-4 text-orange-200/55">
-            Studio preview will not change real files. In the real app, this must run as dry-run before apply.
+            Review the rewrite plan carefully before applying changes.
           </p>
         </div>
       </div>
@@ -591,7 +591,7 @@ function DryRunProgress({
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-white/50">Dry-run preview only. No files are changed.</p>
+      <p className="text-xs text-white/50">Review the plan before applying changes.</p>
       <div className="space-y-2.5">
         {steps.map((s, i) => {
           const active = i === step
@@ -697,7 +697,7 @@ function RewriteProgress({ onComplete }: { onComplete: () => void }) {
     'Updating artwork selections',
     'Updating lyrics data',
     'Processing advanced metadata',
-    'Recording mock activity',
+    'Recording activity',
     'Finalizing result',
   ]
 
@@ -710,7 +710,7 @@ function RewriteProgress({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div className="space-y-4">
-      <p className="text-xs text-white/50">Mock preview only. No files are changed.</p>
+      <p className="text-xs text-white/50">Applying the selected rewrite plan.</p>
       <div className="space-y-2.5">
         {steps.map((s, i) => {
           const active = i === step
@@ -762,7 +762,7 @@ function ResultScreen({
         <div className="grid grid-cols-2 gap-3">
           <div>
             <p className="text-lg font-semibold text-white">{result.changed}</p>
-            <p className="text-[10px] text-white/45">mock changes applied</p>
+            <p className="text-[10px] text-white/45">changes applied</p>
           </div>
           <div>
             <p className="text-lg font-semibold text-white">{result.rewritten}</p>
@@ -777,7 +777,7 @@ function ResultScreen({
             <p className="text-[10px] text-white/45">protected fields skipped</p>
           </div>
           <div className="col-span-2 border-t border-white/[0.05] pt-3">
-            <p className="text-[11px] text-white/50">0 real files changed</p>
+            <p className="text-[11px] text-white/50">Rewrite complete</p>
           </div>
         </div>
       </ForgeCard>
@@ -970,7 +970,7 @@ export function ForgeEnrichMode({
   }
 
   const completeRewrite = () => {
-    const mockResult: EnrichResultSummary = {
+    const rewriteResult: EnrichResultSummary = {
       changed: 438,
       rewritten: 138,
       sentToReview: 74,
@@ -980,7 +980,7 @@ export function ForgeEnrichMode({
       lyricsCount: 112,
       advancedCount: 106,
     }
-    setResult(mockResult)
+    setResult(rewriteResult)
     setStep('result')
 
     // Append activity
@@ -989,25 +989,25 @@ export function ForgeEnrichMode({
     appendActivity({
       id: `activity-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       title: 'Enrich Mode completed',
-      subtitle: 'Source: Forge mock',
+      subtitle: 'Source: Forge',
       time: timeStr,
       icon: 'CheckCircle2',
       accent: 'text-emerald-300',
       bgAccent: 'bg-emerald-400/13',
       summary: ['Tags', 'Covers', 'Lyrics', 'Metadata'],
-      detail: `Enrich Mode rewrite completed in mock preview. ${mockResult.changed} changes applied, ${mockResult.rewritten} existing values rewritten, ${mockResult.sentToReview} items sent to Review, ${mockResult.protectedSkipped} protected fields skipped. No real files changed.`,
+      detail: `Enrich Mode rewrite completed. ${rewriteResult.changed} changes applied, ${rewriteResult.rewritten} existing values rewritten, ${rewriteResult.sentToReview} items sent to Review, ${rewriteResult.protectedSkipped} protected fields skipped.`,
       activityType: 'libraryCheck',
       dateGroup: 'today',
-      affectedCount: mockResult.changed,
+      affectedCount: rewriteResult.changed,
       affectedItems: ['Tags', 'Covers', 'Lyrics', 'Advanced metadata'],
       changedFields: ['Tags', 'Covers', 'Lyrics', 'Metadata'],
-      provider: 'Forge mock',
+      provider: 'Forge',
       status: 'completed',
       relatedReviewTarget: 'all',
     })
 
     markSafeItemsApplied?.()
-    showToast('Enrich Mode completed in mock preview')
+    showToast('Enrich Mode completed')
   }
 
   const handleReviewConflicts = () => {
@@ -1097,7 +1097,7 @@ export function ForgeEnrichMode({
               onClick={openSettings}
               type="button"
             >
-              <span className="text-[11px] text-white/50">Using current mock provider settings</span>
+              <span className="text-[11px] text-white/50">Using current provider settings</span>
               <span className="text-[11px] font-medium text-[#f0b879] transition hover:text-[#efad6c]">
                 Open Forge Settings →
               </span>
@@ -1155,7 +1155,7 @@ export function ForgeEnrichMode({
                   { label: 'Done', onClick: onClose, tone: 'primary' },
                 ]}
                 title="Nothing to rewrite"
-                message="Selected targets already match the current mock settings."
+                message="Selected targets already match the current settings."
               />
             ) : mockState.enrichState === 'dryRunFailed' ? (
               <ForgeEmptyState
@@ -1164,7 +1164,7 @@ export function ForgeEnrichMode({
                   { label: 'Open Settings', onClick: openSettings, tone: 'secondary' },
                 ]}
                 title="Dry-run failed"
-                message="Mock dry-run could not complete. Check provider settings and try again."
+                message="Dry-run could not complete. Check provider settings and try again."
               />
             ) : (
               <DryRunResult
@@ -1180,7 +1180,7 @@ export function ForgeEnrichMode({
           <div className="pt-8">
             <div className="mb-6 text-center">
               <p className="font-serif text-xl text-white">Rewriting metadata</p>
-              <p className="mt-1 text-xs text-white/50">Mock preview only. No files are changed.</p>
+              <p className="mt-1 text-xs text-white/50">Applying the selected rewrite plan.</p>
             </div>
             <RewriteProgress onComplete={completeRewrite} />
           </div>
@@ -1195,7 +1195,7 @@ export function ForgeEnrichMode({
                   { label: 'View dry-run', onClick: () => { setDryRunComplete(true); setStep('dryrun') }, tone: 'secondary' },
                 ]}
                 title="Rewrite failed"
-                message="Mock rewrite could not complete. No files were changed."
+                message="Rewrite could not complete."
               />
             ) : (
               <ResultScreen

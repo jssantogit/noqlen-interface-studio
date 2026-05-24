@@ -35,7 +35,6 @@ import {
   type ForgeSettingsState,
 } from '../forgeSettingsCatalog'
 import { ForgeConfirmDialog } from './ForgeConfirmDialog'
-import { ForgeMockStatePanel } from './ForgeMockStatePanel'
 import { ForgeProgressSheet } from './ForgeProgressSheet'
 import { ForgeStateNotice } from './ForgeStateNotice'
 
@@ -84,16 +83,16 @@ function TagsIcon() {
 }
 
 const providerTestSteps: Record<string, string[]> = {
-  MusicBrainz: ['Preparing mock lookup', 'Checking identity rules', 'Mock provider reachable'],
-  Discogs: ['Checking masked token', 'Testing catalog enrichment', 'Mock provider ready'],
-  AcoustID: ['Checking identifier settings', 'Fingerprint test skipped in Studio mock'],
-  Deezer: ['Checking fallback settings', 'Mock fallback provider ready'],
-  iTunes: ['Checking storefront settings', 'Mock storefront ready'],
-  'Last.fm': ['Checking tag source', 'Mock tags available'],
-  LRCLIB: ['Checking lyrics source', 'Mock lyrics provider ready'],
-  Genius: ['Checking advanced lyrics settings', 'Mock provider ready'],
-  Musixmatch: ['Checking translation settings', 'Mock provider ready'],
-  AudD: ['Checking audio recognition settings', 'Mock provider ready'],
+  MusicBrainz: ['Preparing lookup', 'Checking identity rules', 'Provider reachable'],
+  Discogs: ['Checking masked token', 'Testing catalog enrichment', 'Provider ready'],
+  AcoustID: ['Checking identifier settings', 'Checking fingerprint settings'],
+  Deezer: ['Checking fallback settings', 'Fallback provider ready'],
+  iTunes: ['Checking storefront settings', 'Storefront ready'],
+  'Last.fm': ['Checking tag source', 'Tags available'],
+  LRCLIB: ['Checking lyrics source', 'Lyrics provider ready'],
+  Genius: ['Checking advanced lyrics settings', 'Provider ready'],
+  Musixmatch: ['Checking translation settings', 'Provider ready'],
+  AudD: ['Checking audio recognition settings', 'Provider ready'],
 }
 
 export function ForgeSettingsSheet({
@@ -102,7 +101,6 @@ export function ForgeSettingsSheet({
   showToast,
   showConfirm,
   mockState,
-  onSetMockScenario,
 }: {
   onClose: () => void
   onSave: () => void
@@ -184,7 +182,7 @@ export function ForgeSettingsSheet({
     }
     setProgressFlow({
       title: 'Saving settings',
-      steps: ['Preparing settings', 'Applying mock preferences'],
+      steps: ['Preparing settings', 'Applying preferences'],
       onComplete: () => {
         setProgressFlow(null)
         setUnsaved(false)
@@ -222,13 +220,13 @@ export function ForgeSettingsSheet({
   }, [mockState.settingsState, unsaved, onClose, showConfirm])
 
   const handleTestProvider = useCallback((providerName: string) => {
-    const steps = providerTestSteps[providerName] || ['Preparing mock request', 'Simulating provider response']
+    const steps = providerTestSteps[providerName] || ['Preparing request', 'Checking provider response']
     setProgressFlow({
       title: `Testing ${providerName}`,
       steps,
       onComplete: () => {
         setProgressFlow(null)
-        showToast(`${providerName} mock test completed`, 'success')
+        showToast(`${providerName} test completed`, 'success')
       },
     })
   }, [showToast])
@@ -238,7 +236,7 @@ export function ForgeSettingsSheet({
     setState((prev) => ({ ...prev, updateStatus: 'checking' }))
     setProgressFlow({
       title: 'Checking for updates',
-      steps: ['Checking update channel', 'Comparing versions', 'Verifying mock package'],
+      steps: ['Checking update channel', 'Comparing versions', 'Verifying package'],
       onComplete: () => {
         setProgressFlow(null)
         const count = updateCheckCount + 1
@@ -262,7 +260,7 @@ export function ForgeSettingsSheet({
                 'Bug fixes',
               ],
             }))
-            showToast('Update available in mock preview', 'info')
+            showToast('Update available', 'info')
           } else if (count % 3 === 1) {
             setState((prev) => ({
               ...prev,
@@ -276,7 +274,7 @@ export function ForgeSettingsSheet({
               updateStatus: 'failed',
               lastCheckedUpdate: 'Today',
             }))
-            showToast('Update check failed in mock preview', 'warning')
+            showToast('Update check failed', 'warning')
           }
         } else {
           setState((prev) => ({
@@ -290,7 +288,7 @@ export function ForgeSettingsSheet({
               'Bug fixes',
             ],
           }))
-          showToast('Update available in mock preview', 'info')
+          showToast('Update available', 'info')
         }
       },
     })
@@ -300,11 +298,11 @@ export function ForgeSettingsSheet({
     setState((prev) => ({ ...prev, updateStatus: 'downloading' }))
     setProgressFlow({
       title: 'Downloading update',
-      steps: ['Preparing update', 'Downloading mock package', 'Verifying mock package'],
+      steps: ['Preparing update', 'Preparing package', 'Verifying package'],
       onComplete: () => {
         setProgressFlow(null)
         setState((prev) => ({ ...prev, updateStatus: 'ready' }))
-        showToast('Update ready in mock preview', 'success')
+        showToast('Update ready', 'success')
       },
     })
   }, [showToast])
@@ -312,7 +310,7 @@ export function ForgeSettingsSheet({
   const handleInstallUpdate = useCallback(() => {
     setProgressFlow({
       title: 'Installing update',
-      steps: ['Preparing install', 'Applying mock update'],
+      steps: ['Preparing install', 'Applying update'],
       onComplete: () => {
         setProgressFlow(null)
         setState((prev) => ({
@@ -321,7 +319,7 @@ export function ForgeSettingsSheet({
           availableVersion: null,
           updateReleaseNotes: [],
         }))
-        showToast('Update installed in mock preview. Restart to apply.', 'success')
+        showToast('Update installed. Restart to apply.', 'success')
       },
     })
   }, [showToast])
@@ -350,11 +348,11 @@ export function ForgeSettingsSheet({
     }
     setProgressFlow({
       title: 'Saving credentials',
-      steps: ['Preparing credential update', 'Applying mock preferences'],
+      steps: ['Preparing credential update', 'Applying preferences'],
       onComplete: () => {
         setProgressFlow(null)
         setUnsaved(false)
-        showToast('Credentials saved in mock preview', 'success')
+        showToast('Credentials saved', 'success')
       },
     })
   }, [unsaved, showToast])
@@ -418,8 +416,8 @@ export function ForgeSettingsSheet({
     return (
       <ForgeBottomSheet
         onClose={() => setPlannedSheetOpen(null)}
-        subtitle="This control will be configured in the next Forge block."
-        title="Planned for Enrich Mode"
+        subtitle="This control is not configurable here."
+        title="Enrich Mode"
       >
         <div className="space-y-4">
           <p className="text-xs leading-5 text-orange-100/60">
@@ -483,7 +481,7 @@ export function ForgeSettingsSheet({
                   if (action.includes('Test')) {
                     handleTestProvider(providerDetail.name)
                   } else {
-                    showToast(`${action} opened in mock preview`, 'info')
+                    showToast(`${action} opened`, 'info')
                   }
                 }}
                 type="button"
@@ -514,7 +512,7 @@ export function ForgeSettingsSheet({
             setActiveCategory(null)
           }
         }}
-        subtitle={activeCategory === 'API Keys' ? 'Manage mock credentials for metadata providers.' : 'Tap a setting to change its value.'}
+        subtitle={activeCategory === 'API Keys' ? 'Manage credentials for metadata providers.' : 'Tap a setting to change its value.'}
         title={activeCategory}
       >
         <div className="space-y-4 pb-2">
@@ -527,21 +525,21 @@ export function ForgeSettingsSheet({
           )}
           {mockState.settingsState === 'invalidCredential' && (
             <ForgeStateNotice
-              message="One or more credentials failed local validation in this mock preview."
+              message="One or more credentials failed validation."
               title="Invalid credential"
               variant="error"
             />
           )}
           {mockState.settingsState === 'providerUnavailable' && (
             <ForgeStateNotice
-              message="Provider test returned a mock failure. No network request was sent."
+              message="Provider test failed."
               title="Provider unavailable"
               variant="warning"
             />
           )}
           {mockState.settingsState === 'unsavedChanges' && (
             <ForgeStateNotice
-              message="You have unsaved changes in this mock preview. Save or discard before leaving."
+              message="You have unsaved changes. Save or discard before leaving."
               title="Unsaved changes"
               variant="info"
             />
@@ -612,13 +610,11 @@ export function ForgeSettingsSheet({
             />
           )}
           {activeCategory === 'Advanced' && (
-            <AdvancedPanel
-              activeScenario={mockState.scenario}
-              settings={effectiveState.settings}
-              onChange={updateSetting}
-              onPlanned={(label) => setPlannedSheetOpen(label)}
-              onSetMockScenario={onSetMockScenario}
-            />
+              <AdvancedPanel
+                settings={effectiveState.settings}
+                onChange={updateSetting}
+                onPlanned={(label) => setPlannedSheetOpen(label)}
+              />
           )}
           <button
             className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-xs font-medium text-slate-300 transition hover:bg-white/[0.06]"
@@ -842,7 +838,7 @@ function MetadataProvidersPanel({
                 onClick={() => onTest(provider.name)}
                 type="button"
               >
-                Test mock
+                Test
               </button>
             </div>
           </div>
@@ -878,11 +874,11 @@ function ApiKeysPanel({
             Provider credentials
           </div>
           <span className="rounded-md bg-white/[0.06] px-2 py-0.5 text-[10px] text-slate-200/70">
-            Mock-only
+            Credentials
           </span>
         </div>
         <p className="mb-3 text-[11px] leading-4 text-orange-100/50">
-          Credentials are stored in local preview state only. No real secrets are persisted.
+          Manage provider credentials used by metadata checks.
         </p>
         <div className="space-y-2">
           {credProviders.map((provider) => (
@@ -1127,7 +1123,7 @@ function AppUpdatesPanel({
         <div className="space-y-1.5 text-xs text-orange-100/70">
           <div className="flex justify-between">
             <span>App</span>
-            <span className="text-slate-200">Forge Studio Preview</span>
+            <span className="text-slate-200">Forge</span>
           </div>
           <div className="flex justify-between">
             <span>Version</span>
@@ -1212,7 +1208,7 @@ function AppUpdatesPanel({
             Update check failed
           </div>
           <p className="mb-3 text-xs text-orange-100/60">
-            Mock failure state. No network error occurred.
+            Check the provider settings and try again.
           </p>
           <button
             className="flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] text-sm font-medium text-slate-300 transition hover:bg-white/[0.06]"
@@ -1231,7 +1227,7 @@ function AppUpdatesPanel({
             Update ready
           </div>
           <p className="mb-3 text-xs text-orange-100/60">
-            Studio preview only. No update was downloaded or installed.
+            Restart Forge to apply the update.
           </p>
           <button
             className="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#e7a35f] text-sm font-semibold text-[#211508] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] transition hover:bg-[#efad6c]"
@@ -1262,14 +1258,10 @@ function AdvancedPanel({
   settings,
   onChange,
   onPlanned,
-  activeScenario,
-  onSetMockScenario,
 }: {
   settings: Record<string, unknown>
   onChange: (id: string, value: unknown) => void
   onPlanned: (label: string) => void
-  activeScenario: string
-  onSetMockScenario: (scenario: ForgeMockScenario) => void
 }) {
   const items = forgeSettingsCatalog.filter((s) => s.category === 'Advanced')
   const enrichIds = items.filter((s) => s.id.startsWith('advanced.enrich_')).map((s) => s.id)
@@ -1289,15 +1281,13 @@ function AdvancedPanel({
         </div>
       </div>
 
-      <ForgeMockStatePanel activeScenario={activeScenario as ForgeMockScenario} onChange={onSetMockScenario} />
-
       <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5">
         <div className="mb-2.5 flex items-center gap-2 text-sm font-semibold text-white">
           <Sparkles className="text-orange-300" size={16} />
           Enrich presets
         </div>
         <p className="mb-2 text-[11px] text-orange-100/50">
-          Planned for the next Forge block. Controls are disabled in preview.
+          Configure defaults for enrichment workflows.
         </p>
         <div className="space-y-1">
           {enrichIds.map((id) => (
@@ -1333,7 +1323,7 @@ function DeferredSettingRow({
         <div className="flex items-center gap-2">
           <span className="text-xs text-slate-200/60">{def.appLabel}</span>
           <span className="rounded bg-orange-300/10 px-1.5 py-0.5 text-[9px] font-semibold text-orange-300/80">
-            Planned
+            Preset
           </span>
         </div>
         {def.notes && (

@@ -82,11 +82,6 @@ export function ForgeActivitySummarySheet({
         {/* Detail */}
         <p className="text-sm leading-relaxed text-white/55">{item.detail}</p>
 
-        {/* Mock-only note */}
-        <p className="rounded-lg bg-white/[0.03] px-3 py-2 text-xs italic text-white/35">
-          This is a mock-only preview. No real files or metadata were changed.
-        </p>
-
         {/* Actions */}
         <div className="flex flex-col gap-2.5 pt-1">
           {onOpenRelatedReview ? (

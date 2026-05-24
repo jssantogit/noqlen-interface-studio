@@ -98,11 +98,11 @@ export function AnchorSetupServer({
           <div className="mt-3 flex items-center gap-2">
             {availabilityStatus === 'available' ? (
               <span className="rounded-full bg-emerald-300/16 px-2 py-1 text-xs font-semibold text-emerald-300">
-                <ShieldCheck className="mr-1 inline" size={12} /> Mock check passed
+                <ShieldCheck className="mr-1 inline" size={12} /> Check passed
               </span>
             ) : availabilityStatus === 'warning' ? (
               <span className="rounded-full bg-orange-300/16 px-2 py-1 text-xs font-semibold text-orange-300">
-                Mock check warning
+                Check warning
               </span>
             ) : availabilityStatus === 'checking' ? (
               <span className="rounded-full bg-amber-300/16 px-2 py-1 text-xs font-semibold text-amber-300">
@@ -117,7 +117,7 @@ export function AnchorSetupServer({
             type="button"
           >
             <Zap size={13} />
-            Check mock availability
+            Check availability
           </button>
         </div>
       ) : null}

@@ -34,7 +34,7 @@ export function AriaExplore({
         <button
           aria-label="Explore queue status"
           className="relative mt-2 grid h-10 w-10 place-items-center rounded-xl border border-white/[0.16] bg-white/[0.035] text-[#f7eadb]"
-          onClick={() => onShowToast('Explore status (mock)')}
+          onClick={() => onShowToast('Explore status')}
           type="button"
         >
           <ListMusic size={25} strokeWidth={1.5} />

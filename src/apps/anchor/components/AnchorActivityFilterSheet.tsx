@@ -3,10 +3,10 @@ import type { AnchorActivityFilter } from '../anchorMockData'
 import { AnchorBottomSheet } from './AnchorBottomSheet'
 
 const filterOptions: Array<{ id: AnchorActivityFilter; label: string; detail: string }> = [
-  { id: 'all', label: 'All', detail: 'Show every mock event' },
+  { id: 'all', label: 'All', detail: 'Show every event' },
   { id: 'server', label: 'Server', detail: 'Server starts, restarts and failures' },
-  { id: 'library', label: 'Library', detail: 'Mock library scan and update events' },
-  { id: 'errors', label: 'Errors', detail: 'Only failed mock events' },
+  { id: 'library', label: 'Library', detail: 'Library scan and update events' },
+  { id: 'errors', label: 'Errors', detail: 'Only failed events' },
   { id: 'today', label: 'Today', detail: 'Events grouped under Today' },
   { id: 'yesterday', label: 'Yesterday', detail: 'Events grouped under Yesterday' },
 ]
@@ -23,7 +23,6 @@ export function AnchorActivityFilterSheet({
   return (
     <AnchorBottomSheet
       onClose={onClose}
-      subtitle="Choose which mock events are shown."
       title="Filter activity"
     >
       <div className="grid gap-2">

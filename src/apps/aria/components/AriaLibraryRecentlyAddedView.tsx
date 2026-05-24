@@ -47,10 +47,10 @@ export function AriaLibraryRecentlyAddedView({
 function HeaderTools({ label, onShowToast }: { label: string; onShowToast: (message: string) => void }) {
   return (
     <div className="flex shrink-0 items-center gap-2 pt-0.5">
-      <button aria-label={`Filter ${label}`} className="grid h-9 w-9 place-items-center rounded-full bg-white/[0.055] text-[#f0a13d] transition hover:bg-white/[0.085]" onClick={() => onShowToast(`Filter ${label} (mock)`)} type="button">
+      <button aria-label={`Filter ${label}`} className="grid h-9 w-9 place-items-center rounded-full bg-white/[0.055] text-[#f0a13d] transition hover:bg-white/[0.085]" onClick={() => onShowToast(`Filter ${label}`)} type="button">
         <SlidersHorizontal size={17} />
       </button>
-      <button aria-label={`Search ${label}`} className="grid h-9 w-9 place-items-center rounded-full bg-white/[0.055] text-[#f0a13d] transition hover:bg-white/[0.085]" onClick={() => onShowToast(`Search ${label} (mock)`)} type="button">
+      <button aria-label={`Search ${label}`} className="grid h-9 w-9 place-items-center rounded-full bg-white/[0.055] text-[#f0a13d] transition hover:bg-white/[0.085]" onClick={() => onShowToast(`Search ${label}`)} type="button">
         <Search size={18} />
       </button>
     </div>

@@ -21,7 +21,6 @@ export function AnchorAccessCheckSheet({ onClose }: { onClose: () => void }) {
   return (
     <AnchorBottomSheet
       onClose={onClose}
-      subtitle="Mock permission check for the selected folder."
       title="Verify library access"
     >
       <div className="space-y-4">
@@ -32,7 +31,7 @@ export function AnchorAccessCheckSheet({ onClose }: { onClose: () => void }) {
           <div className="min-w-0">
             <p className="text-sm font-semibold text-white">Accessible</p>
             <p className="mt-1 text-xs leading-4 text-slate-300/76">
-              {checking ? 'Replaying mock checks locally.' : 'Static Studio checks passed with one warning.'}
+              {checking ? 'Checking access.' : 'Checks passed with one warning.'}
             </p>
           </div>
         </div>

@@ -140,7 +140,7 @@ export const mockScenarioLabels: Record<ForgeMockScenario, string> = {
   enrichDryRunNoChanges: 'Enrich — Dry-run no changes',
   enrichDryRunFailed: 'Enrich — Dry-run failed',
   enrichRewriteFailed: 'Enrich — Rewrite failed',
-  appOffline: 'App — Offline mock',
+  appOffline: 'App — Offline',
 }
 
 export const mockScenarioGroups = [

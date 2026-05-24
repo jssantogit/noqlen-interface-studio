@@ -12,13 +12,13 @@ export function ForgeMockStatePanel({
     <div className="space-y-4">
       <div className="rounded-2xl border border-white/[0.065] bg-white/[0.04] p-3.5">
         <div className="mb-3 flex items-center justify-between gap-2">
-          <div className="text-sm font-semibold text-white">Preview States</div>
+          <div className="text-sm font-semibold text-white">States</div>
           <span className="rounded-md bg-orange-300/10 px-2 py-0.5 text-[10px] font-semibold text-orange-300/80">
-            Studio only
+            Local
           </span>
         </div>
         <p className="mb-3 text-[11px] leading-4 text-orange-100/50">
-          Select a mock scenario to preview how Forge surfaces behave under different conditions. No real data is changed.
+          Select a scenario to see how Forge surfaces behave under different conditions.
         </p>
 
         <div className="space-y-3">

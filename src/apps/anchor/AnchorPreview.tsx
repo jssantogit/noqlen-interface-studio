@@ -25,7 +25,6 @@ import type { AnchorLibrarySettings } from './components/AnchorLibrarySettingsSh
 import { AnchorLibraryStatsSheet } from './components/AnchorLibraryStatsSheet'
 import { AnchorLogViewerSheet } from './components/AnchorLogViewerSheet'
 import { AnchorMockQrCode } from './components/AnchorMockQrCode'
-import { AnchorMockStateControls } from './components/AnchorMockStateControls'
 import { AnchorNavidromeSettingsSheet } from './components/AnchorNavidromeSettingsSheet'
 import { createNavidromeMockDraft } from './navidromeConfigCatalog'
 import type { NavidromeConfigDraft } from './navidromeConfigCatalog'
@@ -74,7 +73,6 @@ const initialLibrarySettings: AnchorLibrarySettings = {
   'Prefer embedded tags': true,
   'Keep original genre tags': true,
   'Confirm folder changes': true,
-  'Mock-only mode': true,
 }
 
 export function AnchorPreview() {
@@ -129,17 +127,6 @@ export function AnchorPreview() {
   const startRestart = () => {
     setActiveDialog(null)
     setMockState((current) => ({ ...current, server: 'restarting' }))
-  }
-
-  const updateMockState = (state: AnchorMockState) => {
-    setMockState(state)
-    if (state.serverList === 'addingServer') setActiveSheet('addServer')
-    if (state.library === 'scanning') setScanState('scanning')
-    if (state.library === 'scanFailed') setScanState('failed')
-    if (state.library !== 'scanning' && state.library !== 'scanFailed') setScanState('idle')
-    if (state.activity === 'errorsOnly') setActivityFilter('errors')
-    if (state.activity === 'filteredNoResults') setActivityFilter('server')
-    if (state.activity === 'populated' || state.activity === 'empty') setActivityFilter('all')
   }
 
   const stateActivity =
@@ -203,7 +190,7 @@ export function AnchorPreview() {
         onRestoreServer={() => {
           setNavidromeVisible(true)
           setMockState((current) => ({ ...current, server: 'active', serverList: 'normal' }))
-          showToast('Mock server restored')
+          showToast('Server restored')
         }}
         serverState={mockState.serverList === 'navidromeDisabled' ? 'disabled' : serverState}
       />
@@ -242,11 +229,6 @@ export function AnchorPreview() {
     setMockLibraryPath(setupDraft.libraryPath)
     setActiveTab('home')
     showToast('Anchor setup completed')
-  }
-
-  const resetSetup = () => {
-    setSetupDraft({ ...initialAnchorSetupDraft })
-    setSetupFromSettings(true)
   }
 
   const buildCatalogDraftFromSetup = (navidromeDraft: AnchorSetupDraft['navidromeDraft']): NavidromeConfigDraft => {
@@ -302,8 +284,7 @@ export function AnchorPreview() {
             <div className="pointer-events-none absolute inset-0 z-30 grid place-items-center bg-black/42 backdrop-blur-[2px]">
               <div className="rounded-2xl border border-amber-300/18 bg-[#071014]/92 px-4 py-3 text-center shadow-2xl">
                 <div className="mx-auto mb-2 h-8 w-8 animate-spin rounded-full border-2 border-amber-300/25 border-t-amber-300" />
-                <p className="text-sm font-semibold text-white">Loading mock state</p>
-                <p className="mt-1 text-xs text-slate-300/76">Studio-only overlay</p>
+                <p className="text-sm font-semibold text-white">Loading</p>
               </div>
             </div>
           ) : null}
@@ -312,22 +293,7 @@ export function AnchorPreview() {
       )}
 
       {activeSheet === 'settings' ? (
-        <AnchorSettingsSheet
-          mockStateControls={
-            <AnchorMockStateControls
-              mockState={mockState}
-              onClearSurfaces={() => {
-                setActiveSheet(null)
-                setActiveDialog(null)
-                setToast(null)
-              }}
-              onResetSetup={resetSetup}
-              onShowToast={() => showToast('Mock state toast active', 'info')}
-              onStateChange={updateMockState}
-            />
-          }
-          onClose={() => setActiveSheet(null)}
-        />
+        <AnchorSettingsSheet onClose={() => setActiveSheet(null)} />
       ) : null}
 
       {activeSheet === 'qr' ? (
@@ -343,13 +309,12 @@ export function AnchorPreview() {
       {activeSheet === 'scan' ? (
         <AnchorBottomSheet
           onClose={() => setActiveSheet(null)}
-          subtitle="Simulating a local library scan."
           title="Refresh library"
         >
           <AnchorScanProgress
             onFail={() => {
               setScanState('failed')
-              showToast('Library refresh failed in mock preview', 'warning')
+              showToast('Library refresh failed', 'warning')
             }}
             state={scanState}
           />
@@ -363,7 +328,7 @@ export function AnchorPreview() {
           onUseFolder={(path) => {
             setMockLibraryPath(path)
             setActiveSheet(null)
-            showToast('Library folder updated in mock preview')
+            showToast('Library folder updated')
           }}
         />
       ) : null}
@@ -378,7 +343,7 @@ export function AnchorPreview() {
           onSave={(settings) => {
             setMockLibrarySettings(settings)
             setActiveSheet(null)
-            showToast('Library settings saved in mock preview')
+            showToast('Library settings saved')
           }}
           settings={mockLibrarySettings}
         />
@@ -411,7 +376,7 @@ export function AnchorPreview() {
         <AnchorErrorDetailSheet
           event={selectedActivity}
           onClose={() => setActiveSheet(null)}
-          onCopyDiagnostic={() => showToast('Diagnostic summary copied in mock preview', 'info')}
+          onCopyDiagnostic={() => showToast('Diagnostic summary copied', 'info')}
           onOpenNavidromeSettings={() => setActiveSheet('navidromeSettings')}
         />
       ) : null}
@@ -423,7 +388,7 @@ export function AnchorPreview() {
             setActiveSheet(null)
             setNavidromeVisible(true)
             setMockState((current) => ({ ...current, serverList: 'normal' }))
-            showToast('Mock server added')
+            showToast('Server added')
           }}
         />
       ) : null}
@@ -452,16 +417,16 @@ export function AnchorPreview() {
             if (action === 'disable') {
               setActiveSheet(null)
               setMockState((current) => ({ ...current, server: 'disabled', serverList: 'navidromeDisabled' }))
-              showToast('Mock server disabled', 'warning')
+              showToast('Server disabled', 'warning')
               return
             }
             if (action === 'duplicate') {
               setActiveSheet(null)
-              showToast('Mock configuration duplicated')
+              showToast('Configuration duplicated')
               return
             }
             setActiveSheet(null)
-            showToast('Rename is visual-only in this preview', 'info')
+            showToast('Rename server', 'info')
           }}
           onClose={() => setActiveSheet(null)}
         />
@@ -472,7 +437,7 @@ export function AnchorPreview() {
           onCancel={() => setActiveSheet(null)}
           onSave={() => {
             setActiveSheet(null)
-            showToast('Server settings saved in mock preview')
+            showToast('Server settings saved')
           }}
         />
       ) : null}
@@ -480,8 +445,8 @@ export function AnchorPreview() {
       {activeSheet === 'navidromeSettings' ? (
         <AnchorNavidromeSettingsSheet
           onClose={() => setActiveSheet(null)}
-          onMockApply={() => showToast('Navidrome settings saved in mock preview')}
-          onMockReset={() => showToast('Mock changes reset', 'info')}
+          onMockApply={() => showToast('Navidrome settings saved')}
+          onMockReset={() => showToast('Changes reset', 'info')}
           onRestartRecommended={() => setMockState((current) => ({ ...current, server: 'degraded' }))}
           initialDraft={inSetup ? buildCatalogDraftFromSetup(setupDraft.navidromeDraft) : undefined}
           onDraftChange={inSetup ? (catalogDraft) => {
@@ -507,12 +472,12 @@ export function AnchorPreview() {
       {activeDialog === 'stop' ? (
         <AnchorConfirmDialog
           confirmLabel="Stop server"
-          description="This only changes the mock server state in the Studio preview."
+          description="Stop the current Navidrome server card."
           onCancel={() => setActiveDialog(null)}
           onConfirm={() => {
             setActiveDialog(null)
             setMockState((current) => ({ ...current, server: 'stopped' }))
-            showToast('Server stopped in mock preview', 'warning')
+            showToast('Server stopped', 'warning')
           }}
           title="Stop Navidrome?"
           tone="danger"
@@ -522,7 +487,7 @@ export function AnchorPreview() {
       {activeDialog === 'restart' ? (
         <AnchorConfirmDialog
           confirmLabel="Restart"
-          description="Anchor will simulate a restart without contacting a real server."
+          description="Restart the Navidrome server card."
           onCancel={() => setActiveDialog(null)}
           onConfirm={startRestart}
           title="Restart Navidrome?"
@@ -532,15 +497,15 @@ export function AnchorPreview() {
       {activeDialog === 'removeServer' ? (
         <AnchorConfirmDialog
           confirmLabel="Remove"
-          description="This only removes the Navidrome card from the current local preview until refresh."
+          description="Remove the Navidrome server card from the server list."
           onCancel={() => setActiveDialog(null)}
           onConfirm={() => {
             setActiveDialog(null)
             setNavidromeVisible(false)
             setMockState((current) => ({ ...current, serverList: 'noServers' }))
-            showToast('Mock server removed', 'warning')
+            showToast('Server removed', 'warning')
           }}
-          title="Remove mock server?"
+          title="Remove server?"
           tone="danger"
         />
       ) : null}

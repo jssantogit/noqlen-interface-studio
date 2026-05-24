@@ -16,7 +16,6 @@ import {
   Shield,
   SlidersHorizontal,
   Smartphone,
-  Sparkles,
   UserCog,
   Volume2,
   Wifi,
@@ -86,13 +85,10 @@ export function AriaSettingsSheet({
   const [loudnessNormalization, setLoudnessNormalization] = useState(false)
   const [crossfade, setCrossfade] = useState<'off' | 'short' | 'long'>('off')
   const [compactLists, setCompactLists] = useState(false)
-  const [visualOnlyMode, setVisualOnlyMode] = useState(true)
   const [artworkEmphasis, setArtworkEmphasis] = useState<'balanced' | 'large' | 'minimal'>('balanced')
 
   const [showTechnicalLabels, setShowTechnicalLabels] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
-  const [showProviderReadiness, setShowProviderReadiness] = useState(true)
-  const [showSourceCapabilities, setShowSourceCapabilities] = useState(true)
   const [showFolders, setShowFolders] = useState(true)
   const [showCompilations, setShowCompilations] = useState(true)
   const [hideEmptyCategories, setHideEmptyCategories] = useState(true)
@@ -125,7 +121,7 @@ export function AriaSettingsSheet({
   const [storageBudget, setStorageBudget] = useState<'small' | 'medium' | 'large'>('medium')
   const [activeProfile, setActiveProfile] = useState<'default' | 'listening' | 'minimal'>('default')
   const [preferenceScope, setPreferenceScope] = useState<'global' | 'profile'>('global')
-  const [backupScope, setBackupScope] = useState<'preferences' | 'visual' | 'all'>('preferences')
+  const [backupScope, setBackupScope] = useState<'preferences' | 'appearance' | 'all'>('preferences')
   const [restoreConflictBehavior, setRestoreConflictBehavior] = useState<'ask' | 'keepCurrent' | 'useBackup'>('ask')
   const [backupSafetyConfirmation, setBackupSafetyConfirmation] = useState(true)
   const [androidAutoVisibility, setAndroidAutoVisibility] = useState(false)
@@ -133,23 +129,22 @@ export function AriaSettingsSheet({
   const [notificationControls, setNotificationControls] = useState(false)
   const [lockScreenControls, setLockScreenControls] = useState(false)
   const [headsetControls, setHeadsetControls] = useState(false)
-  const [foregroundServiceBehavior, setForegroundServiceBehavior] = useState<'planned' | 'disabled'>('planned')
-  const [strictMockMode, setStrictMockMode] = useState(true)
-  const [mockFlowVisibility, setMockFlowVisibility] = useState(true)
-  const [providerBoundaryWarnings, setProviderBoundaryWarnings] = useState(true)
-  const [showCoreDiagnostics, setShowCoreDiagnostics] = useState(false)
-  const [snapshotRedaction, setSnapshotRedaction] = useState<'safe' | 'minimal' | 'full'>('safe')
-  const [automationSafety, setAutomationSafety] = useState<'strict' | 'balanced'>('strict')
+  const [foregroundServiceBehavior, setForegroundServiceBehavior] = useState<'automatic' | 'disabled'>('automatic')
+  const [debugMode, setDebugMode] = useState(false)
+  const [rebuildLibraryIndex, setRebuildLibraryIndex] = useState(false)
+  const [compactLocalIndex, setCompactLocalIndex] = useState(true)
+  const [wifiMetered, setWifiMetered] = useState(false)
+  const [vpnMetered, setVpnMetered] = useState(true)
 
   const toggleSetting = (label: string, checked: boolean, setChecked: (checked: boolean) => void) => {
     const next = !checked
     setChecked(next)
-    onShowToast(`${label}: ${next ? 'On' : 'Off'} (mock)`)
+    onShowToast(`${label}: ${next ? 'On' : 'Off'}`)
   }
 
   const setSegment = <T extends string>(label: string, value: T, setValue: (value: T) => void) => {
     setValue(value)
-    onShowToast(`${label}: ${formatValue(value)} (mock)`)
+    onShowToast(`${label}: ${formatValue(value)}`)
   }
 
   const pageContent = settingsPage === 'root' ? (
@@ -165,8 +160,7 @@ export function AriaSettingsSheet({
             <SegmentedSetting label="Artwork emphasis" onChange={(value) => setSegment('Artwork emphasis', value, setArtworkEmphasis)} options={[{ label: 'Balanced', value: 'balanced' }, { label: 'Large', value: 'large' }, { label: 'Minimal', value: 'minimal' }]} value={artworkEmphasis} />
             <ToggleSetting checked={showTechnicalLabels} label="Show technical labels" onToggle={() => toggleSetting('Show technical labels', showTechnicalLabels, setShowTechnicalLabels)} />
           </SettingsGroup>
-          <SettingsGroup icon={<Sparkles size={14} />} title="Simulator">
-            <ToggleSetting checked={visualOnlyMode} label="Visual-only mode" onToggle={() => toggleSetting('Visual-only mode', visualOnlyMode, setVisualOnlyMode)} />
+          <SettingsGroup icon={<Shield size={14} />} title="Comfort">
             <ToggleSetting checked={reduceMotion} label="Reduce motion" onToggle={() => toggleSetting('Reduce motion', reduceMotion, setReduceMotion)} />
           </SettingsGroup>
         </>
@@ -177,10 +171,8 @@ export function AriaSettingsSheet({
           <SourceStatusCard activeSource={activeSource} onOpenSource={onOpenSource} />
           <SettingsGroup icon={<HardDrive size={14} />} title="Visibility">
             <ToggleSetting checked={showSourceBadges} label="Show source badges" onToggle={() => toggleSetting('Show source badges', showSourceBadges, setShowSourceBadges)} />
-            <ToggleSetting checked={showProviderReadiness} label="Show provider readiness" onToggle={() => toggleSetting('Show provider readiness', showProviderReadiness, setShowProviderReadiness)} />
-            <ToggleSetting checked={showSourceCapabilities} label="Show source capabilities" onToggle={() => toggleSetting('Show source capabilities', showSourceCapabilities, setShowSourceCapabilities)} />
+            <ToggleSetting checked={showTechnicalLabels} label="Show source labels" onToggle={() => toggleSetting('Show source labels', showTechnicalLabels, setShowTechnicalLabels)} />
           </SettingsGroup>
-          <NoticeCard title="Provider boundary" items={['Provider integration is mock-only.', 'No real login, auth, network discovery or provider mutation.']} />
         </>
       ) : null}
 
@@ -234,7 +226,6 @@ export function AriaSettingsSheet({
             <SegmentedSetting label="Bit-depth handling" onChange={(value) => setSegment('Bit-depth handling', value, setBitDepthHandling)} options={[{ label: 'Native', value: 'native' }, { label: 'Fixed', value: 'fixed' }, { label: 'Auto', value: 'auto' }]} value={bitDepthHandling} />
             <SegmentedSetting label="Format preference" onChange={(value) => setSegment('Format preference', value, setFormatPreference)} options={[{ label: 'Original', value: 'original' }, { label: 'Lossless', value: 'lossless' }, { label: 'Compatible', value: 'compatible' }]} value={formatPreference} />
           </SettingsGroup>
-          <NoticeCard title="Desired policies" items={['These are desired/mock policies.', 'No real audio engine or output control is connected.']} />
         </>
       ) : null}
 
@@ -251,7 +242,6 @@ export function AriaSettingsSheet({
             <SegmentedSetting label="Metered network" onChange={(value) => setSegment('Metered network', value, setMeteredNetworkBehavior)} options={[{ label: 'Ask', value: 'ask' }, { label: 'Limit', value: 'limit' }, { label: 'Allow', value: 'allow' }]} value={meteredNetworkBehavior} />
             <SegmentedSetting label="Transcoding" onChange={(value) => setSegment('Transcoding', value, setTranscodingPreference)} options={[{ label: 'Auto', value: 'auto' }, { label: 'Avoid', value: 'avoid' }, { label: 'Always', value: 'always' }]} value={transcodingPreference} />
           </SettingsGroup>
-          <NoticeCard title="Network boundary" items={['Streaming is not real in the current interface.', 'Network policy is mock-only.']} />
         </>
       ) : null}
 
@@ -265,7 +255,6 @@ export function AriaSettingsSheet({
             <SegmentedSetting label="Storage budget" onChange={(value) => setSegment('Storage budget', value, setStorageBudget)} options={[{ label: 'Small', value: 'small' }, { label: 'Medium', value: 'medium' }, { label: 'Large', value: 'large' }]} value={storageBudget} />
             <ToggleSetting checked={requireCleanupConfirmation} label="Require cleanup confirmation" onToggle={() => toggleSetting('Require cleanup confirmation', requireCleanupConfirmation, setRequireCleanupConfirmation)} />
           </SettingsGroup>
-          <NoticeCard title="Storage boundary" items={['No real download, delete or filesystem access.', 'No storage path is exposed.']} />
         </>
       ) : null}
 
@@ -276,17 +265,15 @@ export function AriaSettingsSheet({
             <SegmentedSetting label="Preference scope" onChange={(value) => setSegment('Preference scope', value, setPreferenceScope)} options={[{ label: 'Global', value: 'global' }, { label: 'Profile', value: 'profile' }]} value={preferenceScope} />
           </SettingsGroup>
           <SettingsGroup icon={<Shield size={14} />} title="Backup">
-            <SegmentedSetting label="Backup scope" onChange={(value) => setSegment('Backup scope', value, setBackupScope)} options={[{ label: 'Preferences', value: 'preferences' }, { label: 'Visual', value: 'visual' }, { label: 'All', value: 'all' }]} value={backupScope} />
+            <SegmentedSetting label="Backup scope" onChange={(value) => setSegment('Backup scope', value, setBackupScope)} options={[{ label: 'Preferences', value: 'preferences' }, { label: 'Appearance', value: 'appearance' }, { label: 'All', value: 'all' }]} value={backupScope} />
             <SegmentedSetting label="Restore conflicts" onChange={(value) => setSegment('Restore conflicts', value, setRestoreConflictBehavior)} options={[{ label: 'Ask', value: 'ask' }, { label: 'Keep Current', value: 'keepCurrent' }, { label: 'Use Backup', value: 'useBackup' }]} value={restoreConflictBehavior} />
             <ToggleSetting checked={backupSafetyConfirmation} label="Backup safety confirmation" onToggle={() => toggleSetting('Backup safety confirmation', backupSafetyConfirmation, setBackupSafetyConfirmation)} />
           </SettingsGroup>
-          <NoticeCard title="Backup boundary" items={['No real filesystem backup or restore.', 'No destructive operation.']} />
         </>
       ) : null}
 
       {settingsPage === 'androidExternal' ? (
         <>
-          <NoticeCard title="Planned boundary" items={['Planned/mock-only.', 'No Android SDK integration or real media controls.']} muted />
           <SettingsGroup icon={<Smartphone size={14} />} title="External control" muted>
             <ToggleSetting checked={androidAutoVisibility} label="Android Auto visibility" onToggle={() => toggleSetting('Android Auto visibility', androidAutoVisibility, setAndroidAutoVisibility)} />
             <ToggleSetting checked={mediaSessionControls} label="MediaSession controls" onToggle={() => toggleSetting('MediaSession controls', mediaSessionControls, setMediaSessionControls)} />
@@ -295,24 +282,20 @@ export function AriaSettingsSheet({
             <ToggleSetting checked={headsetControls} label="Headset/Bluetooth controls" onToggle={() => toggleSetting('Headset/Bluetooth controls', headsetControls, setHeadsetControls)} />
           </SettingsGroup>
           <SettingsGroup icon={<RadioTower size={14} />} title="Service" muted>
-            <SegmentedSetting label="Foreground service" onChange={(value) => setSegment('Foreground service', value, setForegroundServiceBehavior)} options={[{ label: 'Planned', value: 'planned' }, { label: 'Disabled', value: 'disabled' }]} value={foregroundServiceBehavior} />
+            <SegmentedSetting label="Foreground service" onChange={(value) => setSegment('Foreground service', value, setForegroundServiceBehavior)} options={[{ label: 'Automatic', value: 'automatic' }, { label: 'Disabled', value: 'disabled' }]} value={foregroundServiceBehavior} />
           </SettingsGroup>
         </>
       ) : null}
 
       {settingsPage === 'advanced' ? (
         <>
-          <SettingsGroup icon={<Wrench size={14} />} title="Lab">
-            <ToggleSetting checked={strictMockMode} label="Strict mock mode" onToggle={() => toggleSetting('Strict mock mode', strictMockMode, setStrictMockMode)} />
-            <ToggleSetting checked={mockFlowVisibility} label="Mock flow visibility" onToggle={() => toggleSetting('Mock flow visibility', mockFlowVisibility, setMockFlowVisibility)} />
-            <ToggleSetting checked={providerBoundaryWarnings} label="Provider boundary warnings" onToggle={() => toggleSetting('Provider boundary warnings', providerBoundaryWarnings, setProviderBoundaryWarnings)} />
-            <ToggleSetting checked={showCoreDiagnostics} label="Show core diagnostics" onToggle={() => toggleSetting('Show core diagnostics', showCoreDiagnostics, setShowCoreDiagnostics)} />
+          <SettingsGroup icon={<Wrench size={14} />} title="Tools">
+            <ToggleSetting checked={debugMode} label="Debug mode" onToggle={() => toggleSetting('Debug mode', debugMode, setDebugMode)} />
+            <ToggleSetting checked={rebuildLibraryIndex} label="Rebuild library index" onToggle={() => toggleSetting('Rebuild library index', rebuildLibraryIndex, setRebuildLibraryIndex)} />
+            <ToggleSetting checked={compactLocalIndex} label="Compact local index" onToggle={() => toggleSetting('Compact local index', compactLocalIndex, setCompactLocalIndex)} />
+            <ToggleSetting checked={wifiMetered} label="Treat Wi-Fi as metered" onToggle={() => toggleSetting('Treat Wi-Fi as metered', wifiMetered, setWifiMetered)} />
+            <ToggleSetting checked={vpnMetered} label="Treat VPN as metered" onToggle={() => toggleSetting('Treat VPN as metered', vpnMetered, setVpnMetered)} />
           </SettingsGroup>
-          <SettingsGroup icon={<Shield size={14} />} title="Safety">
-            <SegmentedSetting label="Snapshot redaction" onChange={(value) => setSegment('Snapshot redaction', value, setSnapshotRedaction)} options={[{ label: 'Safe', value: 'safe' }, { label: 'Minimal', value: 'minimal' }, { label: 'Full', value: 'full' }]} value={snapshotRedaction} />
-            <SegmentedSetting label="Automation safety" onChange={(value) => setSegment('Automation safety', value, setAutomationSafety)} options={[{ label: 'Strict', value: 'strict' }, { label: 'Balanced', value: 'balanced' }]} value={automationSafety} />
-          </SettingsGroup>
-          <NoticeCard title="Diagnostics boundary" items={['Do not show raw debug dumps.', 'Diagnostics are visual-only.']} />
         </>
       ) : null}
 
@@ -321,7 +304,7 @@ export function AriaSettingsSheet({
   )
 
   return (
-    <AriaBottomSheet onClose={onClose} subtitle={settingsPage === 'root' ? 'Core-mapped visual player preferences' : getPageSubtitle(settingsPage)} title={pageTitles[settingsPage]}>
+    <AriaBottomSheet onClose={onClose} subtitle={settingsPage === 'root' ? 'Player settings' : getPageSubtitle(settingsPage)} title={pageTitles[settingsPage]}>
       {pageContent}
     </AriaBottomSheet>
   )
@@ -332,25 +315,25 @@ function SettingsHub({ activeSource, onOpenPage }: { activeSource: ActiveSource;
     <div className="space-y-4">
       <div>
         <h2 className="text-[21px] font-semibold tracking-[-0.03em] text-[#fff3e4]">Aria Settings</h2>
-        <p className="mt-1 text-[12px] leading-5 text-[#b9b1a7]">Core-mapped visual player preferences</p>
+        <p className="mt-1 text-[12px] leading-5 text-[#b9b1a7]">Player settings</p>
       </div>
       <StatusStrip activeSource={activeSource} />
       <SettingsGroup title="Primary" compact>
-        <SettingsCategoryCard icon={<Palette size={17} />} page="interface" status="Visual" subtitle="Display, artwork and simulator behavior." title="Interface" weight="primary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<HardDrive size={17} />} page="sources" status="Local" subtitle="Active source and provider readiness." title="Sources & Providers" weight="primary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Palette size={17} />} page="interface" status="Display" subtitle="Display, artwork and motion behavior." title="Interface" weight="primary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<HardDrive size={17} />} page="sources" status="Local" subtitle="Active source and source labels." title="Sources & Providers" weight="primary" onOpenPage={onOpenPage} />
         <SettingsCategoryCard icon={<Music2 size={17} />} page="library" status="Tracks" subtitle="Browsing, labels and library display rules." title="Library" weight="primary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<PlayCircle size={17} />} page="playback" status="Mock" subtitle="Default playback and queue policies." title="Playback" weight="primary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<PlayCircle size={17} />} page="playback" status="Player" subtitle="Default playback and queue policies." title="Playback" weight="primary" onOpenPage={onOpenPage} />
         <SettingsCategoryCard icon={<Headphones size={17} />} page="audioQuality" status="Desired" subtitle="Output and quality preference policies." title="Audio Output & Quality" weight="primary" onOpenPage={onOpenPage} />
       </SettingsGroup>
       <SettingsGroup title="Secondary" compact muted>
-        <SettingsCategoryCard icon={<Wifi size={17} />} page="streamingNetwork" status="Planned" subtitle="Quality, network and transcoding policy." title="Streaming & Network" weight="secondary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<Archive size={17} />} page="offlineStorage" status="Policy" subtitle="Offline and cache policy previews." title="Offline, Cache & Storage" weight="secondary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Wifi size={17} />} page="streamingNetwork" status="Network" subtitle="Quality, network and transcoding policy." title="Streaming & Network" weight="secondary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Archive size={17} />} page="offlineStorage" status="Policy" subtitle="Offline and cache preferences." title="Offline, Cache & Storage" weight="secondary" onOpenPage={onOpenPage} />
         <SettingsCategoryCard icon={<UserCog size={17} />} page="profilesBackup" status="Local" subtitle="Profiles, preference scope and backup policy." title="Profiles & Backup" weight="secondary" onOpenPage={onOpenPage} />
       </SettingsGroup>
-      <SettingsGroup title="System / Lab" compact muted>
-        <SettingsCategoryCard icon={<Smartphone size={17} />} page="androidExternal" status="Planned" subtitle="Android shell and external control boundaries." title="Android & External Control" weight="system" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<Wrench size={17} />} page="advanced" status="Lab" subtitle="Diagnostics and mock safety controls." title="Advanced" weight="system" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<Info size={17} />} page="about" status="Info" subtitle="Aria Core and interface status." title="About" weight="system" onOpenPage={onOpenPage} />
+      <SettingsGroup title="System" compact muted>
+        <SettingsCategoryCard icon={<Smartphone size={17} />} page="androidExternal" status="Device" subtitle="External controls and service behavior." title="Android & External Control" weight="system" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Wrench size={17} />} page="advanced" status="Tools" subtitle="Diagnostics and library maintenance." title="Advanced" weight="system" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Info size={17} />} page="about" status="Info" subtitle="App information and interface status." title="About" weight="system" onOpenPage={onOpenPage} />
       </SettingsGroup>
     </div>
   )
@@ -408,9 +391,7 @@ function StatusStrip({ activeSource }: { activeSource: ActiveSource }) {
   return (
     <section className="rounded-[18px] border border-[#f0a13d]/14 bg-[linear-gradient(145deg,rgba(240,161,61,0.08),rgba(255,255,255,0.025))] p-3">
       <div className="flex flex-wrap gap-1.5">
-        <span className="rounded-full bg-[#f0a13d]/12 px-2.5 py-1 text-[11px] font-semibold text-[#f8bd76]">Active source: {activeSource.name}</span>
-        <span className="rounded-full bg-white/[0.055] px-2.5 py-1 text-[11px] font-semibold text-[#d7cabe]">Visual mock</span>
-        <span className="rounded-full bg-white/[0.055] px-2.5 py-1 text-[11px] font-semibold text-[#d7cabe]">Local state</span>
+        <span className="rounded-full bg-[#f0a13d]/12 px-2.5 py-1 text-[11px] font-semibold text-[#f8bd76]">Source: {activeSource.name}</span>
       </div>
     </section>
   )
@@ -498,7 +479,7 @@ function NoticeCard({ items, muted = false, title }: { items: string[]; muted?: 
 }
 
 function AboutPage() {
-  const facts = ['Aria Interface Studio visual mock', 'Aria Core mapped settings', 'No real playback', 'No real streaming', 'No real provider auth', 'No real filesystem/cache mutation', 'No Android shell implementation', 'No persistence']
+  const facts = ['Aria music player', 'Local library source', 'Playback preferences', 'Library organization', 'Source management', 'Interface controls', 'Device controls', 'Maintenance tools']
 
   return (
     <InfoCard>
@@ -506,7 +487,7 @@ function AboutPage() {
         <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f0a13d]/12">
           <Info size={15} />
         </span>
-        <h3 className="text-[11px] font-bold uppercase tracking-[0.22em]">Aria Core Status</h3>
+        <h3 className="text-[11px] font-bold uppercase tracking-[0.22em]">Aria Status</h3>
       </div>
       <div className="mt-3 grid grid-cols-1 gap-1.5">
         {facts.map((fact) => (
@@ -519,18 +500,18 @@ function AboutPage() {
 
 function getPageSubtitle(page: SettingsPage) {
   const subtitles: Record<SettingsPage, string> = {
-    root: 'Core-mapped visual player preferences',
-    interface: 'Visual behavior and display preferences.',
+    root: 'Player settings',
+    interface: 'Display and motion preferences.',
     sources: 'Active source, source visibility and provider readiness.',
     library: 'Browsing and display rules for the music library.',
     playback: 'Default playback behavior and queue policies.',
     audioQuality: 'Desired audio behavior and output policies.',
     streamingNetwork: 'Quality, transcoding and network policy preferences.',
-    offlineStorage: 'Offline and cache policy previews.',
+    offlineStorage: 'Offline and cache preferences.',
     profilesBackup: 'Profiles, preference scope and safe backup policy.',
-    androidExternal: 'Planned Android shell and external media control boundaries.',
-    advanced: 'Lab diagnostics and mock safety controls.',
-    about: 'Aria Core and interface status.',
+    androidExternal: 'External media controls and service behavior.',
+    advanced: 'Diagnostics and library maintenance.',
+    about: 'App information and interface status.',
   }
 
   return subtitles[page]

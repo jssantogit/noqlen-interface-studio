@@ -4,7 +4,7 @@ import type { NavidromeSafetyLevel } from '../navidromeConfigCatalog'
 const riskyMessages: Record<string, string> = {
   EnableDownloads: 'Downloads can let users export media from the server.',
   EnableSharing: 'Sharing can expose public links outside the local device.',
-  EnableInsightsCollector: 'Insights collection is privacy-sensitive; the mock profile keeps it disabled.',
+  EnableInsightsCollector: 'Insights collection is privacy-sensitive; keep it disabled unless needed.',
   'ExtAuth.TrustedSources': 'Trusted proxy sources can allow spoofed users if configured too broadly.',
   'Subsonic.DefaultReportRealPath': 'Reporting real paths may expose private filesystem details.',
 }

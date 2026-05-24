@@ -10,8 +10,7 @@ export function AnchorNavidromeConfigPreview({ draft }: { draft: NavidromeConfig
     <section className="w-full min-w-0 max-w-full overflow-hidden rounded-2xl border border-white/[0.065] bg-[#071014]/78 p-3.5">
       <div className="mb-3 flex min-w-0 flex-wrap items-center justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="text-sm font-semibold text-white">Config preview</h3>
-          <p className="mt-1 text-[0.68rem] leading-4 text-slate-300/72">Display-only preview. No files are written.</p>
+          <h3 className="text-sm font-semibold text-white">Config</h3>
         </div>
         <div className="grid shrink-0 grid-cols-2 rounded-full bg-white/[0.055] p-1 text-[0.66rem] font-semibold">
           {(['toml', 'env'] as const).map((item) => (

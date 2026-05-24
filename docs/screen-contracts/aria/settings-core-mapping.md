@@ -4,7 +4,7 @@
 
 Aria Settings must be based on Aria Core-supported capabilities, policies and preference-like concepts. Settings should not expose arbitrary UI ideas that do not map to Core.
 
-Settings must remain mock-only and non-persistent until real integration exists. A Settings control may represent desired behavior, display policy or safe interface visibility, but it must not imply real playback, streaming, provider auth, filesystem/cache mutation, Android shell behavior or persistence.
+Settings controls may represent desired behavior, display policy or safe interface visibility, but they must not imply playback, streaming, provider auth, filesystem/cache mutation, Android shell behavior or persistence.
 
 ## Rule: What becomes a setting
 
@@ -14,7 +14,7 @@ A Core concept may become a setting only if it represents:
 - display choice;
 - default behavior;
 - policy mode;
-- safe mock control;
+- safe local control;
 - integration readiness visibility toggle;
 - profile/preference scope.
 
@@ -60,23 +60,23 @@ Reason: Radio is a content/player feature. Settings may later include radio meta
 
 Active in current UI:
 
-- Interface: active mock controls.
+- Interface: active controls.
 - Sources & Providers: partial active source card and source sheet entry point.
-- Library: partial mock controls.
-- Playback: partial mock controls.
-- About: partial mock status card.
+- Library: partial controls.
+- Playback: partial controls.
+- About: partial status card.
 
-Planned or mock-only for later UI blocks:
+Later UI blocks:
 
-- Audio Output & Quality: planned mock policies only.
-- Streaming & Network: planned mock policies only.
-- Offline, Cache & Storage: planned mock policies only.
+- Audio Output & Quality: policy controls.
+- Streaming & Network: policy controls.
+- Offline, Cache & Storage: policy controls.
 - Smart Playlists: retired from Settings UI in Bloco 7D.2.2-I.
-- Profiles & Backup: planned mock policies only.
-- Android & External Control: planned mock policies only.
+- Profiles & Backup: policy controls.
+- Android & External Control: policy controls.
 - Advanced: planned diagnostics/developer policy area only.
 
-Current active categories may be reorganized in Bloco 7D.2.2, but they must stay mock-only and must not expand into unsupported real integration behavior.
+Current active categories may be reorganized in Bloco 7D.2.2, but they must not expand into unsupported integration behavior.
 
 ## Category: Sources & Providers
 
@@ -92,7 +92,7 @@ Core basis:
 Allowed settings:
 
 - active source display;
-- preferred source behavior, mock-only;
+- preferred source behavior;
 - show source badges;
 - show provider readiness;
 - provider compatibility display;
@@ -102,15 +102,15 @@ Not settings:
 
 - provider discovery result;
 - source availability itself;
-- real login/auth;
-- real add server;
-- real network discovery;
-- real provider mutation.
+- login/auth;
+- add server;
+- network discovery;
+- provider mutation.
 
 Status:
 
-- Current UI: partial/mock.
-- Real integration: not implemented.
+- Current UI: partial.
+- Integration: not implemented.
 
 ## Category: Library
 
@@ -210,10 +210,10 @@ Not settings:
 
 - actual output readiness state;
 - actual device status;
-- real bit-perfect claim;
-- real USB DAC control.
+- bit-perfect claim;
+- USB DAC control.
 
-Important: These are desired/mock policies until real playback/audio output exists.
+Important: These are desired policies until playback/audio output exists.
 
 ## Category: Streaming & Network
 
@@ -323,7 +323,7 @@ Not settings:
 - backup result;
 - restore result;
 - restore conflict object itself;
-- real filesystem backup/restore.
+- filesystem backup/restore.
 
 ## Category: Android & External Control
 
@@ -340,21 +340,21 @@ Core basis:
 
 Allowed settings:
 
-- Android Auto visibility, planned/mock;
-- MediaSession controls, planned/mock;
-- notification controls, planned/mock;
-- lock-screen controls, planned/mock;
-- headset/Bluetooth controls, planned/mock;
-- foreground service behavior, planned/mock.
+- Android Auto visibility;
+- MediaSession controls;
+- notification controls;
+- lock-screen controls;
+- headset/Bluetooth controls;
+- foreground service behavior.
 
 Not settings:
 
-- real Android SDK integration;
-- real MediaSession implementation;
-- real Android Auto implementation;
-- real notification implementation.
+- Android SDK integration;
+- MediaSession implementation;
+- Android Auto implementation;
+- notification implementation.
 
-Status: Planned/mock-only.
+Status: Limited.
 
 ## Category: Advanced
 
@@ -369,8 +369,8 @@ Core basis:
 
 Allowed settings:
 
-- show core diagnostics;
-- strict mock mode;
+- show diagnostics;
+- strict local mode;
 - snapshot redaction policy;
 - fake flow visibility;
 - automation safety level;
@@ -387,13 +387,13 @@ Not settings:
 Should show:
 
 - Aria Core status;
-- interface visual mock status;
-- no real playback;
-- no real streaming;
-- no real provider auth;
-- no real filesystem/cache mutation;
-- no Android shell implementation;
-- no persistence unless explicitly implemented later.
+- interface status;
+- playback status;
+- streaming status;
+- provider auth status;
+- filesystem/cache status;
+- Android shell status;
+- persistence status.
 
 ## Current UI implementation target
 
@@ -420,7 +420,7 @@ Advanced:
 - Advanced
 - About
 
-Controls may be mock-only and limited.
+Controls may be limited.
 
 ## Explicit exclusions for next UI block
 

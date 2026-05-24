@@ -31,7 +31,7 @@ export function FluxPreview() {
             </span>
             <div className="min-w-0 flex-1">
               <p className="truncate font-medium">{item}</p>
-              <p className="truncate text-xs text-slate-400">Neutral placeholder</p>
+              <p className="truncate text-xs text-slate-400">Neutral workspace</p>
             </div>
             {index < 2 ? (
               <ArrowRight className="text-slate-500" size={18} />
@@ -43,7 +43,7 @@ export function FluxPreview() {
       </div>
 
       <div className="mt-5 rounded-[1.4rem] border border-dashed border-white/15 bg-white/[0.035] p-4 text-sm leading-6 text-slate-400">
-        Flux remains intentionally neutral until dedicated concepts are provided.
+        Flux keeps the sequence focused while dedicated concepts are shaped.
       </div>
     </div>
   )

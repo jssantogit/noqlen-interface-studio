@@ -74,7 +74,7 @@ export function AriaNowPlaying({
         <button
           aria-label="More player options"
           className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
-          onClick={() => onShowToast('Player options (mock)')}
+          onClick={() => onShowToast('Player options')}
           type="button"
         >
           <MoreHorizontal size={22} />
@@ -113,7 +113,7 @@ export function AriaNowPlaying({
         <button
           aria-label="Seek through track"
           className="group relative block h-5 w-full rounded-full"
-          onClick={() => onShowToast('Seek preview only (mock)')}
+          onClick={() => onShowToast('Seek')}
           type="button"
         >
           <span className="absolute left-0 right-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-white/[0.14]" />
@@ -189,7 +189,7 @@ export function AriaNowPlaying({
               contextWasSwiped.current = false
               return
             }
-            onShowToast(`${activeContext.description}: ${activeContext.label} (mock)`)
+            onShowToast(`${activeContext.description}: ${activeContext.label}`)
           }}
           onKeyDown={(event) => {
             if (event.key === 'ArrowLeft') {

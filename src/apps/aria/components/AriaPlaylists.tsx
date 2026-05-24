@@ -9,8 +9,8 @@ type SortMode = 'Recent' | 'A-Z' | 'Most tracks'
 const actions = [
   { id: 'create', title: 'Create Playlist', subtitle: 'Start a new collection', icon: Plus, active: true },
   { id: 'folder', title: 'New Folder', subtitle: 'Group your playlists', icon: FolderPlus },
-  { id: 'import', title: 'Import Playlist', subtitle: 'Mock import preview', icon: Download },
-  { id: 'export', title: 'Export Playlist', subtitle: 'Preview export flow', icon: Share },
+  { id: 'import', title: 'Import Playlist', subtitle: 'Bring in a saved collection', icon: Download },
+  { id: 'export', title: 'Export Playlist', subtitle: 'Share a playlist file', icon: Share },
 ]
 
 const folders = [
@@ -36,9 +36,9 @@ function getPlaylistKind(index: number): Exclude<PlaylistFilter, 'All' | 'Folder
 }
 
 function getActionToast(actionId: string, title: string) {
-  if (actionId === 'import') return 'Import preview only - no file access (mock)'
-  if (actionId === 'export') return 'Export preview only - no file created (mock)'
-  return `${title} (mock)`
+  if (actionId === 'import') return 'Import playlist'
+  if (actionId === 'export') return 'Export playlist'
+  return title
 }
 
 export function AriaPlaylists({
@@ -67,7 +67,7 @@ export function AriaPlaylists({
   const cycleSortMode = () => {
     const next = sortModes[(sortModes.indexOf(sortMode) + 1) % sortModes.length]
     setSortMode(next)
-    onShowToast(`Sort: ${next} (mock)`)
+    onShowToast(`Sort: ${next}`)
   }
 
   return (
@@ -111,7 +111,7 @@ export function AriaPlaylists({
             onClick={() => {
               setSelectedFilter(filter)
               if (filter !== 'Folders') setSelectedFolder(null)
-              onShowToast(`${filter} playlists (mock)`)
+              onShowToast(`${filter} playlists`)
             }}
             type="button"
           >
@@ -130,7 +130,7 @@ export function AriaPlaylists({
               onClick={() => {
                 setSelectedFilter('Folders')
                 setSelectedFolder(folder.title)
-                onShowToast(`Opened ${folder.title} folder (mock)`)
+                onShowToast(`Opened ${folder.title} folder`)
               }}
               type="button"
             >
@@ -145,7 +145,7 @@ export function AriaPlaylists({
         </div>
         {selectedFilter === 'Folders' && selectedFolder && (
           <p className="mt-2 rounded-2xl border border-white/[0.075] bg-white/[0.035] px-3 py-2 text-[12px] text-[#c9beb1]">
-            Showing mock contents for {selectedFolder}. No folder access is performed.
+            Showing {selectedFolder}.
           </p>
         )}
       </section>
@@ -186,7 +186,7 @@ export function AriaPlaylists({
               <button
                 aria-label={`More options for ${playlist.title}`}
                 className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[#d8cec3] transition hover:bg-white/[0.06]"
-                onClick={() => onShowToast(`Options for ${playlist.title} (mock)`)}
+                onClick={() => onShowToast(`Options for ${playlist.title}`)}
                 type="button"
               >
                 <MoreHorizontal size={18} />
@@ -194,7 +194,7 @@ export function AriaPlaylists({
             </div>
           ))}
           {sortedRows.length === 0 && (
-            <div className="px-4 py-3 text-[13px] text-[#b9b1a7]">Select a folder or another filter to show mock playlists.</div>
+            <div className="px-4 py-3 text-[13px] text-[#b9b1a7]">Select a folder or another filter to show playlists.</div>
           )}
         </div>
       </section>

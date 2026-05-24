@@ -46,10 +46,10 @@ export function AriaAlbumDetail({
       </section>
 
       <div className="mt-5 flex items-center gap-2.5">
-        <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] text-[15px] font-bold text-[#1a1008] shadow-[0_12px_24px_rgba(240,161,61,0.23)]" onClick={() => onShowToast('Play album (mock)')} type="button">
+        <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] text-[15px] font-bold text-[#1a1008] shadow-[0_12px_24px_rgba(240,161,61,0.23)]" onClick={() => onShowToast('Play album')} type="button">
           <Play size={17} fill="currentColor" /> Play
         </button>
-        <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.045] text-[15px] font-semibold text-[#fff3e4]" onClick={() => onShowToast('Shuffle album (mock)')} type="button">
+        <button className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full border border-white/[0.09] bg-white/[0.045] text-[15px] font-semibold text-[#fff3e4]" onClick={() => onShowToast('Shuffle album')} type="button">
           <Shuffle size={17} /> Shuffle
         </button>
         <button aria-label="More album actions" className="grid h-11 w-11 place-items-center rounded-full border border-white/[0.08] bg-white/[0.04] text-[#f5ecdf]" onClick={() => onOpenAlbumOptions(album)} type="button">
