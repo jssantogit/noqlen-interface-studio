@@ -2,8 +2,8 @@
 
 ## Summary
 
-- Total controls audited: 198
-- Working: 180
+- Total controls audited: 201
+- Working: 190
 - Dead: 6
 - Partial: 0
 - Should not be clickable: 12
@@ -28,7 +28,7 @@ These are not necessarily dead controls. They are cases where the control respon
 | Source | Element | Current destination | Concern | Likely expected destination/behavior | Status | Suggested fix block |
 |---|---|---|---|---|---|---|
 | Listen Home | Track recent addition rows: Sunday Morning, Late Ambient, A Place | Track Details | A music-player home row tap may be expected to start/open playback, not open metadata inspection. | Open Now Playing or set current local track and open Now Playing; reserve Track Details for explicit info/more action. | PARTIAL | Aria top-level screen interactions |
-| Explore | Songs category card | Track Details | Category card implies browsing Songs, not inspecting one arbitrary track. | Open local Songs category/list or a search result set. | PARTIAL | Aria top-level screen interactions |
+| Explore | Discover cards | Search/discovery sheets or Random Album detail | Explore no longer mirrors Library category navigation. | Keep Explore focused on rediscovery: Forgotten Albums, Random Album, By Year, By Style, By Mood, By Genre and Radio. | WORKING | Aria Explore role realignment |
 | Album Detail | Track number/title rows | Track Details | In an album playback context, tapping a track commonly plays/selects it and opens Now Playing; current behavior opens metadata details. | Start/select local track and open Now Playing, or add a separate info affordance for Track Details. | PARTIAL | Aria detail screen interactions |
 | Artist Detail | Top song number/title rows | Track Details | Top songs list reads as playback content; row tap likely should play/open Now Playing rather than metadata. | Start/select local track and open Now Playing; keep more/info for Track Details if needed. | PARTIAL | Aria detail screen interactions |
 | Playlist Detail | Track artwork/title rows | Track Details | Playlist tracks usually play/select track; current behavior opens Track Details. | Start/select local track and open Now Playing. | PARTIAL | Aria detail screen interactions |
@@ -98,18 +98,19 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Playlists | Playlist title rows, 5 instances | Open Playlist Detail. | WORKING | Open playlist detail. | Aria top-level screen interactions |
 | Playlists | Playlist more buttons, 5 instances | Show `More options` toast. | PARTIAL | Open local options sheet/menu or clearly use toast-only affordance. | Aria top-level screen interactions |
 | Explore | Explore queue/status icon | Shows `Explore status` toast. | WORKING | Toast-only status is acceptable if it remains status feedback. | Aria top-level screen interactions |
-| Explore | Search affordance | Shows `Explore search` toast. | PARTIAL | Enter local search mode/filter state or clearly keep as toast-only. | Aria top-level screen interactions |
-| Explore | Genres category card | Shows `Genres` toast. | PARTIAL | Open local genre category view or restyle as passive. | Aria top-level screen interactions |
-| Explore | Albums category card | Opens Album Detail. | WORKING | Open album detail or albums category. | Aria top-level screen interactions |
-| Explore | Artists category card | Opens Artist Detail. | WORKING | Open artist detail or artists category. | Aria top-level screen interactions |
-| Explore | Radio category card | Shows `Radio` toast. | PARTIAL | Open local radio detail or restyle as passive. | Aria top-level screen interactions |
-| Explore | Songs category card | Opens Track Details. | WORKING | Open track detail or songs category. | Aria top-level screen interactions |
-| Explore | Playlists category card | Opens Playlist Detail. | WORKING | Open playlist detail or playlists category. | Aria top-level screen interactions |
-| Explore | Recently Explored See all | Shows `See all explored` toast. | PARTIAL | Open local recent exploration list or clarify as toast-only. | Aria top-level screen interactions |
-| Explore | Recently Explored Genres | Shows `Genres` toast. | PARTIAL | Open local genre view or restyle as passive. | Aria top-level screen interactions |
-| Explore | Recently Explored Artist | Opens Artist Detail. | WORKING | Open artist detail. | Aria top-level screen interactions |
-| Explore | Recently Explored Albums | Opens Album Detail. | WORKING | Open album detail. | Aria top-level screen interactions |
-| Explore | Recently Explored Recently Added | Shows `Recently Added` toast. | PARTIAL | Open local list or restyle as passive. | Aria top-level screen interactions |
+| Explore | Search affordance | Opens the Search sheet with local album, artist, track and playlist rows. | WORKING | Keep Search top-level in Explore. | Aria Explore role realignment |
+| Explore | Forgotten Albums card | Opens a local album discovery sheet. | WORKING | Open rediscovery-oriented local album list. | Aria Explore role realignment |
+| Explore | Random Album card | Opens one local album detail directly and shows Random Album feedback. | WORKING | Keep deterministic/local detail navigation. | Aria Explore role realignment |
+| Explore | By Year card | Opens a local sheet with year chips. | WORKING | Keep year chips local and app-like. | Aria Explore role realignment |
+| Explore | By Style card | Opens a local sheet with style chips. | WORKING | Keep style chips local and app-like. | Aria Explore role realignment |
+| Explore | By Mood card | Opens a local sheet with mood chips. | WORKING | Keep mood chips local and app-like. | Aria Explore role realignment |
+| Explore | By Genre card | Opens the existing local genre sheet under discovery context. | WORKING | Keep Genre discovery separate from Library category navigation. | Aria Explore role realignment |
+| Explore | Radio Browse control | Opens the Radio sheet. | WORKING | Radio represents user-added internet radio stations. | Aria Explore role realignment |
+| Explore | Radio station rows: Soma FM, Radio Paradise, NTS Radio | Open the Radio sheet with internet-radio framing. | WORKING | Keep station copy as internet radio, not generated mixes. | Aria Explore role realignment |
+| Explore | Recently Explored Forgotten Albums | Opens the Forgotten Albums sheet. | WORKING | Keep recent shortcuts discovery-oriented. | Aria Explore role realignment |
+| Explore | Recently Explored By Mood | Opens the By Mood sheet. | WORKING | Keep recent shortcuts discovery-oriented. | Aria Explore role realignment |
+| Explore | Recently Explored By Year | Opens the By Year sheet. | WORKING | Keep recent shortcuts discovery-oriented. | Aria Explore role realignment |
+| Explore | Recently Explored Radio | Opens the Radio sheet. | WORKING | Keep recent shortcuts discovery-oriented. | Aria Explore role realignment |
 | Album Detail | Back | Returns to active top-level tab. | WORKING | Return from detail to previous top-level tab. | Aria detail screen interactions |
 | Album Detail | Header more actions | Removed; header is navigation-only. | SHOULD_NOT_BE_CLICKABLE | Keep one album contextual menu entry point. | Aria detail screen interactions |
 | Album Detail | Artist link | Opens matching Artist Detail when artist data exists; otherwise shows unavailable toast. | WORKING | Open Artist Detail or restyle as passive metadata. | Aria detail screen interactions |
@@ -347,6 +348,14 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Lyrics timeline uses the same shared progress, updates elapsed time and derives the highlighted lyric line from the current position.
 - Queue rows select the current track, row options expose play-next/details/remove actions, clear uses a local confirmation panel and grip controls move tracks down.
 - Queue mutations stay in React state for the current session and do not add integration behavior.
+
+## Bloco 7E.1 Resolution Notes
+
+- Library and Explore roles were separated.
+- Library remains collection navigation for Songs, Albums, Artists, Genres, Folders, Compilations, Playlists and Recently Added.
+- Explore now focuses on discovery: Forgotten Albums, Random Album, By Year, By Style, By Mood, By Genre and Radio.
+- Songs, Albums, Artists and Playlists were removed as primary Explore cards.
+- Radio is treated as user-added internet radio, not generated mixes.
 
 ## Notes
 

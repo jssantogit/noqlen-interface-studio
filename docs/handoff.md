@@ -78,6 +78,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D.2.3-I — Refatorar Settings para estrutura app-like
 [x] Bloco 7D.2.3-P — Polir Settings app-like antes do 7E
 [x] Bloco 7E — Completar interações de playback overlays do Aria
+[x] Bloco 7E.1 — Resolver conflito entre Library e Explore
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
 [ ] Bloco 9 — Refatorar Anchor sem mudar aparência
@@ -288,6 +289,16 @@ Unknown / browser-check needed: 0
 - [x] Preserve Now Playing visual spacing as currently accepted.
 - [x] Now Playing, Lyrics and Queue share current track and progress from `AriaPreview.tsx`.
 - [x] Queue select, remove, move-next, move-down and clear behavior stays in local React state.
+
+### Bloco 7E.1 — Library and Explore role separation
+
+- [x] Explore no longer repeats Library primary categories.
+- [x] Explore is positioned as discovery/rediscovery.
+- [x] Library remains organized collection browsing.
+- [x] Search remains top-level in Explore.
+- [x] Discover section added.
+- [x] Radio section represents user-added internet radios.
+- [x] No visible prototype/development language reintroduced.
 
 ### Bloco 7F — Final no-dead-control sweep
 

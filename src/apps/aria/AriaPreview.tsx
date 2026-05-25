@@ -35,7 +35,7 @@ type AriaDetailScreen =
   | { type: 'libraryRecent' }
 
 type AriaPlaybackOverlay = 'nowPlaying' | 'lyrics' | 'queue'
-type ExploreMode = 'search' | 'genres' | 'albums' | 'artists' | 'radios' | 'songs' | 'playlists' | 'recent'
+type ExploreMode = 'search' | 'forgottenAlbums' | 'randomAlbum' | 'year' | 'style' | 'mood' | 'genre' | 'radio'
 type AriaSheet =
   | { type: 'source' }
   | { type: 'settings' }
@@ -65,9 +65,12 @@ const activeSource: ActiveSource = {
   detail: 'Device storage',
 }
 const localGenres = ['Ambient', 'Classical', 'Progressive Metal', 'Electronic', 'Jazz']
-const localRadios = ['Local Mix Radio', 'Focus Radio', 'Discovery Radio']
+const localRadios = ['Soma FM', 'Radio Paradise', 'NTS Radio']
 const localFolders = ['Local Library', 'Imported Archive', 'Focus Collections']
 const localCompilations = ['Piano Sketches', 'Late Night Edits', 'Collected Singles']
+const discoveryYears = ['2020s', '2010s', '2000s', '1990s', 'Older']
+const discoveryStyles = ['Live', 'Instrumental', 'Acoustic', 'Long tracks', 'Hi-Res', 'Compilations']
+const discoveryMoods = ['Focus', 'Night', 'Heavy', 'Calm', 'Energetic', 'Melancholic']
 const librarySheetCategoryTitles: Record<AriaLibrarySheetCategoryId, string> = {
   genres: 'Genres',
   folders: 'Folders',
@@ -286,9 +289,17 @@ export function AriaPreview() {
   }, [])
 
   const handleOpenExploreMode = useCallback((mode: ExploreMode, label: string) => {
+    if (mode === 'randomAlbum') {
+      const album = ariaAlbums[1] ?? ariaAlbums[0]
+
+      pushDetail({ type: 'album', album })
+      showToast(`Random Album: ${album.title}`)
+      return
+    }
+
     setActiveSheet({ type: 'exploreMode', mode })
     showToast(label)
-  }, [showToast])
+  }, [pushDetail, showToast])
 
   const handleNavigateToExplore = useCallback(() => {
     setActiveTab('explore')
@@ -529,9 +540,19 @@ export function AriaPreview() {
 
     if (activeSheet?.type === 'exploreMode') {
       const mode = activeSheet.mode
-      const title = mode === 'radios' ? 'Radio' : mode === 'recent' ? 'Recently Explored' : mode[0].toUpperCase() + mode.slice(1)
+      const exploreSheetTitles: Record<ExploreMode, string> = {
+        search: 'Search',
+        forgottenAlbums: 'Forgotten Albums',
+        randomAlbum: 'Random Album',
+        year: 'By Year',
+        style: 'By Style',
+        mood: 'By Mood',
+        genre: 'By Genre',
+        radio: 'Radio',
+      }
+      const title = exploreSheetTitles[mode]
       return (
-        <AriaBottomSheet onClose={handleCloseSheet} title={title}>
+        <AriaBottomSheet onClose={handleCloseSheet} subtitle={mode === 'radio' ? 'Internet radio stations' : undefined} title={title}>
           {mode === 'search' ? (
             <div className="space-y-3">
               <SheetGroup title="Albums">{ariaAlbums.slice(0, 2).map((album) => <SheetRow key={album.id} title={album.title} subtitle={album.artist} onClick={() => openAlbumFromSheet(album)} />)}</SheetGroup>
@@ -539,18 +560,18 @@ export function AriaPreview() {
               <SheetGroup title="Tracks">{ariaQueue.slice(0, 2).map((track) => <SheetRow key={track.id} title={track.title} subtitle={track.artist} onClick={() => openTrackFromSheet(track)} />)}</SheetGroup>
               <SheetGroup title="Playlists">{ariaPlaylists.slice(0, 2).map((playlist) => <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks`} onClick={() => openPlaylistFromSheet(playlist)} />)}</SheetGroup>
             </div>
-          ) : mode === 'genres' ? (
+          ) : mode === 'forgottenAlbums' ? (
+            <SheetList>{ariaAlbums.slice().reverse().map((album) => <SheetRow key={album.id} title={album.title} subtitle={`${album.artist} · ${album.year}`} onClick={() => openAlbumFromSheet(album)} />)}</SheetList>
+          ) : mode === 'year' ? (
+            <SheetGrid>{discoveryYears.map((year) => <SheetChip key={year} label={year} onClick={() => showToast(`${year} discovery`)} />)}</SheetGrid>
+          ) : mode === 'style' ? (
+            <SheetGrid>{discoveryStyles.map((style) => <SheetChip key={style} label={style} onClick={() => showToast(`${style} discovery`)} />)}</SheetGrid>
+          ) : mode === 'mood' ? (
+            <SheetGrid>{discoveryMoods.map((mood) => <SheetChip key={mood} label={mood} onClick={() => showToast(`${mood} discovery`)} />)}</SheetGrid>
+          ) : mode === 'genre' ? (
             <SheetGrid>{localGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre`)} />)}</SheetGrid>
-          ) : mode === 'albums' || mode === 'recent' ? (
-            <SheetList>{ariaAlbums.map((album) => <SheetRow key={album.id} title={album.title} subtitle={`${album.artist} · ${album.year}`} onClick={() => openAlbumFromSheet(album)} />)}</SheetList>
-          ) : mode === 'artists' ? (
-            <SheetList>{ariaArtists.map((artist) => <SheetRow key={artist.id} title={artist.name} subtitle={artist.genre} onClick={() => openArtistFromSheet(artist)} />)}</SheetList>
-          ) : mode === 'radios' ? (
-            <SheetList>{localRadios.map((radio) => <SheetRow key={radio} title={radio} onClick={() => showToast(radio)} variant="action" />)}</SheetList>
-          ) : mode === 'songs' ? (
-            <SheetList>{ariaQueue.map((track) => <SheetRow key={track.id} title={track.title} subtitle={`${track.artist} · ${track.album}`} onClick={() => openTrackFromSheet(track)} />)}</SheetList>
           ) : (
-            <SheetList>{ariaPlaylists.map((playlist) => <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks`} onClick={() => openPlaylistFromSheet(playlist)} />)}</SheetList>
+            <SheetList>{localRadios.map((radio) => <SheetRow key={radio} title={radio} subtitle="User-added internet radio" onClick={() => showToast(`${radio} station`)} variant="action" />)}</SheetList>
           )}
         </AriaBottomSheet>
       )
