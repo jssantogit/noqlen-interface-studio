@@ -86,6 +86,19 @@ Expected:
 - Import Playlist opens import source choices.
 - No file picker or real file access.
 
+Implementation note:
+
+- Implemented Create Playlist, Smart Playlist expansion and Import Playlist flows.
+- New Folder, Export Playlist and Folder Detail remain under 7F.2.
+
+7F.1 contract from the reference:
+
+- Create Playlist must borrow the left reference sheet structure directly: title/subtitle, two large field surfaces, a labeled selectable-card grid, tag pills with remove glyphs, add-tag pill, color preview and horizontal color rail, and one large amber CTA.
+- Create Playlist must not introduce unrelated controls such as visibility, sharing, device/account/source selection or generic settings-style toggle rows.
+- Smart Playlist must stay inside the Create Playlist flow by replacing the selectable-card grid with rule cards and path-mode-style radio rows while keeping the same field/tag/color/CTA sheet structure.
+- Import Playlist must borrow the middle reference sheet structure directly: source/playlist row, format chips, path-mode-style option rows, destination row and one large amber CTA. Link remains a visible source choice only; it must not trigger a network flow.
+- Folder detail and its overflow menu are documented by the right reference image but remain deferred to 7F.2.
+
 References:
 
 - `aria_playlist_new-folder-export-folder-detail_reference.png`
