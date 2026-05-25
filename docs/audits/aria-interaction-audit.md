@@ -8,6 +8,7 @@
 - Partial: 0
 - Should not be clickable: 12
 - Unknown / browser-check needed: 0
+- Reference-backed remaining interaction work: TODO, tracked under `Reference-backed Remaining Interaction Work`.
 - Console errors: 0 runtime errors observed in Playwright. Browser console showed React DevTools info messages and one Vite reconnect/polling log while the dev server was restarted during audit.
 
 Static inspection used `src/apps/aria/AriaPreview.tsx`, `ariaInteractionMap.ts`, `ariaMockData.ts`, all Aria component files, and the Aria screen contract/handoff docs. Browser inspection used the local app at `http://127.0.0.1:5173`, selected Aria, visited every top-level tab, opened Album Detail, Artist Detail, Playlist Detail, Track Details, Now Playing, Lyrics and Queue, and clicked the visible controls represented below. Chrome DevTools MCP could not start in this environment because the browser backend reported a missing X server, so console validation was performed with Playwright MCP.
@@ -357,12 +358,73 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Songs, Albums, Artists and Playlists were removed as primary Explore cards.
 - Radio is treated as user-added internet radio, not generated mixes.
 
+## Bloco 7F.0 Resolution Notes
+
+- New reference images were mapped to the remaining missing interactions in `docs/screen-contracts/aria/missing-interaction-reference-map.md`.
+- Manual review found controls that still need real local flows instead of simple feedback.
+- The previous audit summary must not be treated as final.
+- 7F is now split into reference-backed implementation blocks.
+- Final no-dead-control sweep is deferred until 7F.7.
+
+## Reference-backed Remaining Interaction Work
+
+### Playlist interactions 1
+
+- [ ] Create Playlist opens a creation flow.
+- [ ] Smart Playlist Expansion opens or expands a local criteria flow.
+- [ ] Import Playlist opens import source choices without file picker/device access.
+
+### Playlist interactions 2
+
+- [ ] New Folder opens a folder creation form.
+- [ ] Export Playlist opens a relevant action sheet.
+- [ ] Folder Detail opens folder contents/actions instead of only filtering plus feedback.
+- [ ] Folder add/edit/rename/export/delete follow the new folder references.
+- [ ] Delete folder uses confirmation.
+
+### Library category interactions
+
+- [ ] Songs remains a useful Library category view.
+- [ ] Albums remains a useful Library category view.
+- [ ] Artists remains a useful Library category view.
+- [ ] Genres gains useful local browsing beyond feedback-only chips.
+- [ ] Folders gains useful app-library folder browsing without device access.
+- [ ] Compilations gains useful collection browsing.
+
+### Explore discovery/search interactions requiring reconciliation
+
+- [ ] Genres remains discovery-oriented in Explore.
+- [ ] Albums appears only in search/discovery result rows or sheets, not as a primary Explore card.
+- [ ] Artists appears only in search/discovery result rows or sheets, not as a primary Explore card.
+- [ ] Songs appears only in search/discovery result rows or sheets, not as a primary Explore card.
+- [ ] Playlists appears only in search/discovery result rows or sheets, not as a primary Explore card.
+- [ ] Library continues to own structural Songs, Albums, Artists, Genres, Folders and Compilations browsing.
+
+### Radio interactions
+
+- [ ] Radio represents user-added internet radio stations.
+- [ ] Add Radio opens a form.
+- [ ] Radio station rows open preview/details.
+- [ ] Radio does not become generated mixes.
+
+### Now Playing extra actions
+
+- [ ] Add to Playlist opens playlist selection.
+- [ ] Playback Info opens an app-like info panel with format, sample rate, source, output and queue position.
+
+### Queue save-as-playlist
+
+- [ ] Save as Playlist opens a form.
+- [ ] User can enter playlist name.
+- [ ] Flow can include current track or upcoming queue.
+- [ ] Save action updates local UI state or gives app-like confirmation.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.
 - Duplicated navigation handlers: `AriaTrackRow` number/artwork and title buttons both open the same track detail. This works, but creates multiple focusable controls per row.
 - Visual affordances that should probably become passive if not implemented: mini player progress underline, artist tags, static metadata rows, lyric lines, and possibly queue drag handles if local reorder is not planned.
-- Interactions that can remain toast-only: create playlist, new folder, save queue as playlist, show in folder, static status buttons, and current-track feedback, provided copy does not imply filesystem/download behavior.
+- Interactions that can remain toast-only only if no reference-backed flow exists: show in folder, static status buttons and current-track feedback. Create playlist, new folder and save queue as playlist now have reference-backed TODOs and should not stay feedback-only.
 - Interactions that should open detail: album cards/rows, artist cards/rows, playlist cards/rows, track rows, album artist link if it remains visually link-like, and artist discography rows with chevrons.
 - Interactions that should toggle local state: playlist filter chips, sort selection if visible, favorite in Track Details, shuffle/repeat, play/pause, and possibly local queue item selection/current track.
 - Interactions that should open overlay or sheet: global mini player, lyrics, queue, and all menu/more/options buttons if their ellipsis affordance remains.

@@ -39,6 +39,14 @@ aria_nowplaying_reference.png
 
 The old `aria_reference1.png`, `aria_reference2.png` and legacy showcase HTML are no longer the source of truth.
 
+Future missing-interaction implementation blocks must also use:
+
+```txt
+docs/screen-contracts/aria/missing-interaction-reference-map.md
+```
+
+Reference images under `docs/references/aria/` are visual guidance for missing flows. The missing-interaction map defines which image covers each trigger, destination type, likely component ownership, implementation block, avoid list and expected app-facing behavior.
+
 Additional chat-approved concepts guide future work:
 
 ```txt
@@ -148,9 +156,12 @@ Must preserve:
 
 - discovery hub role;
 - search as affordance only;
-- visual category cards for Genres, Albums, Artists, Radio, Songs and Playlists;
+- visual discovery cards for Forgotten Albums, Random Album, By Year, By Style, By Mood and By Genre;
+- Radio as user-added internet radio stations;
 - Recently Explored section;
 - distinction from Search.
+
+Explore must not reintroduce Albums, Artists, Songs or Playlists as primary root cards. Those entities may appear inside search/discovery result sheets while Library owns structural collection browsing.
 
 ### Playlists
 

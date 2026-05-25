@@ -79,7 +79,14 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D.2.3-P — Polir Settings app-like antes do 7E
 [x] Bloco 7E — Completar interações de playback overlays do Aria
 [x] Bloco 7E.1 — Resolver conflito entre Library e Explore
-[ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
+[x] Bloco 7F.0 — Mapear referências visuais para interações faltantes
+[ ] Bloco 7F.1 — Playlist create/import/smart flows
+[ ] Bloco 7F.2 — Playlist folders/export/detail flows
+[ ] Bloco 7F.3 — Library category flows
+[ ] Bloco 7F.4 — Radio flows
+[ ] Bloco 7F.5 — Now Playing extra actions
+[ ] Bloco 7F.6 — Queue save as playlist
+[ ] Bloco 7F.7 — Final no-dead-control sweep
 [ ] Bloco 8 — Testes de Aria
 [ ] Bloco 9 — Refatorar Anchor sem mudar aparência
 [ ] Bloco 10 — Refatorar Forge sem mudar aparência
@@ -106,6 +113,14 @@ Partial: 0
 Should not be clickable: 12
 Unknown / browser-check needed: 0
 ```
+
+Reference-backed remaining interaction work is tracked in:
+
+```txt
+docs/screen-contracts/aria/missing-interaction-reference-map.md
+```
+
+The numeric summary above must not be treated as final while 7F.1 through 7F.7 remain open.
 
 ### Bloco 7B — Global/navigation interactions
 
@@ -300,12 +315,63 @@ Unknown / browser-check needed: 0
 - [x] Radio section represents user-added internet radios.
 - [x] No visible prototype/development language reintroduced.
 
-### Bloco 7F — Final no-dead-control sweep
+### Bloco 7F.0 — Missing interaction reference map
+
+- [x] Create `docs/screen-contracts/aria/missing-interaction-reference-map.md`.
+- [x] Map new Aria reference images to remaining missing interaction flows.
+- [x] Preserve Library/Explore separation from Bloco 7E.1.
+- [x] Split final work into reference-backed blocks 7F.1 through 7F.7.
+- [x] Keep this as a docs/spec block only.
+
+### Bloco 7F.1 — Playlist create/import/smart flows
+
+- [ ] Create Playlist opens an app-like creation sheet.
+- [ ] Smart Playlist expansion is part of create flow or a dedicated sheet.
+- [ ] Import Playlist opens source choices without file picker/device access.
+
+### Bloco 7F.2 — Playlist folders/export/detail flows
+
+- [ ] New Folder opens a local form.
+- [ ] Export Playlist opens a relevant sheet instead of simple feedback.
+- [ ] Folder rows open folder detail/sheet, not only filter state.
+- [ ] Folder add/edit/rename/export/delete flows follow references.
+- [ ] Folder delete uses confirmation.
+
+### Bloco 7F.3 — Library category flows
+
+- [ ] Songs, Albums and Artists remain useful Library category views.
+- [ ] Genres opens useful local browsing beyond feedback-only chips.
+- [ ] Folders opens useful local folder browsing without device access.
+- [ ] Compilations opens useful local collection browsing.
+- [ ] Library remains structural browsing.
+
+### Bloco 7F.4 — Radio flows
+
+- [ ] Radio represents user-added internet radio stations.
+- [ ] Add Radio opens a form.
+- [ ] Radio station rows open preview/details.
+- [ ] Radio does not become generated mixes.
+
+### Bloco 7F.5 — Now Playing extra actions
+
+- [ ] Add to Playlist opens playlist selection.
+- [ ] Playback Info opens an app-like info panel.
+- [ ] Info panel can show format, sample rate, source, output and queue position.
+
+### Bloco 7F.6 — Queue save as playlist
+
+- [ ] Save as playlist opens a form.
+- [ ] User can enter playlist name.
+- [ ] Flow can include current track or upcoming queue.
+- [ ] Save action updates local UI state or gives app-like confirmation.
+
+### Bloco 7F.7 — Final no-dead-control sweep
 
 - [ ] Re-run browser audit across all Aria tabs.
 - [ ] Re-open every detail screen.
 - [ ] Re-open Now Playing, Lyrics and Queue.
 - [ ] Verify every visible control responds or is visually passive.
+- [ ] Compare against `docs/screen-contracts/aria/missing-interaction-reference-map.md`.
 - [ ] Confirm no new visual regressions.
 - [ ] Confirm no integration was added.
 - [ ] Update `docs/audits/aria-interaction-audit.md` with final status.
