@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Download, FolderPlus, MoreHorizontal, Plus, Share, SlidersHorizontal } from 'lucide-react'
 import type { AriaPlaylist } from '../ariaMockData'
+import { ariaPlaylists } from '../ariaMockData'
 
 type PlaylistFilter = 'All' | 'Folders' | 'Created' | 'Imported' | 'Favorites'
 type SortMode = 'Recent' | 'A-Z' | 'Most tracks'
@@ -18,7 +19,8 @@ const folders = [
   { id: 'ambient', title: 'Ambient / Focus', count: '4 playlists' },
 ]
 
-const extraPlaylistRows: AriaPlaylist[] = [
+const playlistRows = [
+  ...ariaPlaylists,
   { id: 'prog-archives', title: 'Prog Archives', description: 'Long-form records and live favorites.', trackCount: 126, duration: '8h 14m', accent: 'from-stone-200 via-stone-500 to-slate-900' },
   { id: 'late-ambient', title: 'Late Ambient', description: 'Low light textures and piano fragments.', trackCount: 32, duration: '2h 42m', accent: 'from-violet-200 via-violet-500 to-slate-900' },
 ]
@@ -27,52 +29,30 @@ const rowArt = ['aria-art-waves', 'aria-art-architecture', 'aria-art-mountain', 
 const filters: PlaylistFilter[] = ['All', 'Folders', 'Created', 'Imported', 'Favorites']
 const sortModes: SortMode[] = ['Recent', 'A-Z', 'Most tracks']
 
-function getPlaylistKind(playlist: AriaPlaylist, index: number): Exclude<PlaylistFilter, 'All' | 'Folders'> {
-  if (playlist.id.includes('imported')) return 'Imported'
-  if (playlist.id.includes('created') || playlist.id.includes('smart')) return 'Created'
+function getPlaylistKind(index: number): Exclude<PlaylistFilter, 'All' | 'Folders'> {
   if (index === 1) return 'Imported'
   if (index === 2) return 'Favorites'
   return 'Created'
 }
 
-function getActionHandler({
-  actionId,
-  onOpenCreatePlaylist,
-  onOpenImportPlaylist,
-  onShowToast,
-  title,
-}: {
-  actionId: string
-  onOpenCreatePlaylist: () => void
-  onOpenImportPlaylist: () => void
-  onShowToast: (message: string) => void
-  title: string
-}) {
-  if (actionId === 'create') return onOpenCreatePlaylist
-  if (actionId === 'import') return onOpenImportPlaylist
+function getActionToast(actionId: string, title: string) {
+  if (actionId === 'import') return 'Import playlist'
   if (actionId === 'export') return 'Export playlist'
-  return () => onShowToast(title)
+  return title
 }
 
 export function AriaPlaylists({
-  onOpenCreatePlaylist,
-  onOpenImportPlaylist,
   onOpenPlaylist,
   onShowToast,
-  playlists,
 }: {
-  onOpenCreatePlaylist: () => void
-  onOpenImportPlaylist: () => void
   onOpenPlaylist: (playlist: AriaPlaylist) => void
   onShowToast: (message: string) => void
-  playlists: AriaPlaylist[]
 }) {
   const [selectedFilter, setSelectedFilter] = useState<PlaylistFilter>('All')
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
   const [sortMode, setSortMode] = useState<SortMode>('Recent')
 
-  const playlistRows = [...playlists, ...extraPlaylistRows]
-  const rowsWithMeta = playlistRows.map((playlist, index) => ({ playlist, index, kind: getPlaylistKind(playlist, index) }))
+  const rowsWithMeta = playlistRows.map((playlist, index) => ({ playlist, index, kind: getPlaylistKind(index) }))
   const filteredRows = rowsWithMeta.filter((row) => {
     if (selectedFilter === 'All') return true
     if (selectedFilter === 'Folders') return selectedFolder ? row.index % folders.length === folders.findIndex((folder) => folder.title === selectedFolder) : false
@@ -108,22 +88,7 @@ export function AriaPlaylists({
                   : 'border-white/[0.075] bg-white/[0.035] text-[#d8cdc1]'
               }`}
               key={action.id}
-              onClick={() => {
-                const handler = getActionHandler({
-                  actionId: action.id,
-                  onOpenCreatePlaylist,
-                  onOpenImportPlaylist,
-                  onShowToast,
-                  title: action.title,
-                })
-
-                if (typeof handler === 'string') {
-                  onShowToast(handler)
-                  return
-                }
-
-                handler()
-              }}
+              onClick={() => onShowToast(getActionToast(action.id, action.title))}
               type="button"
             >
               <Icon size={23} strokeWidth={1.5} />

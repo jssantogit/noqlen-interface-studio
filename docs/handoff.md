@@ -80,7 +80,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7E — Completar interações de playback overlays do Aria
 [x] Bloco 7E.1 — Resolver conflito entre Library e Explore
 [x] Bloco 7F.0 — Mapear referências visuais para interações faltantes
-[x] Bloco 7F.1 — Playlist create/import/smart flows
+[ ] Bloco 7F.1 — Playlist create/import/smart flows
 [ ] Bloco 7F.2 — Playlist folders/export/detail flows
 [ ] Bloco 7F.3 — Library category flows
 [ ] Bloco 7F.4 — Radio flows
@@ -325,14 +325,9 @@ The numeric summary above must not be treated as final while 7F.1 through 7F.7 r
 
 ### Bloco 7F.1 — Playlist create/import/smart flows
 
-- [x] Create Playlist opens a creation sheet.
-- [x] Regular playlist creation has app-facing options.
-- [x] Smart Playlist expansion exists inside creation flow.
-- [x] Import Playlist opens source/options sheet.
-- [x] Created/imported playlists can appear in the Playlists list for the current session.
-- [x] No file picker, network request or persistence added.
-- [x] New Folder, Export Playlist and Folder Detail remain deferred to 7F.2.
-- [x] No visible development/prototype language reintroduced.
+- [ ] Create Playlist opens an app-like creation sheet.
+- [ ] Smart Playlist expansion is part of create flow or a dedicated sheet.
+- [ ] Import Playlist opens source choices without file picker/device access.
 
 ### Bloco 7F.2 — Playlist folders/export/detail flows
 
