@@ -10,6 +10,8 @@ Existing technical contracts remain internal references. They help implementatio
 
 Implementation note: Bloco 7D.2.3-I implemented this structure in `AriaSettingsSheet.tsx`.
 
+Polish note: Bloco 7D.2.3-P changed the visible root title to `Settings`, removed the root subtitle and required Accent color to use a compact color selector when more than four choices exist.
+
 ## 2. Core rule
 
 The Settings UI starts from user-facing app needs, then maps to Core contracts where useful.

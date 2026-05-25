@@ -333,6 +333,13 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Advanced was simplified to Debug, Database and Network groups.
 - No real functionality or persistence was added.
 
+## Bloco 7D.2.3-P Resolution Notes
+
+- Settings root header was simplified to `Settings`.
+- Redundant root subtitle was removed.
+- Accent color selector was changed to a compact color-chip layout.
+- Settings structure from 7D.2.3-I was preserved.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.

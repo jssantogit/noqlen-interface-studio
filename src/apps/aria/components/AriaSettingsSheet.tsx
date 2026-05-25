@@ -45,9 +45,10 @@ type SegmentOption<T extends string> = {
 }
 
 type CategoryWeight = 'primary' | 'secondary' | 'system'
+type AccentColor = 'amber' | 'blue' | 'red' | 'green' | 'pink'
 
 const pageTitles: Record<SettingsPage, string> = {
-  root: 'Aria Settings',
+  root: 'Settings',
   interface: 'Interface',
   library: 'Library',
   playback: 'Playback',
@@ -68,6 +69,14 @@ const backupOptions = [
   { label: 'Offline rules' },
 ] as const
 
+const accentColorOptions: { label: string; swatch: string; value: AccentColor }[] = [
+  { label: 'Amber', swatch: '#f0a13d', value: 'amber' },
+  { label: 'Blue', swatch: '#60a5fa', value: 'blue' },
+  { label: 'Red', swatch: '#fb7185', value: 'red' },
+  { label: 'Green', swatch: '#4ade80', value: 'green' },
+  { label: 'Pink', swatch: '#f472b6', value: 'pink' },
+]
+
 export function AriaSettingsSheet({
   activeSource,
   onClose,
@@ -82,7 +91,7 @@ export function AriaSettingsSheet({
   const [settingsPage, setSettingsPage] = useState<SettingsPage>('root')
 
   const [appearance, setAppearance] = useState<'system' | 'dark' | 'light'>('system')
-  const [accentColor, setAccentColor] = useState<'amber' | 'blue' | 'red' | 'green' | 'pink'>('amber')
+  const [accentColor, setAccentColor] = useState<AccentColor>('amber')
   const [dynamicColor, setDynamicColor] = useState<'off' | 'artwork' | 'system'>('off')
   const [startScreen, setStartScreen] = useState<'listen' | 'library' | 'playlists' | 'explore'>('listen')
   const [compactLists, setCompactLists] = useState(false)
@@ -166,7 +175,7 @@ export function AriaSettingsSheet({
         <>
           <SettingsGroup icon={<Palette size={14} />} title="Theme">
             <SegmentedSetting label="Appearance" onChange={(value) => setSegment('Appearance', value, setAppearance)} options={[{ label: 'System', value: 'system' }, { label: 'Dark', value: 'dark' }, { label: 'Light', value: 'light' }]} value={appearance} />
-            <SegmentedSetting label="Accent color" onChange={(value) => setSegment('Accent color', value, setAccentColor)} options={[{ label: 'Amber', value: 'amber' }, { label: 'Blue', value: 'blue' }, { label: 'Red', value: 'red' }, { label: 'Green', value: 'green' }, { label: 'Pink', value: 'pink' }]} value={accentColor} />
+            <AccentColorSetting onChange={(value) => setSegment('Accent color', value, setAccentColor)} value={accentColor} />
             <SegmentedSetting label="Dynamic color" onChange={(value) => setSegment('Dynamic color', value, setDynamicColor)} options={[{ label: 'Off', value: 'off' }, { label: 'Album artwork', value: 'artwork' }, { label: 'System colors', value: 'system' }]} value={dynamicColor} />
           </SettingsGroup>
           <SettingsGroup icon={<ListFilter size={14} />} title="Layout">
@@ -324,7 +333,7 @@ export function AriaSettingsSheet({
   )
 
   return (
-    <AriaBottomSheet onClose={onClose} subtitle={getPageSubtitle(settingsPage)} title={pageTitles[settingsPage]}>
+    <AriaBottomSheet onClose={onClose} subtitle={settingsPage === 'root' ? undefined : getPageSubtitle(settingsPage)} title={pageTitles[settingsPage]}>
       {pageContent}
     </AriaBottomSheet>
   )
@@ -446,6 +455,31 @@ function SegmentedSetting<T extends string>({ label, onChange, options, value }:
   )
 }
 
+function AccentColorSetting({ onChange, value }: { onChange: (value: AccentColor) => void; value: AccentColor }) {
+  return (
+    <div className="rounded-[18px] bg-white/[0.035] p-3">
+      <p className="text-[14px] font-semibold leading-tight text-[#fff3e4]">Accent color</p>
+      <div className="mt-2 grid grid-cols-3 gap-1.5">
+        {accentColorOptions.map((option) => {
+          const active = option.value === value
+          return (
+            <button
+              aria-pressed={active}
+              className={`inline-flex items-center justify-center gap-1.5 rounded-full border px-2.5 py-1.5 text-[11px] font-bold transition ${active ? 'border-[#f0a13d]/55 bg-[#f0a13d]/14 text-[#fff3e4] shadow-[0_0_0_1px_rgba(240,161,61,0.16)]' : 'border-white/[0.075] bg-white/[0.035] text-[#c9beb2] hover:bg-white/[0.07]'}`}
+              key={option.value}
+              onClick={() => onChange(option.value)}
+              type="button"
+            >
+              <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: option.swatch }} />
+              <span>{option.label}</span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 function InfoCard({ children }: { children: ReactNode }) {
   return <section className="rounded-[20px] border border-white/[0.075] bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.02))] p-3.5">{children}</section>
 }
@@ -511,7 +545,7 @@ function getBackPage(page: SettingsPage): SettingsPage {
 
 function getPageSubtitle(page: SettingsPage) {
   const subtitles: Record<SettingsPage, string> = {
-    root: 'Settings',
+    root: '',
     interface: 'Theme, layout and player display.',
     library: 'Browsing, sorting and metadata labels.',
     playback: 'Output, queue and playback behavior.',

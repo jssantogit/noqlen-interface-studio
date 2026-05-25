@@ -25,8 +25,8 @@ Root order:
 
 Header:
 
-- Title: `Aria Settings`
-- Subtitle: `Player preferences`
+- Title: `Settings`
+- No root subtitle.
 - Compact status strip/card:
 - Active source
 - Interface status
@@ -114,6 +114,8 @@ Segmented control:
 - mode selection.
 - 2-4 options.
 - active state warm amber.
+- Do not force five or more choices into a one-line segmented control inside the phone frame.
+- Use chips/grid selectors for color/theme choices with many options.
 
 Info card:
 

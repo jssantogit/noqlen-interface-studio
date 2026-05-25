@@ -76,6 +76,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D.2.2-I — Implementar Settings UI com categorias filtradas do Core
 [x] Bloco 7D.2.3-S — Definir estrutura app-like das Settings
 [x] Bloco 7D.2.3-I — Refatorar Settings para estrutura app-like
+[x] Bloco 7D.2.3-P — Polir Settings app-like antes do 7E
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
@@ -266,6 +267,14 @@ Unknown / browser-check needed: 0
 - [x] Backup & Restore uses action-first flows.
 - [x] Advanced no longer exposes Visual Lab/development controls.
 - [x] About is app-like.
+- [x] No visible development/prototype language reintroduced.
+
+### Bloco 7D.2.3-P — Settings app-like polish pass
+
+- [x] Root title changed to Settings.
+- [x] Root subtitle removed.
+- [x] Accent color control changed from cramped 5-way segment to color chips/grid.
+- [x] No Settings structure changes.
 - [x] No visible development/prototype language reintroduced.
 
 ### Bloco 7E — Playback overlay interactions
