@@ -12,12 +12,8 @@ import {
   Music2,
   Palette,
   PlayCircle,
-  RadioTower,
   Shield,
   SlidersHorizontal,
-  Smartphone,
-  UserCog,
-  Volume2,
   Wifi,
   Wrench,
 } from 'lucide-react'
@@ -33,14 +29,13 @@ type ActiveSource = {
 type SettingsPage =
   | 'root'
   | 'interface'
-  | 'sources'
   | 'library'
   | 'playback'
-  | 'audioQuality'
-  | 'streamingNetwork'
-  | 'offlineStorage'
-  | 'profilesBackup'
-  | 'androidExternal'
+  | 'offlineCache'
+  | 'mediaSources'
+  | 'backupRestore'
+  | 'backupCreate'
+  | 'backupRestoreFlow'
   | 'advanced'
   | 'about'
 
@@ -54,17 +49,24 @@ type CategoryWeight = 'primary' | 'secondary' | 'system'
 const pageTitles: Record<SettingsPage, string> = {
   root: 'Aria Settings',
   interface: 'Interface',
-  sources: 'Sources & Providers',
   library: 'Library',
   playback: 'Playback',
-  audioQuality: 'Audio Output & Quality',
-  streamingNetwork: 'Streaming & Network',
-  offlineStorage: 'Offline, Cache & Storage',
-  profilesBackup: 'Profiles & Backup',
-  androidExternal: 'Android & External Control',
+  offlineCache: 'Offline & Cache',
+  mediaSources: 'Media Sources',
+  backupRestore: 'Backup & Restore',
+  backupCreate: 'Create Backup',
+  backupRestoreFlow: 'Restore Backup',
   advanced: 'Advanced',
   about: 'About',
 }
+
+const backupOptions = [
+  { label: 'Settings' },
+  { label: 'Media sources' },
+  { label: 'Playlists' },
+  { label: 'Playback history' },
+  { label: 'Offline rules' },
+] as const
 
 export function AriaSettingsSheet({
   activeSource,
@@ -79,60 +81,62 @@ export function AriaSettingsSheet({
 }) {
   const [settingsPage, setSettingsPage] = useState<SettingsPage>('root')
 
-  const [showSourceBadges, setShowSourceBadges] = useState(true)
-  const [preferLosslessLabels, setPreferLosslessLabels] = useState(true)
-  const [gapless, setGapless] = useState(false)
-  const [loudnessNormalization, setLoudnessNormalization] = useState(false)
-  const [crossfade, setCrossfade] = useState<'off' | 'short' | 'long'>('off')
+  const [appearance, setAppearance] = useState<'system' | 'dark' | 'light'>('system')
+  const [accentColor, setAccentColor] = useState<'amber' | 'blue' | 'red' | 'green' | 'pink'>('amber')
+  const [dynamicColor, setDynamicColor] = useState<'off' | 'artwork' | 'system'>('off')
+  const [startScreen, setStartScreen] = useState<'listen' | 'library' | 'playlists' | 'explore'>('listen')
   const [compactLists, setCompactLists] = useState(false)
-  const [artworkEmphasis, setArtworkEmphasis] = useState<'balanced' | 'large' | 'minimal'>('balanced')
+  const [showLibraryShortcuts, setShowLibraryShortcuts] = useState(true)
+  const [albumArtSize, setAlbumArtSize] = useState<'compact' | 'balanced' | 'large'>('balanced')
+  const [showAudioQuality, setShowAudioQuality] = useState(true)
+  const [showMusicSource, setShowMusicSource] = useState(true)
+  const [miniPlayerStyle, setMiniPlayerStyle] = useState<'compact' | 'expanded'>('compact')
+  const [showExtraTrackInfo, setShowExtraTrackInfo] = useState(false)
 
-  const [showTechnicalLabels, setShowTechnicalLabels] = useState(false)
-  const [reduceMotion, setReduceMotion] = useState(false)
   const [showFolders, setShowFolders] = useState(true)
   const [showCompilations, setShowCompilations] = useState(true)
-  const [hideEmptyCategories, setHideEmptyCategories] = useState(true)
+  const [hideEmptySections, setHideEmptySections] = useState(true)
   const [defaultSort, setDefaultSort] = useState<'recent' | 'title' | 'artist'>('recent')
-  const [searchScope, setSearchScope] = useState<'library' | 'local' | 'metadata'>('library')
-  const [defaultRepeat, setDefaultRepeat] = useState<'off' | 'one' | 'all'>('off')
-  const [defaultShuffle, setDefaultShuffle] = useState<'off' | 'songs'>('off')
-  const [resumePlayback, setResumePlayback] = useState(true)
-  const [seekStep, setSeekStep] = useState<'10s' | '15s' | '30s'>('15s')
-  const [queueBehavior, setQueueBehavior] = useState<'append' | 'playNext'>('append')
-  const [unavailableMediaHandling, setUnavailableMediaHandling] = useState<'ask' | 'skip' | 'stop'>('ask')
-  const [replayGainMode, setReplayGainMode] = useState<'off' | 'track' | 'album'>('off')
-  const [preferBitPerfect, setPreferBitPerfect] = useState(false)
+  const [searchScope, setSearchScope] = useState<'library' | 'localFiles' | 'metadata'>('library')
+  const [showFormatLabels, setShowFormatLabels] = useState(true)
+  const [showSourceLabels, setShowSourceLabels] = useState(true)
+
+  const [outputDevice, setOutputDevice] = useState<'phone' | 'usbDac' | 'remote'>('phone')
   const [preferUsbDac, setPreferUsbDac] = useState(false)
   const [preferExclusiveOutput, setPreferExclusiveOutput] = useState(false)
-  const [sampleRateHandling, setSampleRateHandling] = useState<'native' | 'fixed' | 'auto'>('native')
-  const [bitDepthHandling, setBitDepthHandling] = useState<'native' | 'fixed' | 'auto'>('native')
-  const [fadeBehavior, setFadeBehavior] = useState<'off' | 'short' | 'smooth'>('off')
-  const [formatPreference, setFormatPreference] = useState<'original' | 'lossless' | 'compatible'>('original')
-  const [streamQuality, setStreamQuality] = useState<'auto' | 'high' | 'original'>('auto')
-  const [bitrateLimit, setBitrateLimit] = useState<'none' | '320' | '256'>('none')
-  const [qualityFallback, setQualityFallback] = useState<'auto' | 'ask' | 'strict'>('auto')
-  const [dataSaver, setDataSaver] = useState(false)
-  const [meteredNetworkBehavior, setMeteredNetworkBehavior] = useState<'ask' | 'limit' | 'allow'>('ask')
-  const [transcodingPreference, setTranscodingPreference] = useState<'auto' | 'avoid' | 'always'>('auto')
-  const [offlineQuality, setOfflineQuality] = useState<'original' | 'high' | 'balanced'>('high')
-  const [cachePolicy, setCachePolicy] = useState<'manual' | 'balanced' | 'aggressive'>('balanced')
-  const [preferOfflineMedia, setPreferOfflineMedia] = useState(true)
-  const [requireCleanupConfirmation, setRequireCleanupConfirmation] = useState(true)
-  const [storageBudget, setStorageBudget] = useState<'small' | 'medium' | 'large'>('medium')
-  const [activeProfile, setActiveProfile] = useState<'default' | 'listening' | 'minimal'>('default')
-  const [preferenceScope, setPreferenceScope] = useState<'global' | 'profile'>('global')
-  const [backupScope, setBackupScope] = useState<'preferences' | 'appearance' | 'all'>('preferences')
-  const [restoreConflictBehavior, setRestoreConflictBehavior] = useState<'ask' | 'keepCurrent' | 'useBackup'>('ask')
-  const [backupSafetyConfirmation, setBackupSafetyConfirmation] = useState(true)
-  const [androidAutoVisibility, setAndroidAutoVisibility] = useState(false)
-  const [mediaSessionControls, setMediaSessionControls] = useState(false)
-  const [notificationControls, setNotificationControls] = useState(false)
-  const [lockScreenControls, setLockScreenControls] = useState(false)
-  const [headsetControls, setHeadsetControls] = useState(false)
-  const [foregroundServiceBehavior, setForegroundServiceBehavior] = useState<'automatic' | 'disabled'>('automatic')
+  const [resumePlayback, setResumePlayback] = useState(true)
+  const [gapless, setGapless] = useState(false)
+  const [volumeNormalization, setVolumeNormalization] = useState(false)
+  const [replayGainMode, setReplayGainMode] = useState<'off' | 'track' | 'album'>('off')
+  const [fadeIn, setFadeIn] = useState(false)
+  const [fadeOut, setFadeOut] = useState(false)
+  const [crossfade, setCrossfade] = useState<'off' | 'short' | 'long'>('off')
+  const [repeatMode, setRepeatMode] = useState<'off' | 'one' | 'all'>('off')
+  const [shuffleStyle, setShuffleStyle] = useState<'standard' | 'fresh' | 'deep'>('standard')
+  const [saveQueue, setSaveQueue] = useState(true)
+
+  const [offlineMode, setOfflineMode] = useState<'manual' | 'automatic'>('manual')
+  const [storageLimit, setStorageLimit] = useState<'small' | 'medium' | 'large'>('medium')
+  const [downloadOnlyWifi, setDownloadOnlyWifi] = useState(true)
+  const [downloadQuality, setDownloadQuality] = useState<'original' | 'high' | 'balanced'>('high')
+  const [simultaneousDownloads, setSimultaneousDownloads] = useState<'1' | '2' | '3'>('2')
+  const [playbackCacheSize, setPlaybackCacheSize] = useState<'small' | 'medium' | 'large'>('medium')
+  const [preloadNextTracks, setPreloadNextTracks] = useState(true)
+  const [imageCache, setImageCache] = useState(true)
+  const [highQualityArtwork, setHighQualityArtwork] = useState(true)
+
+  const [backupIncludeSettings, setBackupIncludeSettings] = useState(true)
+  const [backupIncludeSources, setBackupIncludeSources] = useState(true)
+  const [backupIncludePlaylists, setBackupIncludePlaylists] = useState(true)
+  const [backupIncludeHistory, setBackupIncludeHistory] = useState(false)
+  const [backupIncludeOfflineRules, setBackupIncludeOfflineRules] = useState(true)
+  const [restoreSettings, setRestoreSettings] = useState(true)
+  const [restoreSources, setRestoreSources] = useState(true)
+  const [restorePlaylists, setRestorePlaylists] = useState(true)
+  const [restoreHistory, setRestoreHistory] = useState(false)
+  const [restoreOfflineRules, setRestoreOfflineRules] = useState(true)
+
   const [debugMode, setDebugMode] = useState(false)
-  const [rebuildLibraryIndex, setRebuildLibraryIndex] = useState(false)
-  const [compactLocalIndex, setCompactLocalIndex] = useState(true)
   const [wifiMetered, setWifiMetered] = useState(false)
   const [vpnMetered, setVpnMetered] = useState(true)
 
@@ -147,152 +151,168 @@ export function AriaSettingsSheet({
     onShowToast(`${label}: ${formatValue(value)}`)
   }
 
+  const handleBackupToggle = (label: string, checked: boolean, setChecked: (checked: boolean) => void) => {
+    setChecked(!checked)
+    onShowToast(`${label}: ${!checked ? 'On' : 'Off'}`)
+  }
+
   const pageContent = settingsPage === 'root' ? (
-    <SettingsHub activeSource={activeSource} onOpenPage={setSettingsPage} />
+    <SettingsHub onOpenPage={setSettingsPage} />
   ) : (
     <div className="space-y-4">
-      <SettingsPageHeader page={settingsPage} subtitle={getPageSubtitle(settingsPage)} onBack={() => setSettingsPage('root')} />
+      <SettingsPageHeader onBack={() => setSettingsPage(getBackPage(settingsPage))} />
 
       {settingsPage === 'interface' ? (
         <>
-          <SettingsGroup icon={<Palette size={14} />} title="Display">
-            <ToggleSetting checked={compactLists} label="Compact lists" onToggle={() => toggleSetting('Compact lists', compactLists, setCompactLists)} />
-            <SegmentedSetting label="Artwork emphasis" onChange={(value) => setSegment('Artwork emphasis', value, setArtworkEmphasis)} options={[{ label: 'Balanced', value: 'balanced' }, { label: 'Large', value: 'large' }, { label: 'Minimal', value: 'minimal' }]} value={artworkEmphasis} />
-            <ToggleSetting checked={showTechnicalLabels} label="Show technical labels" onToggle={() => toggleSetting('Show technical labels', showTechnicalLabels, setShowTechnicalLabels)} />
+          <SettingsGroup icon={<Palette size={14} />} title="Theme">
+            <SegmentedSetting label="Appearance" onChange={(value) => setSegment('Appearance', value, setAppearance)} options={[{ label: 'System', value: 'system' }, { label: 'Dark', value: 'dark' }, { label: 'Light', value: 'light' }]} value={appearance} />
+            <SegmentedSetting label="Accent color" onChange={(value) => setSegment('Accent color', value, setAccentColor)} options={[{ label: 'Amber', value: 'amber' }, { label: 'Blue', value: 'blue' }, { label: 'Red', value: 'red' }, { label: 'Green', value: 'green' }, { label: 'Pink', value: 'pink' }]} value={accentColor} />
+            <SegmentedSetting label="Dynamic color" onChange={(value) => setSegment('Dynamic color', value, setDynamicColor)} options={[{ label: 'Off', value: 'off' }, { label: 'Album artwork', value: 'artwork' }, { label: 'System colors', value: 'system' }]} value={dynamicColor} />
           </SettingsGroup>
-          <SettingsGroup icon={<Shield size={14} />} title="Comfort">
-            <ToggleSetting checked={reduceMotion} label="Reduce motion" onToggle={() => toggleSetting('Reduce motion', reduceMotion, setReduceMotion)} />
+          <SettingsGroup icon={<ListFilter size={14} />} title="Layout">
+            <SegmentedSetting label="Start screen" onChange={(value) => setSegment('Start screen', value, setStartScreen)} options={[{ label: 'Listen', value: 'listen' }, { label: 'Library', value: 'library' }, { label: 'Playlists', value: 'playlists' }, { label: 'Explore', value: 'explore' }]} value={startScreen} />
+            <ToggleSetting checked={compactLists} label="Use compact lists" onToggle={() => toggleSetting('Use compact lists', compactLists, setCompactLists)} />
+            <ToggleSetting checked={showLibraryShortcuts} label="Show library shortcuts" onToggle={() => toggleSetting('Show library shortcuts', showLibraryShortcuts, setShowLibraryShortcuts)} />
           </SettingsGroup>
-        </>
-      ) : null}
-
-      {settingsPage === 'sources' ? (
-        <>
-          <SourceStatusCard activeSource={activeSource} onOpenSource={onOpenSource} />
-          <SettingsGroup icon={<HardDrive size={14} />} title="Visibility">
-            <ToggleSetting checked={showSourceBadges} label="Show source badges" onToggle={() => toggleSetting('Show source badges', showSourceBadges, setShowSourceBadges)} />
-            <ToggleSetting checked={showTechnicalLabels} label="Show source labels" onToggle={() => toggleSetting('Show source labels', showTechnicalLabels, setShowTechnicalLabels)} />
+          <SettingsGroup icon={<Music2 size={14} />} title="Music display">
+            <SegmentedSetting label="Album art size" onChange={(value) => setSegment('Album art size', value, setAlbumArtSize)} options={[{ label: 'Compact', value: 'compact' }, { label: 'Balanced', value: 'balanced' }, { label: 'Large', value: 'large' }]} value={albumArtSize} />
+            <ToggleSetting checked={showAudioQuality} label="Show audio quality" onToggle={() => toggleSetting('Show audio quality', showAudioQuality, setShowAudioQuality)} />
+            <ToggleSetting checked={showMusicSource} label="Show music source" onToggle={() => toggleSetting('Show music source', showMusicSource, setShowMusicSource)} />
+          </SettingsGroup>
+          <SettingsGroup icon={<PlayCircle size={14} />} title="Player">
+            <SegmentedSetting label="Mini player style" onChange={(value) => setSegment('Mini player style', value, setMiniPlayerStyle)} options={[{ label: 'Compact', value: 'compact' }, { label: 'Expanded', value: 'expanded' }]} value={miniPlayerStyle} />
+            <ToggleSetting checked={showExtraTrackInfo} label="Show extra track info" onToggle={() => toggleSetting('Show extra track info', showExtraTrackInfo, setShowExtraTrackInfo)} />
           </SettingsGroup>
         </>
       ) : null}
 
       {settingsPage === 'library' ? (
         <>
-          <SettingsGroup icon={<LibraryIcon size={14} />} title="Display">
-            <ToggleSetting checked={preferLosslessLabels} label="Prefer lossless labels" onToggle={() => toggleSetting('Prefer lossless labels', preferLosslessLabels, setPreferLosslessLabels)} />
+          <SettingsGroup icon={<LibraryIcon size={14} />} title="Browsing">
+            <SegmentedSetting label="Default sort" onChange={(value) => setSegment('Default sort', value, setDefaultSort)} options={[{ label: 'Recent', value: 'recent' }, { label: 'Title', value: 'title' }, { label: 'Artist', value: 'artist' }]} value={defaultSort} />
+            <SegmentedSetting label="Search in" onChange={(value) => setSegment('Search in', value, setSearchScope)} options={[{ label: 'Library', value: 'library' }, { label: 'Local files', value: 'localFiles' }, { label: 'Metadata', value: 'metadata' }]} value={searchScope} />
             <ToggleSetting checked={showFolders} label="Show folders" onToggle={() => toggleSetting('Show folders', showFolders, setShowFolders)} />
             <ToggleSetting checked={showCompilations} label="Show compilations" onToggle={() => toggleSetting('Show compilations', showCompilations, setShowCompilations)} />
-            <ToggleSetting checked={hideEmptyCategories} label="Hide empty categories" onToggle={() => toggleSetting('Hide empty categories', hideEmptyCategories, setHideEmptyCategories)} />
+            <ToggleSetting checked={hideEmptySections} label="Hide empty sections" onToggle={() => toggleSetting('Hide empty sections', hideEmptySections, setHideEmptySections)} />
           </SettingsGroup>
-          <SettingsGroup icon={<ListFilter size={14} />} title="Browsing">
-            <SegmentedSetting label="Default sort" onChange={(value) => setSegment('Default sort', value, setDefaultSort)} options={[{ label: 'Recent', value: 'recent' }, { label: 'Title', value: 'title' }, { label: 'Artist', value: 'artist' }]} value={defaultSort} />
-            <SegmentedSetting label="Search scope" onChange={(value) => setSegment('Search scope', value, setSearchScope)} options={[{ label: 'Library', value: 'library' }, { label: 'Local', value: 'local' }, { label: 'Metadata', value: 'metadata' }]} value={searchScope} />
+          <SettingsGroup icon={<Info size={14} />} title="Metadata">
+            <ToggleSetting checked={showFormatLabels} label="Show format labels" onToggle={() => toggleSetting('Show format labels', showFormatLabels, setShowFormatLabels)} />
+            <ToggleSetting checked={showSourceLabels} label="Show source labels" onToggle={() => toggleSetting('Show source labels', showSourceLabels, setShowSourceLabels)} />
           </SettingsGroup>
-          <NoticeCard title="Library decisions" items={['Recently Added is tracks-only.', 'Favorites is a Library feature, not a setting.']} />
         </>
       ) : null}
 
       {settingsPage === 'playback' ? (
         <>
-          <SettingsGroup icon={<PlayCircle size={14} />} title="Behavior">
+          <SettingsGroup icon={<Headphones size={14} />} title="Output">
+            <SegmentedSetting label="Output device" onChange={(value) => setSegment('Output device', value, setOutputDevice)} options={[{ label: 'Phone', value: 'phone' }, { label: 'USB DAC', value: 'usbDac' }, { label: 'Remote', value: 'remote' }]} value={outputDevice} />
+            <ToggleSetting checked={preferUsbDac} label="Prefer USB DAC" onToggle={() => toggleSetting('Prefer USB DAC', preferUsbDac, setPreferUsbDac)} />
+            <ToggleSetting checked={preferExclusiveOutput} label="Exclusive output" onToggle={() => toggleSetting('Exclusive output', preferExclusiveOutput, setPreferExclusiveOutput)} />
+          </SettingsGroup>
+          <SettingsGroup icon={<PlayCircle size={14} />} title="Playback">
             <ToggleSetting checked={resumePlayback} label="Resume playback" onToggle={() => toggleSetting('Resume playback', resumePlayback, setResumePlayback)} />
-            <SegmentedSetting label="Default repeat" onChange={(value) => setSegment('Default repeat', value, setDefaultRepeat)} options={[{ label: 'Off', value: 'off' }, { label: 'One', value: 'one' }, { label: 'All', value: 'all' }]} value={defaultRepeat} />
-            <SegmentedSetting label="Default shuffle" onChange={(value) => setSegment('Default shuffle', value, setDefaultShuffle)} options={[{ label: 'Off', value: 'off' }, { label: 'Songs', value: 'songs' }]} value={defaultShuffle} />
+            <ToggleSetting checked={gapless} label="Gapless playback" onToggle={() => toggleSetting('Gapless playback', gapless, setGapless)} />
+            <ToggleSetting checked={volumeNormalization} label="Volume normalization" onToggle={() => toggleSetting('Volume normalization', volumeNormalization, setVolumeNormalization)} />
+            <SegmentedSetting label="ReplayGain" onChange={(value) => setSegment('ReplayGain', value, setReplayGainMode)} options={[{ label: 'Off', value: 'off' }, { label: 'Track', value: 'track' }, { label: 'Album', value: 'album' }]} value={replayGainMode} />
+          </SettingsGroup>
+          <SettingsGroup icon={<SlidersHorizontal size={14} />} title="Transitions">
+            <ToggleSetting checked={fadeIn} label="Fade in" onToggle={() => toggleSetting('Fade in', fadeIn, setFadeIn)} />
+            <ToggleSetting checked={fadeOut} label="Fade out" onToggle={() => toggleSetting('Fade out', fadeOut, setFadeOut)} />
+            <SegmentedSetting label="Crossfade" onChange={(value) => setSegment('Crossfade', value, setCrossfade)} options={[{ label: 'Off', value: 'off' }, { label: 'Short', value: 'short' }, { label: 'Long', value: 'long' }]} value={crossfade} />
           </SettingsGroup>
           <SettingsGroup icon={<ListFilter size={14} />} title="Queue">
-            <SegmentedSetting label="Queue behavior" onChange={(value) => setSegment('Queue behavior', value, setQueueBehavior)} options={[{ label: 'Append', value: 'append' }, { label: 'Play Next', value: 'playNext' }]} value={queueBehavior} />
-            <SegmentedSetting label="Seek step" onChange={(value) => setSegment('Seek step', value, setSeekStep)} options={[{ label: '10s', value: '10s' }, { label: '15s', value: '15s' }, { label: '30s', value: '30s' }]} value={seekStep} />
-            <SegmentedSetting label="Unavailable media" onChange={(value) => setSegment('Unavailable media', value, setUnavailableMediaHandling)} options={[{ label: 'Ask', value: 'ask' }, { label: 'Skip', value: 'skip' }, { label: 'Stop', value: 'stop' }]} value={unavailableMediaHandling} />
+            <SegmentedSetting label="Repeat mode" onChange={(value) => setSegment('Repeat mode', value, setRepeatMode)} options={[{ label: 'Off', value: 'off' }, { label: 'One', value: 'one' }, { label: 'All', value: 'all' }]} value={repeatMode} />
+            <SegmentedSetting label="Shuffle style" onChange={(value) => setSegment('Shuffle style', value, setShuffleStyle)} options={[{ label: 'Standard', value: 'standard' }, { label: 'Fresh', value: 'fresh' }, { label: 'Deep', value: 'deep' }]} value={shuffleStyle} />
+            <ToggleSetting checked={saveQueue} label="Save queue" onToggle={() => toggleSetting('Save queue', saveQueue, setSaveQueue)} />
           </SettingsGroup>
         </>
       ) : null}
 
-      {settingsPage === 'audioQuality' ? (
+      {settingsPage === 'offlineCache' ? (
         <>
-          <SettingsGroup icon={<Volume2 size={14} />} title="Playback quality">
-            <ToggleSetting checked={gapless} label="Gapless playback" onToggle={() => toggleSetting('Gapless playback', gapless, setGapless)} />
-            <ToggleSetting checked={loudnessNormalization} label="Loudness normalization" onToggle={() => toggleSetting('Loudness normalization', loudnessNormalization, setLoudnessNormalization)} />
-            <SegmentedSetting label="ReplayGain mode" onChange={(value) => setSegment('ReplayGain mode', value, setReplayGainMode)} options={[{ label: 'Off', value: 'off' }, { label: 'Track', value: 'track' }, { label: 'Album', value: 'album' }]} value={replayGainMode} />
-            <SegmentedSetting label="Crossfade" onChange={(value) => setSegment('Crossfade', value, setCrossfade)} options={[{ label: 'Off', value: 'off' }, { label: 'Short', value: 'short' }, { label: 'Long', value: 'long' }]} value={crossfade} />
-            <SegmentedSetting label="Fade behavior" onChange={(value) => setSegment('Fade behavior', value, setFadeBehavior)} options={[{ label: 'Off', value: 'off' }, { label: 'Short', value: 'short' }, { label: 'Smooth', value: 'smooth' }]} value={fadeBehavior} />
+          <SettingsGroup icon={<Archive size={14} />} title="General">
+            <SegmentedSetting label="Offline mode" onChange={(value) => setSegment('Offline mode', value, setOfflineMode)} options={[{ label: 'Manual', value: 'manual' }, { label: 'Automatic', value: 'automatic' }]} value={offlineMode} />
+            <SegmentedSetting label="Storage limit" onChange={(value) => setSegment('Storage limit', value, setStorageLimit)} options={[{ label: 'Small', value: 'small' }, { label: 'Medium', value: 'medium' }, { label: 'Large', value: 'large' }]} value={storageLimit} />
           </SettingsGroup>
-          <SettingsGroup icon={<Headphones size={14} />} title="Output preference">
-            <ToggleSetting checked={preferBitPerfect} label="Prefer bit-perfect" onToggle={() => toggleSetting('Prefer bit-perfect', preferBitPerfect, setPreferBitPerfect)} />
-            <ToggleSetting checked={preferUsbDac} label="Prefer USB DAC when available" onToggle={() => toggleSetting('Prefer USB DAC when available', preferUsbDac, setPreferUsbDac)} />
-            <ToggleSetting checked={preferExclusiveOutput} label="Prefer exclusive output" onToggle={() => toggleSetting('Prefer exclusive output', preferExclusiveOutput, setPreferExclusiveOutput)} />
+          <SettingsGroup icon={<HardDrive size={14} />} title="Downloads">
+            <ToggleSetting checked={downloadOnlyWifi} label="Download only on Wi-Fi" onToggle={() => toggleSetting('Download only on Wi-Fi', downloadOnlyWifi, setDownloadOnlyWifi)} />
+            <SegmentedSetting label="Download quality" onChange={(value) => setSegment('Download quality', value, setDownloadQuality)} options={[{ label: 'Original', value: 'original' }, { label: 'High', value: 'high' }, { label: 'Balanced', value: 'balanced' }]} value={downloadQuality} />
+            <SegmentedSetting label="Simultaneous downloads" onChange={(value) => setSegment('Simultaneous downloads', value, setSimultaneousDownloads)} options={[{ label: '1', value: '1' }, { label: '2', value: '2' }, { label: '3', value: '3' }]} value={simultaneousDownloads} />
           </SettingsGroup>
-          <SettingsGroup icon={<SlidersHorizontal size={14} />} title="Format">
-            <SegmentedSetting label="Sample-rate handling" onChange={(value) => setSegment('Sample-rate handling', value, setSampleRateHandling)} options={[{ label: 'Native', value: 'native' }, { label: 'Fixed', value: 'fixed' }, { label: 'Auto', value: 'auto' }]} value={sampleRateHandling} />
-            <SegmentedSetting label="Bit-depth handling" onChange={(value) => setSegment('Bit-depth handling', value, setBitDepthHandling)} options={[{ label: 'Native', value: 'native' }, { label: 'Fixed', value: 'fixed' }, { label: 'Auto', value: 'auto' }]} value={bitDepthHandling} />
-            <SegmentedSetting label="Format preference" onChange={(value) => setSegment('Format preference', value, setFormatPreference)} options={[{ label: 'Original', value: 'original' }, { label: 'Lossless', value: 'lossless' }, { label: 'Compatible', value: 'compatible' }]} value={formatPreference} />
+          <SettingsGroup icon={<Database size={14} />} title="Playback cache">
+            <SegmentedSetting label="Playback cache size" onChange={(value) => setSegment('Playback cache size', value, setPlaybackCacheSize)} options={[{ label: 'Small', value: 'small' }, { label: 'Medium', value: 'medium' }, { label: 'Large', value: 'large' }]} value={playbackCacheSize} />
+            <ToggleSetting checked={preloadNextTracks} label="Preload next tracks" onToggle={() => toggleSetting('Preload next tracks', preloadNextTracks, setPreloadNextTracks)} />
+          </SettingsGroup>
+          <SettingsGroup icon={<Palette size={14} />} title="Images">
+            <ToggleSetting checked={imageCache} label="Image cache" onToggle={() => toggleSetting('Image cache', imageCache, setImageCache)} />
+            <ToggleSetting checked={highQualityArtwork} label="High quality artwork" onToggle={() => toggleSetting('High quality artwork', highQualityArtwork, setHighQualityArtwork)} />
           </SettingsGroup>
         </>
       ) : null}
 
-      {settingsPage === 'streamingNetwork' ? (
+      {settingsPage === 'mediaSources' ? (
         <>
-          <SettingsGroup icon={<Wifi size={14} />} title="Quality">
-            <SegmentedSetting label="Stream quality" onChange={(value) => setSegment('Stream quality', value, setStreamQuality)} options={[{ label: 'Auto', value: 'auto' }, { label: 'High', value: 'high' }, { label: 'Original', value: 'original' }]} value={streamQuality} />
-            <SegmentedSetting label="Bitrate limit" onChange={(value) => setSegment('Bitrate limit', value, setBitrateLimit)} options={[{ label: 'None', value: 'none' }, { label: '320', value: '320' }, { label: '256', value: '256' }]} value={bitrateLimit} />
-            <SegmentedSetting label="Quality fallback" onChange={(value) => setSegment('Quality fallback', value, setQualityFallback)} options={[{ label: 'Auto', value: 'auto' }, { label: 'Ask', value: 'ask' }, { label: 'Strict', value: 'strict' }]} value={qualityFallback} />
-            <SegmentedSetting label="Offline quality" onChange={(value) => setSegment('Offline quality', value, setOfflineQuality)} options={[{ label: 'Original', value: 'original' }, { label: 'High', value: 'high' }, { label: 'Balanced', value: 'balanced' }]} value={offlineQuality} />
-          </SettingsGroup>
-          <SettingsGroup icon={<SlidersHorizontal size={14} />} title="Network">
-            <ToggleSetting checked={dataSaver} label="Data saver" onToggle={() => toggleSetting('Data saver', dataSaver, setDataSaver)} />
-            <SegmentedSetting label="Metered network" onChange={(value) => setSegment('Metered network', value, setMeteredNetworkBehavior)} options={[{ label: 'Ask', value: 'ask' }, { label: 'Limit', value: 'limit' }, { label: 'Allow', value: 'allow' }]} value={meteredNetworkBehavior} />
-            <SegmentedSetting label="Transcoding" onChange={(value) => setSegment('Transcoding', value, setTranscodingPreference)} options={[{ label: 'Auto', value: 'auto' }, { label: 'Avoid', value: 'avoid' }, { label: 'Always', value: 'always' }]} value={transcodingPreference} />
+          <SourceStatusCard activeSource={activeSource} onOpenSource={onOpenSource} />
+          <SettingsGroup icon={<HardDrive size={14} />} title="Source">
+            <ToggleSetting checked={showSourceLabels} label="Show source labels" onToggle={() => toggleSetting('Show source labels', showSourceLabels, setShowSourceLabels)} />
+            <InlineActionButton icon={<SlidersHorizontal size={15} />} label="Sync library" onClick={() => onShowToast('Library sync queued')} />
           </SettingsGroup>
         </>
       ) : null}
 
-      {settingsPage === 'offlineStorage' ? (
+      {settingsPage === 'backupRestore' ? (
         <>
-          <SettingsGroup icon={<Archive size={14} />} title="Offline">
-            <ToggleSetting checked={preferOfflineMedia} label="Prefer offline media" onToggle={() => toggleSetting('Prefer offline media', preferOfflineMedia, setPreferOfflineMedia)} />
-            <SegmentedSetting label="Cache policy" onChange={(value) => setSegment('Cache policy', value, setCachePolicy)} options={[{ label: 'Manual', value: 'manual' }, { label: 'Balanced', value: 'balanced' }, { label: 'Aggressive', value: 'aggressive' }]} value={cachePolicy} />
-          </SettingsGroup>
-          <SettingsGroup icon={<Database size={14} />} title="Storage">
-            <SegmentedSetting label="Storage budget" onChange={(value) => setSegment('Storage budget', value, setStorageBudget)} options={[{ label: 'Small', value: 'small' }, { label: 'Medium', value: 'medium' }, { label: 'Large', value: 'large' }]} value={storageBudget} />
-            <ToggleSetting checked={requireCleanupConfirmation} label="Require cleanup confirmation" onToggle={() => toggleSetting('Require cleanup confirmation', requireCleanupConfirmation, setRequireCleanupConfirmation)} />
-          </SettingsGroup>
-        </>
-      ) : null}
-
-      {settingsPage === 'profilesBackup' ? (
-        <>
-          <SettingsGroup icon={<UserCog size={14} />} title="Profiles">
-            <SegmentedSetting label="Active profile" onChange={(value) => setSegment('Active profile', value, setActiveProfile)} options={[{ label: 'Default', value: 'default' }, { label: 'Listening', value: 'listening' }, { label: 'Minimal', value: 'minimal' }]} value={activeProfile} />
-            <SegmentedSetting label="Preference scope" onChange={(value) => setSegment('Preference scope', value, setPreferenceScope)} options={[{ label: 'Global', value: 'global' }, { label: 'Profile', value: 'profile' }]} value={preferenceScope} />
-          </SettingsGroup>
           <SettingsGroup icon={<Shield size={14} />} title="Backup">
-            <SegmentedSetting label="Backup scope" onChange={(value) => setSegment('Backup scope', value, setBackupScope)} options={[{ label: 'Preferences', value: 'preferences' }, { label: 'Appearance', value: 'appearance' }, { label: 'All', value: 'all' }]} value={backupScope} />
-            <SegmentedSetting label="Restore conflicts" onChange={(value) => setSegment('Restore conflicts', value, setRestoreConflictBehavior)} options={[{ label: 'Ask', value: 'ask' }, { label: 'Keep Current', value: 'keepCurrent' }, { label: 'Use Backup', value: 'useBackup' }]} value={restoreConflictBehavior} />
-            <ToggleSetting checked={backupSafetyConfirmation} label="Backup safety confirmation" onToggle={() => toggleSetting('Backup safety confirmation', backupSafetyConfirmation, setBackupSafetyConfirmation)} />
+            <InlineActionButton icon={<Archive size={15} />} label="Create backup" onClick={() => setSettingsPage('backupCreate')} />
+          </SettingsGroup>
+          <SettingsGroup icon={<Database size={14} />} title="Restore">
+            <InlineActionButton icon={<Database size={15} />} label="Restore from backup" onClick={() => setSettingsPage('backupRestoreFlow')} />
           </SettingsGroup>
         </>
       ) : null}
 
-      {settingsPage === 'androidExternal' ? (
+      {settingsPage === 'backupCreate' ? (
         <>
-          <SettingsGroup icon={<Smartphone size={14} />} title="External control" muted>
-            <ToggleSetting checked={androidAutoVisibility} label="Android Auto visibility" onToggle={() => toggleSetting('Android Auto visibility', androidAutoVisibility, setAndroidAutoVisibility)} />
-            <ToggleSetting checked={mediaSessionControls} label="MediaSession controls" onToggle={() => toggleSetting('MediaSession controls', mediaSessionControls, setMediaSessionControls)} />
-            <ToggleSetting checked={notificationControls} label="Notification controls" onToggle={() => toggleSetting('Notification controls', notificationControls, setNotificationControls)} />
-            <ToggleSetting checked={lockScreenControls} label="Lock-screen controls" onToggle={() => toggleSetting('Lock-screen controls', lockScreenControls, setLockScreenControls)} />
-            <ToggleSetting checked={headsetControls} label="Headset/Bluetooth controls" onToggle={() => toggleSetting('Headset/Bluetooth controls', headsetControls, setHeadsetControls)} />
-          </SettingsGroup>
-          <SettingsGroup icon={<RadioTower size={14} />} title="Service" muted>
-            <SegmentedSetting label="Foreground service" onChange={(value) => setSegment('Foreground service', value, setForegroundServiceBehavior)} options={[{ label: 'Automatic', value: 'automatic' }, { label: 'Disabled', value: 'disabled' }]} value={foregroundServiceBehavior} />
-          </SettingsGroup>
+          <BackupFlow
+            options={[
+              { checked: backupIncludeSettings, label: backupOptions[0].label, onToggle: () => handleBackupToggle(backupOptions[0].label, backupIncludeSettings, setBackupIncludeSettings) },
+              { checked: backupIncludeSources, label: backupOptions[1].label, onToggle: () => handleBackupToggle(backupOptions[1].label, backupIncludeSources, setBackupIncludeSources) },
+              { checked: backupIncludePlaylists, label: backupOptions[2].label, onToggle: () => handleBackupToggle(backupOptions[2].label, backupIncludePlaylists, setBackupIncludePlaylists) },
+              { checked: backupIncludeHistory, label: backupOptions[3].label, onToggle: () => handleBackupToggle(backupOptions[3].label, backupIncludeHistory, setBackupIncludeHistory) },
+              { checked: backupIncludeOfflineRules, label: backupOptions[4].label, onToggle: () => handleBackupToggle(backupOptions[4].label, backupIncludeOfflineRules, setBackupIncludeOfflineRules) },
+            ]}
+            title="Choose what to include"
+          />
+          <ActionButton icon={<Archive size={15} />} label="Create backup" onClick={() => { onShowToast('Backup created'); setSettingsPage('backupRestore') }} />
+        </>
+      ) : null}
+
+      {settingsPage === 'backupRestoreFlow' ? (
+        <>
+          <BackupFlow
+            options={[
+              { checked: restoreSettings, label: backupOptions[0].label, onToggle: () => handleBackupToggle(backupOptions[0].label, restoreSettings, setRestoreSettings) },
+              { checked: restoreSources, label: backupOptions[1].label, onToggle: () => handleBackupToggle(backupOptions[1].label, restoreSources, setRestoreSources) },
+              { checked: restorePlaylists, label: backupOptions[2].label, onToggle: () => handleBackupToggle(backupOptions[2].label, restorePlaylists, setRestorePlaylists) },
+              { checked: restoreHistory, label: backupOptions[3].label, onToggle: () => handleBackupToggle(backupOptions[3].label, restoreHistory, setRestoreHistory) },
+              { checked: restoreOfflineRules, label: backupOptions[4].label, onToggle: () => handleBackupToggle(backupOptions[4].label, restoreOfflineRules, setRestoreOfflineRules) },
+            ]}
+            title="Choose what to restore"
+          />
+          <ActionButton icon={<Database size={15} />} label="Restore backup" onClick={() => { onShowToast('Backup restored'); setSettingsPage('backupRestore') }} />
         </>
       ) : null}
 
       {settingsPage === 'advanced' ? (
         <>
-          <SettingsGroup icon={<Wrench size={14} />} title="Tools">
+          <SettingsGroup icon={<Wrench size={14} />} title="Debug">
             <ToggleSetting checked={debugMode} label="Debug mode" onToggle={() => toggleSetting('Debug mode', debugMode, setDebugMode)} />
-            <ToggleSetting checked={rebuildLibraryIndex} label="Rebuild library index" onToggle={() => toggleSetting('Rebuild library index', rebuildLibraryIndex, setRebuildLibraryIndex)} />
-            <ToggleSetting checked={compactLocalIndex} label="Compact local index" onToggle={() => toggleSetting('Compact local index', compactLocalIndex, setCompactLocalIndex)} />
+          </SettingsGroup>
+          <SettingsGroup icon={<Database size={14} />} title="Database">
+            <InlineActionButton icon={<Database size={15} />} label="Rebuild library index" onClick={() => onShowToast('Library index rebuild queued')} />
+            <InlineActionButton icon={<Archive size={15} />} label="Compact local index" onClick={() => onShowToast('Local index compacted')} />
+          </SettingsGroup>
+          <SettingsGroup icon={<Wifi size={14} />} title="Network">
             <ToggleSetting checked={wifiMetered} label="Treat Wi-Fi as metered" onToggle={() => toggleSetting('Treat Wi-Fi as metered', wifiMetered, setWifiMetered)} />
             <ToggleSetting checked={vpnMetered} label="Treat VPN as metered" onToggle={() => toggleSetting('Treat VPN as metered', vpnMetered, setVpnMetered)} />
           </SettingsGroup>
@@ -304,36 +324,28 @@ export function AriaSettingsSheet({
   )
 
   return (
-    <AriaBottomSheet onClose={onClose} subtitle={settingsPage === 'root' ? 'Player settings' : getPageSubtitle(settingsPage)} title={pageTitles[settingsPage]}>
+    <AriaBottomSheet onClose={onClose} subtitle={getPageSubtitle(settingsPage)} title={pageTitles[settingsPage]}>
       {pageContent}
     </AriaBottomSheet>
   )
 }
 
-function SettingsHub({ activeSource, onOpenPage }: { activeSource: ActiveSource; onOpenPage: (page: SettingsPage) => void }) {
+function SettingsHub({ onOpenPage }: { onOpenPage: (page: SettingsPage) => void }) {
   return (
     <div className="space-y-4">
-      <div>
-        <h2 className="text-[21px] font-semibold tracking-[-0.03em] text-[#fff3e4]">Aria Settings</h2>
-        <p className="mt-1 text-[12px] leading-5 text-[#b9b1a7]">Player settings</p>
-      </div>
-      <StatusStrip activeSource={activeSource} />
-      <SettingsGroup title="Primary" compact>
-        <SettingsCategoryCard icon={<Palette size={17} />} page="interface" status="Display" subtitle="Display, artwork and motion behavior." title="Interface" weight="primary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<HardDrive size={17} />} page="sources" status="Local" subtitle="Active source and source labels." title="Sources & Providers" weight="primary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<Music2 size={17} />} page="library" status="Tracks" subtitle="Browsing, labels and library display rules." title="Library" weight="primary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<PlayCircle size={17} />} page="playback" status="Player" subtitle="Default playback and queue policies." title="Playback" weight="primary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<Headphones size={17} />} page="audioQuality" status="Desired" subtitle="Output and quality preference policies." title="Audio Output & Quality" weight="primary" onOpenPage={onOpenPage} />
+      <SettingsGroup title="Main" compact>
+        <SettingsCategoryCard icon={<Palette size={17} />} page="interface" status="Display" subtitle="Theme, layout and player display." title="Interface" weight="primary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Music2 size={17} />} page="library" status="Music" subtitle="Browsing, sorting and metadata labels." title="Library" weight="primary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<PlayCircle size={17} />} page="playback" status="Audio" subtitle="Output, queue and playback behavior." title="Playback" weight="primary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Archive size={17} />} page="offlineCache" status="Storage" subtitle="Downloads, cache and storage limits." title="Offline & Cache" weight="primary" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<HardDrive size={17} />} page="mediaSources" status="Source" subtitle="Current source, sync and labels." title="Media Sources" weight="primary" onOpenPage={onOpenPage} />
       </SettingsGroup>
-      <SettingsGroup title="Secondary" compact muted>
-        <SettingsCategoryCard icon={<Wifi size={17} />} page="streamingNetwork" status="Network" subtitle="Quality, network and transcoding policy." title="Streaming & Network" weight="secondary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<Archive size={17} />} page="offlineStorage" status="Policy" subtitle="Offline and cache preferences." title="Offline, Cache & Storage" weight="secondary" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<UserCog size={17} />} page="profilesBackup" status="Local" subtitle="Profiles, preference scope and backup policy." title="Profiles & Backup" weight="secondary" onOpenPage={onOpenPage} />
+      <SettingsGroup title="Tools" compact muted>
+        <SettingsCategoryCard icon={<Shield size={17} />} page="backupRestore" status="Tools" subtitle="Save and restore app data." title="Backup & Restore" weight="secondary" onOpenPage={onOpenPage} />
       </SettingsGroup>
       <SettingsGroup title="System" compact muted>
-        <SettingsCategoryCard icon={<Smartphone size={17} />} page="androidExternal" status="Device" subtitle="External controls and service behavior." title="Android & External Control" weight="system" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<Wrench size={17} />} page="advanced" status="Tools" subtitle="Diagnostics and library maintenance." title="Advanced" weight="system" onOpenPage={onOpenPage} />
-        <SettingsCategoryCard icon={<Info size={17} />} page="about" status="Info" subtitle="App information and interface status." title="About" weight="system" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Wrench size={17} />} page="advanced" status="System" subtitle="Debug, index and network options." title="Advanced" weight="system" onOpenPage={onOpenPage} />
+        <SettingsCategoryCard icon={<Info size={17} />} page="about" status="Info" subtitle="Version, engine, licenses and credits." title="About" weight="system" onOpenPage={onOpenPage} />
       </SettingsGroup>
     </div>
   )
@@ -375,25 +387,11 @@ function SettingsGroup({ children, compact = false, icon, muted = false, title }
   )
 }
 
-function SettingsPageHeader({ onBack, page, subtitle }: { onBack: () => void; page: SettingsPage; subtitle: string }) {
+function SettingsPageHeader({ onBack }: { onBack: () => void }) {
   return (
-    <div>
-      <button className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1.5 text-[12px] font-semibold text-[#d7cabe] transition hover:bg-white/[0.07]" onClick={onBack} type="button">
-        <ChevronLeft size={15} /> Settings
-      </button>
-      <h2 className="mt-3 text-[21px] font-semibold tracking-[-0.03em] text-[#fff3e4]">{pageTitles[page]}</h2>
-      <p className="mt-1 text-[12px] leading-5 text-[#b9b1a7]">{subtitle}</p>
-    </div>
-  )
-}
-
-function StatusStrip({ activeSource }: { activeSource: ActiveSource }) {
-  return (
-    <section className="rounded-[18px] border border-[#f0a13d]/14 bg-[linear-gradient(145deg,rgba(240,161,61,0.08),rgba(255,255,255,0.025))] p-3">
-      <div className="flex flex-wrap gap-1.5">
-        <span className="rounded-full bg-[#f0a13d]/12 px-2.5 py-1 text-[11px] font-semibold text-[#f8bd76]">Source: {activeSource.name}</span>
-      </div>
-    </section>
+    <button className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-2.5 py-1.5 text-[12px] font-semibold text-[#d7cabe] transition hover:bg-white/[0.07]" onClick={onBack} type="button">
+      <ChevronLeft size={15} /> Settings
+    </button>
   )
 }
 
@@ -406,7 +404,7 @@ function SourceStatusCard({ activeSource, onOpenSource }: { activeSource: Active
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#f0a13d]">Active Source</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#f0a13d]">Current source</p>
             <span className="rounded-full border border-white/[0.08] bg-white/[0.055] px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#d7cabe]">{activeSource.type}</span>
           </div>
           <h3 className="mt-1 truncate text-[17px] font-semibold text-[#fff3e4]">{activeSource.name}</h3>
@@ -460,26 +458,32 @@ function ActionButton({ icon, label, onClick }: { icon?: ReactNode; label: strin
   )
 }
 
-function NoticeCard({ items, muted = false, title }: { items: string[]; muted?: boolean; title: string }) {
+function InlineActionButton({ icon, label, onClick }: { icon?: ReactNode; label: string; onClick: () => void }) {
   return (
-    <InfoCard>
-      <div className={`flex items-center gap-2 ${muted ? 'text-[#b9b1a7]' : 'text-[#f0a13d]'}`}>
-        <span className={`grid h-7 w-7 place-items-center rounded-full ${muted ? 'bg-white/[0.045]' : 'bg-[#f0a13d]/12'}`}>
-          <Info size={15} />
-        </span>
-        <h3 className="text-[11px] font-bold uppercase tracking-[0.22em]">{title}</h3>
-      </div>
-      <div className="mt-2 flex flex-wrap gap-1.5">
-        {items.map((item) => (
-          <span className="rounded-full border border-white/[0.075] bg-white/[0.04] px-2.5 py-1 text-[11px] text-[#cfc3b8]" key={item}>{item}</span>
-        ))}
-      </div>
-    </InfoCard>
+    <button className="flex w-full items-center justify-center gap-2 rounded-[18px] bg-white/[0.045] px-3 py-2.5 text-[14px] font-bold text-[#fff3e4] transition hover:bg-white/[0.07] active:scale-[0.99]" onClick={onClick} type="button">
+      {icon} {label}
+    </button>
+  )
+}
+
+function BackupFlow({ options, title }: { options: { checked: boolean; label: string; onToggle: () => void }[]; title: string }) {
+  return (
+    <SettingsGroup icon={<Shield size={14} />} title={title}>
+      {options.map((option) => (
+        <ToggleSetting checked={option.checked} key={option.label} label={option.label} onToggle={option.onToggle} />
+      ))}
+    </SettingsGroup>
   )
 }
 
 function AboutPage() {
-  const facts = ['Aria music player', 'Local library source', 'Playback preferences', 'Library organization', 'Source management', 'Interface controls', 'Device controls', 'Maintenance tools']
+  const facts = [
+    { label: 'Aria', value: 'Music player' },
+    { label: 'Version', value: '0.1' },
+    { label: 'Library engine', value: 'Aria Core' },
+    { label: 'Licenses', value: 'Open source notices' },
+    { label: 'Credits', value: 'Noqlen' },
+  ]
 
   return (
     <InfoCard>
@@ -487,31 +491,37 @@ function AboutPage() {
         <span className="grid h-7 w-7 place-items-center rounded-full bg-[#f0a13d]/12">
           <Info size={15} />
         </span>
-        <h3 className="text-[11px] font-bold uppercase tracking-[0.22em]">Aria Status</h3>
+        <h3 className="text-[11px] font-bold uppercase tracking-[0.22em]">App details</h3>
       </div>
       <div className="mt-3 grid grid-cols-1 gap-1.5">
         {facts.map((fact) => (
-          <span className="rounded-2xl border border-white/[0.075] bg-white/[0.04] px-3 py-2 text-[12px] font-semibold text-[#d7cabe]" key={fact}>{fact}</span>
+          <div className="rounded-2xl border border-white/[0.075] bg-white/[0.04] px-3 py-2" key={fact.label}>
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#f0a13d]">{fact.label}</p>
+            <p className="mt-0.5 text-[13px] font-semibold text-[#d7cabe]">{fact.value}</p>
+          </div>
         ))}
       </div>
     </InfoCard>
   )
 }
 
+function getBackPage(page: SettingsPage): SettingsPage {
+  return page === 'backupCreate' || page === 'backupRestoreFlow' ? 'backupRestore' : 'root'
+}
+
 function getPageSubtitle(page: SettingsPage) {
   const subtitles: Record<SettingsPage, string> = {
-    root: 'Player settings',
-    interface: 'Display and motion preferences.',
-    sources: 'Active source, source visibility and provider readiness.',
-    library: 'Browsing and display rules for the music library.',
-    playback: 'Default playback behavior and queue policies.',
-    audioQuality: 'Desired audio behavior and output policies.',
-    streamingNetwork: 'Quality, transcoding and network policy preferences.',
-    offlineStorage: 'Offline and cache preferences.',
-    profilesBackup: 'Profiles, preference scope and safe backup policy.',
-    androidExternal: 'External media controls and service behavior.',
-    advanced: 'Diagnostics and library maintenance.',
-    about: 'App information and interface status.',
+    root: 'Settings',
+    interface: 'Theme, layout and player display.',
+    library: 'Browsing, sorting and metadata labels.',
+    playback: 'Output, queue and playback behavior.',
+    offlineCache: 'Downloads, cache and storage limits.',
+    mediaSources: 'Current source, sync and labels.',
+    backupRestore: 'Save and restore app data.',
+    backupCreate: 'Choose what to include.',
+    backupRestoreFlow: 'Choose what to restore.',
+    advanced: 'Debug, index and network options.',
+    about: 'App details and credits.',
   }
 
   return subtitles[page]

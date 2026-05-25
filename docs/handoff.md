@@ -75,7 +75,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D.2.2-V — Criar guia visual do Aria Settings
 [x] Bloco 7D.2.2-I — Implementar Settings UI com categorias filtradas do Core
 [x] Bloco 7D.2.3-S — Definir estrutura app-like das Settings
-[ ] Bloco 7D.2.3-I — Refatorar Settings para estrutura app-like
+[x] Bloco 7D.2.3-I — Refatorar Settings para estrutura app-like
 [ ] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
@@ -255,10 +255,18 @@ Unknown / browser-check needed: 0
 
 ### Bloco 7D.2.3-I — Settings app-like structure implementation
 
-- [ ] Refactor `AriaSettingsSheet.tsx` to follow `settings-app-structure.md`.
-- [ ] Keep the Settings bottom sheet and internal category pages.
-- [ ] Replace Core-driven visible category names with app-facing names.
-- [ ] Keep state local-only and do not add real functionality.
+- [x] Refactor `AriaSettingsSheet.tsx` to follow `settings-app-structure.md`.
+- [x] Keep the Settings bottom sheet and internal category pages.
+- [x] Replace Core-driven visible category names with app-facing names.
+- [x] Keep state local-only and do not add real functionality.
+- [x] Removed Core-driven root categories.
+- [x] Root Settings now uses Interface, Library, Playback, Offline & Cache, Media Sources, Backup & Restore, Advanced and About.
+- [x] Interface includes Theme settings.
+- [x] Playback includes Shuffle style.
+- [x] Backup & Restore uses action-first flows.
+- [x] Advanced no longer exposes Visual Lab/development controls.
+- [x] About is app-like.
+- [x] No visible development/prototype language reintroduced.
 
 ### Bloco 7E — Playback overlay interactions
 

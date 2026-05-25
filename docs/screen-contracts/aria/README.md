@@ -78,7 +78,9 @@ Bottom navigation has four tabs:
 - Bloco 7D.2 implements Aria Settings as a dedicated bottom-sheet settings surface with cards, toggles and segmented selectors.
 - Bloco 7D.2.2-I implemented the Settings hub and internal category pages.
 - Bloco 7D.2.3-S defines the final app-like Settings structure for the next implementation block.
+- Bloco 7D.2.3-I implemented `settings-app-structure.md` in the Settings UI.
 - Settings implementation must follow `settings-app-structure.md`.
+- Visible Settings now follows the app-like category structure.
 - `settings-app-structure.md` is the visible UI source of truth for root categories, category structure, copy rules and removal/merge rules.
 - `settings-core-mapping.md` remains internal grounding, not visible UI language.
 - `settings-visual-guide.md` remains visual guidance, but app-like structure supersedes Core-driven categories where they conflict.

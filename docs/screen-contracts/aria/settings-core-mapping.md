@@ -82,14 +82,14 @@ Active in current UI:
 - Backup & Restore: currently implemented under the older Profiles & Backup name.
 - About: partial status card.
 
-Next UI block:
+Implementation status:
 
-- Bloco 7D.2.3-I must refactor visible Settings to the app-like root and structure in `settings-app-structure.md`.
-- Old Core-driven roots must be removed, merged or renamed.
+- Bloco 7D.2.3-I refactored visible Settings to the app-like root and structure in `settings-app-structure.md`.
+- Old Core-driven roots were removed, merged or renamed.
 - Smart Playlists remains retired from Settings UI.
 - Advanced must stay practical and app-like.
 
-Current active categories may be reorganized in Bloco 7D.2.3-I, but they must not expand into unsupported integration behavior.
+Current active categories must not expand into unsupported integration behavior.
 
 ## Internal bucket: Sources & Providers -> Media Sources
 
@@ -413,11 +413,11 @@ Should show:
 
 Should not show app limitations as user-facing copy.
 
-## Current UI implementation target
+## Current UI implementation status
 
-Define the next implementation block target from the internal Core mapping.
+Define the current implementation result from the internal Core mapping.
 
-Implementation note: Bloco 7D.2.2-I implemented a filtered Core-mapped category hub. Bloco 7D.2.3-S supersedes that visible root with the app-like structure in `settings-app-structure.md`. Smart Playlists remains retired from the Settings tab set. Recently Added remains tracks-only info, Favorites remains excluded from Settings controls, and internal controls should be translated into app-facing settings names.
+Implementation note: Bloco 7D.2.2-I implemented a filtered Core-mapped category hub. Bloco 7D.2.3-I superseded that visible root with the app-like structure in `settings-app-structure.md`. Smart Playlists remains retired from the Settings tab set. Recently Added remains tracks-only info, Favorites remains excluded from Settings controls, and internal controls are translated into app-facing settings names.
 
 Settings root hub should show:
 

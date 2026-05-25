@@ -8,6 +8,8 @@ Aria Core remains the internal grounding for supported areas, but the visible Se
 
 Existing technical contracts remain internal references. They help implementation stay grounded, but they do not define visible category names when this app-structure contract is more user-facing.
 
+Implementation note: Bloco 7D.2.3-I implemented this structure in `AriaSettingsSheet.tsx`.
+
 ## 2. Core rule
 
 The Settings UI starts from user-facing app needs, then maps to Core contracts where useful.

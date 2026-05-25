@@ -226,11 +226,11 @@ Explicitly forbidden:
 - planned features styled as active working features;
 - settings that imply playback/streaming/cache/provider behavior.
 
-## Implementation target for next block
+## Implementation status
 
-Implementation note: Root hub and internal pages were implemented in Bloco 7D.2.2-I. Bloco 7D.2.3-S supersedes the Core-driven root with the app-like structure in `settings-app-structure.md`. Smart Playlists remains retired from the Settings tab set, and the generic root toggle wall remains forbidden.
+Implementation note: Root hub and internal pages were implemented in Bloco 7D.2.2-I. Bloco 7D.2.3-I superseded the Core-driven root with the app-like structure in `settings-app-structure.md`. Smart Playlists remains retired from the Settings tab set, and the generic root toggle wall remains forbidden.
 
-Bloco 7D.2.3-I must implement:
+Bloco 7D.2.3-I implemented:
 
 - root category hub;
 - internal pages;
@@ -239,7 +239,7 @@ Bloco 7D.2.3-I must implement:
 - existing source/settings behavior preserved;
 - local state only.
 
-It must not:
+It did not:
 
 - touch playback overlays;
 - touch Library views;

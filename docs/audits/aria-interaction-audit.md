@@ -321,6 +321,18 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Backup & Restore will become a flow instead of showing Included data as static root content.
 - Advanced loses Visual Lab/development controls and stays practical/app-like.
 
+## Bloco 7D.2.3-I Resolution Notes
+
+- Settings was refactored from Core-driven categories to app-facing categories.
+- Audio Output & Quality, Streaming & Network, Profiles & Backup and Android & External Control were removed as root categories.
+- Media Sources replaced Sources & Providers.
+- Offline & Cache replaced Offline, Cache & Storage.
+- Backup & Restore became an action-first flow with create and restore subpages.
+- Interface gained Theme settings for appearance, accent color and dynamic color.
+- Playback gained Shuffle style with Standard, Fresh and Deep modes.
+- Advanced was simplified to Debug, Database and Network groups.
+- No real functionality or persistence was added.
+
 ## Notes
 
 - Duplicated detail menu handlers from Bloco 7D remain governed by the Bloco 7D.1S detail header contract: album, artist and playlist details should keep one contextual menu and avoid duplicate header/action-row ellipsis controls.
