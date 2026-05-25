@@ -3,9 +3,9 @@
 ## Summary
 
 - Total controls audited: 198
-- Working: 174
+- Working: 180
 - Dead: 6
-- Partial: 6
+- Partial: 0
 - Should not be clickable: 12
 - Unknown / browser-check needed: 0
 - Console errors: 0 runtime errors observed in Playwright. Browser console showed React DevTools info messages and one Vite reconnect/polling log while the dev server was restarted during audit.
@@ -16,7 +16,7 @@ Static inspection used `src/apps/aria/AriaPreview.tsx`, `ariaInteractionMap.ts`,
 
 - Listen Home recent addition `•••` glyphs look like row-level more buttons, but they are only text inside the row button; clicking the row opens the detail instead of opening options. Status: DEAD.
 - Bottom nav visibility under full playback overlays was resolved in Bloco 7B. Full playback overlays now own the screen and bottom nav is not rendered while an overlay is open. Status: WORKING.
-- Queue reorder handles are explicit grip buttons, but they only show a toast. Status: PARTIAL, bordering on should-be-passive unless drag/reorder is added.
+- Queue reorder handles now move tracks down in the local queue order and keep the current track stable. Status: WORKING.
 - Detail navigation was resolved in Bloco 7B. Nested details now use a local stack, so Back returns to the previous detail before returning to the active top-level tab. Status: WORKING.
 - Many `More` / options buttons display menu affordances but only show toast feedback. They are not dead, but they are incomplete for the visual affordance. Status: PARTIAL.
 - Playlist import/export cards use file/share language but only show toasts. They should either use toast-only behavior or be restyled away from file actions. Status: PARTIAL.
@@ -27,12 +27,12 @@ These are not necessarily dead controls. They are cases where the control respon
 
 | Source | Element | Current destination | Concern | Likely expected destination/behavior | Status | Suggested fix block |
 |---|---|---|---|---|---|---|
-| Listen Home | Track recent addition rows: Sunday Morning, Late Ambient, A Place | Track Details | A music-player home row tap may be expected to start/open playback, not open metadata inspection. | Open Now Playing or set current mock track and open Now Playing; reserve Track Details for explicit info/more action. | PARTIAL | Aria top-level screen interactions |
+| Listen Home | Track recent addition rows: Sunday Morning, Late Ambient, A Place | Track Details | A music-player home row tap may be expected to start/open playback, not open metadata inspection. | Open Now Playing or set current local track and open Now Playing; reserve Track Details for explicit info/more action. | PARTIAL | Aria top-level screen interactions |
 | Explore | Songs category card | Track Details | Category card implies browsing Songs, not inspecting one arbitrary track. | Open local Songs category/list or a search result set. | PARTIAL | Aria top-level screen interactions |
-| Album Detail | Track number/title rows | Track Details | In an album playback context, tapping a track commonly plays/selects it and opens Now Playing; current behavior opens metadata details. | Start/select local mock track and open Now Playing, or add a separate info affordance for Track Details. | PARTIAL | Aria detail screen interactions |
-| Artist Detail | Top song number/title rows | Track Details | Top songs list reads as playback content; row tap likely should play/open Now Playing rather than metadata. | Start/select local mock track and open Now Playing; keep more/info for Track Details if needed. | PARTIAL | Aria detail screen interactions |
-| Playlist Detail | Track artwork/title rows | Track Details | Playlist tracks usually play/select track; current behavior opens Track Details. | Start/select local mock track and open Now Playing. | PARTIAL | Aria detail screen interactions |
-| Queue | Queue item rows | Toast only | Queue row responds but does not open Now Playing, change current item, or show Track Details. | Select local queue item and open/update Now Playing, or show row detail intentionally. | PARTIAL | Aria playback overlay interactions |
+| Album Detail | Track number/title rows | Track Details | In an album playback context, tapping a track commonly plays/selects it and opens Now Playing; current behavior opens metadata details. | Start/select local track and open Now Playing, or add a separate info affordance for Track Details. | PARTIAL | Aria detail screen interactions |
+| Artist Detail | Top song number/title rows | Track Details | Top songs list reads as playback content; row tap likely should play/open Now Playing rather than metadata. | Start/select local track and open Now Playing; keep more/info for Track Details if needed. | PARTIAL | Aria detail screen interactions |
+| Playlist Detail | Track artwork/title rows | Track Details | Playlist tracks usually play/select track; current behavior opens Track Details. | Start/select local track and open Now Playing. | PARTIAL | Aria detail screen interactions |
+| Queue | Queue item rows | Selects the local queue item as the current track and updates playback overlay copy. | Queue rows now behave as playback rows. | Keep selecting local queue items and updating Now Playing/Lyrics/Queue. | WORKING | Aria playback overlay interactions |
 | Library | Albums category row | Album Detail | A category row with chevron implies browsing the Albums collection, but it opens one representative album. | Open local Albums category/list first, then album detail from an album row. | PARTIAL | Aria top-level screen interactions |
 | Library | Artists category row | Artist Detail | A category row with chevron implies browsing the Artists collection, but it opens one representative artist. | Open local Artists category/list first, then artist detail from an artist row. | PARTIAL | Aria top-level screen interactions |
 | Library | My Playlists shelf card | Playlist Detail | Shelf cards can reasonably open detail, but if treated as a shelf/category entry, they may be expected to open the Playlists collection. | Keep as detail if card is a concrete playlist; otherwise navigate to Playlists. | PARTIAL | Aria top-level screen interactions |
@@ -49,7 +49,7 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 
 ## Interaction Map By Screen
 
-| Screen | Element | Current behavior | Status | Expected mock behavior | Suggested fix block |
+| Screen | Element | Current behavior | Status | Expected local behavior | Suggested fix block |
 |---|---|---|---|---|---|
 | Global / AriaPreview | Toast behavior | Local toast appears and clears after timeout. | WORKING | Keep local display-only toast feedback. | Aria global/navigation interactions |
 | Global / AriaPreview | Overlay transitions | Now Playing, Lyrics and Queue mount as local animated overlays. | WORKING | Keep local overlay transitions. | Aria global/navigation interactions |
@@ -66,8 +66,8 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Mini Player | Progress underline | Looks like progress but has `pointer-events-none` and no handler. | SHOULD_NOT_BE_CLICKABLE | Keep passive or make it an actual seek affordance. | Aria playback overlay interactions |
 | Listen Home | Queue status icon button | Shows `Queue status` toast. | WORKING | Toast-only status is acceptable if this remains a status indicator. | Aria top-level screen interactions |
 | Listen Home | Main Play CTA | Calls local play handler, sets playing true, shows playback toast. | WORKING | Start local playback state. | Aria top-level screen interactions |
-| Listen Home | Your Playlists shortcut card | Opens Playlist Detail for the first mock playlist. | WORKING | Open playlist detail. | Aria top-level screen interactions |
-| Listen Home | Artists shortcut card | Opens Artist Detail for the first mock artist. | WORKING | Open artist detail. | Aria top-level screen interactions |
+| Listen Home | Your Playlists shortcut card | Opens Playlist Detail for the first playlist. | WORKING | Open playlist detail. | Aria top-level screen interactions |
+| Listen Home | Artists shortcut card | Opens Artist Detail for the first artist. | WORKING | Open artist detail. | Aria top-level screen interactions |
 | Listen Home | Search affordance | Navigates locally to Explore. | WORKING | Open Explore/search hub. | Aria top-level screen interactions |
 | Listen Home | Recent additions See all | Shows `See all` toast. | PARTIAL | Open a local list view or clearly keep as toast-only. | Aria top-level screen interactions |
 | Listen Home | Recent addition row: Midnight Horizons | Opens Album Detail. | WORKING | Open album detail. | Aria top-level screen interactions |
@@ -146,13 +146,13 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Track Details | Add to queue action | Sets visible local queued state and shows queue toast; no queue persistence. | WORKING | Mutate local queue or clarify as toast-only. | Aria detail screen interactions |
 | Track Details | Show in folder action | Shows folder location toast. | WORKING | Toast-only feedback is acceptable. | Aria detail screen interactions |
 | Now Playing | Collapse | Closes overlay back to mini player. | WORKING | Collapse overlay. | Aria playback overlay interactions |
-| Now Playing | More player options | Shows `Player options` toast. | PARTIAL | Open local options menu/sheet. | Aria playback overlay interactions |
+| Now Playing | More player options | Opens a compact local player options panel with track-specific actions. | WORKING | Open local options menu/sheet. | Aria playback overlay interactions |
 | Now Playing | Favorite | Toggles local favorite visual state and toast. | WORKING | Toggle local favorite. | Aria playback overlay interactions |
-| Now Playing | Seek/progress | Shows `Seek` toast; no local position change. | PARTIAL | Set local progress/seek state or make it visually passive. | Aria playback overlay interactions |
+| Now Playing | Seek/progress | Sets shared local progress and updates elapsed time/progress thumb. | WORKING | Set local progress/seek state. | Aria playback overlay interactions |
 | Now Playing | Shuffle | Toggles local shuffle state and toast. | WORKING | Toggle local shuffle. | Aria playback overlay interactions |
-| Now Playing | Previous | Shows previous-track toast; no queue cycling. | PARTIAL | Cycle local queue or keep toast-only. | Aria playback overlay interactions |
+| Now Playing | Previous | Cycles the local queue backward, resets progress and updates overlay track copy. | WORKING | Cycle local queue. | Aria playback overlay interactions |
 | Now Playing | Play/Pause | Toggles local playing visual state. | WORKING | Toggle local playback. | Aria playback overlay interactions |
-| Now Playing | Next | Shows next-track toast; no queue cycling. | PARTIAL | Cycle local queue or keep toast-only. | Aria playback overlay interactions |
+| Now Playing | Next | Cycles the local queue forward, resets progress and updates overlay track copy. | WORKING | Cycle local queue. | Aria playback overlay interactions |
 | Now Playing | Repeat | Cycles local repeat state off/all/one and toast. | WORKING | Toggle local repeat. | Aria playback overlay interactions |
 | Now Playing | Lyrics button | Opens Lyrics overlay. | WORKING | Open Lyrics overlay. | Aria playback overlay interactions |
 | Now Playing | Queue button | Opens Queue overlay. | WORKING | Open Queue overlay. | Aria playback overlay interactions |
@@ -161,13 +161,13 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Now Playing | Context pill swipe | Pointer drag threshold rotates context item. | WORKING | Keep local swipe cycling. | Aria playback overlay interactions |
 | Lyrics | Collapse lyrics | Closes overlay to mini player. | WORKING | Collapse overlay. | Aria playback overlay interactions |
 | Lyrics | Header title/back to Now Playing | Returns to Now Playing overlay. | WORKING | Return to Now Playing. | Aria playback overlay interactions |
-| Lyrics | Lyrics options | Shows `Lyrics options` toast. | PARTIAL | Open local lyrics options menu/sheet. | Aria playback overlay interactions |
+| Lyrics | Lyrics options | Opens a compact local lyrics options panel with line, credit and source actions. | WORKING | Open local lyrics options menu/sheet. | Aria playback overlay interactions |
 | Lyrics | Lyric lines | Static text, no row handlers. | SHOULD_NOT_BE_CLICKABLE | Keep passive unless lyric line seek is added. | Aria playback overlay interactions |
-| Lyrics | Timeline/progress | Shows `Lyric timeline` toast; no local position change. | PARTIAL | Set local progress/seek state or make it visually passive. | Aria playback overlay interactions |
+| Lyrics | Timeline/progress | Sets shared local progress, updates elapsed time and shifts the highlighted lyric line. | WORKING | Set local progress/seek state. | Aria playback overlay interactions |
 | Lyrics | Footer return/list button | Returns to Now Playing overlay. | WORKING | Return to Now Playing. | Aria playback overlay interactions |
-| Lyrics | Previous | Shows previous-track toast; no queue cycling. | PARTIAL | Cycle local queue or keep toast-only. | Aria playback overlay interactions |
+| Lyrics | Previous | Cycles the local queue backward, resets progress and updates lyric header copy. | WORKING | Cycle local queue. | Aria playback overlay interactions |
 | Lyrics | Play/Pause | Toggles local playing visual state. | WORKING | Toggle local playback. | Aria playback overlay interactions |
-| Lyrics | Next | Shows next-track toast; no queue cycling. | PARTIAL | Cycle local queue or keep toast-only. | Aria playback overlay interactions |
+| Lyrics | Next | Cycles the local queue forward, resets progress and updates lyric header copy. | WORKING | Cycle local queue. | Aria playback overlay interactions |
 | Lyrics | Queue | Opens Queue overlay. | WORKING | Open Queue overlay. | Aria playback overlay interactions |
 | Queue | Return to Now Playing | Returns to Now Playing overlay. | WORKING | Return to Now Playing. | Aria playback overlay interactions |
 | Queue | Close queue overlay | Collapses to base screen/mini player. | WORKING | Close overlay. | Aria playback overlay interactions |
@@ -175,10 +175,10 @@ Decision needed before implementation: define the primary row-tap rule for Aria 
 | Queue | Shuffle | Toggles local shuffle state and toast. | WORKING | Toggle local shuffle. | Aria playback overlay interactions |
 | Queue | Repeat | Cycles local repeat state off/all/one and toast. | WORKING | Toggle local repeat. | Aria playback overlay interactions |
 | Queue | Save as playlist | Shows `Save queue as playlist` toast. | WORKING | Toast-only save is acceptable if no mutation is expected. | Aria playback overlay interactions |
-| Queue | Clear | Shows `Clear queue confirmation` toast; no confirm dialog appears. | PARTIAL | Open local confirmation or relabel as toast-only. | Aria playback overlay interactions |
-| Queue | Reorder handles, 6 instances | Show `Reorder handle`; no drag/reorder. | PARTIAL | Implement local reorder or remove/passivate drag affordance. | Aria playback overlay interactions |
-| Queue | Queue rows, 6 instances | Show selected-track toast; do not open details or change now playing. | PARTIAL | Open track detail, set local current queue item, or restyle as passive. | Aria playback overlay interactions |
-| Queue | Row more buttons, 6 instances | Show track action toast. | PARTIAL | Open local row options menu/sheet. | Aria playback overlay interactions |
+| Queue | Clear | Opens a local confirmation panel; confirm leaves only the current track in the queue. | WORKING | Open local confirmation. | Aria playback overlay interactions |
+| Queue | Reorder handles, 6 instances | Move the selected row down in local queue order. | WORKING | Implement local reorder. | Aria playback overlay interactions |
+| Queue | Queue rows, 6 instances | Select the local queue item as the current track and update playback overlays. | WORKING | Set local current queue item. | Aria playback overlay interactions |
+| Queue | Row more buttons, 6 instances | Open a compact local row options panel with play-next, details feedback and remove. | WORKING | Open local row options menu/sheet. | Aria playback overlay interactions |
 
 ## Suggested Implementation Blocks
 
@@ -188,7 +188,7 @@ Address detail-stack behavior, overlay/bottom-nav visibility or clickability, an
 
 2. Aria top-level screen interactions
 
-Resolve top-level category rows, search affordances, See all buttons, playlist filters, sort controls, and misleading import/export labels. Prefer local mock state where useful; otherwise make visual affordances passive.
+Resolve top-level category rows, search affordances, See all buttons, playlist filters, sort controls, and misleading import/export labels. Prefer local state where useful; otherwise make visual affordances passive.
 
 3. Aria detail screen interactions
 
@@ -319,7 +319,7 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Interface will gain Theme settings for appearance, accent color and dynamic color.
 - Playback will gain Shuffle style with Standard, Fresh and Deep modes.
 - Backup & Restore will become a flow instead of showing Included data as static root content.
-- Advanced loses Visual Lab/development controls and stays practical/app-like.
+- Advanced loses internal tooling controls and stays practical/app-like.
 
 ## Bloco 7D.2.3-I Resolution Notes
 
@@ -339,6 +339,14 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Redundant root subtitle was removed.
 - Accent color selector was changed to a compact color-chip layout.
 - Settings structure from 7D.2.3-I was preserved.
+
+## Bloco 7E Resolution Notes
+
+- `AriaPreview.tsx` now owns playback queue order, current track and progress for Now Playing, Lyrics and Queue.
+- Now Playing seek updates shared progress, player options open a compact panel and previous/next update the visible track.
+- Lyrics timeline uses the same shared progress, updates elapsed time and derives the highlighted lyric line from the current position.
+- Queue rows select the current track, row options expose play-next/details/remove actions, clear uses a local confirmation panel and grip controls move tracks down.
+- Queue mutations stay in React state for the current session and do not add integration behavior.
 
 ## Notes
 

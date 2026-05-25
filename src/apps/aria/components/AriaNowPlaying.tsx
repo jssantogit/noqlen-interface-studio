@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, type MouseEvent } from 'react'
 import { ChevronDown, Heart, MoreHorizontal, Pause, Play, Repeat, Shuffle, SkipBack, SkipForward, SlidersHorizontal, WholeWord } from 'lucide-react'
-import { nowPlaying } from '../ariaMockData'
+import type { AriaTrack } from '../ariaMockData'
 
 type PlaybackContextItem = {
   id: 'quality' | 'output' | 'source' | 'queue'
@@ -17,10 +17,12 @@ const nowPlayingContextItems: PlaybackContextItem[] = [
 ]
 
 export function AriaNowPlaying({
+  currentTrack,
   isPlaying,
   onPlayPause,
   onNext,
   onPrevious,
+  onSeek,
   onCollapse,
   onOpenLyrics,
   onOpenQueue,
@@ -30,12 +32,15 @@ export function AriaNowPlaying({
   onToggleFavorite,
   isShuffled,
   repeatMode,
+  progress,
   isFavorite,
 }: {
+  currentTrack: AriaTrack
   isPlaying: boolean
   onPlayPause: () => void
   onNext: () => void
   onPrevious: () => void
+  onSeek: (progress: number) => void
   onCollapse: () => void
   onOpenLyrics: () => void
   onOpenQueue: () => void
@@ -45,17 +50,26 @@ export function AriaNowPlaying({
   onToggleFavorite: () => void
   isShuffled: boolean
   repeatMode: 'off' | 'all' | 'one'
+  progress: number
   isFavorite: boolean
 }) {
   const repeatLabel = repeatMode === 'off' ? 'Repeat off' : repeatMode === 'all' ? 'Repeat all' : 'Repeat one'
   const [contextIndex, setContextIndex] = useState(0)
+  const [showOptions, setShowOptions] = useState(false)
   const contextPointerStartX = useRef<number | null>(null)
   const contextWasSwiped = useRef(false)
   const activeContext = nowPlayingContextItems[contextIndex]
   const contentColumnClass = 'mx-auto w-[312px] max-w-[calc(100%-3.5rem)]'
+  const elapsedLabel = formatElapsed(currentTrack.duration, progress)
+  const progressStyle = `${progress}%`
 
   const shiftContext = (direction: 1 | -1) => {
     setContextIndex((currentIndex) => (currentIndex + direction + nowPlayingContextItems.length) % nowPlayingContextItems.length)
+  }
+
+  const handleSeek = (event: MouseEvent<HTMLButtonElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect()
+    onSeek(((event.clientX - bounds.left) / bounds.width) * 100)
   }
 
   return (
@@ -74,12 +88,20 @@ export function AriaNowPlaying({
         <button
           aria-label="More player options"
           className="grid h-10 w-10 place-items-center rounded-full text-[#eadac4] transition hover:bg-white/[0.07] hover:text-white"
-          onClick={() => onShowToast('Player options')}
+          onClick={() => setShowOptions((visible) => !visible)}
           type="button"
         >
           <MoreHorizontal size={22} />
         </button>
       </header>
+
+      {showOptions ? (
+        <div className="absolute right-5 top-[4.2rem] z-10 w-48 overflow-hidden rounded-[22px] border border-white/[0.08] bg-[#101820]/95 p-2 shadow-[0_18px_36px_rgba(0,0,0,0.42)] backdrop-blur-md">
+          <PlayerOption label="Track details" onClick={() => onShowToast(`${currentTrack.title} details`)} />
+          <PlayerOption label="Add to playlist" onClick={() => onShowToast(`Add ${currentTrack.title} to playlist`)} />
+          <PlayerOption label="Playback info" onClick={() => onShowToast(`${currentTrack.album} · ${currentTrack.duration}`)} />
+        </div>
+      ) : null}
 
       {/* Artwork */}
       <div className={`${contentColumnClass} shrink-0 pt-7`}>
@@ -91,10 +113,10 @@ export function AriaNowPlaying({
         <div className="flex min-w-0 items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <h2 className="truncate font-serif text-[22px] leading-[1.05] text-[#fff3e4]">
-              {nowPlaying.title}
+              {currentTrack.title}
             </h2>
             <p className="mt-1.5 truncate font-serif text-[14px] text-[#f0a13d]">
-              {nowPlaying.artist}
+              {currentTrack.artist}
             </p>
           </div>
           <button
@@ -113,16 +135,16 @@ export function AriaNowPlaying({
         <button
           aria-label="Seek through track"
           className="group relative block h-5 w-full rounded-full"
-          onClick={() => onShowToast('Seek')}
+          onClick={handleSeek}
           type="button"
         >
           <span className="absolute left-0 right-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-white/[0.14]" />
-          <span className="absolute left-0 top-1/2 h-[3px] w-[37%] -translate-y-1/2 rounded-full bg-[#f0a13d]" />
-          <span className="absolute left-[37%] top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ffad45] shadow-[0_0_0_4px_rgba(240,161,61,0.10)] transition group-active:scale-110" />
+          <span className="absolute left-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-[#f0a13d]" style={{ width: progressStyle }} />
+          <span className="absolute top-1/2 h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ffad45] shadow-[0_0_0_4px_rgba(240,161,61,0.10)] transition group-active:scale-110" style={{ left: progressStyle }} />
         </button>
         <div className="mt-2 flex items-center justify-between text-[13px] text-[#c9bdae]">
-          <span>1:37</span>
-          <span>{nowPlaying.duration}</span>
+          <span>{elapsedLabel}</span>
+          <span>{currentTrack.duration}</span>
         </div>
       </div>
 
@@ -233,4 +255,26 @@ export function AriaNowPlaying({
       </div>
     </div>
   )
+}
+
+function PlayerOption({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      className="block w-full rounded-2xl px-3 py-2 text-left text-[13px] font-medium text-[#f5ecdf] transition hover:bg-white/[0.06]"
+      onClick={onClick}
+      type="button"
+    >
+      {label}
+    </button>
+  )
+}
+
+function formatElapsed(duration: string, progress: number) {
+  const [minutes = '0', seconds = '0'] = duration.split(':')
+  const durationSeconds = Number(minutes) * 60 + Number(seconds)
+  const elapsedSeconds = Math.round(durationSeconds * (progress / 100))
+  const elapsedMinutes = Math.floor(elapsedSeconds / 60)
+  const remainingSeconds = String(elapsedSeconds % 60).padStart(2, '0')
+
+  return `${elapsedMinutes}:${remainingSeconds}`
 }

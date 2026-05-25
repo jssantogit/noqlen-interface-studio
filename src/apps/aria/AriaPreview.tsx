@@ -57,17 +57,17 @@ type ActiveSource = {
   detail: string
 }
 
-const playbackQueue = [nowPlaying, ...ariaQueue]
+const initialPlaybackQueue = [nowPlaying, ...ariaQueue]
 const activeSource: ActiveSource = {
   type: 'local',
   name: 'Local library',
   status: 'Active local source',
   detail: 'Device storage',
 }
-const mockGenres = ['Ambient', 'Classical', 'Progressive Metal', 'Electronic', 'Jazz']
-const mockRadios = ['Local Mix Radio', 'Focus Radio', 'Discovery Radio']
-const mockFolders = ['Local Library', 'Imported Archive', 'Focus Collections']
-const mockCompilations = ['Piano Sketches', 'Late Night Edits', 'Collected Singles']
+const localGenres = ['Ambient', 'Classical', 'Progressive Metal', 'Electronic', 'Jazz']
+const localRadios = ['Local Mix Radio', 'Focus Radio', 'Discovery Radio']
+const localFolders = ['Local Library', 'Imported Archive', 'Focus Collections']
+const localCompilations = ['Piano Sketches', 'Late Night Edits', 'Collected Singles']
 const librarySheetCategoryTitles: Record<AriaLibrarySheetCategoryId, string> = {
   genres: 'Genres',
   folders: 'Folders',
@@ -82,12 +82,15 @@ export function AriaPreview() {
   const [repeatMode, setRepeatMode] = useState<'off' | 'all' | 'one'>('off')
   const [isFavorite, setIsFavorite] = useState(false)
   const [detailStack, setDetailStack] = useState<AriaDetailScreen[]>([])
+  const [playbackQueue, setPlaybackQueue] = useState<AriaTrack[]>(initialPlaybackQueue)
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
+  const [playbackProgress, setPlaybackProgress] = useState(38)
   const [activeSheet, setActiveSheet] = useState<AriaSheet>(null)
   const [toast, setToast] = useState<{ message: string } | null>(null)
 
   const detailScreen = detailStack.at(-1) ?? null
-  const currentTrack = playbackQueue[currentTrackIndex] ?? nowPlaying
+  const currentTrack = playbackQueue[currentTrackIndex] ?? playbackQueue[0] ?? nowPlaying
+  const queueTracks = playbackQueue.filter((track) => track.id !== currentTrack.id)
 
   const showToast = useCallback((message: string) => {
     setToast({ message })
@@ -102,17 +105,103 @@ export function AriaPreview() {
     setCurrentTrackIndex((currentIndex) => {
       const nextIndex = (currentIndex + 1) % playbackQueue.length
       showToast(`Playing next: ${playbackQueue[nextIndex].title}`)
+      setPlaybackProgress(0)
       return nextIndex
     })
-  }, [showToast])
+  }, [playbackQueue, showToast])
 
   const handlePrevious = useCallback(() => {
     setCurrentTrackIndex((currentIndex) => {
       const nextIndex = (currentIndex - 1 + playbackQueue.length) % playbackQueue.length
       showToast(`Playing previous: ${playbackQueue[nextIndex].title}`)
+      setPlaybackProgress(0)
       return nextIndex
     })
-  }, [showToast])
+  }, [playbackQueue, showToast])
+
+  const handleSeekPlayback = useCallback((progress: number) => {
+    setPlaybackProgress(Math.max(0, Math.min(100, progress)))
+  }, [])
+
+  const handleSelectQueueTrack = useCallback((trackId: string) => {
+    const nextIndex = playbackQueue.findIndex((track) => track.id === trackId)
+    if (nextIndex === -1) return
+
+    setCurrentTrackIndex(nextIndex)
+    setIsPlaying(true)
+    setPlaybackProgress(0)
+    showToast(`Playing ${playbackQueue[nextIndex].title}`)
+  }, [playbackQueue, showToast])
+
+  const handleRemoveQueueTrack = useCallback((trackId: string) => {
+    const removedTrack = playbackQueue.find((track) => track.id === trackId)
+    if (!removedTrack || playbackQueue.length <= 1) return
+
+    setPlaybackQueue((tracks) => {
+      const removeIndex = tracks.findIndex((track) => track.id === trackId)
+      if (removeIndex === -1) return tracks
+
+      const nextTracks = tracks.filter((track) => track.id !== trackId)
+      setCurrentTrackIndex((currentIndex) => {
+        if (removeIndex < currentIndex) return currentIndex - 1
+        if (removeIndex === currentIndex) return Math.min(currentIndex, nextTracks.length - 1)
+        return currentIndex
+      })
+      return nextTracks
+    })
+    showToast(`Removed ${removedTrack.title}`)
+  }, [playbackQueue, showToast])
+
+  const handleMoveQueueTrackNext = useCallback((trackId: string) => {
+    const movedTrack = playbackQueue.find((track) => track.id === trackId)
+    if (!movedTrack) return
+
+    setPlaybackQueue((tracks) => {
+      const moveIndex = tracks.findIndex((track) => track.id === trackId)
+      const currentId = tracks[currentTrackIndex]?.id
+      if (moveIndex === -1 || !currentId || tracks[moveIndex].id === currentId) return tracks
+
+      const movingTrack = tracks[moveIndex]
+      const remainingTracks = tracks.filter((track) => track.id !== trackId)
+      const currentIndexInRemaining = remainingTracks.findIndex((track) => track.id === currentId)
+      const insertIndex = Math.min(currentIndexInRemaining + 1, remainingTracks.length)
+      const nextTracks = [
+        ...remainingTracks.slice(0, insertIndex),
+        movingTrack,
+        ...remainingTracks.slice(insertIndex),
+      ]
+
+      setCurrentTrackIndex(nextTracks.findIndex((track) => track.id === currentId))
+      return nextTracks
+    })
+    showToast(`${movedTrack.title} plays next`)
+  }, [currentTrackIndex, playbackQueue, showToast])
+
+  const handleMoveQueueTrackDown = useCallback((trackId: string) => {
+    const movedTrack = playbackQueue.find((track) => track.id === trackId)
+    if (!movedTrack) return
+
+    setPlaybackQueue((tracks) => {
+      const moveIndex = tracks.findIndex((track) => track.id === trackId)
+      if (moveIndex === -1 || moveIndex >= tracks.length - 1) return tracks
+
+
+      const currentId = tracks[currentTrackIndex]?.id
+      const nextTracks = [...tracks]
+      const nextTrack = nextTracks[moveIndex + 1]
+      nextTracks[moveIndex + 1] = nextTracks[moveIndex]
+      nextTracks[moveIndex] = nextTrack
+      if (currentId) setCurrentTrackIndex(nextTracks.findIndex((track) => track.id === currentId))
+      return nextTracks
+    })
+    showToast(`${movedTrack.title} moved down`)
+  }, [currentTrackIndex, playbackQueue, showToast])
+
+  const handleClearQueue = useCallback(() => {
+    setPlaybackQueue([currentTrack])
+    setCurrentTrackIndex(0)
+    showToast('Queue cleared')
+  }, [currentTrack, showToast])
 
   const handleToggleShuffle = useCallback(() => {
     setIsShuffled((prev) => !prev)
@@ -428,11 +517,11 @@ export function AriaPreview() {
       return (
         <AriaBottomSheet onClose={handleCloseSheet} title={title}>
           {category === 'genres' ? (
-            <SheetGrid>{mockGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre`)} />)}</SheetGrid>
+            <SheetGrid>{localGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre`)} />)}</SheetGrid>
           ) : category === 'folders' ? (
-            <SheetList>{mockFolders.map((folder) => <SheetRow key={folder} title={folder} onClick={() => showToast(`${folder} folder`)} variant="action" />)}</SheetList>
+            <SheetList>{localFolders.map((folder) => <SheetRow key={folder} title={folder} onClick={() => showToast(`${folder} folder`)} variant="action" />)}</SheetList>
           ) : category === 'compilations' ? (
-            <SheetList>{mockCompilations.map((compilation) => <SheetRow key={compilation} title={compilation} onClick={() => showToast(`${compilation} compilation`)} variant="action" />)}</SheetList>
+            <SheetList>{localCompilations.map((compilation) => <SheetRow key={compilation} title={compilation} onClick={() => showToast(`${compilation} compilation`)} variant="action" />)}</SheetList>
           ) : null}
         </AriaBottomSheet>
       )
@@ -451,13 +540,13 @@ export function AriaPreview() {
               <SheetGroup title="Playlists">{ariaPlaylists.slice(0, 2).map((playlist) => <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks`} onClick={() => openPlaylistFromSheet(playlist)} />)}</SheetGroup>
             </div>
           ) : mode === 'genres' ? (
-            <SheetGrid>{mockGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre`)} />)}</SheetGrid>
+            <SheetGrid>{localGenres.map((genre) => <SheetChip key={genre} label={genre} onClick={() => showToast(`Open ${genre} genre`)} />)}</SheetGrid>
           ) : mode === 'albums' || mode === 'recent' ? (
             <SheetList>{ariaAlbums.map((album) => <SheetRow key={album.id} title={album.title} subtitle={`${album.artist} · ${album.year}`} onClick={() => openAlbumFromSheet(album)} />)}</SheetList>
           ) : mode === 'artists' ? (
             <SheetList>{ariaArtists.map((artist) => <SheetRow key={artist.id} title={artist.name} subtitle={artist.genre} onClick={() => openArtistFromSheet(artist)} />)}</SheetList>
           ) : mode === 'radios' ? (
-            <SheetList>{mockRadios.map((radio) => <SheetRow key={radio} title={radio} onClick={() => showToast(radio)} variant="action" />)}</SheetList>
+            <SheetList>{localRadios.map((radio) => <SheetRow key={radio} title={radio} onClick={() => showToast(radio)} variant="action" />)}</SheetList>
           ) : mode === 'songs' ? (
             <SheetList>{ariaQueue.map((track) => <SheetRow key={track.id} title={track.title} subtitle={`${track.artist} · ${track.album}`} onClick={() => openTrackFromSheet(track)} />)}</SheetList>
           ) : (
@@ -618,6 +707,7 @@ export function AriaPreview() {
           >
             {playbackOverlay === 'nowPlaying' ? (
               <AriaNowPlaying
+                currentTrack={currentTrack}
                 isFavorite={isFavorite}
                 isPlaying={isPlaying}
                 isShuffled={isShuffled}
@@ -627,14 +717,17 @@ export function AriaPreview() {
                 onOpenQueue={handleOpenQueue}
                 onPlayPause={handlePlayPause}
                 onPrevious={handlePrevious}
+                onSeek={handleSeekPlayback}
                 onShowToast={showToast}
                 onToggleFavorite={handleToggleFavorite}
                 onToggleRepeat={handleToggleRepeat}
                 onToggleShuffle={handleToggleShuffle}
+                progress={playbackProgress}
                 repeatMode={repeatMode}
               />
             ) : playbackOverlay === 'lyrics' ? (
               <AriaLyrics
+                currentTrack={currentTrack}
                 isPlaying={isPlaying}
                 onBack={handleOpenNowPlaying}
                 onCollapse={handleCollapsePlayer}
@@ -642,16 +735,26 @@ export function AriaPreview() {
                 onOpenQueue={handleOpenQueue}
                 onPlayPause={handlePlayPause}
                 onPrevious={handlePrevious}
+                onSeek={handleSeekPlayback}
                 onShowToast={showToast}
+                progress={playbackProgress}
               />
             ) : (
               <AriaQueue
+                currentTrack={currentTrack}
                 isShuffled={isShuffled}
+                onClearQueue={handleClearQueue}
                 onBack={handleOpenNowPlaying}
                 onCollapse={handleCollapsePlayer}
+                onMoveTrackDown={handleMoveQueueTrackDown}
+                onMoveTrackNext={handleMoveQueueTrackNext}
+                onRemoveTrack={handleRemoveQueueTrack}
+                onSelectTrack={handleSelectQueueTrack}
                 onShowToast={showToast}
                 onToggleRepeat={handleToggleRepeat}
                 onToggleShuffle={handleToggleShuffle}
+                progress={playbackProgress}
+                queueTracks={queueTracks}
                 repeatMode={repeatMode}
               />
             )}

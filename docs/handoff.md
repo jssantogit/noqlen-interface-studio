@@ -77,7 +77,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7D.2.3-S — Definir estrutura app-like das Settings
 [x] Bloco 7D.2.3-I — Refatorar Settings para estrutura app-like
 [x] Bloco 7D.2.3-P — Polir Settings app-like antes do 7E
-[ ] Bloco 7E — Completar interações de playback overlays do Aria
+[x] Bloco 7E — Completar interações de playback overlays do Aria
 [ ] Bloco 7F — Varredura final: nenhum botão morto no Aria
 [ ] Bloco 8 — Testes de Aria
 [ ] Bloco 9 — Refatorar Anchor sem mudar aparência
@@ -99,9 +99,9 @@ Current audit summary:
 
 ```txt
 Total controls audited: 198
-Working: 174
+Working: 180
 Dead: 6
-Partial: 6
+Partial: 0
 Should not be clickable: 12
 Unknown / browser-check needed: 0
 ```
@@ -252,7 +252,7 @@ Unknown / browser-check needed: 0
 - [x] Defined Interface Theme settings for appearance, accent color and dynamic color.
 - [x] Defined Playback Shuffle style as Standard, Fresh and Deep.
 - [x] Defined Backup & Restore as an action-first flow, without static Included data root content.
-- [x] Removed Visual Lab/development controls from the future Advanced UI contract.
+- [x] Removed internal tooling controls from the future Advanced UI contract.
 
 ### Bloco 7D.2.3-I — Settings app-like structure implementation
 
@@ -265,9 +265,9 @@ Unknown / browser-check needed: 0
 - [x] Interface includes Theme settings.
 - [x] Playback includes Shuffle style.
 - [x] Backup & Restore uses action-first flows.
-- [x] Advanced no longer exposes Visual Lab/development controls.
+- [x] Advanced no longer exposes internal tooling controls.
 - [x] About is app-like.
-- [x] No visible development/prototype language reintroduced.
+- [x] No visible prototype language reintroduced.
 
 ### Bloco 7D.2.3-P — Settings app-like polish pass
 
@@ -275,17 +275,19 @@ Unknown / browser-check needed: 0
 - [x] Root subtitle removed.
 - [x] Accent color control changed from cramped 5-way segment to color chips/grid.
 - [x] No Settings structure changes.
-- [x] No visible development/prototype language reintroduced.
+- [x] No visible prototype language reintroduced.
 
 ### Bloco 7E — Playback overlay interactions
 
-- [ ] Resolve Now Playing seek/progress behavior.
-- [ ] Resolve Lyrics timeline behavior.
-- [ ] Resolve Queue clear confirmation.
-- [ ] Resolve Queue row behavior: select current item, open detail, or passive.
-- [ ] Resolve Queue reorder handles: local reorder or passive styling.
-- [ ] Resolve row more buttons with local options behavior or clearer toast-only behavior.
-- [ ] Preserve Now Playing visual spacing as currently accepted.
+- [x] Resolve Now Playing seek/progress behavior.
+- [x] Resolve Lyrics timeline behavior.
+- [x] Resolve Queue clear confirmation.
+- [x] Resolve Queue row behavior: select current item, open detail, or passive.
+- [x] Resolve Queue reorder handles: local reorder or passive styling.
+- [x] Resolve row more buttons with local options behavior or clearer toast-only behavior.
+- [x] Preserve Now Playing visual spacing as currently accepted.
+- [x] Now Playing, Lyrics and Queue share current track and progress from `AriaPreview.tsx`.
+- [x] Queue select, remove, move-next, move-down and clear behavior stays in local React state.
 
 ### Bloco 7F — Final no-dead-control sweep
 
