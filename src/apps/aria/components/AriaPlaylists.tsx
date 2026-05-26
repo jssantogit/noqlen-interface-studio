@@ -29,7 +29,9 @@ const rowArt = ['aria-art-waves', 'aria-art-architecture', 'aria-art-mountain', 
 const filters: PlaylistFilter[] = ['All', 'Folders', 'Created', 'Imported', 'Favorites']
 const sortModes: SortMode[] = ['Recent', 'A-Z', 'Most tracks']
 
-function getPlaylistKind(index: number): Exclude<PlaylistFilter, 'All' | 'Folders'> {
+function getPlaylistKind(playlist: AriaPlaylist, index: number): Exclude<PlaylistFilter, 'All' | 'Folders'> {
+  if (playlist.id.startsWith('playlist-imported-')) return 'Imported'
+  if (playlist.id.startsWith('playlist-created-') || playlist.id.startsWith('playlist-smart-')) return 'Created'
   if (index === 1) return 'Imported'
   if (index === 2) return 'Favorites'
   return 'Created'
@@ -42,17 +44,24 @@ function getActionToast(actionId: string, title: string) {
 }
 
 export function AriaPlaylists({
+  onOpenCreatePlaylist,
+  onOpenImportPlaylist,
   onOpenPlaylist,
   onShowToast,
+  playlists,
 }: {
+  onOpenCreatePlaylist: () => void
+  onOpenImportPlaylist: () => void
   onOpenPlaylist: (playlist: AriaPlaylist) => void
   onShowToast: (message: string) => void
+  playlists?: AriaPlaylist[]
 }) {
   const [selectedFilter, setSelectedFilter] = useState<PlaylistFilter>('All')
   const [selectedFolder, setSelectedFolder] = useState<string | null>(null)
   const [sortMode, setSortMode] = useState<SortMode>('Recent')
 
-  const rowsWithMeta = playlistRows.map((playlist, index) => ({ playlist, index, kind: getPlaylistKind(index) }))
+  const visiblePlaylists = playlists ?? playlistRows
+  const rowsWithMeta = visiblePlaylists.map((playlist, index) => ({ playlist, index, kind: getPlaylistKind(playlist, index) }))
   const filteredRows = rowsWithMeta.filter((row) => {
     if (selectedFilter === 'All') return true
     if (selectedFilter === 'Folders') return selectedFolder ? row.index % folders.length === folders.findIndex((folder) => folder.title === selectedFolder) : false
@@ -88,7 +97,19 @@ export function AriaPlaylists({
                   : 'border-white/[0.075] bg-white/[0.035] text-[#d8cdc1]'
               }`}
               key={action.id}
-              onClick={() => onShowToast(getActionToast(action.id, action.title))}
+              onClick={() => {
+                if (action.id === 'create') {
+                  onOpenCreatePlaylist()
+                  return
+                }
+
+                if (action.id === 'import') {
+                  onOpenImportPlaylist()
+                  return
+                }
+
+                onShowToast(getActionToast(action.id, action.title))
+              }}
               type="button"
             >
               <Icon size={23} strokeWidth={1.5} />

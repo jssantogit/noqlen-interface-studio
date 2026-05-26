@@ -77,7 +77,7 @@ Explore mapping must preserve Bloco 7E.1: Explore root no longer has Albums, Art
 
 ### Bloco 7F.1 — Playlist create/import/smart flows
 
-See `docs/screen-contracts/aria/playlist-create-import-reference-breakdown.md`. 7F.1 implementation must follow that breakdown, and 7F.1 remains pending until implementation matches it.
+See `docs/screen-contracts/aria/playlist-create-import-reference-breakdown.md`. Create Playlist, Smart mode and Import Playlist have been implemented against that breakdown. New Folder, Export Playlist and Folder Detail remain pending under 7F.2.
 
 Covers:
 

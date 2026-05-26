@@ -36,9 +36,21 @@ type AriaDetailScreen =
 
 type AriaPlaybackOverlay = 'nowPlaying' | 'lyrics' | 'queue'
 type ExploreMode = 'search' | 'forgottenAlbums' | 'randomAlbum' | 'year' | 'style' | 'mood' | 'genre' | 'radio'
+type CreatePlaylistMode = 'regular' | 'smart'
+type PlaylistSource = 'empty' | 'queue' | 'liked'
+type PlaylistTag = 'Focus' | 'Collection' | 'Road'
+type PlaylistColor = 'Amber' | 'Violet' | 'Blue' | 'Green'
+type SmartMatch = 'Match all' | 'Match any'
+type SmartRule = 'Genre is Progressive Metal' | 'Year is 2020s' | 'Quality is Lossless'
+type SmartLimit = '25' | '50' | '100'
+type ImportFormat = 'M3U' | 'CSV' | 'Text' | 'Link'
+type ImportOption = 'Keep order' | 'Skip duplicates' | 'Match local tracks'
+type ImportDestination = 'New playlist' | 'Existing playlist'
 type AriaSheet =
   | { type: 'source' }
   | { type: 'settings' }
+  | { type: 'playlistCreate' }
+  | { type: 'playlistImport' }
   | { type: 'librarySearch' }
   | { type: 'libraryCategory'; category: AriaLibrarySheetCategoryId }
   | { type: 'exploreMode'; mode: ExploreMode }
@@ -71,6 +83,24 @@ const localCompilations = ['Piano Sketches', 'Late Night Edits', 'Collected Sing
 const discoveryYears = ['2020s', '2010s', '2000s', '1990s', 'Older']
 const discoveryStyles = ['Live', 'Instrumental', 'Acoustic', 'Long tracks', 'Hi-Res', 'Compilations']
 const discoveryMoods = ['Focus', 'Night', 'Heavy', 'Calm', 'Energetic', 'Melancholic']
+const playlistSources: { id: PlaylistSource; label: string }[] = [
+  { id: 'empty', label: 'Empty' },
+  { id: 'queue', label: 'From queue' },
+  { id: 'liked', label: 'From liked tracks' },
+]
+const playlistTags: PlaylistTag[] = ['Focus', 'Collection', 'Road']
+const playlistColors: PlaylistColor[] = ['Amber', 'Violet', 'Blue', 'Green']
+const playlistColorGradients: Record<PlaylistColor, string> = {
+  Amber: 'from-amber-200 via-orange-400 to-slate-900',
+  Violet: 'from-violet-200 via-violet-500 to-slate-900',
+  Blue: 'from-sky-200 via-sky-500 to-slate-900',
+  Green: 'from-emerald-200 via-emerald-500 to-slate-900',
+}
+const smartRules: SmartRule[] = ['Genre is Progressive Metal', 'Year is 2020s', 'Quality is Lossless']
+const smartMatches: SmartMatch[] = ['Match all', 'Match any']
+const smartLimits: SmartLimit[] = ['25', '50', '100']
+const importFormats: ImportFormat[] = ['M3U', 'CSV', 'Text', 'Link']
+const importOptions: ImportOption[] = ['Keep order', 'Skip duplicates', 'Match local tracks']
 const librarySheetCategoryTitles: Record<AriaLibrarySheetCategoryId, string> = {
   genres: 'Genres',
   folders: 'Folders',
@@ -88,12 +118,27 @@ export function AriaPreview() {
   const [playbackQueue, setPlaybackQueue] = useState<AriaTrack[]>(initialPlaybackQueue)
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
   const [playbackProgress, setPlaybackProgress] = useState(38)
+  const [localPlaylists, setLocalPlaylists] = useState<AriaPlaylist[]>([])
+  const [createPlaylistMode, setCreatePlaylistMode] = useState<CreatePlaylistMode>('regular')
+  const [playlistName, setPlaylistName] = useState('Focus Mix')
+  const [playlistDescription, setPlaylistDescription] = useState('')
+  const [playlistSource, setPlaylistSource] = useState<PlaylistSource>('empty')
+  const [playlistTag, setPlaylistTag] = useState<PlaylistTag>('Focus')
+  const [playlistColor, setPlaylistColor] = useState<PlaylistColor>('Amber')
+  const [smartMatch, setSmartMatch] = useState<SmartMatch>('Match all')
+  const [smartRule, setSmartRule] = useState<SmartRule>('Genre is Progressive Metal')
+  const [smartLimit, setSmartLimit] = useState<SmartLimit>('25')
+  const [smartAutoUpdate, setSmartAutoUpdate] = useState(true)
+  const [importFormat, setImportFormat] = useState<ImportFormat>('M3U')
+  const [importOption, setImportOption] = useState<ImportOption>('Keep order')
+  const [importDestination, setImportDestination] = useState<ImportDestination>('New playlist')
   const [activeSheet, setActiveSheet] = useState<AriaSheet>(null)
   const [toast, setToast] = useState<{ message: string } | null>(null)
 
   const detailScreen = detailStack.at(-1) ?? null
   const currentTrack = playbackQueue[currentTrackIndex] ?? playbackQueue[0] ?? nowPlaying
   const queueTracks = playbackQueue.filter((track) => track.id !== currentTrack.id)
+  const visiblePlaylists = [...ariaPlaylists, ...localPlaylists]
 
   const showToast = useCallback((message: string) => {
     setToast({ message })
@@ -258,6 +303,84 @@ export function AriaPreview() {
   const handleCloseSheet = useCallback(() => {
     setActiveSheet(null)
   }, [])
+
+  const resetCreatePlaylistSheet = useCallback(() => {
+    setCreatePlaylistMode('regular')
+    setPlaylistName('Focus Mix')
+    setPlaylistDescription('')
+    setPlaylistSource('empty')
+    setPlaylistTag('Focus')
+    setPlaylistColor('Amber')
+    setSmartMatch('Match all')
+    setSmartRule('Genre is Progressive Metal')
+    setSmartLimit('25')
+    setSmartAutoUpdate(true)
+  }, [])
+
+  const resetImportPlaylistSheet = useCallback(() => {
+    setImportFormat('M3U')
+    setImportOption('Keep order')
+    setImportDestination('New playlist')
+  }, [])
+
+  const handleOpenCreatePlaylist = useCallback(() => {
+    resetCreatePlaylistSheet()
+    setActiveSheet({ type: 'playlistCreate' })
+  }, [resetCreatePlaylistSheet])
+
+  const handleOpenImportPlaylist = useCallback(() => {
+    resetImportPlaylistSheet()
+    setActiveSheet({ type: 'playlistImport' })
+  }, [resetImportPlaylistSheet])
+
+  const handleCreatePlaylist = useCallback(() => {
+    const title = playlistName.trim() || 'Focus Mix'
+    const sourceLabel = playlistSources.find((source) => source.id === playlistSource)?.label ?? 'Empty'
+    const trackCount = playlistSource === 'empty' ? 0 : playlistSource === 'queue' ? playbackQueue.length : 12
+    const playlist: AriaPlaylist = {
+      id: `playlist-created-${localPlaylists.filter((item) => item.id.startsWith('playlist-created-')).length + 1}`,
+      title,
+      description: playlistDescription.trim() || `${playlistTag} · ${sourceLabel}`,
+      trackCount,
+      duration: trackCount === 0 ? '0m' : playlistSource === 'queue' ? '42m' : '48m',
+      accent: playlistColorGradients[playlistColor],
+    }
+
+    setLocalPlaylists((playlists) => [...playlists, playlist])
+    setActiveSheet(null)
+    showToast(`Created ${title}`)
+  }, [localPlaylists, playbackQueue.length, playlistColor, playlistDescription, playlistName, playlistSource, playlistTag, showToast])
+
+  const handleCreateSmartPlaylist = useCallback(() => {
+    const baseTitle = playlistName.trim() || 'Focus Mix'
+    const playlist: AriaPlaylist = {
+      id: `playlist-smart-${localPlaylists.filter((item) => item.id.startsWith('playlist-smart-')).length + 1}`,
+      title: `Smart: ${baseTitle}`,
+      description: `Based on ${smartRule}`,
+      trackCount: Number(smartLimit),
+      duration: '48m',
+      accent: playlistColorGradients[playlistColor],
+    }
+
+    setLocalPlaylists((playlists) => [...playlists, playlist])
+    setActiveSheet(null)
+    showToast('Smart playlist created')
+  }, [localPlaylists, playlistColor, playlistName, showToast, smartLimit, smartRule])
+
+  const handleImportPlaylist = useCallback(() => {
+    const playlist: AriaPlaylist = {
+      id: `playlist-imported-${localPlaylists.filter((item) => item.id.startsWith('playlist-imported-')).length + 1}`,
+      title: 'Imported Playlist',
+      description: `${importFormat} · ${importDestination}`,
+      trackCount: 12,
+      duration: '48m',
+      accent: 'from-stone-200 via-stone-500 to-slate-900',
+    }
+
+    setLocalPlaylists((playlists) => [...playlists, playlist])
+    setActiveSheet(null)
+    showToast('Playlist imported')
+  }, [importDestination, importFormat, localPlaylists, showToast])
 
   const handleOpenSourceSheet = useCallback(() => {
     setActiveSheet({ type: 'source' })
@@ -443,7 +566,7 @@ export function AriaPreview() {
       />
     ),
     library: <AriaLibrary onNavigateToPlaylists={handleNavigateToPlaylists} onOpenAlbum={handleOpenAlbum} onOpenLibrarySearch={handleOpenLibrarySearch} onOpenLibrarySheetCategory={handleOpenLibrarySheetCategory} onOpenLibraryView={handleOpenLibraryView} onOpenPlaylist={handleOpenPlaylist} onOpenSettings={handleOpenSettings} onShowToast={showToast} />,
-    playlists: <AriaPlaylists onOpenPlaylist={handleOpenPlaylist} onShowToast={showToast} />,
+    playlists: <AriaPlaylists onOpenCreatePlaylist={handleOpenCreatePlaylist} onOpenImportPlaylist={handleOpenImportPlaylist} onOpenPlaylist={handleOpenPlaylist} onShowToast={showToast} playlists={visiblePlaylists} />,
     explore: <AriaExplore onOpenExploreMode={handleOpenExploreMode} onShowToast={showToast} />,
   }
 
@@ -467,6 +590,135 @@ export function AriaPreview() {
 
   const renderSheetContent = () => {
     const SourceIcon = activeSource.type === 'local' ? HardDrive : Server
+
+    if (activeSheet?.type === 'playlistCreate') {
+      const isSmart = createPlaylistMode === 'smart'
+
+      return (
+        <AriaBottomSheet onClose={handleCloseSheet} subtitle="New listening space" title="Create Playlist">
+          <div className="space-y-3">
+            <PlaylistSheetField label="Name" onChange={setPlaylistName} value={playlistName} />
+            <PlaylistSheetField label="Description" onChange={setPlaylistDescription} value={playlistDescription} />
+
+            <div>
+              <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">Playlist type</p>
+              <div className="grid grid-cols-2 gap-2 rounded-[17px] border border-white/[0.07] bg-white/[0.035] p-1.5">
+                {(['regular', 'smart'] as CreatePlaylistMode[]).map((mode) => (
+                  <PlaylistPill key={mode} active={createPlaylistMode === mode} label={mode === 'regular' ? 'Playlist' : 'Smart'} onClick={() => setCreatePlaylistMode(mode)} />
+                ))}
+              </div>
+            </div>
+
+            {isSmart ? (
+              <div className="space-y-3">
+                <PlaylistSheetGroup title="Smart rules">
+                  {smartRules.map((rule) => (
+                    <PlaylistOptionRow key={rule} active={smartRule === rule} label={rule} onClick={() => setSmartRule(rule)} />
+                  ))}
+                </PlaylistSheetGroup>
+                <div>
+                  <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">Match mode</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {smartMatches.map((match) => <PlaylistPill key={match} active={smartMatch === match} label={match} onClick={() => setSmartMatch(match)} />)}
+                  </div>
+                </div>
+                <div>
+                  <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">Limit</p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {smartLimits.map((limit) => <PlaylistPill key={limit} active={smartLimit === limit} label={limit} onClick={() => setSmartLimit(limit)} />)}
+                  </div>
+                </div>
+                <button
+                  className="flex w-full items-center justify-between rounded-[18px] border border-white/[0.075] bg-white/[0.04] px-3 py-3 text-left transition hover:bg-white/[0.055]"
+                  onClick={() => setSmartAutoUpdate((enabled) => !enabled)}
+                  type="button"
+                >
+                  <span className="text-[14px] font-semibold text-[#fff3e4]">Auto update</span>
+                  <span className={`flex h-6 w-11 items-center rounded-full p-1 transition ${smartAutoUpdate ? 'bg-[#f0a13d]' : 'bg-white/[0.12]'}`}>
+                    <span className={`h-4 w-4 rounded-full bg-[#fff3e4] transition ${smartAutoUpdate ? 'translate-x-5' : 'translate-x-0'}`} />
+                  </span>
+                </button>
+              </div>
+            ) : (
+              <div>
+                <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">Playlist content</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {playlistSources.map((source) => <PlaylistPill key={source.id} active={playlistSource === source.id} label={source.label} onClick={() => setPlaylistSource(source.id)} />)}
+                </div>
+              </div>
+            )}
+
+            <div>
+              <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">Tags</p>
+              <div className="flex flex-wrap gap-2">
+                {playlistTags.map((tag) => <PlaylistPill key={tag} active={playlistTag === tag} label={playlistTag === tag ? `${tag} ×` : tag} onClick={() => setPlaylistTag(tag)} />)}
+                <PlaylistPill label="+ Add tag" onClick={() => showToast('Add tag')} />
+              </div>
+            </div>
+
+            <PlaylistColorRail color={playlistColor} onChange={setPlaylistColor} />
+
+            <PlaylistPrimaryButton label={isSmart ? 'Create Smart Playlist' : 'Create Playlist'} onClick={isSmart ? handleCreateSmartPlaylist : handleCreatePlaylist} />
+          </div>
+        </AriaBottomSheet>
+      )
+    }
+
+    if (activeSheet?.type === 'playlistImport') {
+      return (
+        <AriaBottomSheet onClose={handleCloseSheet} subtitle="Bring in a saved collection" title="Import Playlist">
+          <div className="space-y-3">
+            <button
+              className="flex w-full items-center justify-between rounded-[18px] border border-white/[0.075] bg-white/[0.04] px-3 py-3 text-left transition hover:bg-white/[0.055]"
+              onClick={() => showToast('Saved playlist selected')}
+              type="button"
+            >
+              <span className="text-[14px] font-semibold text-[#fff3e4]">Saved playlist</span>
+              <ChevronRight size={17} className="text-[#ffb05d]" />
+            </button>
+
+            <div>
+              <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">Format</p>
+              <div className="grid grid-cols-4 gap-2">
+                {importFormats.map((format) => <PlaylistPill key={format} active={importFormat === format} label={format} onClick={() => setImportFormat(format)} />)}
+              </div>
+            </div>
+
+            <PlaylistSheetGroup title="Import options">
+              {importOptions.map((option) => <PlaylistOptionRow key={option} active={importOption === option} label={option} onClick={() => setImportOption(option)} />)}
+            </PlaylistSheetGroup>
+
+            <div>
+              <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">Destination</p>
+              <button
+                className="flex w-full items-center justify-between rounded-[18px] border border-white/[0.075] bg-white/[0.04] px-3 py-3 text-left transition hover:bg-white/[0.055]"
+                onClick={() => setImportDestination((destination) => destination === 'New playlist' ? 'Existing playlist' : 'New playlist')}
+                type="button"
+              >
+                <span className="text-[14px] font-semibold text-[#fff3e4]">{importDestination}</span>
+                <ChevronRight size={17} className="text-[#ffb05d]" />
+              </button>
+              {importDestination === 'Existing playlist' ? (
+                <div className="mt-2 max-h-28 space-y-1 overflow-y-auto rounded-[18px] border border-white/[0.06] bg-white/[0.025] p-1.5">
+                  {visiblePlaylists.slice(0, 4).map((playlist) => (
+                    <button
+                      className="block w-full truncate rounded-xl px-2.5 py-1.5 text-left text-[12px] text-[#d8cbbb] transition hover:bg-white/[0.055]"
+                      key={playlist.id}
+                      onClick={() => showToast(`${playlist.title} selected`)}
+                      type="button"
+                    >
+                      {playlist.title}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+
+            <PlaylistPrimaryButton label="Import Playlist" onClick={handleImportPlaylist} />
+          </div>
+        </AriaBottomSheet>
+      )
+    }
 
     if (activeSheet?.type === 'source') {
       return (
@@ -558,7 +810,7 @@ export function AriaPreview() {
               <SheetGroup title="Albums">{ariaAlbums.slice(0, 2).map((album) => <SheetRow key={album.id} title={album.title} subtitle={album.artist} onClick={() => openAlbumFromSheet(album)} />)}</SheetGroup>
               <SheetGroup title="Artists">{ariaArtists.slice(0, 2).map((artist) => <SheetRow key={artist.id} title={artist.name} subtitle={artist.genre} onClick={() => openArtistFromSheet(artist)} />)}</SheetGroup>
               <SheetGroup title="Tracks">{ariaQueue.slice(0, 2).map((track) => <SheetRow key={track.id} title={track.title} subtitle={track.artist} onClick={() => openTrackFromSheet(track)} />)}</SheetGroup>
-              <SheetGroup title="Playlists">{ariaPlaylists.slice(0, 2).map((playlist) => <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks`} onClick={() => openPlaylistFromSheet(playlist)} />)}</SheetGroup>
+              <SheetGroup title="Playlists">{visiblePlaylists.slice(0, 2).map((playlist) => <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks`} onClick={() => openPlaylistFromSheet(playlist)} />)}</SheetGroup>
             </div>
           ) : mode === 'forgottenAlbums' ? (
             <SheetList>{ariaAlbums.slice().reverse().map((album) => <SheetRow key={album.id} title={album.title} subtitle={`${album.artist} · ${album.year}`} onClick={() => openAlbumFromSheet(album)} />)}</SheetList>
@@ -667,7 +919,7 @@ export function AriaPreview() {
       return (
         <AriaBottomSheet onClose={handleCloseSheet} subtitle={track.title} title="Add to Playlist">
           <SheetList>
-            {ariaPlaylists.map((playlist) => (
+            {visiblePlaylists.map((playlist) => (
               <SheetRow key={playlist.id} title={playlist.title} subtitle={`${playlist.trackCount} tracks · ${playlist.duration}`} onClick={() => closeSheetWithToast(`Added ${track.title} to ${playlist.title}`)} variant="action" />
             ))}
           </SheetList>
@@ -820,6 +1072,107 @@ function SheetGroup({ children, title }: { children: React.ReactNode; title: str
 
 function SheetGrid({ children }: { children: React.ReactNode }) {
   return <div className="grid grid-cols-2 gap-2">{children}</div>
+}
+
+function PlaylistSheetField({
+  label,
+  onChange,
+  value,
+}: {
+  label: string
+  onChange: (value: string) => void
+  value: string
+}) {
+  return (
+    <label className="block rounded-[17px] border border-white/[0.075] bg-white/[0.04] px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+      <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-[#817a72]">{label}</span>
+      <input
+        className="mt-1 w-full bg-transparent text-[15px] text-[#fff3e4] outline-none placeholder:text-[#8f867c]"
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={label}
+        value={value}
+      />
+    </label>
+  )
+}
+
+function PlaylistSheetGroup({ children, title }: { children: React.ReactNode; title: string }) {
+  return (
+    <div>
+      <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">{title}</p>
+      <div className="overflow-hidden rounded-[18px] border border-white/[0.075] bg-white/[0.035]">
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function PlaylistPill({ active = false, label, onClick }: { active?: boolean; label: string; onClick: () => void }) {
+  return (
+    <button
+      className={`min-h-9 rounded-full px-3 py-2 text-center text-[12px] font-semibold transition ${
+        active
+          ? 'border border-[#f0a13d] bg-[#f0a13d]/18 text-[#ffbd65] shadow-[0_0_18px_rgba(240,161,61,0.12)]'
+          : 'border border-white/[0.075] bg-white/[0.04] text-[#d8cbbb] hover:bg-white/[0.06]'
+      }`}
+      onClick={onClick}
+      type="button"
+    >
+      {label}
+    </button>
+  )
+}
+
+function PlaylistOptionRow({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
+  return (
+    <button
+      className="flex w-full items-center gap-3 border-b border-white/[0.055] px-3 py-2.5 text-left last:border-b-0 transition hover:bg-white/[0.04]"
+      onClick={onClick}
+      type="button"
+    >
+      <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border ${active ? 'border-[#f0a13d]' : 'border-white/[0.22]'}`}>
+        {active ? <span className="h-2.5 w-2.5 rounded-full bg-[#f0a13d]" /> : null}
+      </span>
+      <span className="text-[14px] font-semibold text-[#fff3e4]">{label}</span>
+    </button>
+  )
+}
+
+function PlaylistColorRail({ color, onChange }: { color: PlaylistColor; onChange: (color: PlaylistColor) => void }) {
+  return (
+    <div>
+      <p className="mb-2 text-[12px] font-semibold text-[#f3c98f]">Playlist color</p>
+      <div className="flex items-center gap-3 rounded-[18px] border border-white/[0.075] bg-white/[0.035] px-3 py-3">
+        <span className={`h-12 w-12 shrink-0 rounded-full bg-gradient-to-br ${playlistColorGradients[color]} shadow-[0_10px_24px_rgba(0,0,0,0.26)]`} />
+        <span className="grid min-w-0 flex-1 grid-cols-4 gap-2">
+          {playlistColors.map((item) => (
+            <button
+              aria-label={item}
+              className={`h-8 rounded-full bg-gradient-to-r ${playlistColorGradients[item]} transition ${color === item ? 'ring-2 ring-[#f0a13d] ring-offset-2 ring-offset-[#09121a]' : 'opacity-80 hover:opacity-100'}`}
+              key={item}
+              onClick={() => onChange(item)}
+              type="button"
+            />
+          ))}
+        </span>
+      </div>
+      <div className="mt-1.5 flex justify-between px-1 text-[10px] text-[#9f958a]">
+        {playlistColors.map((item) => <span key={item}>{item}</span>)}
+      </div>
+    </div>
+  )
+}
+
+function PlaylistPrimaryButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      className="mt-1 w-full rounded-full bg-gradient-to-b from-[#ffbd63] to-[#f09a35] px-4 py-3 text-[15px] font-bold text-[#1a1008] shadow-[0_14px_28px_rgba(240,161,61,0.18)] transition active:scale-[0.98]"
+      onClick={onClick}
+      type="button"
+    >
+      {label}
+    </button>
+  )
 }
 
 function SheetChip({ label, onClick }: { label: string; onClick: () => void }) {

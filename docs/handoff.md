@@ -82,7 +82,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7F.0 — Mapear referências visuais para interações faltantes
 [x] Bloco 7F.P0 — Criar Product Spec, Screen Map e Design Guardrails do Aria
 [x] Bloco 7F.1-S — Quebrar referência visual de Playlist create/import/smart em contrato literal
-[ ] Bloco 7F.1-I — Implementar Playlist create/import/smart seguindo contrato literal
+[x] Bloco 7F.1-I — Implementar Playlist create/import/smart seguindo contrato literal
 [ ] Bloco 7F.2 — Playlist folders/export/detail flows
 [ ] Bloco 7F.3 — Library category flows
 [ ] Bloco 7F.4 — Radio flows
@@ -342,9 +342,15 @@ The numeric summary above must not be treated as final while 7F.1 through 7F.7 r
 
 ### Bloco 7F.1-I — Playlist create/import/smart flows
 
-- [ ] Create Playlist opens an app-like creation sheet.
-- [ ] Smart Playlist expansion is part of create flow or a dedicated sheet.
-- [ ] Import Playlist opens source choices without file picker/device access.
+- [x] Create Playlist card opens Create Playlist sheet.
+- [x] Create Playlist sheet follows breakdown anatomy.
+- [x] Smart mode lives inside Create Playlist sheet.
+- [x] Import Playlist card opens Import Playlist sheet.
+- [x] Import Playlist sheet follows breakdown anatomy.
+- [x] Created/imported playlist rows can appear during current session.
+- [x] New Folder, Export Playlist and Folder Detail remain deferred to 7F.2.
+- [x] No file picker/network/persistence added.
+- [x] No visible development/prototype language reintroduced.
 
 ### Bloco 7F.2 — Playlist folders/export/detail flows
 

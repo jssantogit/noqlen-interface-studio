@@ -310,6 +310,17 @@ Expected routing:
 
 ## Future Implementation Checklist
 
+## 7F.1-I Implementation Note
+
+7F.1-I implemented this contract in `src/apps/aria/AriaPreview.tsx` and `src/apps/aria/components/AriaPlaylists.tsx`.
+
+Deliberate deviations:
+
+- The source reference image shows folder/export-specific copy, so Create Playlist and Import Playlist use the exact 7F.1 copy defined in this breakdown while preserving the same compact sheet anatomy.
+- The color rail is represented as compact color chips plus a swatch instead of a continuous slider, matching the allowed `small color chips` anatomy.
+
+New Folder, Export Playlist and Folder Detail remain outside this implementation and stay governed by 7F.2.
+
 ### Create Playlist
 
 - [ ] Create Playlist card opens sheet.

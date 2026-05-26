@@ -384,13 +384,22 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - Future implementation must follow the breakdown, not invent generic form UI.
 - New Folder, Export Playlist and Folder Detail remain 7F.2.
 
+## Bloco 7F.1-I Resolution Notes
+
+- Create Playlist now opens a sheet matching the reference breakdown.
+- Smart Playlist exists inside Create Playlist sheet.
+- Import Playlist now opens a sheet matching the reference breakdown.
+- Created/imported playlist rows are local to the current session.
+- New Folder, Export Playlist and Folder Detail remain pending for 7F.2.
+- No file picker, network behavior or persistence was added.
+
 ## Reference-backed Remaining Interaction Work
 
 ### Playlist interactions 1
 
-- [ ] Create Playlist opens a creation flow.
-- [ ] Smart Playlist Expansion opens or expands a local criteria flow.
-- [ ] Import Playlist opens import source choices without file picker/device access.
+- [x] Create Playlist opens a creation flow.
+- [x] Smart Playlist Expansion opens or expands a local criteria flow.
+- [x] Import Playlist opens import source choices without file picker/device access.
 
 ### Playlist interactions 2
 
