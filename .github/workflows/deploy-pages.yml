@@ -1,9 +1,15 @@
 name: Deploy static content to Pages
+run-name: Deploy Pages
 
 on:
   push:
     branches: ['main']
   workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Deployment note'
+        required: false
+        default: 'Manual deploy'
 
 permissions:
   contents: read
