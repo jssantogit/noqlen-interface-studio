@@ -55,6 +55,14 @@ docs/screen-contracts/aria/screen-map.md
 docs/design.md
 ```
 
+Active Aria reference breakdowns:
+
+```txt
+docs/screen-contracts/aria/playlist-create-import-reference-breakdown.md
+```
+
+`playlist-create-import-reference-breakdown.md` governs the next implementation attempt for 7F.1-I.
+
 Future Aria implementation blocks must consult:
 
 1. Product spec

@@ -375,6 +375,15 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - 7F.1 remains pending.
 - The next block is 7F.1-S reference breakdown.
 
+## Bloco 7F.1-S Resolution Notes
+
+- The bad 7F.1 implementation was reverted before this block.
+- Product spec, screen map and design guardrails are now required context.
+- Playlist create/import reference now has a literal breakdown in `docs/screen-contracts/aria/playlist-create-import-reference-breakdown.md`.
+- 7F.1 implementation remains pending.
+- Future implementation must follow the breakdown, not invent generic form UI.
+- New Folder, Export Playlist and Folder Detail remain 7F.2.
+
 ## Reference-backed Remaining Interaction Work
 
 ### Playlist interactions 1

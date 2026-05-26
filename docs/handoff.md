@@ -81,7 +81,7 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7E.1 — Resolver conflito entre Library e Explore
 [x] Bloco 7F.0 — Mapear referências visuais para interações faltantes
 [x] Bloco 7F.P0 — Criar Product Spec, Screen Map e Design Guardrails do Aria
-[ ] Bloco 7F.1-S — Quebrar referência visual de Playlist create/import/smart em contrato literal
+[x] Bloco 7F.1-S — Quebrar referência visual de Playlist create/import/smart em contrato literal
 [ ] Bloco 7F.1-I — Implementar Playlist create/import/smart seguindo contrato literal
 [ ] Bloco 7F.2 — Playlist folders/export/detail flows
 [ ] Bloco 7F.3 — Library category flows
@@ -335,9 +335,10 @@ The numeric summary above must not be treated as final while 7F.1 through 7F.7 r
 
 ### Bloco 7F.1-S — Playlist create/import/smart reference breakdown
 
-- [ ] Break the playlist create/import/smart reference into literal anatomy.
-- [ ] Define exact sheet structure, fields, states, copy and avoid list.
-- [ ] Confirm implementation files and acceptance criteria before coding.
+- [x] Break the playlist create/import/smart reference into literal anatomy.
+- [x] Define exact sheet structure, fields, states, copy and avoid list.
+- [x] Confirm implementation files and acceptance criteria before coding.
+- [x] Create `docs/screen-contracts/aria/playlist-create-import-reference-breakdown.md` as the required 7F.1-I contract.
 
 ### Bloco 7F.1-I — Playlist create/import/smart flows
 
