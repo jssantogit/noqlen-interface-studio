@@ -14,6 +14,10 @@ Before implementation, each reference needs an explicit map to its trigger, dest
 
 ## Global rules
 
+- Product behavior is governed by `docs/product/aria-product-spec.md`.
+- Navigation destinations are governed by `docs/screen-contracts/aria/screen-map.md`.
+- Visual implementation must follow `docs/design.md` and the relevant reference breakdown.
+- 7F.1-S must be completed before another 7F.1 implementation attempt.
 - Use bottom sheets for compact actions, forms and selection flows.
 - Use detail views only when the interaction represents a full browsing destination.
 - Use confirmation panels for destructive actions.

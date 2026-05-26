@@ -366,6 +366,15 @@ Remove or implement remaining fake option glyphs, especially Listen Home recent-
 - 7F is now split into reference-backed implementation blocks.
 - Final no-dead-control sweep is deferred until 7F.7.
 
+## Bloco 7F.P0 Resolution Notes
+
+- Created the Aria product spec in `docs/product/aria-product-spec.md`.
+- Created the Aria screen map in `docs/screen-contracts/aria/screen-map.md`.
+- Created the Noqlen design guardrails in `docs/design.md`.
+- These docs exist to prevent future implementation from inventing product behavior, navigation or generic UI.
+- 7F.1 remains pending.
+- The next block is 7F.1-S reference breakdown.
+
 ## Reference-backed Remaining Interaction Work
 
 ### Playlist interactions 1

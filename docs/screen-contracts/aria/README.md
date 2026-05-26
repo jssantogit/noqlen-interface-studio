@@ -47,6 +47,22 @@ docs/screen-contracts/aria/missing-interaction-reference-map.md
 
 Reference images under `docs/references/aria/` are visual guidance for missing flows. The missing-interaction map defines which image covers each trigger, destination type, likely component ownership, implementation block, avoid list and expected app-facing behavior.
 
+High-level Aria truth documents:
+
+```txt
+docs/product/aria-product-spec.md
+docs/screen-contracts/aria/screen-map.md
+docs/design.md
+```
+
+Future Aria implementation blocks must consult:
+
+1. Product spec
+2. Screen map
+3. Relevant reference image
+4. Relevant reference breakdown, if present
+5. Existing component contracts
+
 Additional chat-approved concepts guide future work:
 
 ```txt

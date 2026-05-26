@@ -80,7 +80,9 @@ Before Aria tests, every visible Aria interaction must be audited and completed:
 [x] Bloco 7E — Completar interações de playback overlays do Aria
 [x] Bloco 7E.1 — Resolver conflito entre Library e Explore
 [x] Bloco 7F.0 — Mapear referências visuais para interações faltantes
-[ ] Bloco 7F.1 — Playlist create/import/smart flows
+[x] Bloco 7F.P0 — Criar Product Spec, Screen Map e Design Guardrails do Aria
+[ ] Bloco 7F.1-S — Quebrar referência visual de Playlist create/import/smart em contrato literal
+[ ] Bloco 7F.1-I — Implementar Playlist create/import/smart seguindo contrato literal
 [ ] Bloco 7F.2 — Playlist folders/export/detail flows
 [ ] Bloco 7F.3 — Library category flows
 [ ] Bloco 7F.4 — Radio flows
@@ -323,7 +325,21 @@ The numeric summary above must not be treated as final while 7F.1 through 7F.7 r
 - [x] Split final work into reference-backed blocks 7F.1 through 7F.7.
 - [x] Keep this as a docs/spec block only.
 
-### Bloco 7F.1 — Playlist create/import/smart flows
+### Bloco 7F.P0 — Product spec, screen map and design guardrails
+
+- [x] Create `docs/product/aria-product-spec.md`.
+- [x] Create `docs/screen-contracts/aria/screen-map.md`.
+- [x] Create `docs/design.md`.
+- [x] Link the product, navigation and design truth docs from Aria screen contracts.
+- [x] Preserve 7F.1 as pending implementation work.
+
+### Bloco 7F.1-S — Playlist create/import/smart reference breakdown
+
+- [ ] Break the playlist create/import/smart reference into literal anatomy.
+- [ ] Define exact sheet structure, fields, states, copy and avoid list.
+- [ ] Confirm implementation files and acceptance criteria before coding.
+
+### Bloco 7F.1-I — Playlist create/import/smart flows
 
 - [ ] Create Playlist opens an app-like creation sheet.
 - [ ] Smart Playlist expansion is part of create flow or a dedicated sheet.
